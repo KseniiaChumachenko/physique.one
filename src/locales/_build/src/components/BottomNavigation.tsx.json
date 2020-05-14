@@ -1,0 +1,10 @@
+{
+  "Meals": {
+    "origin": [
+      [
+        "src/components/BottomNavigation.tsx",
+        20
+      ]
+    ]
+  }
+}

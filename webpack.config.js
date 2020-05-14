@@ -2,6 +2,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -101,6 +102,13 @@ module.exports = (/* env = {} */) => {
         minChunkSize: 20000,
       }),
       new CopyWebpackPlugin([{ from: "public" }]),
+
+      // TODO: resolve warning
+      // Or: To strip all locales except “en”, “es-us” and “ru”
+      // (“en” is built into Moment and can’t be removed)
+      new MomentLocalesPlugin({
+        localesToKeep: ["es-us", "ru", "uk", "cs"],
+      }),
     ],
 
     devServer: {
@@ -109,13 +117,13 @@ module.exports = (/* env = {} */) => {
       port: 3000,
       historyApiFallback: true,
 
-      // proxy: {
-      //   "/api/graphql": {
-      //     target: "http://localhost:8080/air2day-devel", //"http://william.multimediatech.cz:8081/air2day-test",
-      //     changeOrigin: true,
-      //     secure: false
-      //   }
-      // }
+      proxy: {
+        "/graphql": {
+          target: "https://body-monitor-be.herokuapp.com/v1/graphql",
+          secure: false,
+          changeOrigin: true,
+        },
+      },
     },
   };
 };

@@ -1,0 +1,76 @@
+query MealsListing {
+  meal {
+    id
+    time
+    name
+    meal_items {
+      id
+      foodDesc {
+        id
+        name
+        energy_cal
+        energy_kj
+        carbohydrates
+        fats
+        proteins
+      }
+      weight
+    }
+  }
+}
+
+query MealsByDate($_eq: date = "") {
+  meal_aggregate(where: { date: { _eq: $_eq } }){
+    aggregate{
+      sum{
+        energy_cal
+        energy_kj
+        carbohydrates
+        proteins
+        fats
+      }
+    }
+    nodes{
+      id
+      date
+      time
+      name
+      meal_items_aggregate{
+        aggregate{
+          sum{
+            energy_cal
+            energy_kj
+            carbohydrates
+            proteins
+            fats
+          }
+        }
+        nodes{
+          id
+          foodDesc {
+            id
+            name
+            energy_cal
+            energy_kj
+            carbohydrates
+            fats
+            proteins
+          }
+          weight
+        }
+      }
+    }
+  }
+}
+
+query FoodSelectFieldListing {
+  food {
+    id
+    name
+    carbohydrates
+    proteins
+    fats
+    energy_cal
+    energy_kj
+  }
+}

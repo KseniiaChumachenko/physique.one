@@ -8,10 +8,13 @@ const app = express();
 
 app.use(express.static(path.join(__dirname, "build")));
 
-app.use('/api/graphql', proxy({
-  target: "http://william.multimediatech.cz:8081/air2day-test/api/graphql",
-  changeOrigin: true
-}))
+app.use(
+  "/api/graphql",
+  proxy({
+    target: "https://body-monitor-be.herokuapp.com/v1/graphql",
+    changeOrigin: true,
+  })
+);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "build", "index.html"));

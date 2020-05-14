@@ -1,0 +1,29 @@
+mutation AddMeal(
+  $name: String
+  $date: date
+  $time: time
+  $data: [meal_item_insert_input!]!
+  $u_id: uuid!
+  $carbs: numeric
+  $proteins: numeric
+  $fats: numeric
+  $energy_cal: numeric
+  $energy_kj: numeric
+) {
+  insert_meal_one(
+    object: {
+      date: $date
+      time: $time
+      meal_items: { data: $data }
+      name: $name
+      u_id: $u_id
+      carbohydrates: $carbs
+      proteins: $proteins
+      fats: $fats
+      energy_cal: $energy_cal
+      energy_kj: $energy_kj
+    }
+  ) {
+    name
+  }
+}

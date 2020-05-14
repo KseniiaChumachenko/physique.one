@@ -1,0 +1,19 @@
+overwrite: true
+schema: "src/graphql/schema.graphql"
+documents: "**/*.graphql"
+config:
+  withMutationFn: false
+  withHOC: false
+  withComponent: false
+  withHooks: true
+  reactApolloVersion: 3
+  addDocBlocks: false
+generates:
+  src/graphql/generated/graphql.tsx:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+    hooks:
+      afterOneFileWrite:
+        - prettier --write
