@@ -58,7 +58,9 @@ export const PanelSummary = ({
           />
           <Grid item xs={8}>
             <Chip
-              label={`${energy_cal} kcal | ${energy_kj} kJ`}
+              label={`${energy_cal?.toFixed(2)} kcal | ${energy_kj?.toFixed(
+                2
+              )} kJ`}
               variant={"outlined"}
               size={"small"}
               color={"secondary"}
@@ -66,7 +68,7 @@ export const PanelSummary = ({
             />
             <Chip
               avatar={<Avatar>P</Avatar>}
-              label={proteins}
+              label={proteins?.toFixed(2)}
               variant={"outlined"}
               size={"small"}
               color={"primary"}
@@ -74,7 +76,7 @@ export const PanelSummary = ({
             />
             <Chip
               avatar={<Avatar>C</Avatar>}
-              label={carbohydrates}
+              label={carbohydrates?.toFixed(2)}
               variant={"outlined"}
               size={"small"}
               color={"primary"}
@@ -82,7 +84,7 @@ export const PanelSummary = ({
             />
             <Chip
               avatar={<Avatar>F</Avatar>}
-              label={fats}
+              label={fats?.toFixed(2)}
               variant={"outlined"}
               size={"small"}
               color={"primary"}

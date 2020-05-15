@@ -47,6 +47,15 @@ export const DayPanelHeader = ({
 
   const handleAddMeal = () => setOpen(true);
 
+  const macronutrientsInPersents = () => {
+    const sum = carbohydrates + fats + proteins;
+    return {
+      proteins: ((proteins * sum) / 100)?.toFixed(2),
+      carbohydrates: ((carbohydrates * sum) / 100)?.toFixed(2),
+      fats: ((fats * sum) / 100)?.toFixed(2),
+    };
+  };
+
   return (
     <ExpansionPanelSummary
       classes={{ content: classes.content, expanded: classes.expanded }}
@@ -59,37 +68,53 @@ export const DayPanelHeader = ({
           </Typography>
         </Grid>
         <Grid item xs={9} alignItems={"center"}>
-          <Chip
-            label={`${energy_cal} kcal | ${energy_kj} kJ`}
-            variant={"outlined"}
-            size={"small"}
-            color={"secondary"}
-            className={classes.chip}
-          />
-          <Chip
-            avatar={<Avatar>P</Avatar>}
-            label={proteins}
-            variant={"outlined"}
-            size={"small"}
-            color={"primary"}
-            className={classes.chip}
-          />
-          <Chip
-            avatar={<Avatar>C</Avatar>}
-            label={carbohydrates}
-            variant={"outlined"}
-            size={"small"}
-            color={"primary"}
-            className={classes.chip}
-          />
-          <Chip
-            avatar={<Avatar>F</Avatar>}
-            label={fats}
-            variant={"outlined"}
-            size={"small"}
-            color={"primary"}
-            className={classes.chip}
-          />
+          {energy_cal && (
+            <Chip
+              label={`${energy_cal?.toFixed(2)} kcal | ${energy_kj?.toFixed(
+                2
+              )} kJ`}
+              variant={"outlined"}
+              size={"small"}
+              color={"secondary"}
+              className={classes.chip}
+            />
+          )}
+          {proteins && (
+            <Chip
+              avatar={<Avatar>P</Avatar>}
+              label={`${proteins?.toFixed(2)} | ${
+                macronutrientsInPersents().proteins
+              }%`}
+              variant={"outlined"}
+              size={"small"}
+              color={"primary"}
+              className={classes.chip}
+            />
+          )}
+          {carbohydrates && (
+            <Chip
+              avatar={<Avatar>C</Avatar>}
+              label={`${carbohydrates?.toFixed(2)} | ${
+                macronutrientsInPersents().carbohydrates
+              }%`}
+              variant={"outlined"}
+              size={"small"}
+              color={"primary"}
+              className={classes.chip}
+            />
+          )}
+          {fats && (
+            <Chip
+              avatar={<Avatar>F</Avatar>}
+              label={`${fats?.toFixed(2)} | ${
+                macronutrientsInPersents().fats
+              }%`}
+              variant={"outlined"}
+              size={"small"}
+              color={"primary"}
+              className={classes.chip}
+            />
+          )}
         </Grid>
         <Grid item xs={1} alignItems={"center"}>
           <IconButton children={<AddRounded />} onClick={handleAddMeal} />

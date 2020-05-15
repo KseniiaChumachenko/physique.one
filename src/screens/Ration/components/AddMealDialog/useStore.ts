@@ -131,7 +131,6 @@ export function useStore(
     }),
     { name, time, meal_items }
   );
-  console.log(name, time, meal_items);
 
   return store;
 }

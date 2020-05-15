@@ -113,7 +113,6 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     time,
     meal_items,
   }) => {
-    console.log(name, date);
     const [insert_meal_one, mutationResponse] = useAddMealMutation({
       onCompleted: () => {
         setOpen(false);
@@ -123,7 +122,6 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     const classes = useStyles();
     const stateEndRef = useRef(null);
     const store = useStore(fetchedFoods, name, date, time, meal_items);
-    console.log(store.name, store.time);
 
     useScrollToBottom(store.meal_items, stateEndRef); //TODO for some reason this stoped working
 
@@ -192,7 +190,6 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
               value={store.name}
               onChange={(event) => store.setName(event.target.value)}
             />
-            {console.log(store.time)}
             <TimePicker
               ampm={false}
               renderInput={(props: any) => (
