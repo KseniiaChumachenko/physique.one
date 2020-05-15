@@ -27,3 +27,14 @@ mutation AddMeal(
     name
   }
 }
+
+mutation DeleteMealById($id: uuid!) {
+  delete_meal_item(where: {meal_id: {_eq: $id}}) {
+    returning {
+      u_id
+    }
+  }
+  delete_meal_by_pk(id: $id) {
+    u_id
+  }
+}

@@ -21,6 +21,7 @@ import { TimePicker } from "@material-ui/pickers";
 
 import {
   Food,
+  Meal_Item_Insert_Input,
   MealsListingDocument,
   useAddMealMutation,
   useFoodSelectFieldListingQuery,
@@ -28,6 +29,7 @@ import {
 import { ToastMessage } from "src/components/ToastMessage";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
 import { useStore } from "./useStore";
+import MomentUtils from "@material-ui/pickers/adapter/moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -51,11 +53,24 @@ interface Props {
   open: boolean;
   setOpen: any;
   date: string;
+  refetchPanel: any;
+
+  name?: string | null;
+  time?: any;
+  meal_items?: Meal_Item_Insert_Input[];
 }
 
 const HARDCODED_U_ID = "7040b96b-0994-4f79-ac7e-6e0299fcad04";
 
-export const AddMealDialog = ({ open, setOpen, date }: Props) => {
+export const AddMealDialog = ({
+  open,
+  setOpen,
+  date,
+  refetchPanel,
+  name,
+  time,
+  meal_items,
+}: Props) => {
   const { data, loading, error } = useFoodSelectFieldListingQuery();
   if (error) {
     return <ToastMessage severity={"error"} children={error?.message as any} />;
@@ -73,6 +88,10 @@ export const AddMealDialog = ({ open, setOpen, date }: Props) => {
           setOpen={setOpen}
           date={date}
           fetchedFoods={data.food as Food[]}
+          refetchPanel={refetchPanel}
+          name={name}
+          time={time}
+          meal_items={meal_items}
         />
       )}
     </>
@@ -84,13 +103,27 @@ interface AddMealDialogProps extends Props {
 }
 
 const AddMealDialogDataFlow = observer<AddMealDialogProps>(
-  ({ open, setOpen, date, fetchedFoods }) => {
+  ({
+    open,
+    setOpen,
+    date,
+    fetchedFoods,
+    refetchPanel,
+    name,
+    time,
+    meal_items,
+  }) => {
+    console.log(name, date);
     const [insert_meal_one, mutationResponse] = useAddMealMutation({
-      onCompleted: () => setOpen(false),
+      onCompleted: () => {
+        setOpen(false);
+        refetchPanel();
+      },
     });
     const classes = useStyles();
     const stateEndRef = useRef(null);
-    const store = useStore(fetchedFoods);
+    const store = useStore(fetchedFoods, name, date, time, meal_items);
+    console.log(store.name, store.time);
 
     useScrollToBottom(store.meal_items, stateEndRef); //TODO for some reason this stoped working
 
@@ -156,8 +189,10 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
             <TextField
               className={classes.field}
               label={<Trans>Name</Trans>}
+              value={store.name}
               onChange={(event) => store.setName(event.target.value)}
             />
+            {console.log(store.time)}
             <TimePicker
               ampm={false}
               renderInput={(props: any) => (
@@ -165,17 +200,15 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
                   InputLabelProps={{
                     shrink: true,
                   }}
+                  defaultValue={store.time}
                   className={classes.smallerField}
                   {...props}
                 />
               )}
               value={store.time}
               onChange={(time) => store.setTime(time as any)}
-              label={
-                <Trans>
-                  When <i>(will be)</i> consumed
-                </Trans>
-              }
+              label={<Trans>When</Trans>}
+              autoOk={true}
             />
           </div>
           {store.meal_items.map((item, key) => (

@@ -1,15 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import moment from "moment";
 import { ExpandMoreRounded } from "@material-ui/icons";
 import {
   Avatar,
   Chip,
+  ExpansionPanel,
   ExpansionPanelSummary,
   Grid,
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Meal, Meal_Item_Sum_Fields } from "src/graphql/generated/graphql";
+import {
+  Meal,
+  Meal_Item,
+  Meal_Item_Sum_Fields,
+  useMealByIdQuery,
+} from "src/graphql/generated/graphql";
+import { PanelDetailActions } from "./PanelDetailActions";
 import { AddMealDialog } from "../../../AddMealDialog";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +28,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type SummaryProps = Meal_Item_Sum_Fields & Pick<Meal, "name" | "time">;
+type SummaryProps = Meal_Item_Sum_Fields &
+  Pick<Meal, "name" | "time"> &
+  Pick<Meal_Item, "id"> & { refetchPanel: any };
 
 export const PanelSummary = ({
   name,
@@ -30,9 +39,14 @@ export const PanelSummary = ({
   proteins,
   carbohydrates,
   fats,
+  id,
   time,
+  refetchPanel,
 }: SummaryProps) => {
   const classes = useStyles();
+  const [openEditMealDialog, setOpenEditMealDialog] = React.useState(false);
+  const { data } = useMealByIdQuery({ variables: { id } });
+
   return (
     <ExpansionPanelSummary expandIcon={<ExpandMoreRounded />}>
       <div className={classes.panelHeader}>
@@ -42,7 +56,7 @@ export const PanelSummary = ({
             xs
             children={<Typography color={"textPrimary"}>{name}</Typography>}
           />
-          <Grid item xs={9}>
+          <Grid item xs={8}>
             <Chip
               label={`${energy_cal} kcal | ${energy_kj} kJ`}
               variant={"outlined"}
@@ -77,6 +91,17 @@ export const PanelSummary = ({
           </Grid>
           <Grid
             item
+            xs
+            children={
+              <PanelDetailActions
+                id={id}
+                refetchPanel={refetchPanel}
+                setOpenEditMealDialog={setOpenEditMealDialog}
+              />
+            }
+          />
+          <Grid
+            item
             xs={1}
             children={
               <Typography color={"textSecondary"} variant={"body1"}>
@@ -86,6 +111,18 @@ export const PanelSummary = ({
           />
         </Grid>
       </div>
+      {/*Here dialog used as edit-mode of meal*/}
+      {data?.meal_by_pk?.name && (
+        <AddMealDialog
+          open={openEditMealDialog}
+          setOpen={setOpenEditMealDialog}
+          date={data?.meal_by_pk?.date}
+          refetchPanel={refetchPanel}
+          name={data?.meal_by_pk?.name}
+          time={data?.meal_by_pk?.time}
+          meal_items={data?.meal_by_pk?.meal_items}
+        />
+      )}
     </ExpansionPanelSummary>
   );
 };

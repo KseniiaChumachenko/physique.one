@@ -8,9 +8,10 @@ import {
   InMemoryCache,
 } from "@apollo/client";
 import { LocalizationProvider } from "@material-ui/pickers";
-import MomentUtils from "@material-ui/pickers/adapter/moment";
+import MomentAdapter from "@material-ui/pickers/adapter/moment";
 import { useLanguageSetup } from "./hooks/useLanguageSetup";
 import { Router } from "./components/Router";
+import moment from "moment";
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
@@ -28,7 +29,10 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <I18nProvider i18n={i18n} language={locale.language}>
-        <LocalizationProvider dateAdapter={MomentUtils}>
+        <LocalizationProvider
+          dateLibInstance={moment}
+          dateAdapter={MomentAdapter}
+        >
           <Router />
         </LocalizationProvider>
       </I18nProvider>

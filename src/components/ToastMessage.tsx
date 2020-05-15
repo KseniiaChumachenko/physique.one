@@ -5,17 +5,31 @@ import { SnackbarProps } from "@material-ui/core/Snackbar/Snackbar";
 
 type JointProps = AlertProps & SnackbarProps;
 
-interface Props extends JointProps {}
+interface Props extends JointProps {
+  controledClose?(state: boolean): void;
+}
 
-export const ToastMessage = ({ children, severity }: Props) => {
-  const [open, setOpen] = React.useState(true);
+export const ToastMessage = ({
+  children,
+  severity,
+  open,
+  controledClose,
+}: Props) => {
+  const [localOpen, setOpen] = React.useState(true);
 
   const handleClose = (event?: React.SyntheticEvent, reason?: string) =>
     setOpen(false);
 
   return (
-    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-      <Alert severity={severity} onClose={handleClose}>
+    <Snackbar
+      open={open ?? localOpen}
+      autoHideDuration={6000}
+      onClose={controledClose ? () => controledClose(false) : handleClose}
+    >
+      <Alert
+        severity={severity}
+        onClose={controledClose ? () => controledClose(false) : handleClose}
+      >
         {children}
       </Alert>
     </Snackbar>

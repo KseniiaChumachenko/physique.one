@@ -63,6 +63,25 @@ query MealsByDate($_eq: date = "") {
   }
 }
 
+query MealById($id: uuid!){
+  meal_by_pk(id: $id) {
+    time
+    name
+    date
+    meal_items {
+      carbohydrates
+      energy_cal
+      energy_kj
+      fats
+      food
+      id
+      meal_id
+      proteins
+      weight
+    }
+  }
+}
+
 query FoodSelectFieldListing {
   food {
     id

@@ -3,20 +3,25 @@ import {
   Avatar,
   Button,
   Chip,
+  ExpansionPanelSummary,
   Grid,
   IconButton,
   Typography,
 } from "@material-ui/core";
-import { AddRounded } from "@material-ui/icons";
+import { AddRounded, ExpandMoreRounded } from "@material-ui/icons";
 import moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
 import { Meal_Sum_Fields } from "src/graphql/generated/graphql";
 import { AddMealDialog } from "../../../AddMealDialog";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
+  content: {
+    margin: 0,
+    "&$expanded": {
+      margin: 0,
+    },
   },
+  expanded: {},
   chip: {
     marginLeft: theme.spacing(1),
   },
@@ -24,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props extends Meal_Sum_Fields {
   date: string;
+  refetchPanel: any;
 }
 
 export const DayPanelHeader = ({
@@ -33,6 +39,7 @@ export const DayPanelHeader = ({
   carbohydrates,
   fats,
   proteins,
+  refetchPanel,
 }: Props) => {
   const classes = useStyles();
 
@@ -41,14 +48,17 @@ export const DayPanelHeader = ({
   const handleAddMeal = () => setOpen(true);
 
   return (
-    <div className={classes.root}>
-      <Grid container spacing={3}>
-        <Grid item xs>
+    <ExpansionPanelSummary
+      classes={{ content: classes.content, expanded: classes.expanded }}
+      expandIcon={<ExpandMoreRounded />}
+    >
+      <Grid container spacing={3} alignItems={"center"}>
+        <Grid item xs alignItems={"center"}>
           <Typography variant={"subtitle1"} color={"textSecondary"}>
             {moment(date).format("dd (DD/MM/YYYY)")}
           </Typography>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={9} alignItems={"center"}>
           <Chip
             label={`${energy_cal} kcal | ${energy_kj} kJ`}
             variant={"outlined"}
@@ -81,11 +91,16 @@ export const DayPanelHeader = ({
             className={classes.chip}
           />
         </Grid>
-        <Grid item xs={1}>
+        <Grid item xs={1} alignItems={"center"}>
           <IconButton children={<AddRounded />} onClick={handleAddMeal} />
         </Grid>
       </Grid>
-      <AddMealDialog open={open} setOpen={setOpen} date={date} />
-    </div>
+      <AddMealDialog
+        refetchPanel={refetchPanel}
+        open={open}
+        setOpen={setOpen}
+        date={date}
+      />
+    </ExpansionPanelSummary>
   );
 };

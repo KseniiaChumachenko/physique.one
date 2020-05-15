@@ -3158,6 +3158,19 @@ export type AddMealMutation = { __typename?: "mutation_root" } & {
   insert_meal_one?: Maybe<{ __typename?: "meal" } & Pick<Meal, "name">>;
 };
 
+export type DeleteMealByIdMutationVariables = {
+  id: Scalars["uuid"];
+};
+
+export type DeleteMealByIdMutation = { __typename?: "mutation_root" } & {
+  delete_meal_item?: Maybe<
+    { __typename?: "meal_item_mutation_response" } & {
+      returning: Array<{ __typename?: "meal_item" } & Pick<Meal_Item, "u_id">>;
+    }
+  >;
+  delete_meal_by_pk?: Maybe<{ __typename?: "meal" } & Pick<Meal, "u_id">>;
+};
+
 export type MealsListingQueryVariables = {};
 
 export type MealsListingQuery = { __typename?: "query_root" } & {
@@ -3237,6 +3250,31 @@ export type MealsByDateQuery = { __typename?: "query_root" } & {
   };
 };
 
+export type MealByIdQueryVariables = {
+  id: Scalars["uuid"];
+};
+
+export type MealByIdQuery = { __typename?: "query_root" } & {
+  meal_by_pk?: Maybe<
+    { __typename?: "meal" } & Pick<Meal, "time" | "name" | "date"> & {
+        meal_items: Array<
+          { __typename?: "meal_item" } & Pick<
+            Meal_Item,
+            | "carbohydrates"
+            | "energy_cal"
+            | "energy_kj"
+            | "fats"
+            | "food"
+            | "id"
+            | "meal_id"
+            | "proteins"
+            | "weight"
+          >
+        >;
+      }
+  >;
+};
+
 export type FoodSelectFieldListingQueryVariables = {};
 
 export type FoodSelectFieldListingQuery = { __typename?: "query_root" } & {
@@ -3303,6 +3341,39 @@ export type AddMealMutationResult = ApolloReactCommon.MutationResult<
 export type AddMealMutationOptions = ApolloReactCommon.BaseMutationOptions<
   AddMealMutation,
   AddMealMutationVariables
+>;
+export const DeleteMealByIdDocument = gql`
+  mutation DeleteMealById($id: uuid!) {
+    delete_meal_item(where: { meal_id: { _eq: $id } }) {
+      returning {
+        u_id
+      }
+    }
+    delete_meal_by_pk(id: $id) {
+      u_id
+    }
+  }
+`;
+export function useDeleteMealByIdMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    DeleteMealByIdMutation,
+    DeleteMealByIdMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    DeleteMealByIdMutation,
+    DeleteMealByIdMutationVariables
+  >(DeleteMealByIdDocument, baseOptions);
+}
+export type DeleteMealByIdMutationHookResult = ReturnType<
+  typeof useDeleteMealByIdMutation
+>;
+export type DeleteMealByIdMutationResult = ApolloReactCommon.MutationResult<
+  DeleteMealByIdMutation
+>;
+export type DeleteMealByIdMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  DeleteMealByIdMutation,
+  DeleteMealByIdMutationVariables
 >;
 export const MealsListingDocument = gql`
   query MealsListing {
@@ -3432,6 +3503,56 @@ export type MealsByDateLazyQueryHookResult = ReturnType<
 export type MealsByDateQueryResult = ApolloReactCommon.QueryResult<
   MealsByDateQuery,
   MealsByDateQueryVariables
+>;
+export const MealByIdDocument = gql`
+  query MealById($id: uuid!) {
+    meal_by_pk(id: $id) {
+      time
+      name
+      date
+      meal_items {
+        carbohydrates
+        energy_cal
+        energy_kj
+        fats
+        food
+        id
+        meal_id
+        proteins
+        weight
+      }
+    }
+  }
+`;
+export function useMealByIdQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    MealByIdQuery,
+    MealByIdQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<MealByIdQuery, MealByIdQueryVariables>(
+    MealByIdDocument,
+    baseOptions
+  );
+}
+export function useMealByIdLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    MealByIdQuery,
+    MealByIdQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<MealByIdQuery, MealByIdQueryVariables>(
+    MealByIdDocument,
+    baseOptions
+  );
+}
+export type MealByIdQueryHookResult = ReturnType<typeof useMealByIdQuery>;
+export type MealByIdLazyQueryHookResult = ReturnType<
+  typeof useMealByIdLazyQuery
+>;
+export type MealByIdQueryResult = ApolloReactCommon.QueryResult<
+  MealByIdQuery,
+  MealByIdQueryVariables
 >;
 export const FoodSelectFieldListingDocument = gql`
   query FoodSelectFieldListing {

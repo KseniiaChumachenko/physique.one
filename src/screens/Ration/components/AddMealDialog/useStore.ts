@@ -1,15 +1,17 @@
 import { useLocalStore } from "mobx-react-lite";
 import {
   Food,
+  Meal_Item,
   Meal_Item_Insert_Input,
 } from "../../../../graphql/generated/graphql";
+import moment, { Moment } from "moment";
 
 interface State {
-  name: string;
+  name?: string | null;
   setName(newName: string): void;
 
-  time: any;
-  setTime(newTime: string): void;
+  time?: any;
+  setTime(newTime: Moment): void;
 
   foods: Food[];
 
@@ -48,77 +50,88 @@ const standardMealItem = (food: Food, weight = 100) => ({
   energy_kj: calculateMacronutrient(food.energy_kj, weight),
 });
 
-export function useStore(fetchedFoods: Food[]) {
-  const store: State = useLocalStore(() => ({
-    name: "",
-    setName: (newName) => {
-      store.name = newName;
-    },
+export function useStore(
+  fetchedFoods: Food[],
+  name?: string | null,
+  date?: any,
+  time?: any,
+  meal_items?: Meal_Item_Insert_Input[]
+) {
+  const store: State = useLocalStore(
+    () => ({
+      name: name,
+      setName: (newName) => {
+        store.name = newName;
+      },
 
-    time: new Date(),
-    setTime: (newTime: string) => {
-      store.time = newTime;
-    },
+      time: moment(time + " " + date).format() || new Date(),
+      setTime: (newTime) => {
+        store.time = newTime;
+      },
 
-    foods: fetchedFoods,
+      foods: fetchedFoods,
 
-    meal_items: [standardMealItem(fetchedFoods[0])],
+      meal_items: meal_items || [standardMealItem(fetchedFoods[0])],
 
-    add_meal_item: () => {
-      store.meal_items.push(standardMealItem(fetchedFoods[0]));
-    },
-    update_meal_item: ({
-      indexOfItem = 0,
-      foodId = fetchedFoods[0].id,
-      weight = 100,
-    }) => {
-      const foodById: Food | undefined = fetchedFoods.find(
-        (item: Food) => item.id === foodId
-      );
+      add_meal_item: () => {
+        store.meal_items.push(standardMealItem(fetchedFoods[0]));
+      },
+      update_meal_item: ({
+        indexOfItem = 0,
+        foodId = fetchedFoods[0].id,
+        weight = 100,
+      }) => {
+        const foodById: Food | undefined = fetchedFoods.find(
+          (item: Food) => item.id === foodId
+        );
 
-      store.meal_items[indexOfItem] = standardMealItem(foodById!, weight);
-    },
-    remove_meal_item: (indexOfItem: number) => {
-      store.meal_items = store.meal_items.filter(
-        (item, index) => indexOfItem !== index
-      );
-    },
-    get aggregated_carbs() {
-      let initialValue = 0;
-      return store.meal_items.reduce(
-        (accumulator, currentValue) => accumulator + currentValue.carbohydrates,
-        initialValue
-      );
-    },
-    get aggregated_fats() {
-      let initialValue = 0;
-      return store.meal_items.reduce(
-        (accumulator, currentValue) => accumulator + currentValue.fats,
-        initialValue
-      );
-    },
-    get aggregated_proteins() {
-      let initialValue = 0;
-      return store.meal_items.reduce(
-        (accumulator, currentValue) => accumulator + currentValue.proteins,
-        initialValue
-      );
-    },
-    get aggregated_energyCal() {
-      let initialValue = 0;
-      return store.meal_items.reduce(
-        (accumulator, currentValue) => accumulator + currentValue.energy_cal,
-        initialValue
-      );
-    },
-    get aggregated_energyKj() {
-      let initialValue = 0;
-      return store.meal_items.reduce(
-        (accumulator, currentValue) => accumulator + currentValue.energy_kj,
-        initialValue
-      );
-    },
-  }));
+        store.meal_items[indexOfItem] = standardMealItem(foodById!, weight);
+      },
+      remove_meal_item: (indexOfItem: number) => {
+        store.meal_items = store.meal_items.filter(
+          (item, index) => indexOfItem !== index
+        );
+      },
+      get aggregated_carbs() {
+        let initialValue = 0;
+        return store.meal_items.reduce(
+          (accumulator, currentValue) =>
+            accumulator + currentValue.carbohydrates,
+          initialValue
+        );
+      },
+      get aggregated_fats() {
+        let initialValue = 0;
+        return store.meal_items.reduce(
+          (accumulator, currentValue) => accumulator + currentValue.fats,
+          initialValue
+        );
+      },
+      get aggregated_proteins() {
+        let initialValue = 0;
+        return store.meal_items.reduce(
+          (accumulator, currentValue) => accumulator + currentValue.proteins,
+          initialValue
+        );
+      },
+      get aggregated_energyCal() {
+        let initialValue = 0;
+        return store.meal_items.reduce(
+          (accumulator, currentValue) => accumulator + currentValue.energy_cal,
+          initialValue
+        );
+      },
+      get aggregated_energyKj() {
+        let initialValue = 0;
+        return store.meal_items.reduce(
+          (accumulator, currentValue) => accumulator + currentValue.energy_kj,
+          initialValue
+        );
+      },
+    }),
+    { name, time, meal_items }
+  );
+  console.log(name, time, meal_items);
 
   return store;
 }

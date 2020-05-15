@@ -38,12 +38,12 @@ export const PanelDetailTable = ({ nodes }: { nodes: MealItemNodes }) => {
       <Table className={classes.table} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell align="right">Name</TableCell>
-            <TableCell align="right">Calories&nbsp;|&nbsp;kJ</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbohydrate&nbsp;(g)</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Weight&nbsp;(g)</TableCell>
+            <TableCell>Name</TableCell>
+            <TableCell>Calories&nbsp;|&nbsp;kJ</TableCell>
+            <TableCell>Protein&nbsp;(g)</TableCell>
+            <TableCell>Carbohydrate&nbsp;(g)</TableCell>
+            <TableCell>Fat&nbsp;(g)</TableCell>
+            <TableCell>Weight&nbsp;(g)</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
