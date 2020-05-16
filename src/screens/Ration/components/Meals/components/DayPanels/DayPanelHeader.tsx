@@ -77,7 +77,7 @@ export const DayPanelHeader = ({
   };
 
   return (
-    <>
+    <React.Fragment>
       <ExpansionPanelSummary
         classes={{ content: classes.content, expanded: classes.expanded }}
         expandIcon={<ExpandMoreRounded />}
@@ -181,6 +181,6 @@ export const DayPanelHeader = ({
           </Alert>
         </Snackbar>
       )}
-    </>
+    </React.Fragment>
   );
 };

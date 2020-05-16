@@ -65,7 +65,7 @@ export const PanelDetailTable = ({
   });
 
   return (
-    <>
+    <React.Fragment>
       <TableContainer>
         <Table
           className={classes.table}
@@ -95,10 +95,10 @@ export const PanelDetailTable = ({
                   component="th"
                   scope="row"
                   children={
-                    <>
+                    <React.Fragment>
                       {row.energy_cal.toFixed(2)}&nbsp;|&nbsp;
                       {row.energy_kj.toFixed(2)}
-                    </>
+                    </React.Fragment>
                   }
                 />
                 <TableCell
@@ -179,6 +179,6 @@ export const PanelDetailTable = ({
           refetch={refetch}
         />
       )}
-    </>
+    </React.Fragment>
   );
 };

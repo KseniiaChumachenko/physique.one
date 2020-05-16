@@ -35,7 +35,7 @@ export const PanelDetailActions = ({ id, refetchPanel }: Props) => {
   });
 
   return (
-    <>
+    <React.Fragment>
       <EditDeleteButtonGroup
         onAddClick={() => setAddMealItemDialog(true)}
         onDeleteClick={() => delete_meal_by_pk()}
@@ -78,6 +78,6 @@ export const PanelDetailActions = ({ id, refetchPanel }: Props) => {
           </Alert>
         </Snackbar>
       )}
-    </>
+    </React.Fragment>
   );
 };

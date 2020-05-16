@@ -1,9 +1,17 @@
 {
-  "Meals": {
+  "Summary": {
     "origin": [
       [
         "src/components/BottomNavigation.tsx",
-        20
+        23
+      ]
+    ]
+  },
+  "Ration": {
+    "origin": [
+      [
+        "src/components/BottomNavigation.tsx",
+        24
       ]
     ]
   }

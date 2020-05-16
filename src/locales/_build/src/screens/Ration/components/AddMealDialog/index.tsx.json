@@ -1,0 +1,66 @@
+{
+  "Add new meal": {
+    "origin": [
+      [
+        "src/screens/Ration/components/AddMealDialog/index.tsx",
+        55
+      ]
+    ]
+  },
+  "Time when meal was or will be consumed could be added later later. Selection of ingredients meal consist of, could be listed in FOOD LIBRARY tab and extended by <0>Add food</0> button.": {
+    "origin": [
+      [
+        "src/screens/Ration/components/AddMealDialog/index.tsx",
+        59
+      ]
+    ]
+  },
+  "Name": {
+    "origin": [
+      [
+        "src/screens/Ration/components/AddMealDialog/index.tsx",
+        66
+      ]
+    ]
+  },
+  "When": {
+    "origin": [
+      [
+        "src/screens/Ration/components/AddMealDialog/index.tsx",
+        69
+      ]
+    ]
+  },
+  "Weight (g)": {
+    "origin": [
+      [
+        "src/screens/Ration/components/AddMealDialog/index.tsx",
+        81
+      ]
+    ]
+  },
+  "Add ingredient": {
+    "origin": [
+      [
+        "src/screens/Ration/components/AddMealDialog/index.tsx",
+        89
+      ]
+    ]
+  },
+  "Cancel": {
+    "origin": [
+      [
+        "src/screens/Ration/components/AddMealDialog/index.tsx",
+        95
+      ]
+    ]
+  },
+  "Submit": {
+    "origin": [
+      [
+        "src/screens/Ration/components/AddMealDialog/index.tsx",
+        109
+      ]
+    ]
+  }
+}

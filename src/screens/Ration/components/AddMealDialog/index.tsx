@@ -80,7 +80,7 @@ export const AddMealDialog = ({
   }
 
   return (
-    <>
+    <React.Fragment>
       {data && (
         <AddMealDialogDataFlow
           open={open}
@@ -93,7 +93,7 @@ export const AddMealDialog = ({
           onConfirm={onConfirm}
         />
       )}
-    </>
+    </React.Fragment>
   );
 };
 

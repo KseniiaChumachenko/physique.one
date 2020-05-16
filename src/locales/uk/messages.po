@@ -13,6 +13,137 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/screens/Ration/components/FoodLibrary/index.tsx:68
+msgid "<0>Actions</0>"
+msgstr ""
+
+#: src/screens/Ration/components/AddFoodDialog/index.tsx:33
+msgid "Add food"
+msgstr ""
+
+#: src/screens/Ration/components/AddMealDialog/index.tsx:89
+msgid "Add ingredient"
+msgstr ""
+
+#: src/screens/Ration/components/FoodLibrary/index.tsx:58
+msgid "Add new food"
+msgstr ""
+
+#: src/screens/Ration/components/AddMealDialog/index.tsx:55
+msgid "Add new meal"
+msgstr ""
+
+#: src/screens/Ration/components/AddFoodDialog/index.tsx:37
+msgid "Always add attributes per 100g"
+msgstr ""
+
+#: src/screens/Ration/components/AddFoodDialog/index.tsx:59
+#: src/screens/Ration/components/AddMealDialog/index.tsx:95
+#: src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx:65
+#: src/screens/Ration/components/MealItemDialog/EditMealItemDialog.tsx:62
+msgid "Cancel"
+msgstr ""
+
+#: src/screens/Ration/components/FoodLibrary/index.tsx:66
+msgid "Carbohydrates"
+msgstr ""
+
+#: src/screens/Ration/components/AddFoodDialog/index.tsx:54
+msgid "Carbohydrates (g)"
+msgstr ""
+
+#: src/screens/Ration/components/AddFoodDialog/index.tsx:51
+msgid "Energy (cal)"
+msgstr ""
+
+#: src/screens/Ration/components/AddFoodDialog/index.tsx:52
+msgid "Energy (kJ)"
+msgstr ""
+
+#: src/screens/Ration/components/FoodLibrary/index.tsx:64
+msgid "Energy (kcal|kJ)"
+msgstr ""
+
+#: src/screens/Ration/components/FoodLibrary/index.tsx:67
+msgid "Fats"
+msgstr ""
+
+#: src/screens/Ration/components/AddFoodDialog/index.tsx:55
+msgid "Fats (g)"
+msgstr ""
+
+#: src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx:57
+#: src/screens/Ration/components/MealItemDialog/EditMealItemDialog.tsx:54
+msgid "Food"
+msgstr ""
+
+#: src/screens/Ration/components/FoodLibrary/index.tsx:90
+msgid "Library updated"
+msgstr ""
+
 #: src/components/BottomNavigation.tsx:20
-msgid "Meals"
+#~ msgid "Meals"
+#~ msgstr ""
+
+#: src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx:72
+#: src/screens/Ration/components/MealItemDialog/EditMealItemDialog.tsx:69
+#: src/screens/Ration/components/Meals/components/DayPanels/DayPanelHeader.tsx:71
+#: src/screens/Ration/components/Meals/components/DayPanels/PanelDetailActions.tsx:33
+#: src/screens/Ration/components/Meals/components/DayPanels/PanelDetailTable.tsx:60
+msgid "Meals successfully updated"
+msgstr ""
+
+#: src/screens/Ration/components/AddFoodDialog/index.tsx:39
+#: src/screens/Ration/components/AddMealDialog/index.tsx:66
+#: src/screens/Ration/components/FoodLibrary/index.tsx:62
+msgid "Name"
+msgstr ""
+
+#: src/screens/Ration/components/FoodLibrary/index.tsx:65
+msgid "Proteins"
+msgstr ""
+
+#: src/screens/Ration/components/AddFoodDialog/index.tsx:53
+msgid "Proteins (g)"
+msgstr ""
+
+#: src/components/BottomNavigation.tsx:24
+msgid "Ration"
+msgstr ""
+
+#: src/screens/Ration/components/Meals/index.tsx:29
+msgid "Select week of the year:"
+msgstr ""
+
+#: src/screens/Ration/components/AddFoodDialog/index.tsx:62
+#: src/screens/Ration/components/AddMealDialog/index.tsx:109
+#: src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx:66
+#: src/screens/Ration/components/MealItemDialog/EditMealItemDialog.tsx:63
+msgid "Submit"
+msgstr ""
+
+#: src/components/BottomNavigation.tsx:23
+msgid "Summary"
+msgstr ""
+
+#: src/screens/Ration/components/AddMealDialog/index.tsx:59
+msgid "Time when meal was or will be consumed could be added later later. Selection of ingredients meal consist of, could be listed in FOOD LIBRARY tab and extended by <0>Add food</0> button."
+msgstr ""
+
+#: src/screens/Ration/components/FoodLibrary/index.tsx:63
+msgid "Type"
+msgstr ""
+
+#: src/screens/Ration/components/AddMealDialog/index.tsx:81
+#: src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx:62
+#: src/screens/Ration/components/MealItemDialog/EditMealItemDialog.tsx:59
+msgid "Weight (g)"
+msgstr ""
+
+#: src/screens/Ration/components/AddMealDialog/index.tsx:69
+msgid "When"
+msgstr ""
+
+#: src/screens/Ration/index.tsx:38
+msgid "{0}"
 msgstr ""

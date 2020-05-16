@@ -87,7 +87,7 @@ export const AddMealItemDialog = ({
   }
 
   return (
-    <>
+    <React.Fragment>
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Meal item</DialogTitle>
         <DialogContent>
@@ -155,6 +155,6 @@ export const AddMealItemDialog = ({
           </Alert>
         </Snackbar>
       )}
-    </>
+    </React.Fragment>
   );
 };

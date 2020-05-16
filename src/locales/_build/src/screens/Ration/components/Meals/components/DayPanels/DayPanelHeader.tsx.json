@@ -1,0 +1,10 @@
+{
+  "Meals successfully updated": {
+    "origin": [
+      [
+        "src/screens/Ration/components/Meals/components/DayPanels/DayPanelHeader.tsx",
+        71
+      ]
+    ]
+  }
+}
