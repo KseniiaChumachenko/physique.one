@@ -86,6 +86,7 @@ query FoodSelectFieldListing {
   food {
     id
     name
+    type
     carbohydrates
     proteins
     fats

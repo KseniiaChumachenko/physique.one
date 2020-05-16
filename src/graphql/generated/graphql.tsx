@@ -3171,6 +3171,48 @@ export type DeleteMealByIdMutation = { __typename?: "mutation_root" } & {
   delete_meal_by_pk?: Maybe<{ __typename?: "meal" } & Pick<Meal, "u_id">>;
 };
 
+export type AddFoodMutationVariables = {
+  name?: Maybe<Scalars["bpchar"]>;
+  proteins?: Maybe<Scalars["numeric"]>;
+  fats?: Maybe<Scalars["numeric"]>;
+  energy_kj?: Maybe<Scalars["numeric"]>;
+  energy_cal?: Maybe<Scalars["numeric"]>;
+  carbohydrates?: Maybe<Scalars["numeric"]>;
+  type?: Maybe<Food_Type_Enum>;
+};
+
+export type AddFoodMutation = { __typename?: "mutation_root" } & {
+  insert_food?: Maybe<
+    { __typename?: "food_mutation_response" } & Pick<
+      Food_Mutation_Response,
+      "affected_rows"
+    >
+  >;
+};
+
+export type UpdateFoodMutationVariables = {
+  id: Scalars["uuid"];
+  name?: Maybe<Scalars["bpchar"]>;
+  proteins?: Maybe<Scalars["numeric"]>;
+  fats?: Maybe<Scalars["numeric"]>;
+  energy_kj?: Maybe<Scalars["numeric"]>;
+  energy_cal?: Maybe<Scalars["numeric"]>;
+  carbohydrates?: Maybe<Scalars["numeric"]>;
+  type?: Maybe<Food_Type_Enum>;
+};
+
+export type UpdateFoodMutation = { __typename?: "mutation_root" } & {
+  update_food_by_pk?: Maybe<{ __typename?: "food" } & Pick<Food, "id">>;
+};
+
+export type DeleteFoodMutationVariables = {
+  id: Scalars["uuid"];
+};
+
+export type DeleteFoodMutation = { __typename?: "mutation_root" } & {
+  delete_food_by_pk?: Maybe<{ __typename?: "food" } & Pick<Food, "id">>;
+};
+
 export type MealsListingQueryVariables = {};
 
 export type MealsListingQuery = { __typename?: "query_root" } & {
@@ -3283,6 +3325,7 @@ export type FoodSelectFieldListingQuery = { __typename?: "query_root" } & {
       Food,
       | "id"
       | "name"
+      | "type"
       | "carbohydrates"
       | "proteins"
       | "fats"
@@ -3374,6 +3417,126 @@ export type DeleteMealByIdMutationResult = ApolloReactCommon.MutationResult<
 export type DeleteMealByIdMutationOptions = ApolloReactCommon.BaseMutationOptions<
   DeleteMealByIdMutation,
   DeleteMealByIdMutationVariables
+>;
+export const AddFoodDocument = gql`
+  mutation AddFood(
+    $name: bpchar
+    $proteins: numeric
+    $fats: numeric
+    $energy_kj: numeric
+    $energy_cal: numeric
+    $carbohydrates: numeric
+    $type: food_type_enum
+  ) {
+    insert_food(
+      objects: {
+        name: $name
+        type: $type
+        energy_cal: $energy_cal
+        energy_kj: $energy_kj
+        proteins: $proteins
+        carbohydrates: $carbohydrates
+        fats: $fats
+      }
+    ) {
+      affected_rows
+    }
+  }
+`;
+export function useAddFoodMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    AddFoodMutation,
+    AddFoodMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    AddFoodMutation,
+    AddFoodMutationVariables
+  >(AddFoodDocument, baseOptions);
+}
+export type AddFoodMutationHookResult = ReturnType<typeof useAddFoodMutation>;
+export type AddFoodMutationResult = ApolloReactCommon.MutationResult<
+  AddFoodMutation
+>;
+export type AddFoodMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  AddFoodMutation,
+  AddFoodMutationVariables
+>;
+export const UpdateFoodDocument = gql`
+  mutation UpdateFood(
+    $id: uuid!
+    $name: bpchar
+    $proteins: numeric
+    $fats: numeric
+    $energy_kj: numeric
+    $energy_cal: numeric
+    $carbohydrates: numeric
+    $type: food_type_enum
+  ) {
+    update_food_by_pk(
+      pk_columns: { id: $id }
+      _set: {
+        name: $name
+        energy_cal: $energy_cal
+        energy_kj: $energy_kj
+        proteins: $proteins
+        type: $type
+        fats: $fats
+        carbohydrates: $carbohydrates
+      }
+    ) {
+      id
+    }
+  }
+`;
+export function useUpdateFoodMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    UpdateFoodMutation,
+    UpdateFoodMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    UpdateFoodMutation,
+    UpdateFoodMutationVariables
+  >(UpdateFoodDocument, baseOptions);
+}
+export type UpdateFoodMutationHookResult = ReturnType<
+  typeof useUpdateFoodMutation
+>;
+export type UpdateFoodMutationResult = ApolloReactCommon.MutationResult<
+  UpdateFoodMutation
+>;
+export type UpdateFoodMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  UpdateFoodMutation,
+  UpdateFoodMutationVariables
+>;
+export const DeleteFoodDocument = gql`
+  mutation DeleteFood($id: uuid!) {
+    delete_food_by_pk(id: $id) {
+      id
+    }
+  }
+`;
+export function useDeleteFoodMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    DeleteFoodMutation,
+    DeleteFoodMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    DeleteFoodMutation,
+    DeleteFoodMutationVariables
+  >(DeleteFoodDocument, baseOptions);
+}
+export type DeleteFoodMutationHookResult = ReturnType<
+  typeof useDeleteFoodMutation
+>;
+export type DeleteFoodMutationResult = ApolloReactCommon.MutationResult<
+  DeleteFoodMutation
+>;
+export type DeleteFoodMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  DeleteFoodMutation,
+  DeleteFoodMutationVariables
 >;
 export const MealsListingDocument = gql`
   query MealsListing {
@@ -3559,6 +3722,7 @@ export const FoodSelectFieldListingDocument = gql`
     food {
       id
       name
+      type
       carbohydrates
       proteins
       fats
