@@ -20,16 +20,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TimePicker } from "@material-ui/pickers";
 
 import {
+  AddMealMutationVariables,
   Food,
   Meal_Item_Insert_Input,
-  MealsListingDocument,
   useAddMealMutation,
   useFoodSelectFieldListingQuery,
 } from "src/graphql/generated/graphql";
 import { ToastMessage } from "src/components/ToastMessage";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
 import { useStore } from "./useStore";
-import MomentUtils from "@material-ui/pickers/adapter/moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -53,23 +52,23 @@ interface Props {
   open: boolean;
   setOpen: any;
   date: string;
-  refetchPanel: any;
+  onConfirm(state: AddMealMutationVariables): () => void;
 
   name?: string | null;
   time?: any;
   meal_items?: Meal_Item_Insert_Input[];
 }
 
-const HARDCODED_U_ID = "7040b96b-0994-4f79-ac7e-6e0299fcad04";
+export const HARDCODED_U_ID = "7040b96b-0994-4f79-ac7e-6e0299fcad04";
 
 export const AddMealDialog = ({
   open,
   setOpen,
   date,
-  refetchPanel,
   name,
   time,
   meal_items,
+  onConfirm,
 }: Props) => {
   const { data, loading, error } = useFoodSelectFieldListingQuery();
   if (error) {
@@ -88,10 +87,10 @@ export const AddMealDialog = ({
           setOpen={setOpen}
           date={date}
           fetchedFoods={data.food as Food[]}
-          refetchPanel={refetchPanel}
           name={name}
           time={time}
           meal_items={meal_items}
+          onConfirm={onConfirm}
         />
       )}
     </>
@@ -108,60 +107,20 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     setOpen,
     date,
     fetchedFoods,
-    refetchPanel,
     name,
     time,
     meal_items,
+    onConfirm,
   }) => {
-    const [insert_meal_one, mutationResponse] = useAddMealMutation({
-      onCompleted: () => {
-        setOpen(false);
-        refetchPanel();
-      },
-    });
     const classes = useStyles();
     const stateEndRef = useRef(null);
     const store = useStore(fetchedFoods, name, date, time, meal_items);
 
     useScrollToBottom(store.meal_items, stateEndRef); //TODO for some reason this stoped working
 
-    if (mutationResponse.error) {
-      return (
-        <ToastMessage
-          severity={"error"}
-          children={mutationResponse.error.message as any}
-        />
-      );
-    }
-
-    if (mutationResponse.data) {
-      return (
-        <ToastMessage
-          severity={"success"}
-          children={<Trans>Meal {store.name} successfully added</Trans>}
-        />
-      );
-    }
-
     const handleClose = () => {
       setOpen(false);
     };
-
-    const handleInsertMealConfirmation = () =>
-      insert_meal_one({
-        variables: {
-          name: store.name,
-          date,
-          time: moment(store.time).format("HH:mm"),
-          data: store.meal_items,
-          u_id: HARDCODED_U_ID,
-          carbs: store.aggregated_carbs,
-          proteins: store.aggregated_proteins,
-          fats: store.aggregated_fats,
-          energy_cal: store.aggregated_energyCal,
-          energy_kj: store.aggregated_energyKj,
-        },
-      });
 
     const handleDeleteItem = (key: number) => () => store.remove_meal_item(key);
 
@@ -187,7 +146,7 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
             <TextField
               className={classes.field}
               label={<Trans>Name</Trans>}
-              value={store.name}
+              defaultValue={store.name}
               onChange={(event) => store.setName(event.target.value)}
             />
             <TimePicker
@@ -213,8 +172,7 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                defaultValue={store.meal_items[0].food}
-                value={item.food}
+                defaultValue={store.meal_items[key].food}
                 onChange={(event) =>
                   store.update_meal_item({
                     indexOfItem: key,
@@ -266,10 +224,20 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
             <Trans> Cancel</Trans>
           </Button>
           <Button
-            onClick={handleInsertMealConfirmation}
+            onClick={onConfirm({
+              name: store.name,
+              date,
+              time: moment(store.time).format("HH:mm"),
+              data: store.meal_items,
+              u_id: HARDCODED_U_ID,
+              carbs: store.aggregated_carbs,
+              proteins: store.aggregated_proteins,
+              fats: store.aggregated_fats,
+              energy_cal: store.aggregated_energyCal,
+              energy_kj: store.aggregated_energyKj,
+            })}
             color="primary"
             autoFocus
-            disabled={mutationResponse.loading}
           >
             <Trans>Submit</Trans>
           </Button>

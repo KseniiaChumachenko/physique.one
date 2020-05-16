@@ -1,77 +1,83 @@
-import React from "react";
-import { ButtonGroup, IconButton } from "@material-ui/core";
-import { DeleteRounded, EditRounded } from "@material-ui/icons";
+import React, { useState } from "react";
+import { Trans } from "@lingui/react";
+import { Snackbar } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { Alert } from "@material-ui/lab";
 import {
   Meal,
   useDeleteMealByIdMutation,
 } from "../../../../../../graphql/generated/graphql";
-import { ToastMessage } from "../../../../../../components/ToastMessage";
-import { Trans } from "@lingui/react";
-import { AddMealDialog } from "../../../AddMealDialog";
+import { EditDeleteButtonGroup } from "../../../EditDeletButtonGroup";
+import { AddMealItemDialog } from "../../../MealItemDialog/AddMealItemDialog";
 
-const useStyles = makeStyles((theme) => ({
-  buttonGroup: {},
-  button: {
-    padding: `0 ${theme.spacing(1)}px`,
-  },
-}));
+const useStyles = makeStyles((theme) => ({}));
 
 type MealItem = Pick<Meal, "id">;
 
 interface Props extends MealItem {
   refetchPanel: any;
-  setOpenEditMealDialog: any;
 }
 
-export const PanelDetailActions = ({
-  id,
-  refetchPanel,
-  setOpenEditMealDialog,
-}: Props) => {
+export const PanelDetailActions = ({ id, refetchPanel }: Props) => {
   const classes = useStyles();
-  const [openErrorMessage, setOpenErrorMessage] = React.useState(false);
-  const [openSuccessMessage, setOpenSuccessMessage] = React.useState(false);
+  const [openAddMealItemDialog, setAddMealItemDialog] = useState(false);
 
-  const [delete_meal_by_pk, { error }] = useDeleteMealByIdMutation({
+  const [error, setOpenErrorMessage] = React.useState();
+  const [success, setOpenSuccessMessage] = React.useState();
+
+  const [delete_meal_by_pk] = useDeleteMealByIdMutation({
     variables: { id },
     onCompleted: () => {
       setOpenSuccessMessage(true);
       refetchPanel();
     },
-    onError: (error) => setOpenErrorMessage(true),
+    onError: (error) => setOpenErrorMessage(error),
   });
 
   return (
     <>
-      <ButtonGroup
-        variant={"text"}
-        color={"secondary"}
-        className={classes.buttonGroup}
-      >
-        <IconButton
-          children={<EditRounded />}
-          className={classes.button}
-          onClick={() => setOpenEditMealDialog(true)}
-        />
-        <IconButton
-          children={<DeleteRounded />}
-          className={classes.button}
-          onClick={() => delete_meal_by_pk()}
-        />
-      </ButtonGroup>
-      <ToastMessage
-        open={openSuccessMessage}
-        severity={"success"}
-        children={<Trans>Meal successfully deleted</Trans>}
-        controledClose={setOpenErrorMessage}
+      <EditDeleteButtonGroup
+        onAddClick={() => setAddMealItemDialog(true)}
+        onDeleteClick={() => delete_meal_by_pk()}
       />
-      <ToastMessage
-        open={openErrorMessage}
-        severity={"error"}
-        children={error?.message as any}
-        controledClose={setOpenSuccessMessage}
+
+      {/*  Modals  */}
+      <AddMealItemDialog
+        open={openAddMealItemDialog}
+        setOpen={setAddMealItemDialog}
+        meal_id={id}
+        refetch={refetchPanel}
       />
+
+      {/*  Toasts  */}
+      {success && (
+        <Snackbar
+          open={success}
+          autoHideDuration={6000}
+          onClose={() => setOpenErrorMessage(false)}
+        >
+          <Alert
+            severity={"success"}
+            onClose={() => setOpenErrorMessage(false)}
+          >
+            <Trans>Meals successfully updated</Trans>
+          </Alert>
+        </Snackbar>
+      )}
+      {!!error && (
+        <Snackbar
+          open={!!error}
+          autoHideDuration={6000}
+          onClose={() => setOpenSuccessMessage(false)}
+        >
+          <Alert
+            severity={"error"}
+            onClose={() => setOpenSuccessMessage(false)}
+          >
+            {error?.message as any}
+          </Alert>
+        </Snackbar>
+      )}
     </>
   );
 };

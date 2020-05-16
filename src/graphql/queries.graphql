@@ -20,7 +20,7 @@ query MealsListing {
 }
 
 query MealsByDate($_eq: date = "") {
-  meal_aggregate(where: { date: { _eq: $_eq } }){
+  meal_aggregate(where: { date: { _eq: $_eq } }, order_by: {name: asc_nulls_first}){
     aggregate{
       sum{
         energy_cal
@@ -47,6 +47,8 @@ query MealsByDate($_eq: date = "") {
         }
         nodes{
           id
+          meal_id
+          food
           foodDesc {
             id
             name
@@ -57,6 +59,11 @@ query MealsByDate($_eq: date = "") {
             proteins
           }
           weight
+          carbohydrates,
+          proteins,
+          fats,
+          energy_cal,
+          energy_kj
         }
       }
     }

@@ -24,11 +24,11 @@ export const ToastMessage = ({
     <Snackbar
       open={open ?? localOpen}
       autoHideDuration={6000}
-      onClose={controledClose ? () => controledClose(false) : handleClose}
+      onClose={(controledClose as any) ?? handleClose}
     >
       <Alert
         severity={severity}
-        onClose={controledClose ? () => controledClose(false) : handleClose}
+        onClose={(controledClose as any) ?? handleClose}
       >
         {children}
       </Alert>

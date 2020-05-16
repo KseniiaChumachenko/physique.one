@@ -24,6 +24,7 @@ import { Trans } from "@lingui/react";
 import { AddRounded, DeleteRounded, EditRounded } from "@material-ui/icons";
 import { AddFoodDialog } from "../AddFoodDialog";
 import { State } from "../AddFoodDialog/useStore";
+import { EditDeleteButtonGroup } from "../EditDeletButtonGroup";
 
 const useStyles = makeStyles((theme) => ({
   tableToolbar: {
@@ -116,16 +117,12 @@ export const FoodLibrary = ({}: Props) => {
               <TableCell children={row.carbohydrates} />
               <TableCell children={row.fats} />
               <TableCell>
-                <ButtonGroup>
-                  <IconButton
-                    children={<EditRounded />}
-                    onClick={() => setOpenEditDialog(true)}
-                  />
-                  <IconButton
-                    children={<DeleteRounded />}
-                    onClick={() => delete_food({ variables: { id: row.id } })}
-                  />
-                </ButtonGroup>
+                <EditDeleteButtonGroup
+                  onEditClick={() => setOpenEditDialog(true)}
+                  onDeleteClick={() =>
+                    delete_food({ variables: { id: row.id } })
+                  }
+                />
               </TableCell>
 
               <AddFoodDialog
@@ -148,13 +145,13 @@ export const FoodLibrary = ({}: Props) => {
         severity={"error"}
         children={error?.message as any}
         open={!!error}
-        controledClose={setError}
+        controledClose={() => setError(false)}
       />
       <ToastMessage
         severity={"success"}
         children={<Trans>Library updated</Trans>}
         open={success}
-        controledClose={setSuccess}
+        controledClose={() => setSuccess(false)}
       />
     </TableContainer>
   );

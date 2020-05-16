@@ -28,6 +28,45 @@ mutation AddMeal(
   }
 }
 
+mutation UpdateMeal(
+  $id: uuid!
+  $name: String
+  $date: date
+  $time: time
+  $data: [meal_item_insert_input!]!
+  $u_id: uuid!
+  $carbs: numeric
+  $proteins: numeric
+  $fats: numeric
+  $energy_cal: numeric
+  $energy_kj: numeric
+) {
+  delete_meal_item(where: { meal_id: { _eq: $id } }) {
+    returning {
+      u_id
+    }
+  }
+  delete_meal_by_pk(id: $id) {
+    u_id
+  }
+  insert_meal_one(
+    object: {
+      date: $date
+      time: $time
+      meal_items: { data: $data }
+      name: $name
+      u_id: $u_id
+      carbohydrates: $carbs
+      proteins: $proteins
+      fats: $fats
+      energy_cal: $energy_cal
+      energy_kj: $energy_kj
+    }
+  ) {
+    name
+  }
+}
+
 mutation DeleteMealById($id: uuid!) {
   delete_meal_item(where: { meal_id: { _eq: $id } }) {
     returning {
@@ -91,6 +130,70 @@ mutation UpdateFood(
 
 mutation DeleteFood($id: uuid!) {
   delete_food_by_pk(id: $id) {
+    id
+  }
+}
+
+mutation AddMealItem(
+  $u_id: uuid = "7040b96b-0994-4f79-ac7e-6e0299fcad04"
+  $proteins: numeric = ""
+  $fats: numeric = ""
+  $energy_kj: numeric = ""
+  $energy_cal: numeric = ""
+  $carbohydrates: numeric = ""
+  $food: uuid = ""
+  $meal_id: uuid = ""
+  $weight: numeric = ""
+) {
+  insert_meal_item_one(
+    object: {
+      carbohydrates: $carbohydrates
+      energy_cal: $energy_cal
+      energy_kj: $energy_kj
+      fats: $fats
+      food: $food
+      meal_id: $meal_id
+      proteins: $proteins
+      u_id: $u_id
+      weight: $weight
+    }
+  ) {
+    id
+  }
+}
+
+mutation UpdateMealItem(
+  $u_id: uuid = "7040b96b-0994-4f79-ac7e-6e0299fcad04"
+  $carbohydrates: numeric
+  $energy_cal: numeric
+  $energy_kj: numeric
+  $fats: numeric
+  $proteins: numeric
+  $weight: numeric
+  $food: uuid
+  $meal_id: uuid
+  $id: uuid!
+) {
+  update_meal_item_by_pk(
+    pk_columns: { id: $id }
+    _set: {
+      carbohydrates: $carbohydrates
+      energy_cal: $energy_cal
+      energy_kj: $energy_kj
+      fats: $fats
+      food: $food
+      meal_id: $meal_id
+      proteins: $proteins
+      weight: $weight
+      u_id: $u_id
+    }
+  ) {
+    id
+  }
+}
+
+mutation DeleteMealItemByPrimaryKey($id: uuid!) {
+  delete_meal_item_by_pk(id: $id) {
     id
   }
 }

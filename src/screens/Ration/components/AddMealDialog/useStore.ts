@@ -1,3 +1,4 @@
+import omit from "lodash.omit";
 import { useLocalStore } from "mobx-react-lite";
 import {
   Food,
@@ -71,7 +72,9 @@ export function useStore(
 
       foods: fetchedFoods,
 
-      meal_items: meal_items || [standardMealItem(fetchedFoods[0])],
+      meal_items: meal_items?.map((item) => omit(item, "__typename")) || [
+        standardMealItem(fetchedFoods[0]),
+      ],
 
       add_meal_item: () => {
         store.meal_items.push(standardMealItem(fetchedFoods[0]));

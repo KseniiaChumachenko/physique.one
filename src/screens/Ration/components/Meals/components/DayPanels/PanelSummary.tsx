@@ -44,19 +44,17 @@ export const PanelSummary = ({
   refetchPanel,
 }: SummaryProps) => {
   const classes = useStyles();
-  const [openEditMealDialog, setOpenEditMealDialog] = React.useState(false);
-  const { data } = useMealByIdQuery({ variables: { id } });
 
   return (
     <ExpansionPanelSummary expandIcon={<ExpandMoreRounded />}>
       <div className={classes.panelHeader}>
-        <Grid container spacing={1}>
+        <Grid container spacing={1} alignItems={"center"}>
           <Grid
             item
             xs
             children={<Typography color={"textPrimary"}>{name}</Typography>}
           />
-          <Grid item xs={8}>
+          <Grid item xs={8} alignItems={"center"}>
             <Chip
               label={`${energy_cal?.toFixed(2)} kcal | ${energy_kj?.toFixed(
                 2
@@ -94,17 +92,15 @@ export const PanelSummary = ({
           <Grid
             item
             xs
+            alignItems={"center"}
             children={
-              <PanelDetailActions
-                id={id}
-                refetchPanel={refetchPanel}
-                setOpenEditMealDialog={setOpenEditMealDialog}
-              />
+              <PanelDetailActions id={id} refetchPanel={refetchPanel} />
             }
           />
           <Grid
             item
             xs={1}
+            alignItems={"center"}
             children={
               <Typography color={"textSecondary"} variant={"body1"}>
                 {moment(time, "HH:mm").format("LT")}
@@ -113,18 +109,6 @@ export const PanelSummary = ({
           />
         </Grid>
       </div>
-      {/*Here dialog used as edit-mode of meal*/}
-      {data?.meal_by_pk?.name && (
-        <AddMealDialog
-          open={openEditMealDialog}
-          setOpen={setOpenEditMealDialog}
-          date={data?.meal_by_pk?.date}
-          refetchPanel={refetchPanel}
-          name={data?.meal_by_pk?.name}
-          time={data?.meal_by_pk?.time}
-          meal_items={data?.meal_by_pk?.meal_items}
-        />
-      )}
     </ExpansionPanelSummary>
   );
 };

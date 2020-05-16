@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import {
+  Snackbar,
   Table,
   TableBody,
   TableCell,
@@ -8,7 +9,17 @@ import {
   TableRow,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Food, Meal_Item } from "src/graphql/generated/graphql";
+import { ApolloError } from "@apollo/client";
+import { Alert } from "@material-ui/lab";
+import { Trans } from "@lingui/react";
+import {
+  Food,
+  Meal_Item,
+  useDeleteMealItemByPrimaryKeyMutation,
+  useUpdateMealItemMutation,
+} from "src/graphql/generated/graphql";
+import { EditDeleteButtonGroup } from "../../../EditDeletButtonGroup";
+import { EditMealItemDialog } from "../../../MealItemDialog/EditMealItemDialog";
 
 const useStyles = makeStyles((theme) => ({
   table: {
@@ -17,76 +28,157 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type MealItemNodes = Array<
-  { __typename?: "meal_item" } & Pick<Meal_Item, "id" | "weight"> & {
-      foodDesc: { __typename?: "food" } & Pick<
-        Food,
-        | "id"
-        | "name"
-        | "energy_cal"
-        | "energy_kj"
-        | "carbohydrates"
-        | "fats"
-        | "proteins"
-      >;
-    }
+  Meal_Item & {
+    foodDesc: { __typename?: "food" } & Pick<
+      Food,
+      | "id"
+      | "name"
+      | "energy_cal"
+      | "energy_kj"
+      | "carbohydrates"
+      | "fats"
+      | "proteins"
+    >;
+  }
 >;
 
-export const PanelDetailTable = ({ nodes }: { nodes: MealItemNodes }) => {
+export const PanelDetailTable = ({
+  nodes,
+  refetch,
+}: {
+  nodes: MealItemNodes;
+  refetch: any;
+}) => {
   const classes = useStyles();
+  const [openEditMealItemDialog, setEditMealItemDialog] = useState<
+    Meal_Item | boolean
+  >(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<ApolloError>();
+
+  const [delete_by_pk] = useDeleteMealItemByPrimaryKeyMutation({
+    onCompleted: () => {
+      refetch();
+      setSuccess(true);
+    },
+    onError: (error1) => setError(error1),
+  });
+
   return (
-    <TableContainer>
-      <Table className={classes.table} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Name</TableCell>
-            <TableCell>Calories&nbsp;|&nbsp;kJ</TableCell>
-            <TableCell>Protein&nbsp;(g)</TableCell>
-            <TableCell>Carbohydrate&nbsp;(g)</TableCell>
-            <TableCell>Fat&nbsp;(g)</TableCell>
-            <TableCell>Weight&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {nodes.map((row, key) => (
-            <TableRow key={key}>
-              <TableCell
-                component="th"
-                scope="row"
-                children={row.foodDesc.name}
-              />
-              <TableCell
-                component="th"
-                scope="row"
-                children={
-                  <>
-                    {row.foodDesc.energy_cal}&nbsp;|&nbsp;
-                    {row.foodDesc.energy_kj}
-                  </>
-                }
-              />
-              <TableCell
-                component="th"
-                scope="row"
-                children={row.foodDesc.proteins}
-              />
-
-              <TableCell
-                component="th"
-                scope="row"
-                children={row.foodDesc.carbohydrates}
-              />
-
-              <TableCell
-                component="th"
-                scope="row"
-                children={row.foodDesc.fats}
-              />
-
-              <TableCell component="th" scope="row" children={row.weight} />
+    <>
+      <TableContainer>
+        <Table
+          className={classes.table}
+          size="small"
+          aria-label="a dense table"
+        >
+          <TableHead>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>Calories&nbsp;|&nbsp;kJ</TableCell>
+              <TableCell>Protein&nbsp;(g)</TableCell>
+              <TableCell>Carbohydrate&nbsp;(g)</TableCell>
+              <TableCell>Fat&nbsp;(g)</TableCell>
+              <TableCell>Weight&nbsp;(g)</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {nodes.map((row, key) => (
+              <TableRow key={key}>
+                <TableCell
+                  component="th"
+                  scope="row"
+                  children={row.foodDesc.name}
+                />
+                <TableCell
+                  component="th"
+                  scope="row"
+                  children={
+                    <>
+                      {row.energy_cal.toFixed(2)}&nbsp;|&nbsp;
+                      {row.energy_kj.toFixed(2)}
+                    </>
+                  }
+                />
+                <TableCell
+                  component="th"
+                  scope="row"
+                  children={row.proteins.toFixed(2)}
+                />
+
+                <TableCell
+                  component="th"
+                  scope="row"
+                  children={row.carbohydrates.toFixed(2)}
+                />
+
+                <TableCell
+                  component="th"
+                  scope="row"
+                  children={row.fats.toFixed(2)}
+                />
+
+                <TableCell component="th" scope="row" children={row.weight} />
+                <TableCell
+                  component="th"
+                  scope="row"
+                  children={
+                    <EditDeleteButtonGroup
+                      onEditClick={() => setEditMealItemDialog(row)}
+                      onDeleteClick={() =>
+                        delete_by_pk({ variables: { id: row.id } })
+                      }
+                    />
+                  }
+                />
+
+                {/*  Toasts  */}
+                {success && (
+                  <Snackbar
+                    key={key}
+                    open={success}
+                    autoHideDuration={6000}
+                    onClose={() => setSuccess(false)}
+                  >
+                    <Alert
+                      severity={"success"}
+                      onClose={() => setSuccess(false)}
+                    >
+                      <Trans>Meals successfully updated</Trans>
+                    </Alert>
+                  </Snackbar>
+                )}
+                {error && (
+                  <Snackbar
+                    key={key}
+                    open={!!error}
+                    autoHideDuration={6000}
+                    onClose={() => setError(false as any)}
+                  >
+                    <Alert
+                      severity={"error"}
+                      onClose={() => setError(false as any)}
+                    >
+                      {error.message}
+                    </Alert>
+                  </Snackbar>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      {/* Edit MealItem dialog */}
+      {(openEditMealItemDialog as Meal_Item)?.id && (
+        <EditMealItemDialog
+          open={!!openEditMealItemDialog}
+          setOpen={setEditMealItemDialog}
+          mealItem={openEditMealItemDialog as Meal_Item}
+          refetch={refetch}
+        />
+      )}
+    </>
   );
 };

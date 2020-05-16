@@ -97,7 +97,10 @@ export const DayPanels = ({ date }: Props) => {
               refetchPanel={refetch}
             />
             <ExpansionPanelDetails className={classes.parentExpPanelDetails}>
-              <PanelDetailTable nodes={item?.meal_items_aggregate?.nodes} />
+              <PanelDetailTable
+                nodes={item?.meal_items_aggregate?.nodes}
+                refetch={refetch}
+              />
             </ExpansionPanelDetails>
           </ExpansionPanel>
         ))}
