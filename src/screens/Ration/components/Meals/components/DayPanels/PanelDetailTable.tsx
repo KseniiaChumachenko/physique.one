@@ -16,7 +16,6 @@ import {
   Food,
   Meal_Item,
   useDeleteMealItemByPrimaryKeyMutation,
-  useUpdateMealItemMutation,
 } from "src/graphql/generated/graphql";
 import { EditDeleteButtonGroup } from "../../../EditDeletButtonGroup";
 import { EditMealItemDialog } from "../../../MealItemDialog/EditMealItemDialog";
@@ -27,8 +26,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type MealItemNodes = Array<
-  Meal_Item & {
+type MealItemNode = { __typename?: "meal_item" } & Pick<
+  Meal_Item,
+  | "id"
+  | "meal_id"
+  | "food"
+  | "weight"
+  | "carbohydrates"
+  | "proteins"
+  | "fats"
+  | "energy_cal"
+  | "energy_kj"
+> & {
     foodDesc: { __typename?: "food" } & Pick<
       Food,
       | "id"
@@ -39,19 +48,18 @@ type MealItemNodes = Array<
       | "fats"
       | "proteins"
     >;
-  }
->;
+  };
 
 export const PanelDetailTable = ({
-  nodes,
+  meal_items,
   refetch,
 }: {
-  nodes: MealItemNodes;
+  meal_items?: Meal_Item[];
   refetch: any;
 }) => {
   const classes = useStyles();
   const [openEditMealItemDialog, setEditMealItemDialog] = useState<
-    Meal_Item | boolean
+    MealItemNode | boolean
   >(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<ApolloError>();
@@ -84,7 +92,7 @@ export const PanelDetailTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {nodes.map((row, key) => (
+            {meal_items?.map((row, key) => (
               <TableRow key={key}>
                 <TableCell
                   component="th"

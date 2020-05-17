@@ -28,12 +28,6 @@ interface State {
     weight?: number;
   }): void;
   remove_meal_item(indexOfItem: number): void;
-
-  aggregated_carbs: any;
-  aggregated_proteins: any;
-  aggregated_fats: any;
-  aggregated_energyKj: any;
-  aggregated_energyCal: any;
 }
 const HARDCODED_U_ID = "7040b96b-0994-4f79-ac7e-6e0299fcad04";
 
@@ -93,42 +87,6 @@ export function useStore(
       remove_meal_item: (indexOfItem: number) => {
         store.meal_items = store.meal_items.filter(
           (item, index) => indexOfItem !== index
-        );
-      },
-      get aggregated_carbs() {
-        let initialValue = 0;
-        return store.meal_items.reduce(
-          (accumulator, currentValue) =>
-            accumulator + currentValue.carbohydrates,
-          initialValue
-        );
-      },
-      get aggregated_fats() {
-        let initialValue = 0;
-        return store.meal_items.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.fats,
-          initialValue
-        );
-      },
-      get aggregated_proteins() {
-        let initialValue = 0;
-        return store.meal_items.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.proteins,
-          initialValue
-        );
-      },
-      get aggregated_energyCal() {
-        let initialValue = 0;
-        return store.meal_items.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.energy_cal,
-          initialValue
-        );
-      },
-      get aggregated_energyKj() {
-        let initialValue = 0;
-        return store.meal_items.reduce(
-          (accumulator, currentValue) => accumulator + currentValue.energy_kj,
-          initialValue
         );
       },
     }),

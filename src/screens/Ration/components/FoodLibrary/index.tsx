@@ -1,27 +1,25 @@
 import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Trans } from "@lingui/react";
+import { AddRounded } from "@material-ui/icons";
+import {
+  Button,
+  LinearProgress,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
 import {
   useAddFoodMutation,
   useDeleteFoodMutation,
   useFoodSelectFieldListingQuery,
   useUpdateFoodMutation,
 } from "../../../../graphql/generated/graphql";
-import {
-  LinearProgress,
-  TableContainer,
-  Paper,
-  Table,
-  TableHead,
-  TableCell,
-  TableBody,
-  TableRow,
-  Button,
-  IconButton,
-  ButtonGroup,
-} from "@material-ui/core";
 import { ToastMessage } from "../../../../components/ToastMessage";
-import { makeStyles } from "@material-ui/core/styles";
-import { Trans } from "@lingui/react";
-import { AddRounded, DeleteRounded, EditRounded } from "@material-ui/icons";
 import { AddFoodDialog } from "../AddFoodDialog";
 import { State } from "../AddFoodDialog/useStore";
 import { EditDeleteButtonGroup } from "../EditDeletButtonGroup";

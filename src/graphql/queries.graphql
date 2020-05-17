@@ -20,57 +20,63 @@ query MealsListing {
 }
 
 query MealsByDate($_eq: date = "") {
-  meal_aggregate(where: { date: { _eq: $_eq } }, order_by: {name: asc_nulls_first}){
-    aggregate{
-      sum{
+  meal(where: { date: { _eq: $_eq } }, order_by: { name: asc_nulls_first }) {
+    id
+    date
+    time
+    name
+    meal_items {
+      id
+      meal_id
+      food
+      foodDesc {
+        id
+        name
         energy_cal
         energy_kj
         carbohydrates
-        proteins
         fats
+        proteins
       }
+      weight
+      carbohydrates
+      proteins
+      fats
+      energy_cal
+      energy_kj
     }
-    nodes{
-      id
-      date
-      time
-      name
-      meal_items_aggregate{
-        aggregate{
-          sum{
-            energy_cal
-            energy_kj
-            carbohydrates
-            proteins
-            fats
-          }
-        }
-        nodes{
-          id
-          meal_id
-          food
-          foodDesc {
-            id
-            name
-            energy_cal
-            energy_kj
-            carbohydrates
-            fats
-            proteins
-          }
-          weight
-          carbohydrates,
-          proteins,
-          fats,
-          energy_cal,
-          energy_kj
-        }
+  }
+}
+
+query MealItemMacrosSumById($meal_id: uuid = "") {
+  meal_item_aggregate(where: { meal_id: { _eq: $meal_id } }) {
+    aggregate {
+      sum {
+        carbohydrates
+        energy_cal
+        energy_kj
+        fats
+        proteins
       }
     }
   }
 }
 
-query MealById($id: uuid!){
+query MealItemMacrosSumByDate($date: date = "") {
+  meal_item_aggregate(where: { meal: { date: { _eq: $date } } }) {
+    aggregate {
+      sum {
+        carbohydrates
+        energy_cal
+        energy_kj
+        fats
+        proteins
+      }
+    }
+  }
+}
+
+query MealById($id: uuid!) {
   meal_by_pk(id: $id) {
     time
     name

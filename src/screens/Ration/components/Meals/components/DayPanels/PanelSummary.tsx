@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import moment from "moment";
 import { ExpandMoreRounded } from "@material-ui/icons";
 import {
   Avatar,
   Chip,
-  ExpansionPanel,
   ExpansionPanelSummary,
   Grid,
   Typography,
@@ -12,12 +11,9 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Meal,
-  Meal_Item,
-  Meal_Item_Sum_Fields,
-  useMealByIdQuery,
+  useMealItemMacrosSumByIdQuery,
 } from "src/graphql/generated/graphql";
 import { PanelDetailActions } from "./PanelDetailActions";
-import { AddMealDialog } from "../../../AddMealDialog";
 
 const useStyles = makeStyles((theme) => ({
   chip: {
@@ -28,22 +24,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type SummaryProps = Meal_Item_Sum_Fields &
-  Pick<Meal, "name" | "time"> &
-  Pick<Meal_Item, "id"> & { refetchPanel: any };
+const INITIAL_STATE = {
+  energy_cal: 0,
+  energy_kj: 0,
+  proteins: 0,
+  fats: 0,
+  carbohydrates: 0,
+};
+
+type SummaryProps = Pick<Meal, "name" | "time"> &
+  Pick<Meal, "id"> & { refetchPanel: any };
 
 export const PanelSummary = ({
   name,
-  energy_cal,
-  energy_kj,
-  proteins,
-  carbohydrates,
-  fats,
   id,
   time,
   refetchPanel,
 }: SummaryProps) => {
   const classes = useStyles();
+
+  const [
+    { energy_cal, energy_kj, proteins, fats, carbohydrates },
+    setSum,
+  ] = useState(INITIAL_STATE);
+
+  const { data } = useMealItemMacrosSumByIdQuery({
+    variables: { meal_id: id },
+  });
+
+  useEffect(() => {
+    if (data?.meal_item_aggregate?.aggregate?.sum) {
+      setSum({
+        energy_cal: data?.meal_item_aggregate?.aggregate?.sum.energy_cal || 0,
+        energy_kj: data?.meal_item_aggregate?.aggregate?.sum.energy_kj || 0,
+        proteins: data?.meal_item_aggregate?.aggregate?.sum.proteins || 0,
+        carbohydrates:
+          data?.meal_item_aggregate?.aggregate?.sum.carbohydrates || 0,
+        fats: data?.meal_item_aggregate?.aggregate?.sum.fats || 0,
+      });
+    }
+  }, [data]);
 
   return (
     <ExpansionPanelSummary expandIcon={<ExpandMoreRounded />}>
@@ -63,6 +83,7 @@ export const PanelSummary = ({
               size={"small"}
               color={"secondary"}
               className={classes.chip}
+              disabled={!!energy_cal}
             />
             <Chip
               avatar={<Avatar>P</Avatar>}
@@ -71,6 +92,7 @@ export const PanelSummary = ({
               size={"small"}
               color={"primary"}
               className={classes.chip}
+              disabled={!!proteins}
             />
             <Chip
               avatar={<Avatar>C</Avatar>}
@@ -79,6 +101,7 @@ export const PanelSummary = ({
               size={"small"}
               color={"primary"}
               className={classes.chip}
+              disabled={!!carbohydrates}
             />
             <Chip
               avatar={<Avatar>F</Avatar>}
@@ -87,6 +110,7 @@ export const PanelSummary = ({
               size={"small"}
               color={"primary"}
               className={classes.chip}
+              disabled={!!fats}
             />
           </Grid>
           <Grid

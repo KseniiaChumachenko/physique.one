@@ -5,13 +5,11 @@ import {
   LinearProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useMealsByDateQuery } from "src/graphql/generated/graphql";
+import { Meal_Item, useMealsByDateQuery } from "src/graphql/generated/graphql";
 import { ToastMessage } from "src/components/ToastMessage";
 import { DayPanelHeader } from "./DayPanelHeader";
 import { PanelSummary } from "./PanelSummary";
-import { PanelDetailActions } from "./PanelDetailActions";
 import { PanelDetailTable } from "./PanelDetailTable";
-import { AddMealDialog } from "../../../AddMealDialog";
 
 const useStyles = makeStyles((theme) => ({
   parentExpPanel: {
@@ -74,13 +72,9 @@ export const DayPanels = ({ date }: Props) => {
 
   return (
     <ExpansionPanel className={classes.parentExpPanel}>
-      <DayPanelHeader
-        date={date}
-        refetchPanel={refetch}
-        {...data?.meal_aggregate.aggregate?.sum}
-      />
+      <DayPanelHeader date={date} refetchPanel={refetch} />
       <ExpansionPanelDetails className={classes.parentExpPanelDetails}>
-        {data?.meal_aggregate?.nodes.map((item, key) => (
+        {data?.meal.map((item, key) => (
           <ExpansionPanel
             key={key}
             defaultExpanded={true}
@@ -93,12 +87,11 @@ export const DayPanels = ({ date }: Props) => {
               id={item.id}
               name={item.name}
               time={item.time}
-              {...item.meal_items_aggregate.aggregate?.sum}
               refetchPanel={refetch}
             />
             <ExpansionPanelDetails className={classes.parentExpPanelDetails}>
               <PanelDetailTable
-                nodes={item?.meal_items_aggregate?.nodes}
+                meal_items={item?.meal_items as Meal_Item[]}
                 refetch={refetch}
               />
             </ExpansionPanelDetails>

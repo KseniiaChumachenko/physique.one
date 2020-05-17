@@ -23,7 +23,6 @@ import {
   AddMealMutationVariables,
   Food,
   Meal_Item_Insert_Input,
-  useAddMealMutation,
   useFoodSelectFieldListingQuery,
 } from "src/graphql/generated/graphql";
 import { ToastMessage } from "src/components/ToastMessage";
@@ -230,11 +229,6 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
               time: moment(store.time).format("HH:mm"),
               data: store.meal_items,
               u_id: HARDCODED_U_ID,
-              carbs: store.aggregated_carbs,
-              proteins: store.aggregated_proteins,
-              fats: store.aggregated_fats,
-              energy_cal: store.aggregated_energyCal,
-              energy_kj: store.aggregated_energyKj,
             })}
             color="primary"
             autoFocus

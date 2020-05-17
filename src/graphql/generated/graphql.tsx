@@ -556,23 +556,13 @@ export type Food_Variance_Fields = {
 /** columns and relationships of "meal" */
 export type Meal = {
   __typename?: "meal";
-  /** Aggregation of a macronutrient according to meal_items */
-  carbohydrates: Scalars["numeric"];
   date?: Maybe<Scalars["date"]>;
-  /** Aggregation of an energy according to meal_items */
-  energy_cal: Scalars["numeric"];
-  /** Aggregation of an energy according to meal_items */
-  energy_kj: Scalars["numeric"];
-  /** Aggregation of a macronutrient according to meal_items */
-  fats: Scalars["numeric"];
   id: Scalars["uuid"];
   /** An array relationship */
   meal_items: Array<Meal_Item>;
   /** An aggregated array relationship */
   meal_items_aggregate: Meal_Item_Aggregate;
   name?: Maybe<Scalars["String"]>;
-  /** Aggregation of a macronutrient according to meal_items */
-  proteins: Scalars["numeric"];
   time?: Maybe<Scalars["time"]>;
   u_id?: Maybe<Scalars["uuid"]>;
   /** An object relationship */
@@ -607,33 +597,15 @@ export type Meal_Aggregate = {
 /** aggregate fields of "meal" */
 export type Meal_Aggregate_Fields = {
   __typename?: "meal_aggregate_fields";
-  avg?: Maybe<Meal_Avg_Fields>;
   count?: Maybe<Scalars["Int"]>;
   max?: Maybe<Meal_Max_Fields>;
   min?: Maybe<Meal_Min_Fields>;
-  stddev?: Maybe<Meal_Stddev_Fields>;
-  stddev_pop?: Maybe<Meal_Stddev_Pop_Fields>;
-  stddev_samp?: Maybe<Meal_Stddev_Samp_Fields>;
-  sum?: Maybe<Meal_Sum_Fields>;
-  var_pop?: Maybe<Meal_Var_Pop_Fields>;
-  var_samp?: Maybe<Meal_Var_Samp_Fields>;
-  variance?: Maybe<Meal_Variance_Fields>;
 };
 
 /** aggregate fields of "meal" */
 export type Meal_Aggregate_FieldsCountArgs = {
   columns?: Maybe<Array<Meal_Select_Column>>;
   distinct?: Maybe<Scalars["Boolean"]>;
-};
-
-/** aggregate avg on columns */
-export type Meal_Avg_Fields = {
-  __typename?: "meal_avg_fields";
-  carbohydrates?: Maybe<Scalars["Float"]>;
-  energy_cal?: Maybe<Scalars["Float"]>;
-  energy_kj?: Maybe<Scalars["Float"]>;
-  fats?: Maybe<Scalars["Float"]>;
-  proteins?: Maybe<Scalars["Float"]>;
 };
 
 /** columns and relationships of "meal_item" */
@@ -821,28 +793,18 @@ export type Meal_Item_Variance_Fields = {
 /** aggregate max on columns */
 export type Meal_Max_Fields = {
   __typename?: "meal_max_fields";
-  carbohydrates?: Maybe<Scalars["numeric"]>;
   date?: Maybe<Scalars["date"]>;
-  energy_cal?: Maybe<Scalars["numeric"]>;
-  energy_kj?: Maybe<Scalars["numeric"]>;
-  fats?: Maybe<Scalars["numeric"]>;
   id?: Maybe<Scalars["uuid"]>;
   name?: Maybe<Scalars["String"]>;
-  proteins?: Maybe<Scalars["numeric"]>;
   u_id?: Maybe<Scalars["uuid"]>;
 };
 
 /** aggregate min on columns */
 export type Meal_Min_Fields = {
   __typename?: "meal_min_fields";
-  carbohydrates?: Maybe<Scalars["numeric"]>;
   date?: Maybe<Scalars["date"]>;
-  energy_cal?: Maybe<Scalars["numeric"]>;
-  energy_kj?: Maybe<Scalars["numeric"]>;
-  fats?: Maybe<Scalars["numeric"]>;
   id?: Maybe<Scalars["uuid"]>;
   name?: Maybe<Scalars["String"]>;
-  proteins?: Maybe<Scalars["numeric"]>;
   u_id?: Maybe<Scalars["uuid"]>;
 };
 
@@ -853,76 +815,6 @@ export type Meal_Mutation_Response = {
   affected_rows: Scalars["Int"];
   /** data of the affected rows by the mutation */
   returning: Array<Meal>;
-};
-
-/** aggregate stddev on columns */
-export type Meal_Stddev_Fields = {
-  __typename?: "meal_stddev_fields";
-  carbohydrates?: Maybe<Scalars["Float"]>;
-  energy_cal?: Maybe<Scalars["Float"]>;
-  energy_kj?: Maybe<Scalars["Float"]>;
-  fats?: Maybe<Scalars["Float"]>;
-  proteins?: Maybe<Scalars["Float"]>;
-};
-
-/** aggregate stddev_pop on columns */
-export type Meal_Stddev_Pop_Fields = {
-  __typename?: "meal_stddev_pop_fields";
-  carbohydrates?: Maybe<Scalars["Float"]>;
-  energy_cal?: Maybe<Scalars["Float"]>;
-  energy_kj?: Maybe<Scalars["Float"]>;
-  fats?: Maybe<Scalars["Float"]>;
-  proteins?: Maybe<Scalars["Float"]>;
-};
-
-/** aggregate stddev_samp on columns */
-export type Meal_Stddev_Samp_Fields = {
-  __typename?: "meal_stddev_samp_fields";
-  carbohydrates?: Maybe<Scalars["Float"]>;
-  energy_cal?: Maybe<Scalars["Float"]>;
-  energy_kj?: Maybe<Scalars["Float"]>;
-  fats?: Maybe<Scalars["Float"]>;
-  proteins?: Maybe<Scalars["Float"]>;
-};
-
-/** aggregate sum on columns */
-export type Meal_Sum_Fields = {
-  __typename?: "meal_sum_fields";
-  carbohydrates?: Maybe<Scalars["numeric"]>;
-  energy_cal?: Maybe<Scalars["numeric"]>;
-  energy_kj?: Maybe<Scalars["numeric"]>;
-  fats?: Maybe<Scalars["numeric"]>;
-  proteins?: Maybe<Scalars["numeric"]>;
-};
-
-/** aggregate var_pop on columns */
-export type Meal_Var_Pop_Fields = {
-  __typename?: "meal_var_pop_fields";
-  carbohydrates?: Maybe<Scalars["Float"]>;
-  energy_cal?: Maybe<Scalars["Float"]>;
-  energy_kj?: Maybe<Scalars["Float"]>;
-  fats?: Maybe<Scalars["Float"]>;
-  proteins?: Maybe<Scalars["Float"]>;
-};
-
-/** aggregate var_samp on columns */
-export type Meal_Var_Samp_Fields = {
-  __typename?: "meal_var_samp_fields";
-  carbohydrates?: Maybe<Scalars["Float"]>;
-  energy_cal?: Maybe<Scalars["Float"]>;
-  energy_kj?: Maybe<Scalars["Float"]>;
-  fats?: Maybe<Scalars["Float"]>;
-  proteins?: Maybe<Scalars["Float"]>;
-};
-
-/** aggregate variance on columns */
-export type Meal_Variance_Fields = {
-  __typename?: "meal_variance_fields";
-  carbohydrates?: Maybe<Scalars["Float"]>;
-  energy_cal?: Maybe<Scalars["Float"]>;
-  energy_kj?: Maybe<Scalars["Float"]>;
-  fats?: Maybe<Scalars["Float"]>;
-  proteins?: Maybe<Scalars["Float"]>;
 };
 
 /** mutation root */
@@ -1128,14 +1020,12 @@ export type Mutation_RootUpdate_Food_Type_By_PkArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_MealArgs = {
-  _inc?: Maybe<Meal_Inc_Input>;
   _set?: Maybe<Meal_Set_Input>;
   where: Meal_Bool_Exp;
 };
 
 /** mutation root */
 export type Mutation_RootUpdate_Meal_By_PkArgs = {
-  _inc?: Maybe<Meal_Inc_Input>;
   _set?: Maybe<Meal_Set_Input>;
   pk_columns: Meal_Pk_Columns_Input;
 };
@@ -1607,6 +1497,7 @@ export enum Food_Type_Constraint {
 }
 
 export enum Food_Type_Enum {
+  Cereals = "Cereals",
   /** Products added by users */
   Custom = "Custom",
   /** Fish are gill-bearing aquatic craniate animals that lack limbs with digits.  */
@@ -1770,21 +1661,11 @@ export enum Meal_Item_Update_Column {
 /** select columns of table "meal" */
 export enum Meal_Select_Column {
   /** column name */
-  Carbohydrates = "carbohydrates",
-  /** column name */
   Date = "date",
-  /** column name */
-  EnergyCal = "energy_cal",
-  /** column name */
-  EnergyKj = "energy_kj",
-  /** column name */
-  Fats = "fats",
   /** column name */
   Id = "id",
   /** column name */
   Name = "name",
-  /** column name */
-  Proteins = "proteins",
   /** column name */
   Time = "time",
   /** column name */
@@ -1794,21 +1675,11 @@ export enum Meal_Select_Column {
 /** update columns of table "meal" */
 export enum Meal_Update_Column {
   /** column name */
-  Carbohydrates = "carbohydrates",
-  /** column name */
   Date = "date",
-  /** column name */
-  EnergyCal = "energy_cal",
-  /** column name */
-  EnergyKj = "energy_kj",
-  /** column name */
-  Fats = "fats",
   /** column name */
   Id = "id",
   /** column name */
   Name = "name",
-  /** column name */
-  Proteins = "proteins",
   /** column name */
   Time = "time",
   /** column name */
@@ -2579,17 +2450,9 @@ export type Food_Variance_Order_By = {
 
 /** order by aggregate values of table "meal" */
 export type Meal_Aggregate_Order_By = {
-  avg?: Maybe<Meal_Avg_Order_By>;
   count?: Maybe<Order_By>;
   max?: Maybe<Meal_Max_Order_By>;
   min?: Maybe<Meal_Min_Order_By>;
-  stddev?: Maybe<Meal_Stddev_Order_By>;
-  stddev_pop?: Maybe<Meal_Stddev_Pop_Order_By>;
-  stddev_samp?: Maybe<Meal_Stddev_Samp_Order_By>;
-  sum?: Maybe<Meal_Sum_Order_By>;
-  var_pop?: Maybe<Meal_Var_Pop_Order_By>;
-  var_samp?: Maybe<Meal_Var_Samp_Order_By>;
-  variance?: Maybe<Meal_Variance_Order_By>;
 };
 
 /** input type for inserting array relation for remote table "meal" */
@@ -2598,54 +2461,26 @@ export type Meal_Arr_Rel_Insert_Input = {
   on_conflict?: Maybe<Meal_On_Conflict>;
 };
 
-/** order by avg() on columns of table "meal" */
-export type Meal_Avg_Order_By = {
-  carbohydrates?: Maybe<Order_By>;
-  energy_cal?: Maybe<Order_By>;
-  energy_kj?: Maybe<Order_By>;
-  fats?: Maybe<Order_By>;
-  proteins?: Maybe<Order_By>;
-};
-
 /** Boolean expression to filter rows from the table "meal". All fields are combined with a logical 'AND'. */
 export type Meal_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Meal_Bool_Exp>>>;
   _not?: Maybe<Meal_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Meal_Bool_Exp>>>;
-  carbohydrates?: Maybe<Numeric_Comparison_Exp>;
   date?: Maybe<Date_Comparison_Exp>;
-  energy_cal?: Maybe<Numeric_Comparison_Exp>;
-  energy_kj?: Maybe<Numeric_Comparison_Exp>;
-  fats?: Maybe<Numeric_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   meal_items?: Maybe<Meal_Item_Bool_Exp>;
   name?: Maybe<String_Comparison_Exp>;
-  proteins?: Maybe<Numeric_Comparison_Exp>;
   time?: Maybe<Time_Comparison_Exp>;
   u_id?: Maybe<Uuid_Comparison_Exp>;
   user?: Maybe<Users_Bool_Exp>;
 };
 
-/** input type for incrementing integer column in table "meal" */
-export type Meal_Inc_Input = {
-  carbohydrates?: Maybe<Scalars["numeric"]>;
-  energy_cal?: Maybe<Scalars["numeric"]>;
-  energy_kj?: Maybe<Scalars["numeric"]>;
-  fats?: Maybe<Scalars["numeric"]>;
-  proteins?: Maybe<Scalars["numeric"]>;
-};
-
 /** input type for inserting data into table "meal" */
 export type Meal_Insert_Input = {
-  carbohydrates?: Maybe<Scalars["numeric"]>;
   date?: Maybe<Scalars["date"]>;
-  energy_cal?: Maybe<Scalars["numeric"]>;
-  energy_kj?: Maybe<Scalars["numeric"]>;
-  fats?: Maybe<Scalars["numeric"]>;
   id?: Maybe<Scalars["uuid"]>;
   meal_items?: Maybe<Meal_Item_Arr_Rel_Insert_Input>;
   name?: Maybe<Scalars["String"]>;
-  proteins?: Maybe<Scalars["numeric"]>;
   time?: Maybe<Scalars["time"]>;
   u_id?: Maybe<Scalars["uuid"]>;
   user?: Maybe<Users_Obj_Rel_Insert_Input>;
@@ -2878,27 +2713,17 @@ export type Meal_Item_Variance_Order_By = {
 
 /** order by max() on columns of table "meal" */
 export type Meal_Max_Order_By = {
-  carbohydrates?: Maybe<Order_By>;
   date?: Maybe<Order_By>;
-  energy_cal?: Maybe<Order_By>;
-  energy_kj?: Maybe<Order_By>;
-  fats?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
-  proteins?: Maybe<Order_By>;
   u_id?: Maybe<Order_By>;
 };
 
 /** order by min() on columns of table "meal" */
 export type Meal_Min_Order_By = {
-  carbohydrates?: Maybe<Order_By>;
   date?: Maybe<Order_By>;
-  energy_cal?: Maybe<Order_By>;
-  energy_kj?: Maybe<Order_By>;
-  fats?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   name?: Maybe<Order_By>;
-  proteins?: Maybe<Order_By>;
   u_id?: Maybe<Order_By>;
 };
 
@@ -2917,15 +2742,10 @@ export type Meal_On_Conflict = {
 
 /** ordering options when selecting data from "meal" */
 export type Meal_Order_By = {
-  carbohydrates?: Maybe<Order_By>;
   date?: Maybe<Order_By>;
-  energy_cal?: Maybe<Order_By>;
-  energy_kj?: Maybe<Order_By>;
-  fats?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   meal_items_aggregate?: Maybe<Meal_Item_Aggregate_Order_By>;
   name?: Maybe<Order_By>;
-  proteins?: Maybe<Order_By>;
   time?: Maybe<Order_By>;
   u_id?: Maybe<Order_By>;
   user?: Maybe<Users_Order_By>;
@@ -2938,79 +2758,11 @@ export type Meal_Pk_Columns_Input = {
 
 /** input type for updating data in table "meal" */
 export type Meal_Set_Input = {
-  carbohydrates?: Maybe<Scalars["numeric"]>;
   date?: Maybe<Scalars["date"]>;
-  energy_cal?: Maybe<Scalars["numeric"]>;
-  energy_kj?: Maybe<Scalars["numeric"]>;
-  fats?: Maybe<Scalars["numeric"]>;
   id?: Maybe<Scalars["uuid"]>;
   name?: Maybe<Scalars["String"]>;
-  proteins?: Maybe<Scalars["numeric"]>;
   time?: Maybe<Scalars["time"]>;
   u_id?: Maybe<Scalars["uuid"]>;
-};
-
-/** order by stddev() on columns of table "meal" */
-export type Meal_Stddev_Order_By = {
-  carbohydrates?: Maybe<Order_By>;
-  energy_cal?: Maybe<Order_By>;
-  energy_kj?: Maybe<Order_By>;
-  fats?: Maybe<Order_By>;
-  proteins?: Maybe<Order_By>;
-};
-
-/** order by stddev_pop() on columns of table "meal" */
-export type Meal_Stddev_Pop_Order_By = {
-  carbohydrates?: Maybe<Order_By>;
-  energy_cal?: Maybe<Order_By>;
-  energy_kj?: Maybe<Order_By>;
-  fats?: Maybe<Order_By>;
-  proteins?: Maybe<Order_By>;
-};
-
-/** order by stddev_samp() on columns of table "meal" */
-export type Meal_Stddev_Samp_Order_By = {
-  carbohydrates?: Maybe<Order_By>;
-  energy_cal?: Maybe<Order_By>;
-  energy_kj?: Maybe<Order_By>;
-  fats?: Maybe<Order_By>;
-  proteins?: Maybe<Order_By>;
-};
-
-/** order by sum() on columns of table "meal" */
-export type Meal_Sum_Order_By = {
-  carbohydrates?: Maybe<Order_By>;
-  energy_cal?: Maybe<Order_By>;
-  energy_kj?: Maybe<Order_By>;
-  fats?: Maybe<Order_By>;
-  proteins?: Maybe<Order_By>;
-};
-
-/** order by var_pop() on columns of table "meal" */
-export type Meal_Var_Pop_Order_By = {
-  carbohydrates?: Maybe<Order_By>;
-  energy_cal?: Maybe<Order_By>;
-  energy_kj?: Maybe<Order_By>;
-  fats?: Maybe<Order_By>;
-  proteins?: Maybe<Order_By>;
-};
-
-/** order by var_samp() on columns of table "meal" */
-export type Meal_Var_Samp_Order_By = {
-  carbohydrates?: Maybe<Order_By>;
-  energy_cal?: Maybe<Order_By>;
-  energy_kj?: Maybe<Order_By>;
-  fats?: Maybe<Order_By>;
-  proteins?: Maybe<Order_By>;
-};
-
-/** order by variance() on columns of table "meal" */
-export type Meal_Variance_Order_By = {
-  carbohydrates?: Maybe<Order_By>;
-  energy_cal?: Maybe<Order_By>;
-  energy_kj?: Maybe<Order_By>;
-  fats?: Maybe<Order_By>;
-  proteins?: Maybe<Order_By>;
 };
 
 /** expression to compare columns of type name. All fields are combined with logical 'AND'. */
@@ -3147,11 +2899,6 @@ export type AddMealMutationVariables = {
   time?: Maybe<Scalars["time"]>;
   data: Array<Meal_Item_Insert_Input>;
   u_id: Scalars["uuid"];
-  carbs?: Maybe<Scalars["numeric"]>;
-  proteins?: Maybe<Scalars["numeric"]>;
-  fats?: Maybe<Scalars["numeric"]>;
-  energy_cal?: Maybe<Scalars["numeric"]>;
-  energy_kj?: Maybe<Scalars["numeric"]>;
 };
 
 export type AddMealMutation = { __typename?: "mutation_root" } & {
@@ -3165,11 +2912,6 @@ export type UpdateMealMutationVariables = {
   time?: Maybe<Scalars["time"]>;
   data: Array<Meal_Item_Insert_Input>;
   u_id: Scalars["uuid"];
-  carbs?: Maybe<Scalars["numeric"]>;
-  proteins?: Maybe<Scalars["numeric"]>;
-  fats?: Maybe<Scalars["numeric"]>;
-  energy_cal?: Maybe<Scalars["numeric"]>;
-  energy_kj?: Maybe<Scalars["numeric"]>;
 };
 
 export type UpdateMealMutation = { __typename?: "mutation_root" } & {
@@ -3314,61 +3056,71 @@ export type MealsByDateQueryVariables = {
 };
 
 export type MealsByDateQuery = { __typename?: "query_root" } & {
-  meal_aggregate: { __typename?: "meal_aggregate" } & {
+  meal: Array<
+    { __typename?: "meal" } & Pick<Meal, "id" | "date" | "time" | "name"> & {
+        meal_items: Array<
+          { __typename?: "meal_item" } & Pick<
+            Meal_Item,
+            | "id"
+            | "meal_id"
+            | "food"
+            | "weight"
+            | "carbohydrates"
+            | "proteins"
+            | "fats"
+            | "energy_cal"
+            | "energy_kj"
+          > & {
+              foodDesc: { __typename?: "food" } & Pick<
+                Food,
+                | "id"
+                | "name"
+                | "energy_cal"
+                | "energy_kj"
+                | "carbohydrates"
+                | "fats"
+                | "proteins"
+              >;
+            }
+        >;
+      }
+  >;
+};
+
+export type MealItemMacrosSumByIdQueryVariables = {
+  meal_id?: Maybe<Scalars["uuid"]>;
+};
+
+export type MealItemMacrosSumByIdQuery = { __typename?: "query_root" } & {
+  meal_item_aggregate: { __typename?: "meal_item_aggregate" } & {
     aggregate?: Maybe<
-      { __typename?: "meal_aggregate_fields" } & {
+      { __typename?: "meal_item_aggregate_fields" } & {
         sum?: Maybe<
-          { __typename?: "meal_sum_fields" } & Pick<
-            Meal_Sum_Fields,
-            "energy_cal" | "energy_kj" | "carbohydrates" | "proteins" | "fats"
+          { __typename?: "meal_item_sum_fields" } & Pick<
+            Meal_Item_Sum_Fields,
+            "carbohydrates" | "energy_cal" | "energy_kj" | "fats" | "proteins"
           >
         >;
       }
     >;
-    nodes: Array<
-      { __typename?: "meal" } & Pick<Meal, "id" | "date" | "time" | "name"> & {
-          meal_items_aggregate: { __typename?: "meal_item_aggregate" } & {
-            aggregate?: Maybe<
-              { __typename?: "meal_item_aggregate_fields" } & {
-                sum?: Maybe<
-                  { __typename?: "meal_item_sum_fields" } & Pick<
-                    Meal_Item_Sum_Fields,
-                    | "energy_cal"
-                    | "energy_kj"
-                    | "carbohydrates"
-                    | "proteins"
-                    | "fats"
-                  >
-                >;
-              }
-            >;
-            nodes: Array<
-              { __typename?: "meal_item" } & Pick<
-                Meal_Item,
-                | "id"
-                | "meal_id"
-                | "food"
-                | "weight"
-                | "carbohydrates"
-                | "proteins"
-                | "fats"
-                | "energy_cal"
-                | "energy_kj"
-              > & {
-                  foodDesc: { __typename?: "food" } & Pick<
-                    Food,
-                    | "id"
-                    | "name"
-                    | "energy_cal"
-                    | "energy_kj"
-                    | "carbohydrates"
-                    | "fats"
-                    | "proteins"
-                  >;
-                }
-            >;
-          };
-        }
+  };
+};
+
+export type MealItemMacrosSumByDateQueryVariables = {
+  date?: Maybe<Scalars["date"]>;
+};
+
+export type MealItemMacrosSumByDateQuery = { __typename?: "query_root" } & {
+  meal_item_aggregate: { __typename?: "meal_item_aggregate" } & {
+    aggregate?: Maybe<
+      { __typename?: "meal_item_aggregate_fields" } & {
+        sum?: Maybe<
+          { __typename?: "meal_item_sum_fields" } & Pick<
+            Meal_Item_Sum_Fields,
+            "carbohydrates" | "energy_cal" | "energy_kj" | "fats" | "proteins"
+          >
+        >;
+      }
     >;
   };
 };
@@ -3423,11 +3175,6 @@ export const AddMealDocument = gql`
     $time: time
     $data: [meal_item_insert_input!]!
     $u_id: uuid!
-    $carbs: numeric
-    $proteins: numeric
-    $fats: numeric
-    $energy_cal: numeric
-    $energy_kj: numeric
   ) {
     insert_meal_one(
       object: {
@@ -3436,11 +3183,6 @@ export const AddMealDocument = gql`
         meal_items: { data: $data }
         name: $name
         u_id: $u_id
-        carbohydrates: $carbs
-        proteins: $proteins
-        fats: $fats
-        energy_cal: $energy_cal
-        energy_kj: $energy_kj
       }
     ) {
       name
@@ -3474,11 +3216,6 @@ export const UpdateMealDocument = gql`
     $time: time
     $data: [meal_item_insert_input!]!
     $u_id: uuid!
-    $carbs: numeric
-    $proteins: numeric
-    $fats: numeric
-    $energy_cal: numeric
-    $energy_kj: numeric
   ) {
     delete_meal_item(where: { meal_id: { _eq: $id } }) {
       returning {
@@ -3495,11 +3232,6 @@ export const UpdateMealDocument = gql`
         meal_items: { data: $data }
         name: $name
         u_id: $u_id
-        carbohydrates: $carbs
-        proteins: $proteins
-        fats: $fats
-        energy_cal: $energy_cal
-        energy_kj: $energy_kj
       }
     ) {
       name
@@ -3866,55 +3598,30 @@ export type MealsListingQueryResult = ApolloReactCommon.QueryResult<
 >;
 export const MealsByDateDocument = gql`
   query MealsByDate($_eq: date = "") {
-    meal_aggregate(
-      where: { date: { _eq: $_eq } }
-      order_by: { name: asc_nulls_first }
-    ) {
-      aggregate {
-        sum {
+    meal(where: { date: { _eq: $_eq } }, order_by: { name: asc_nulls_first }) {
+      id
+      date
+      time
+      name
+      meal_items {
+        id
+        meal_id
+        food
+        foodDesc {
+          id
+          name
           energy_cal
           energy_kj
           carbohydrates
-          proteins
           fats
+          proteins
         }
-      }
-      nodes {
-        id
-        date
-        time
-        name
-        meal_items_aggregate {
-          aggregate {
-            sum {
-              energy_cal
-              energy_kj
-              carbohydrates
-              proteins
-              fats
-            }
-          }
-          nodes {
-            id
-            meal_id
-            food
-            foodDesc {
-              id
-              name
-              energy_cal
-              energy_kj
-              carbohydrates
-              fats
-              proteins
-            }
-            weight
-            carbohydrates
-            proteins
-            fats
-            energy_cal
-            energy_kj
-          }
-        }
+        weight
+        carbohydrates
+        proteins
+        fats
+        energy_cal
+        energy_kj
       }
     }
   }
@@ -3948,6 +3655,100 @@ export type MealsByDateLazyQueryHookResult = ReturnType<
 export type MealsByDateQueryResult = ApolloReactCommon.QueryResult<
   MealsByDateQuery,
   MealsByDateQueryVariables
+>;
+export const MealItemMacrosSumByIdDocument = gql`
+  query MealItemMacrosSumById($meal_id: uuid = "") {
+    meal_item_aggregate(where: { meal_id: { _eq: $meal_id } }) {
+      aggregate {
+        sum {
+          carbohydrates
+          energy_cal
+          energy_kj
+          fats
+          proteins
+        }
+      }
+    }
+  }
+`;
+export function useMealItemMacrosSumByIdQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    MealItemMacrosSumByIdQuery,
+    MealItemMacrosSumByIdQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<
+    MealItemMacrosSumByIdQuery,
+    MealItemMacrosSumByIdQueryVariables
+  >(MealItemMacrosSumByIdDocument, baseOptions);
+}
+export function useMealItemMacrosSumByIdLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    MealItemMacrosSumByIdQuery,
+    MealItemMacrosSumByIdQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<
+    MealItemMacrosSumByIdQuery,
+    MealItemMacrosSumByIdQueryVariables
+  >(MealItemMacrosSumByIdDocument, baseOptions);
+}
+export type MealItemMacrosSumByIdQueryHookResult = ReturnType<
+  typeof useMealItemMacrosSumByIdQuery
+>;
+export type MealItemMacrosSumByIdLazyQueryHookResult = ReturnType<
+  typeof useMealItemMacrosSumByIdLazyQuery
+>;
+export type MealItemMacrosSumByIdQueryResult = ApolloReactCommon.QueryResult<
+  MealItemMacrosSumByIdQuery,
+  MealItemMacrosSumByIdQueryVariables
+>;
+export const MealItemMacrosSumByDateDocument = gql`
+  query MealItemMacrosSumByDate($date: date = "") {
+    meal_item_aggregate(where: { meal: { date: { _eq: $date } } }) {
+      aggregate {
+        sum {
+          carbohydrates
+          energy_cal
+          energy_kj
+          fats
+          proteins
+        }
+      }
+    }
+  }
+`;
+export function useMealItemMacrosSumByDateQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    MealItemMacrosSumByDateQuery,
+    MealItemMacrosSumByDateQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<
+    MealItemMacrosSumByDateQuery,
+    MealItemMacrosSumByDateQueryVariables
+  >(MealItemMacrosSumByDateDocument, baseOptions);
+}
+export function useMealItemMacrosSumByDateLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    MealItemMacrosSumByDateQuery,
+    MealItemMacrosSumByDateQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<
+    MealItemMacrosSumByDateQuery,
+    MealItemMacrosSumByDateQueryVariables
+  >(MealItemMacrosSumByDateDocument, baseOptions);
+}
+export type MealItemMacrosSumByDateQueryHookResult = ReturnType<
+  typeof useMealItemMacrosSumByDateQuery
+>;
+export type MealItemMacrosSumByDateLazyQueryHookResult = ReturnType<
+  typeof useMealItemMacrosSumByDateLazyQuery
+>;
+export type MealItemMacrosSumByDateQueryResult = ApolloReactCommon.QueryResult<
+  MealItemMacrosSumByDateQuery,
+  MealItemMacrosSumByDateQueryVariables
 >;
 export const MealByIdDocument = gql`
   query MealById($id: uuid!) {

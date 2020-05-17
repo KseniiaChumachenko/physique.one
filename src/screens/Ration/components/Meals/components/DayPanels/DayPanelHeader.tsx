@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import moment from "moment";
 import {
   Avatar,
   Chip,
@@ -9,17 +10,16 @@ import {
   Typography,
 } from "@material-ui/core";
 import { AddRounded, ExpandMoreRounded } from "@material-ui/icons";
-import moment from "moment";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  AddMealMutationVariables,
-  Meal_Sum_Fields,
-  useAddMealMutation,
-} from "src/graphql/generated/graphql";
-import { AddMealDialog } from "../../../AddMealDialog";
 import { Trans } from "@lingui/react";
 import { ApolloError } from "@apollo/client";
 import { Alert } from "@material-ui/lab";
+import {
+  AddMealMutationVariables,
+  useAddMealMutation,
+  useMealItemMacrosSumByDateQuery,
+} from "src/graphql/generated/graphql";
+import { AddMealDialog } from "../../../AddMealDialog";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -34,26 +34,36 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props extends Meal_Sum_Fields {
+const INITIAL_STATE = {
+  energy_cal: 0,
+  energy_kj: 0,
+  proteins: 0,
+  fats: 0,
+  carbohydrates: 0,
+};
+
+interface Props {
   date: string;
   refetchPanel: any;
 }
 
-export const DayPanelHeader = ({
-  date,
-  energy_cal,
-  energy_kj,
-  carbohydrates,
-  fats,
-  proteins,
-  refetchPanel,
-}: Props) => {
+export const DayPanelHeader = ({ date, refetchPanel }: Props) => {
   const classes = useStyles();
   const [error, setOpenErrorMessage] = React.useState<ApolloError | boolean>(
     false
   );
   const [success, setOpenSuccessMessage] = React.useState(false);
   const [openAddDialog, setOpenAddMealDialog] = useState(false);
+
+  const [
+    { energy_cal, energy_kj, proteins, fats, carbohydrates },
+    setSum,
+  ] = useState(INITIAL_STATE);
+
+  const { data } = useMealItemMacrosSumByDateQuery({
+    variables: { date },
+  });
+
   const [insert_meal_one] = useAddMealMutation({
     onCompleted: () => {
       refetchPanel();
@@ -61,6 +71,19 @@ export const DayPanelHeader = ({
     },
     onError: (error) => setOpenErrorMessage(error),
   });
+
+  useEffect(() => {
+    if (data?.meal_item_aggregate?.aggregate?.sum) {
+      setSum({
+        energy_cal: data?.meal_item_aggregate?.aggregate?.sum.energy_cal || 0,
+        energy_kj: data?.meal_item_aggregate?.aggregate?.sum.energy_kj || 0,
+        proteins: data?.meal_item_aggregate?.aggregate?.sum.proteins || 0,
+        carbohydrates:
+          data?.meal_item_aggregate?.aggregate?.sum.carbohydrates || 0,
+        fats: data?.meal_item_aggregate?.aggregate?.sum.fats || 0,
+      });
+    }
+  }, [data]);
 
   const handleOpenAddMealDialog = () => setOpenAddMealDialog(true);
 
@@ -78,79 +101,81 @@ export const DayPanelHeader = ({
 
   return (
     <React.Fragment>
-      <ExpansionPanelSummary
-        classes={{ content: classes.content, expanded: classes.expanded }}
-        expandIcon={<ExpandMoreRounded />}
-      >
-        <Grid container spacing={3} alignItems={"center"}>
-          <Grid item xs alignItems={"center"}>
-            <Typography variant={"subtitle1"} color={"textSecondary"}>
-              {moment(date).format("dd (DD/MM/YYYY)")}
-            </Typography>
+      {data && (
+        <ExpansionPanelSummary
+          classes={{ content: classes.content, expanded: classes.expanded }}
+          expandIcon={<ExpandMoreRounded />}
+        >
+          <Grid container spacing={3} alignItems={"center"}>
+            <Grid item xs alignItems={"center"}>
+              <Typography variant={"subtitle1"} color={"textSecondary"}>
+                {moment(date).format("dd (DD/MM/YYYY)")}
+              </Typography>
+            </Grid>
+            <Grid item xs={9} alignItems={"center"}>
+              {energy_cal && (
+                <Chip
+                  label={`${energy_cal?.toFixed(2)} kcal | ${energy_kj?.toFixed(
+                    2
+                  )} kJ`}
+                  variant={"outlined"}
+                  size={"small"}
+                  color={"secondary"}
+                  className={classes.chip}
+                />
+              )}
+              {proteins && (
+                <Chip
+                  avatar={<Avatar>P</Avatar>}
+                  label={`${proteins?.toFixed(2)} | ${
+                    macronutrientsInPersents().proteins
+                  }%`}
+                  variant={"outlined"}
+                  size={"small"}
+                  color={"primary"}
+                  className={classes.chip}
+                />
+              )}
+              {carbohydrates && (
+                <Chip
+                  avatar={<Avatar>C</Avatar>}
+                  label={`${carbohydrates?.toFixed(2)} | ${
+                    macronutrientsInPersents().carbohydrates
+                  }%`}
+                  variant={"outlined"}
+                  size={"small"}
+                  color={"primary"}
+                  className={classes.chip}
+                />
+              )}
+              {fats && (
+                <Chip
+                  avatar={<Avatar>F</Avatar>}
+                  label={`${fats?.toFixed(2)} | ${
+                    macronutrientsInPersents().fats
+                  }%`}
+                  variant={"outlined"}
+                  size={"small"}
+                  color={"primary"}
+                  className={classes.chip}
+                />
+              )}
+            </Grid>
+            <Grid item xs={1} alignItems={"center"}>
+              <IconButton
+                children={<AddRounded />}
+                onClick={handleOpenAddMealDialog}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={9} alignItems={"center"}>
-            {energy_cal && (
-              <Chip
-                label={`${energy_cal?.toFixed(2)} kcal | ${energy_kj?.toFixed(
-                  2
-                )} kJ`}
-                variant={"outlined"}
-                size={"small"}
-                color={"secondary"}
-                className={classes.chip}
-              />
-            )}
-            {proteins && (
-              <Chip
-                avatar={<Avatar>P</Avatar>}
-                label={`${proteins?.toFixed(2)} | ${
-                  macronutrientsInPersents().proteins
-                }%`}
-                variant={"outlined"}
-                size={"small"}
-                color={"primary"}
-                className={classes.chip}
-              />
-            )}
-            {carbohydrates && (
-              <Chip
-                avatar={<Avatar>C</Avatar>}
-                label={`${carbohydrates?.toFixed(2)} | ${
-                  macronutrientsInPersents().carbohydrates
-                }%`}
-                variant={"outlined"}
-                size={"small"}
-                color={"primary"}
-                className={classes.chip}
-              />
-            )}
-            {fats && (
-              <Chip
-                avatar={<Avatar>F</Avatar>}
-                label={`${fats?.toFixed(2)} | ${
-                  macronutrientsInPersents().fats
-                }%`}
-                variant={"outlined"}
-                size={"small"}
-                color={"primary"}
-                className={classes.chip}
-              />
-            )}
-          </Grid>
-          <Grid item xs={1} alignItems={"center"}>
-            <IconButton
-              children={<AddRounded />}
-              onClick={handleOpenAddMealDialog}
-            />
-          </Grid>
-        </Grid>
-        <AddMealDialog
-          open={openAddDialog}
-          setOpen={setOpenAddMealDialog}
-          date={date}
-          onConfirm={handleConfirm}
-        />
-      </ExpansionPanelSummary>
+          <AddMealDialog
+            open={openAddDialog}
+            setOpen={setOpenAddMealDialog}
+            date={date}
+            onConfirm={handleConfirm}
+          />
+        </ExpansionPanelSummary>
+      )}
 
       {/*  Toasts  */}
       {success && (
