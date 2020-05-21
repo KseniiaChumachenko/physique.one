@@ -71,10 +71,11 @@ export const PanelSummary = ({
         <Grid container spacing={1} alignItems={"center"}>
           <Grid
             item
-            xs
+            xs={1}
+            md={2}
             children={<Typography color={"textPrimary"}>{name}</Typography>}
           />
-          <Grid item xs={8} alignItems={"center"}>
+          <Grid item xs={4} md alignItems={"center"}>
             <Chip
               label={`${energy_cal?.toFixed(2)} kcal | ${energy_kj?.toFixed(
                 2
@@ -115,7 +116,8 @@ export const PanelSummary = ({
           </Grid>
           <Grid
             item
-            xs
+            xs={5}
+            md={2}
             alignItems={"center"}
             children={
               <PanelDetailActions id={id} refetchPanel={refetchPanel} />
@@ -123,7 +125,8 @@ export const PanelSummary = ({
           />
           <Grid
             item
-            xs={1}
+            xs={3}
+            md={1}
             alignItems={"center"}
             children={
               <Typography color={"textSecondary"} variant={"body1"}>

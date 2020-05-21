@@ -51,7 +51,7 @@ interface Props {
   open: boolean;
   setOpen: any;
   date: string;
-  onConfirm(state: AddMealMutationVariables): () => void;
+  onConfirm(state: AddMealMutationVariables): (event: any) => void;
 
   name?: string | null;
   time?: any;
@@ -117,8 +117,9 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
 
     useScrollToBottom(store.meal_items, stateEndRef); //TODO for some reason this stoped working
 
-    const handleClose = () => {
+    const handleClose = (event: any) => {
       setOpen(false);
+      event.stopPropagation();
     };
 
     const handleDeleteItem = (key: number) => () => store.remove_meal_item(key);

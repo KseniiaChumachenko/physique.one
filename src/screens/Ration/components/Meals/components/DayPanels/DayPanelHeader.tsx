@@ -87,8 +87,12 @@ export const DayPanelHeader = ({ date, refetchPanel }: Props) => {
 
   const handleOpenAddMealDialog = () => setOpenAddMealDialog(true);
 
-  const handleConfirm = (variables: AddMealMutationVariables) => () =>
+  const handleConfirm = (variables: AddMealMutationVariables) => (
+    event: any
+  ) => {
     insert_meal_one({ variables });
+    event.stopPropagation();
+  };
 
   const macronutrientsInPersents = () => {
     const sum = carbohydrates + fats + proteins;
@@ -106,18 +110,16 @@ export const DayPanelHeader = ({ date, refetchPanel }: Props) => {
           classes={{ content: classes.content, expanded: classes.expanded }}
           expandIcon={<ExpandMoreRounded />}
         >
-          <Grid container spacing={3} alignItems={"center"}>
-            <Grid item xs alignItems={"center"}>
+          <Grid container spacing={1} alignItems={"center"}>
+            <Grid item xs={4} md={2} alignItems={"center"}>
               <Typography variant={"subtitle1"} color={"textSecondary"}>
                 {moment(date).format("dd (DD/MM/YYYY)")}
               </Typography>
             </Grid>
-            <Grid item xs={9} alignItems={"center"}>
+            <Grid item xs alignItems={"center"}>
               {energy_cal && (
                 <Chip
-                  label={`${energy_cal?.toFixed(2)} kcal | ${energy_kj?.toFixed(
-                    2
-                  )} kJ`}
+                  label={`${energy_cal?.toFixed(2)} kcal`}
                   variant={"outlined"}
                   size={"small"}
                   color={"secondary"}
@@ -161,10 +163,13 @@ export const DayPanelHeader = ({ date, refetchPanel }: Props) => {
                 />
               )}
             </Grid>
-            <Grid item xs={1} alignItems={"center"}>
+            <Grid item xs={2} md={1} alignItems={"center"}>
               <IconButton
                 children={<AddRounded />}
-                onClick={handleOpenAddMealDialog}
+                onClick={(event) => {
+                  handleOpenAddMealDialog();
+                  event.stopPropagation();
+                }}
               />
             </Grid>
           </Grid>

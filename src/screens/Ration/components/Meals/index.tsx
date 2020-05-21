@@ -15,7 +15,9 @@ const useStyles = makeStyles((theme) => ({
   paginationContainer: {
     display: "flex",
     flexWrap: "wrap",
+    justifyContent: "center",
     marginBottom: theme.spacing(1),
+    marginLeft: theme.spacing(2),
   },
   paginationTitle: {
     marginRight: theme.spacing(1),
@@ -46,7 +48,7 @@ export const Meals = ({}: Props) => {
     <div className={classes.root}>
       {selectedWeek && (
         <div className={classes.paginationContainer}>
-          <Typography variant={"h6"}>
+          <Typography variant={"subtitle1"}>
             <Trans>Select week of the year: </Trans>
           </Typography>
           <Pagination

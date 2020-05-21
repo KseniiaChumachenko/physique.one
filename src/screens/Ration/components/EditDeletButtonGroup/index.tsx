@@ -26,19 +26,28 @@ export const EditDeleteButtonGroup = ({
     <ButtonGroup>
       <IconButton
         children={<AddRounded />}
-        onClick={onAddClick}
+        onClick={(event) => {
+          onAddClick!();
+          event.stopPropagation();
+        }}
         disabled={!onAddClick}
         className={classes.button}
       />
       <IconButton
         children={<EditRounded />}
-        onClick={onEditClick}
+        onClick={(event) => {
+          onEditClick!();
+          event.stopPropagation();
+        }}
         disabled={!onEditClick}
         className={classes.button}
       />
       <IconButton
         children={<DeleteRounded />}
-        onClick={onDeleteClick}
+        onClick={(event) => {
+          onDeleteClick!();
+          event.stopPropagation();
+        }}
         disabled={!onDeleteClick}
         className={classes.button}
       />

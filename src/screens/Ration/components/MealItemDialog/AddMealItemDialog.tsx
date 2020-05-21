@@ -117,12 +117,18 @@ export const AddMealItemDialog = ({
           <Button
             variant={"text"}
             children={<Trans>Cancel</Trans>}
-            onClick={() => setOpen(false)}
+            onClick={(event) => {
+              setOpen(false);
+              event.stopPropagation();
+            }}
           />
           <Button
             variant={"text"}
             children={<Trans>Submit</Trans>}
-            onClick={() => addMealItem()}
+            onClick={(event) => {
+              addMealItem();
+              event.stopPropagation();
+            }}
           />
         </DialogActions>
       </Dialog>

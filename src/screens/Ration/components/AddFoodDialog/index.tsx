@@ -19,7 +19,7 @@ interface Props extends State {
   open: boolean;
   setOpen: any;
 
-  onConfirm(store: State): () => void;
+  onConfirm(store: State): (event: any) => void;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -41,8 +41,9 @@ export const AddFoodDialog = ({
 
   const store = useStore({ ...storeProps });
 
-  const handleClose = () => {
+  const handleClose = (event: any) => {
     setOpen(false);
+    event.stopPropagation();
   };
 
   return (

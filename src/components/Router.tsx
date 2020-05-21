@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
   childrenPadding: {
     display: "flex",
     flexDirection: "column",
-    padding: theme.spacing(2),
   },
 }));
 

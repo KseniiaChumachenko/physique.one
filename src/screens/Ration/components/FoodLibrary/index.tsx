@@ -74,8 +74,9 @@ export const FoodLibrary = ({}: Props) => {
     return <LinearProgress />;
   }
 
-  const handleAddFood = (props: State) => () => {
+  const handleAddFood = (props: State) => (event: any) => {
     insert_food({ variables: props });
+    event.stopPropagation();
   };
 
   return (
