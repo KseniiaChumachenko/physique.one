@@ -4,7 +4,6 @@ import { Trans } from "@lingui/react";
 import { AddRounded } from "@material-ui/icons";
 import {
   Button,
-  LinearProgress,
   Paper,
   Table,
   TableBody,
@@ -37,10 +36,10 @@ interface Props {}
 export const FoodLibrary = ({}: Props) => {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = useState(false);
-  const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openEditDialog, setOpenEditDialog] = useState<any>(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState();
-  const { data, loading, refetch } = useFoodSelectFieldListingQuery({
+  const { data, refetch } = useFoodSelectFieldListingQuery({
     onError: (error1) => setError(error1),
   });
 
@@ -70,10 +69,6 @@ export const FoodLibrary = ({}: Props) => {
     onError: (error1) => setError(error1),
   });
 
-  if (loading) {
-    return <LinearProgress />;
-  }
-
   const handleAddFood = (props: State) => (event: any) => {
     insert_food({ variables: props });
     event.stopPropagation();
@@ -90,7 +85,7 @@ export const FoodLibrary = ({}: Props) => {
           children={<Trans>Add new food</Trans>}
         />
       </div>
-      <Table>
+      <Table size={"small"}>
         <TableHead>
           <TableCell children={<Trans>Name</Trans>} />
           <TableCell children={<Trans>Type</Trans>} />
@@ -107,8 +102,8 @@ export const FoodLibrary = ({}: Props) => {
           />
         </TableHead>
         <TableBody>
-          {data?.food.map((row) => (
-            <TableRow>
+          {data?.food.map((row, key) => (
+            <TableRow key={key}>
               <TableCell children={row.name} />
               <TableCell children={row.type} />
               <TableCell children={`${row.energy_cal} | ${row.energy_kj}`} />
@@ -117,29 +112,33 @@ export const FoodLibrary = ({}: Props) => {
               <TableCell children={row.fats} />
               <TableCell>
                 <EditDeleteButtonGroup
-                  onEditClick={() => setOpenEditDialog(true)}
+                  key={key}
+                  onEditClick={() => setOpenEditDialog(row)}
                   onDeleteClick={() =>
                     delete_food({ variables: { id: row.id } })
                   }
                 />
               </TableCell>
-
-              <AddFoodDialog
-                open={openEditDialog}
-                setOpen={setOpenEditDialog}
-                onConfirm={(state) => () =>
-                  update_food({ variables: { id: row.id, ...state } })}
-                {...row}
-              />
             </TableRow>
           ))}
         </TableBody>
       </Table>
-      <AddFoodDialog
-        open={openAddDialog}
-        setOpen={setOpenAddDialog}
-        onConfirm={handleAddFood}
-      />
+      {!!openEditDialog && (
+        <AddFoodDialog
+          open={!!openEditDialog}
+          setOpen={setOpenEditDialog}
+          onConfirm={(state) => () =>
+            update_food({ variables: { id: openEditDialog.id, ...state } })}
+          {...openEditDialog}
+        />
+      )}
+      {openAddDialog && (
+        <AddFoodDialog
+          open={openAddDialog}
+          setOpen={setOpenAddDialog}
+          onConfirm={handleAddFood}
+        />
+      )}
       <ToastMessage
         severity={"error"}
         children={error?.message as any}

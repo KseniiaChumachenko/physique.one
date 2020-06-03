@@ -19,7 +19,7 @@ query MealsListing {
   }
 }
 
-query MealsByDate($_eq: date = "") {
+subscription MealsByDate($_eq: date = "") {
   meal(where: { date: { _eq: $_eq } }, order_by: { name: asc_nulls_first }) {
     id
     date
@@ -48,7 +48,7 @@ query MealsByDate($_eq: date = "") {
   }
 }
 
-query MealItemMacrosSumById($meal_id: uuid = "") {
+subscription MealItemMacrosSumById($meal_id: uuid = "") {
   meal_item_aggregate(where: { meal_id: { _eq: $meal_id } }) {
     aggregate {
       sum {
@@ -62,7 +62,7 @@ query MealItemMacrosSumById($meal_id: uuid = "") {
   }
 }
 
-query MealItemMacrosSumByDate($date: date = "") {
+subscription MealItemMacrosSumByDate($date: date = "") {
   meal_item_aggregate(where: { meal: { date: { _eq: $date } } }) {
     aggregate {
       sum {
@@ -105,5 +105,12 @@ query FoodSelectFieldListing {
     fats
     energy_cal
     energy_kj
+  }
+}
+
+query FoodTypes{
+  food_type{
+    value
+    decription
   }
 }

@@ -17,7 +17,7 @@ import { Alert } from "@material-ui/lab";
 import {
   AddMealMutationVariables,
   useAddMealMutation,
-  useMealItemMacrosSumByDateQuery,
+  useMealItemMacrosSumByDateSubscription,
 } from "src/graphql/generated/graphql";
 import { AddMealDialog } from "../../../AddMealDialog";
 
@@ -44,10 +44,9 @@ const INITIAL_STATE = {
 
 interface Props {
   date: string;
-  refetchPanel: any;
 }
 
-export const DayPanelHeader = ({ date, refetchPanel }: Props) => {
+export const DayPanelHeader = ({ date }: Props) => {
   const classes = useStyles();
   const [error, setOpenErrorMessage] = React.useState<ApolloError | boolean>(
     false
@@ -60,15 +59,12 @@ export const DayPanelHeader = ({ date, refetchPanel }: Props) => {
     setSum,
   ] = useState(INITIAL_STATE);
 
-  const { data } = useMealItemMacrosSumByDateQuery({
+  const { data } = useMealItemMacrosSumByDateSubscription({
     variables: { date },
   });
 
   const [insert_meal_one] = useAddMealMutation({
-    onCompleted: () => {
-      refetchPanel();
-      setOpenAddMealDialog(false);
-    },
+    onCompleted: () => setOpenAddMealDialog(false),
     onError: (error) => setOpenErrorMessage(error),
   });
 
@@ -117,7 +113,7 @@ export const DayPanelHeader = ({ date, refetchPanel }: Props) => {
               </Typography>
             </Grid>
             <Grid item xs alignItems={"center"}>
-              {energy_cal && (
+              {energy_cal ? (
                 <Chip
                   label={`${energy_cal?.toFixed(2)} kcal`}
                   variant={"outlined"}
@@ -125,8 +121,8 @@ export const DayPanelHeader = ({ date, refetchPanel }: Props) => {
                   color={"secondary"}
                   className={classes.chip}
                 />
-              )}
-              {proteins && (
+              ) : null}
+              {proteins ? (
                 <Chip
                   avatar={<Avatar>P</Avatar>}
                   label={`${proteins?.toFixed(2)} | ${
@@ -137,8 +133,8 @@ export const DayPanelHeader = ({ date, refetchPanel }: Props) => {
                   color={"primary"}
                   className={classes.chip}
                 />
-              )}
-              {carbohydrates && (
+              ) : null}
+              {carbohydrates ? (
                 <Chip
                   avatar={<Avatar>C</Avatar>}
                   label={`${carbohydrates?.toFixed(2)} | ${
@@ -149,8 +145,8 @@ export const DayPanelHeader = ({ date, refetchPanel }: Props) => {
                   color={"primary"}
                   className={classes.chip}
                 />
-              )}
-              {fats && (
+              ) : null}
+              {fats ? (
                 <Chip
                   avatar={<Avatar>F</Avatar>}
                   label={`${fats?.toFixed(2)} | ${
@@ -161,7 +157,7 @@ export const DayPanelHeader = ({ date, refetchPanel }: Props) => {
                   color={"primary"}
                   className={classes.chip}
                 />
-              )}
+              ) : null}
             </Grid>
             <Grid item xs={2} md={1} alignItems={"center"}>
               <IconButton

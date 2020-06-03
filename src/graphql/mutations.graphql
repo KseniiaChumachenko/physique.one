@@ -65,7 +65,7 @@ mutation AddFood(
   $energy_kj: numeric
   $energy_cal: numeric
   $carbohydrates: numeric
-  $type: food_type_enum
+  $type: String
 ) {
   insert_food(
     objects: {
@@ -90,7 +90,7 @@ mutation UpdateFood(
   $energy_kj: numeric
   $energy_cal: numeric
   $carbohydrates: numeric
-  $type: food_type_enum
+  $type: String
 ) {
   update_food_by_pk(
     pk_columns: { id: $id }

@@ -11,7 +11,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Meal,
-  useMealItemMacrosSumByIdQuery,
+  useMealItemMacrosSumByIdSubscription,
 } from "src/graphql/generated/graphql";
 import { PanelDetailActions } from "./PanelDetailActions";
 
@@ -32,15 +32,9 @@ const INITIAL_STATE = {
   carbohydrates: 0,
 };
 
-type SummaryProps = Pick<Meal, "name" | "time"> &
-  Pick<Meal, "id"> & { refetchPanel: any };
+type SummaryProps = Pick<Meal, "name" | "time"> & Pick<Meal, "id">;
 
-export const PanelSummary = ({
-  name,
-  id,
-  time,
-  refetchPanel,
-}: SummaryProps) => {
+export const PanelSummary = ({ name, id, time }: SummaryProps) => {
   const classes = useStyles();
 
   const [
@@ -48,7 +42,7 @@ export const PanelSummary = ({
     setSum,
   ] = useState(INITIAL_STATE);
 
-  const { data } = useMealItemMacrosSumByIdQuery({
+  const { data } = useMealItemMacrosSumByIdSubscription({
     variables: { meal_id: id },
   });
 
@@ -119,9 +113,7 @@ export const PanelSummary = ({
             xs={5}
             md={2}
             alignItems={"center"}
-            children={
-              <PanelDetailActions id={id} refetchPanel={refetchPanel} />
-            }
+            children={<PanelDetailActions id={id} />}
           />
           <Grid
             item

@@ -7,7 +7,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  LinearProgress,
   MenuItem,
   Select,
   Snackbar,
@@ -32,15 +31,9 @@ interface Props {
   open: boolean;
   setOpen(o: boolean): void;
   mealItem: Meal_Item;
-  refetch: any;
 }
 
-export const EditMealItemDialog = ({
-  open,
-  setOpen,
-  mealItem,
-  refetch,
-}: Props) => {
+export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
   const classes = useStyles();
 
   const [error, setOpenErrorMessage] = React.useState();
@@ -55,7 +48,6 @@ export const EditMealItemDialog = ({
   const [addMealItem] = useUpdateMealItemMutation({
     onError: (error1) => setOpenErrorMessage(error1),
     onCompleted: () => {
-      refetch();
       setOpenSuccessMessage(true);
       setOpen(false);
     },
@@ -73,14 +65,8 @@ export const EditMealItemDialog = ({
     },
   });
 
-  console.log(food, mealItem);
-
   if (error) {
     return <ToastMessage severity={"error"} children={error?.message as any} />;
-  }
-
-  if (loading) {
-    return <LinearProgress />;
   }
 
   return (

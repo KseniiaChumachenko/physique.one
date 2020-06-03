@@ -5,12 +5,13 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  LinearProgress,
   MenuItem,
   Select,
   Snackbar,
   TextField,
 } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { Alert } from "@material-ui/lab";
 import { Trans } from "@lingui/react";
 import {
   useAddMealItemMutation,
@@ -18,8 +19,6 @@ import {
 } from "../../../../graphql/generated/graphql";
 import { ToastMessage } from "../../../../components/ToastMessage";
 import { HARDCODED_U_ID } from "../AddMealDialog";
-import { makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
 
 const useStyles = makeStyles((theme) => ({
   field: {
@@ -31,22 +30,15 @@ interface Props {
   open: boolean;
   setOpen(o: boolean): void;
   meal_id?: string;
-
-  refetch: any;
 }
 
-export const AddMealItemDialog = ({
-  open,
-  setOpen,
-  meal_id,
-  refetch,
-}: Props) => {
+export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
   const classes = useStyles();
 
   const [error, setOpenErrorMessage] = React.useState();
   const [success, setOpenSuccessMessage] = React.useState();
 
-  const { data, loading } = useFoodSelectFieldListingQuery();
+  const { data } = useFoodSelectFieldListingQuery();
   const [food, setFood] = useState();
   const [weight, setWeight] = useState(100);
 
@@ -55,7 +47,6 @@ export const AddMealItemDialog = ({
   const [addMealItem] = useAddMealItemMutation({
     onError: (error1) => setOpenErrorMessage(error1),
     onCompleted: () => {
-      refetch();
       setOpenSuccessMessage(true);
       setOpen(false);
     },
@@ -80,10 +71,6 @@ export const AddMealItemDialog = ({
 
   if (error) {
     return <ToastMessage severity={"error"} children={error?.message as any} />;
-  }
-
-  if (loading) {
-    return <LinearProgress />;
   }
 
   return (

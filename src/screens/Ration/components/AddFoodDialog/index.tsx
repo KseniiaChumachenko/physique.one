@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { Trans } from "@lingui/react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Food_Type_Enum } from "../../../../graphql/generated/graphql";
+import { useFoodTypesQuery } from "../../../../graphql/generated/graphql";
 import { useStore, State } from "./useStore";
 
 interface Props extends State {
@@ -38,6 +38,8 @@ export const AddFoodDialog = ({
   ...storeProps
 }: Props) => {
   const classes = useStyles();
+
+  const { data } = useFoodTypesQuery();
 
   const store = useStore({ ...storeProps });
 
@@ -67,36 +69,19 @@ export const AddFoodDialog = ({
           onChange={(event) => store.setName(event.target.value)}
         />
 
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          defaultValue={store.type}
-          onChange={(event) => store.setType(event.target.value as any)}
-          className={classes.field}
-        >
-          <MenuItem
-            value={Food_Type_Enum.Vegetables}
-            children={Food_Type_Enum.Vegetables}
-          />
-          <MenuItem
-            value={Food_Type_Enum.Fruits}
-            children={Food_Type_Enum.Fruits}
-          />
-          <MenuItem
-            value={Food_Type_Enum.Meat}
-            children={Food_Type_Enum.Meat}
-          />
-
-          <MenuItem
-            value={Food_Type_Enum.Fish}
-            children={Food_Type_Enum.Fish}
-          />
-
-          <MenuItem
-            value={Food_Type_Enum.Custom}
-            children={Food_Type_Enum.Custom}
-          />
-        </Select>
+        {data && (
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            defaultValue={store.type}
+            onChange={(event) => store.setType(event.target.value as any)}
+            className={classes.field}
+          >
+            {data?.food_type?.map(({ value }) => (
+              <MenuItem value={value} children={value} />
+            ))}
+          </Select>
+        )}
 
         <TextField
           className={classes.field}

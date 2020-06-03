@@ -52,10 +52,8 @@ type MealItemNode = { __typename?: "meal_item" } & Pick<
 
 export const PanelDetailTable = ({
   meal_items,
-  refetch,
 }: {
   meal_items?: Meal_Item[];
-  refetch: any;
 }) => {
   const classes = useStyles();
   const [openEditMealItemDialog, setEditMealItemDialog] = useState<
@@ -65,12 +63,11 @@ export const PanelDetailTable = ({
   const [error, setError] = useState<ApolloError>();
 
   const [delete_by_pk] = useDeleteMealItemByPrimaryKeyMutation({
-    onCompleted: () => {
-      refetch();
-      setSuccess(true);
-    },
+    onCompleted: () => setSuccess(true),
     onError: (error1) => setError(error1),
   });
+
+  const withMealItems = meal_items && meal_items.length > 0;
 
   return (
     <React.Fragment>
@@ -92,88 +89,89 @@ export const PanelDetailTable = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {meal_items?.map((row, key) => (
-              <TableRow key={key}>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  children={row.foodDesc.name}
-                />
-                <TableCell
-                  component="th"
-                  scope="row"
-                  children={
-                    <React.Fragment>
-                      {row.energy_cal.toFixed(2)}&nbsp;|&nbsp;
-                      {row.energy_kj.toFixed(2)}
-                    </React.Fragment>
-                  }
-                />
-                <TableCell
-                  component="th"
-                  scope="row"
-                  children={row.proteins.toFixed(2)}
-                />
+            {withMealItems &&
+              meal_items?.map((row, key) => (
+                <TableRow key={key}>
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    children={row.foodDesc.name}
+                  />
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    children={
+                      <React.Fragment>
+                        {row.energy_cal.toFixed(2)}&nbsp;|&nbsp;
+                        {row.energy_kj.toFixed(2)}
+                      </React.Fragment>
+                    }
+                  />
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    children={row.proteins.toFixed(2)}
+                  />
 
-                <TableCell
-                  component="th"
-                  scope="row"
-                  children={row.carbohydrates.toFixed(2)}
-                />
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    children={row.carbohydrates.toFixed(2)}
+                  />
 
-                <TableCell
-                  component="th"
-                  scope="row"
-                  children={row.fats.toFixed(2)}
-                />
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    children={row.fats.toFixed(2)}
+                  />
 
-                <TableCell component="th" scope="row" children={row.weight} />
-                <TableCell
-                  component="th"
-                  scope="row"
-                  children={
-                    <EditDeleteButtonGroup
-                      onEditClick={() => setEditMealItemDialog(row)}
-                      onDeleteClick={() =>
-                        delete_by_pk({ variables: { id: row.id } })
-                      }
-                    />
-                  }
-                />
+                  <TableCell component="th" scope="row" children={row.weight} />
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    children={
+                      <EditDeleteButtonGroup
+                        onEditClick={() => setEditMealItemDialog(row)}
+                        onDeleteClick={() =>
+                          delete_by_pk({ variables: { id: row.id } })
+                        }
+                      />
+                    }
+                  />
 
-                {/*  Toasts  */}
-                {success && (
-                  <Snackbar
-                    key={key}
-                    open={success}
-                    autoHideDuration={6000}
-                    onClose={() => setSuccess(false)}
-                  >
-                    <Alert
-                      severity={"success"}
+                  {/*  Toasts  */}
+                  {success && (
+                    <Snackbar
+                      key={key}
+                      open={success}
+                      autoHideDuration={6000}
                       onClose={() => setSuccess(false)}
                     >
-                      <Trans>Meals successfully updated</Trans>
-                    </Alert>
-                  </Snackbar>
-                )}
-                {error && (
-                  <Snackbar
-                    key={key}
-                    open={!!error}
-                    autoHideDuration={6000}
-                    onClose={() => setError(false as any)}
-                  >
-                    <Alert
-                      severity={"error"}
+                      <Alert
+                        severity={"success"}
+                        onClose={() => setSuccess(false)}
+                      >
+                        <Trans>Meals successfully updated</Trans>
+                      </Alert>
+                    </Snackbar>
+                  )}
+                  {error && (
+                    <Snackbar
+                      key={key}
+                      open={!!error}
+                      autoHideDuration={6000}
                       onClose={() => setError(false as any)}
                     >
-                      {error.message}
-                    </Alert>
-                  </Snackbar>
-                )}
-              </TableRow>
-            ))}
+                      <Alert
+                        severity={"error"}
+                        onClose={() => setError(false as any)}
+                      >
+                        {error.message}
+                      </Alert>
+                    </Snackbar>
+                  )}
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -184,7 +182,6 @@ export const PanelDetailTable = ({
           open={!!openEditMealItemDialog}
           setOpen={setEditMealItemDialog}
           mealItem={openEditMealItemDialog as Meal_Item}
-          refetch={refetch}
         />
       )}
     </React.Fragment>

@@ -58,7 +58,7 @@ export type Food = {
   proteins: Scalars["numeric"];
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
-  type: Food_Type_Enum;
+  type: Scalars["String"];
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -179,6 +179,7 @@ export type Food_Max_Fields = {
   proteins?: Maybe<Scalars["numeric"]>;
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
+  type?: Maybe<Scalars["String"]>;
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -216,6 +217,7 @@ export type Food_Min_Fields = {
   proteins?: Maybe<Scalars["numeric"]>;
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
+  type?: Maybe<Scalars["String"]>;
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -1496,20 +1498,6 @@ export enum Food_Type_Constraint {
   FoodTypePkey = "food_type_pkey",
 }
 
-export enum Food_Type_Enum {
-  Cereals = "Cereals",
-  /** Products added by users */
-  Custom = "Custom",
-  /** Fish are gill-bearing aquatic craniate animals that lack limbs with digits.  */
-  Fish = "Fish",
-  /** A fruit is the seed-bearing structure in flowering plants (also known as angiosperms) formed from the ovary after flowering. */
-  Fruits = "Fruits",
-  /** Meat is animal flesh that is eaten as food. */
-  Meat = "Meat",
-  /** Plants collectively to refer to all edible plant matter, including the flowers, fruits, stems, leaves, roots, and seeds. */
-  Vegetables = "Vegetables",
-}
-
 /** select columns of table "food_type" */
 export enum Food_Type_Select_Column {
   /** column name */
@@ -1874,7 +1862,7 @@ export type Food_Bool_Exp = {
   proteins?: Maybe<Numeric_Comparison_Exp>;
   selenium?: Maybe<Numeric_Comparison_Exp>;
   sodium?: Maybe<Numeric_Comparison_Exp>;
-  type?: Maybe<Food_Type_Enum_Comparison_Exp>;
+  type?: Maybe<String_Comparison_Exp>;
   zinc?: Maybe<Numeric_Comparison_Exp>;
 };
 
@@ -1949,7 +1937,7 @@ export type Food_Insert_Input = {
   proteins?: Maybe<Scalars["numeric"]>;
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
-  type?: Maybe<Food_Type_Enum>;
+  type?: Maybe<Scalars["String"]>;
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -1986,6 +1974,7 @@ export type Food_Max_Order_By = {
   proteins?: Maybe<Order_By>;
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
+  type?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -2022,6 +2011,7 @@ export type Food_Min_Order_By = {
   proteins?: Maybe<Order_By>;
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
+  type?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -2117,7 +2107,7 @@ export type Food_Set_Input = {
   proteins?: Maybe<Scalars["numeric"]>;
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
-  type?: Maybe<Food_Type_Enum>;
+  type?: Maybe<Scalars["String"]>;
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -2282,15 +2272,6 @@ export type Food_Type_Bool_Exp = {
   decription?: Maybe<String_Comparison_Exp>;
   food?: Maybe<Food_Bool_Exp>;
   value?: Maybe<String_Comparison_Exp>;
-};
-
-/** expression to compare columns of type food_type_enum. All fields are combined with logical 'AND'. */
-export type Food_Type_Enum_Comparison_Exp = {
-  _eq?: Maybe<Food_Type_Enum>;
-  _in?: Maybe<Array<Food_Type_Enum>>;
-  _is_null?: Maybe<Scalars["Boolean"]>;
-  _neq?: Maybe<Food_Type_Enum>;
-  _nin?: Maybe<Array<Food_Type_Enum>>;
 };
 
 /** input type for inserting data into table "food_type" */
@@ -2944,7 +2925,7 @@ export type AddFoodMutationVariables = {
   energy_kj?: Maybe<Scalars["numeric"]>;
   energy_cal?: Maybe<Scalars["numeric"]>;
   carbohydrates?: Maybe<Scalars["numeric"]>;
-  type?: Maybe<Food_Type_Enum>;
+  type?: Maybe<Scalars["String"]>;
 };
 
 export type AddFoodMutation = { __typename?: "mutation_root" } & {
@@ -2964,7 +2945,7 @@ export type UpdateFoodMutationVariables = {
   energy_kj?: Maybe<Scalars["numeric"]>;
   energy_cal?: Maybe<Scalars["numeric"]>;
   carbohydrates?: Maybe<Scalars["numeric"]>;
-  type?: Maybe<Food_Type_Enum>;
+  type?: Maybe<Scalars["String"]>;
 };
 
 export type UpdateFoodMutation = { __typename?: "mutation_root" } & {
@@ -3051,11 +3032,11 @@ export type MealsListingQuery = { __typename?: "query_root" } & {
   >;
 };
 
-export type MealsByDateQueryVariables = {
+export type MealsByDateSubscriptionVariables = {
   _eq?: Maybe<Scalars["date"]>;
 };
 
-export type MealsByDateQuery = { __typename?: "query_root" } & {
+export type MealsByDateSubscription = { __typename?: "subscription_root" } & {
   meal: Array<
     { __typename?: "meal" } & Pick<Meal, "id" | "date" | "time" | "name"> & {
         meal_items: Array<
@@ -3087,11 +3068,13 @@ export type MealsByDateQuery = { __typename?: "query_root" } & {
   >;
 };
 
-export type MealItemMacrosSumByIdQueryVariables = {
+export type MealItemMacrosSumByIdSubscriptionVariables = {
   meal_id?: Maybe<Scalars["uuid"]>;
 };
 
-export type MealItemMacrosSumByIdQuery = { __typename?: "query_root" } & {
+export type MealItemMacrosSumByIdSubscription = {
+  __typename?: "subscription_root";
+} & {
   meal_item_aggregate: { __typename?: "meal_item_aggregate" } & {
     aggregate?: Maybe<
       { __typename?: "meal_item_aggregate_fields" } & {
@@ -3106,11 +3089,13 @@ export type MealItemMacrosSumByIdQuery = { __typename?: "query_root" } & {
   };
 };
 
-export type MealItemMacrosSumByDateQueryVariables = {
+export type MealItemMacrosSumByDateSubscriptionVariables = {
   date?: Maybe<Scalars["date"]>;
 };
 
-export type MealItemMacrosSumByDateQuery = { __typename?: "query_root" } & {
+export type MealItemMacrosSumByDateSubscription = {
+  __typename?: "subscription_root";
+} & {
   meal_item_aggregate: { __typename?: "meal_item_aggregate" } & {
     aggregate?: Maybe<
       { __typename?: "meal_item_aggregate_fields" } & {
@@ -3165,6 +3150,14 @@ export type FoodSelectFieldListingQuery = { __typename?: "query_root" } & {
       | "energy_cal"
       | "energy_kj"
     >
+  >;
+};
+
+export type FoodTypesQueryVariables = {};
+
+export type FoodTypesQuery = { __typename?: "query_root" } & {
+  food_type: Array<
+    { __typename?: "food_type" } & Pick<Food_Type, "value" | "decription">
   >;
 };
 
@@ -3300,7 +3293,7 @@ export const AddFoodDocument = gql`
     $energy_kj: numeric
     $energy_cal: numeric
     $carbohydrates: numeric
-    $type: food_type_enum
+    $type: String
   ) {
     insert_food(
       objects: {
@@ -3345,7 +3338,7 @@ export const UpdateFoodDocument = gql`
     $energy_kj: numeric
     $energy_cal: numeric
     $carbohydrates: numeric
-    $type: food_type_enum
+    $type: String
   ) {
     update_food_by_pk(
       pk_columns: { id: $id }
@@ -3597,7 +3590,7 @@ export type MealsListingQueryResult = ApolloReactCommon.QueryResult<
   MealsListingQueryVariables
 >;
 export const MealsByDateDocument = gql`
-  query MealsByDate($_eq: date = "") {
+  subscription MealsByDate($_eq: date = "") {
     meal(where: { date: { _eq: $_eq } }, order_by: { name: asc_nulls_first }) {
       id
       date
@@ -3626,38 +3619,25 @@ export const MealsByDateDocument = gql`
     }
   }
 `;
-export function useMealsByDateQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
-    MealsByDateQuery,
-    MealsByDateQueryVariables
+export function useMealsByDateSubscription(
+  baseOptions?: ApolloReactHooks.SubscriptionHookOptions<
+    MealsByDateSubscription,
+    MealsByDateSubscriptionVariables
   >
 ) {
-  return ApolloReactHooks.useQuery<MealsByDateQuery, MealsByDateQueryVariables>(
-    MealsByDateDocument,
-    baseOptions
-  );
-}
-export function useMealsByDateLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    MealsByDateQuery,
-    MealsByDateQueryVariables
-  >
-) {
-  return ApolloReactHooks.useLazyQuery<
-    MealsByDateQuery,
-    MealsByDateQueryVariables
+  return ApolloReactHooks.useSubscription<
+    MealsByDateSubscription,
+    MealsByDateSubscriptionVariables
   >(MealsByDateDocument, baseOptions);
 }
-export type MealsByDateQueryHookResult = ReturnType<typeof useMealsByDateQuery>;
-export type MealsByDateLazyQueryHookResult = ReturnType<
-  typeof useMealsByDateLazyQuery
+export type MealsByDateSubscriptionHookResult = ReturnType<
+  typeof useMealsByDateSubscription
 >;
-export type MealsByDateQueryResult = ApolloReactCommon.QueryResult<
-  MealsByDateQuery,
-  MealsByDateQueryVariables
+export type MealsByDateSubscriptionResult = ApolloReactCommon.SubscriptionResult<
+  MealsByDateSubscription
 >;
 export const MealItemMacrosSumByIdDocument = gql`
-  query MealItemMacrosSumById($meal_id: uuid = "") {
+  subscription MealItemMacrosSumById($meal_id: uuid = "") {
     meal_item_aggregate(where: { meal_id: { _eq: $meal_id } }) {
       aggregate {
         sum {
@@ -3671,40 +3651,25 @@ export const MealItemMacrosSumByIdDocument = gql`
     }
   }
 `;
-export function useMealItemMacrosSumByIdQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
-    MealItemMacrosSumByIdQuery,
-    MealItemMacrosSumByIdQueryVariables
+export function useMealItemMacrosSumByIdSubscription(
+  baseOptions?: ApolloReactHooks.SubscriptionHookOptions<
+    MealItemMacrosSumByIdSubscription,
+    MealItemMacrosSumByIdSubscriptionVariables
   >
 ) {
-  return ApolloReactHooks.useQuery<
-    MealItemMacrosSumByIdQuery,
-    MealItemMacrosSumByIdQueryVariables
+  return ApolloReactHooks.useSubscription<
+    MealItemMacrosSumByIdSubscription,
+    MealItemMacrosSumByIdSubscriptionVariables
   >(MealItemMacrosSumByIdDocument, baseOptions);
 }
-export function useMealItemMacrosSumByIdLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    MealItemMacrosSumByIdQuery,
-    MealItemMacrosSumByIdQueryVariables
-  >
-) {
-  return ApolloReactHooks.useLazyQuery<
-    MealItemMacrosSumByIdQuery,
-    MealItemMacrosSumByIdQueryVariables
-  >(MealItemMacrosSumByIdDocument, baseOptions);
-}
-export type MealItemMacrosSumByIdQueryHookResult = ReturnType<
-  typeof useMealItemMacrosSumByIdQuery
+export type MealItemMacrosSumByIdSubscriptionHookResult = ReturnType<
+  typeof useMealItemMacrosSumByIdSubscription
 >;
-export type MealItemMacrosSumByIdLazyQueryHookResult = ReturnType<
-  typeof useMealItemMacrosSumByIdLazyQuery
->;
-export type MealItemMacrosSumByIdQueryResult = ApolloReactCommon.QueryResult<
-  MealItemMacrosSumByIdQuery,
-  MealItemMacrosSumByIdQueryVariables
+export type MealItemMacrosSumByIdSubscriptionResult = ApolloReactCommon.SubscriptionResult<
+  MealItemMacrosSumByIdSubscription
 >;
 export const MealItemMacrosSumByDateDocument = gql`
-  query MealItemMacrosSumByDate($date: date = "") {
+  subscription MealItemMacrosSumByDate($date: date = "") {
     meal_item_aggregate(where: { meal: { date: { _eq: $date } } }) {
       aggregate {
         sum {
@@ -3718,37 +3683,22 @@ export const MealItemMacrosSumByDateDocument = gql`
     }
   }
 `;
-export function useMealItemMacrosSumByDateQuery(
-  baseOptions?: ApolloReactHooks.QueryHookOptions<
-    MealItemMacrosSumByDateQuery,
-    MealItemMacrosSumByDateQueryVariables
+export function useMealItemMacrosSumByDateSubscription(
+  baseOptions?: ApolloReactHooks.SubscriptionHookOptions<
+    MealItemMacrosSumByDateSubscription,
+    MealItemMacrosSumByDateSubscriptionVariables
   >
 ) {
-  return ApolloReactHooks.useQuery<
-    MealItemMacrosSumByDateQuery,
-    MealItemMacrosSumByDateQueryVariables
+  return ApolloReactHooks.useSubscription<
+    MealItemMacrosSumByDateSubscription,
+    MealItemMacrosSumByDateSubscriptionVariables
   >(MealItemMacrosSumByDateDocument, baseOptions);
 }
-export function useMealItemMacrosSumByDateLazyQuery(
-  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
-    MealItemMacrosSumByDateQuery,
-    MealItemMacrosSumByDateQueryVariables
-  >
-) {
-  return ApolloReactHooks.useLazyQuery<
-    MealItemMacrosSumByDateQuery,
-    MealItemMacrosSumByDateQueryVariables
-  >(MealItemMacrosSumByDateDocument, baseOptions);
-}
-export type MealItemMacrosSumByDateQueryHookResult = ReturnType<
-  typeof useMealItemMacrosSumByDateQuery
+export type MealItemMacrosSumByDateSubscriptionHookResult = ReturnType<
+  typeof useMealItemMacrosSumByDateSubscription
 >;
-export type MealItemMacrosSumByDateLazyQueryHookResult = ReturnType<
-  typeof useMealItemMacrosSumByDateLazyQuery
->;
-export type MealItemMacrosSumByDateQueryResult = ApolloReactCommon.QueryResult<
-  MealItemMacrosSumByDateQuery,
-  MealItemMacrosSumByDateQueryVariables
+export type MealItemMacrosSumByDateSubscriptionResult = ApolloReactCommon.SubscriptionResult<
+  MealItemMacrosSumByDateSubscription
 >;
 export const MealByIdDocument = gql`
   query MealById($id: uuid!) {
@@ -3845,4 +3795,42 @@ export type FoodSelectFieldListingLazyQueryHookResult = ReturnType<
 export type FoodSelectFieldListingQueryResult = ApolloReactCommon.QueryResult<
   FoodSelectFieldListingQuery,
   FoodSelectFieldListingQueryVariables
+>;
+export const FoodTypesDocument = gql`
+  query FoodTypes {
+    food_type {
+      value
+      decription
+    }
+  }
+`;
+export function useFoodTypesQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    FoodTypesQuery,
+    FoodTypesQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<FoodTypesQuery, FoodTypesQueryVariables>(
+    FoodTypesDocument,
+    baseOptions
+  );
+}
+export function useFoodTypesLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    FoodTypesQuery,
+    FoodTypesQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<FoodTypesQuery, FoodTypesQueryVariables>(
+    FoodTypesDocument,
+    baseOptions
+  );
+}
+export type FoodTypesQueryHookResult = ReturnType<typeof useFoodTypesQuery>;
+export type FoodTypesLazyQueryHookResult = ReturnType<
+  typeof useFoodTypesLazyQuery
+>;
+export type FoodTypesQueryResult = ApolloReactCommon.QueryResult<
+  FoodTypesQuery,
+  FoodTypesQueryVariables
 >;

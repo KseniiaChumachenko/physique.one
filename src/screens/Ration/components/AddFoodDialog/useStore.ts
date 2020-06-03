@@ -1,9 +1,8 @@
 import { useLocalStore } from "mobx-react-lite";
-import { Food_Type_Enum } from "../../../../graphql/generated/graphql";
 
 export interface State {
   name?: string;
-  type?: Food_Type_Enum;
+  type?: string;
   energy_cal?: number;
   energy_kj?: number;
   proteins?: number;
@@ -26,8 +25,8 @@ export function useStore({
       setName: (newName: string) => {
         store.name = newName;
       },
-      type: type || Food_Type_Enum.Vegetables,
-      setType: (newType: Food_Type_Enum) => {
+      type: type || "Vegetables",
+      setType: (newType: string) => {
         store.type = newType;
       },
       proteins: proteins,

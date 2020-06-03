@@ -68,7 +68,7 @@ type food {
     proteins: numeric!
     selenium: numeric
     sodium: numeric
-    type: food_type_enum!
+    type: String!
     zinc: numeric
 }
 
@@ -161,6 +161,7 @@ type food_max_fields {
     proteins: numeric
     selenium: numeric
     sodium: numeric
+    type: String
     zinc: numeric
 }
 
@@ -197,6 +198,7 @@ type food_min_fields {
     proteins: numeric
     selenium: numeric
     sodium: numeric
+    type: String
     zinc: numeric
 }
 
@@ -1353,20 +1355,6 @@ enum food_type_constraint {
     food_type_pkey
 }
 
-enum food_type_enum {
-    Cereals
-    "Products added by users"
-    Custom
-    "Fish are gill-bearing aquatic craniate animals that lack limbs with digits. "
-    Fish
-    "A fruit is the seed-bearing structure in flowering plants (also known as angiosperms) formed from the ovary after flowering."
-    Fruits
-    "Meat is animal flesh that is eaten as food."
-    Meat
-    "Plants collectively to refer to all edible plant matter, including the flowers, fruits, stems, leaves, roots, and seeds."
-    Vegetables
-}
-
 "select columns of table \"food_type\""
 enum food_type_select_column {
     "column name"
@@ -1731,7 +1719,7 @@ input food_bool_exp {
     proteins: numeric_comparison_exp
     selenium: numeric_comparison_exp
     sodium: numeric_comparison_exp
-    type: food_type_enum_comparison_exp
+    type: String_comparison_exp
     zinc: numeric_comparison_exp
 }
 
@@ -1806,7 +1794,7 @@ input food_insert_input {
     proteins: numeric
     selenium: numeric
     sodium: numeric
-    type: food_type_enum
+    type: String
     zinc: numeric
 }
 
@@ -1843,6 +1831,7 @@ input food_max_order_by {
     proteins: order_by
     selenium: order_by
     sodium: order_by
+    type: order_by
     zinc: order_by
 }
 
@@ -1879,6 +1868,7 @@ input food_min_order_by {
     proteins: order_by
     selenium: order_by
     sodium: order_by
+    type: order_by
     zinc: order_by
 }
 
@@ -1974,7 +1964,7 @@ input food_set_input {
     proteins: numeric
     selenium: numeric
     sodium: numeric
-    type: food_type_enum
+    type: String
     zinc: numeric
 }
 
@@ -2139,15 +2129,6 @@ input food_type_bool_exp {
     decription: String_comparison_exp
     food: food_bool_exp
     value: String_comparison_exp
-}
-
-"expression to compare columns of type food_type_enum. All fields are combined with logical 'AND'."
-input food_type_enum_comparison_exp {
-    _eq: food_type_enum
-    _in: [food_type_enum!]
-    _is_null: Boolean
-    _neq: food_type_enum
-    _nin: [food_type_enum!]
 }
 
 "input type for inserting data into table \"food_type\""

@@ -14,11 +14,9 @@ const useStyles = makeStyles((theme) => ({}));
 
 type MealItem = Pick<Meal, "id">;
 
-interface Props extends MealItem {
-  refetchPanel: any;
-}
+interface Props extends MealItem {}
 
-export const PanelDetailActions = ({ id, refetchPanel }: Props) => {
+export const PanelDetailActions = ({ id }: Props) => {
   const classes = useStyles();
   const [openAddMealItemDialog, setAddMealItemDialog] = useState(false);
 
@@ -27,10 +25,7 @@ export const PanelDetailActions = ({ id, refetchPanel }: Props) => {
 
   const [delete_meal_by_pk] = useDeleteMealByIdMutation({
     variables: { id },
-    onCompleted: () => {
-      setOpenSuccessMessage(true);
-      refetchPanel();
-    },
+    onCompleted: () => setOpenSuccessMessage(true),
     onError: (error) => setOpenErrorMessage(error),
   });
 
@@ -46,7 +41,6 @@ export const PanelDetailActions = ({ id, refetchPanel }: Props) => {
         open={openAddMealItemDialog}
         setOpen={setAddMealItemDialog}
         meal_id={id}
-        refetch={refetchPanel}
       />
 
       {/*  Toasts  */}

@@ -2,10 +2,12 @@ import React from "react";
 import {
   ExpansionPanel,
   ExpansionPanelDetails,
-  LinearProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Meal_Item, useMealsByDateQuery } from "src/graphql/generated/graphql";
+import {
+  Meal_Item,
+  useMealsByDateSubscription,
+} from "src/graphql/generated/graphql";
 import { ToastMessage } from "src/components/ToastMessage";
 import { DayPanelHeader } from "./DayPanelHeader";
 import { PanelSummary } from "./PanelSummary";
@@ -58,13 +60,9 @@ interface Props {
 
 export const DayPanels = ({ date }: Props) => {
   const classes = useStyles();
-  const { data, loading, error, refetch } = useMealsByDateQuery({
+  const { data, error } = useMealsByDateSubscription({
     variables: { _eq: date },
   });
-
-  if (loading) {
-    return <LinearProgress className={classes.progress} />;
-  }
 
   if (error) {
     return <ToastMessage severity={"error"} children={error.message as any} />;
@@ -72,7 +70,7 @@ export const DayPanels = ({ date }: Props) => {
 
   return (
     <ExpansionPanel className={classes.parentExpPanel}>
-      <DayPanelHeader date={date} refetchPanel={refetch} />
+      <DayPanelHeader date={date} />
       <ExpansionPanelDetails className={classes.parentExpPanelDetails}>
         {data?.meal.map((item, key) => (
           <ExpansionPanel
@@ -83,17 +81,9 @@ export const DayPanels = ({ date }: Props) => {
               expanded: classes.expanded,
             }}
           >
-            <PanelSummary
-              id={item.id}
-              name={item.name}
-              time={item.time}
-              refetchPanel={refetch}
-            />
+            <PanelSummary id={item.id} name={item.name} time={item.time} />
             <ExpansionPanelDetails className={classes.parentExpPanelDetails}>
-              <PanelDetailTable
-                meal_items={item?.meal_items as Meal_Item[]}
-                refetch={refetch}
-              />
+              <PanelDetailTable meal_items={item?.meal_items as Meal_Item[]} />
             </ExpansionPanelDetails>
           </ExpansionPanel>
         ))}
