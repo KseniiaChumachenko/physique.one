@@ -1,9 +1,15 @@
 import React from "react";
 import { ButtonGroup, IconButton } from "@material-ui/core";
-import { AddRounded, DeleteRounded, EditRounded } from "@material-ui/icons";
+import {
+  DoneRounded,
+  CancelRounded,
+  AddRounded,
+  DeleteRounded,
+  EditRounded,
+} from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   button: {
     height: "35px",
     padding: 0,
@@ -11,12 +17,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface Props {
+  onConfirmClick?(): void;
+  onCancelClick?(): void;
   onAddClick?(): void;
   onEditClick?(): void;
   onDeleteClick?(): void;
 }
 
 export const EditDeleteButtonGroup = ({
+  onConfirmClick,
+  onCancelClick,
   onAddClick,
   onEditClick,
   onDeleteClick,
@@ -24,33 +34,58 @@ export const EditDeleteButtonGroup = ({
   const classes = useStyles();
   return (
     <ButtonGroup>
-      <IconButton
-        children={<AddRounded />}
-        onClick={(event) => {
-          onAddClick!();
-          event.stopPropagation();
-        }}
-        disabled={!onAddClick}
-        className={classes.button}
-      />
-      <IconButton
-        children={<EditRounded />}
-        onClick={(event) => {
-          onEditClick!();
-          event.stopPropagation();
-        }}
-        disabled={!onEditClick}
-        className={classes.button}
-      />
-      <IconButton
-        children={<DeleteRounded />}
-        onClick={(event) => {
-          onDeleteClick!();
-          event.stopPropagation();
-        }}
-        disabled={!onDeleteClick}
-        className={classes.button}
-      />
+      {onConfirmClick && (
+        <IconButton
+          children={<DoneRounded />}
+          onClick={(event) => {
+            onConfirmClick!();
+            event.stopPropagation();
+          }}
+          className={classes.button}
+          color={"primary"}
+        />
+      )}
+      {onCancelClick && (
+        <IconButton
+          children={<CancelRounded />}
+          onClick={(event) => {
+            onCancelClick!();
+            event.stopPropagation();
+          }}
+          className={classes.button}
+          color={"secondary"}
+        />
+      )}
+      {onAddClick && (
+        <IconButton
+          children={<AddRounded />}
+          onClick={(event) => {
+            onAddClick!();
+            event.stopPropagation();
+          }}
+          className={classes.button}
+        />
+      )}
+      {onEditClick && (
+        <IconButton
+          children={<EditRounded />}
+          onClick={(event) => {
+            onEditClick!();
+            event.stopPropagation();
+          }}
+          className={classes.button}
+        />
+      )}
+      {onDeleteClick && (
+        <IconButton
+          children={<DeleteRounded />}
+          onClick={(event) => {
+            onDeleteClick!();
+            event.stopPropagation();
+          }}
+          className={classes.button}
+        />
+      )}
     </ButtonGroup>
   );
 };

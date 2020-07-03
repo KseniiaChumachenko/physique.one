@@ -177,3 +177,32 @@ mutation DeleteMealItemByPrimaryKey($id: uuid!) {
     id
   }
 }
+
+mutation UpdateRecipeByPK($id: uuid!, $name: String, $description: String) {
+  update_recipe_by_pk(
+    pk_columns: { id: $id }
+    _set: { name: $name, description: $description }
+  ) {
+    id
+  }
+}
+mutation UpdateRecipeItemByPK($id: uuid!, $food_id: uuid!, $weight: Int) {
+  update_recipe_item_by_pk(
+    pk_columns: { id: $id }
+    _set: { food_id: $food_id, weight: $weight }
+  ) {
+    id
+  }
+}
+
+mutation DeleteRecipeByPK($id: uuid!) {
+  delete_recipe_by_pk(id: $id) {
+    id
+  }
+}
+
+mutation DeleteRecipeItemByPK($id: uuid!) {
+  delete_recipe_item_by_pk(id: $id) {
+    id
+  }
+}

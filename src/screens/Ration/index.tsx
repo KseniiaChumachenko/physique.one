@@ -1,9 +1,10 @@
-import React  from "react";
+import React from "react";
 import { Trans } from "@lingui/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Tab, Tabs } from "@material-ui/core";
 import { Meals } from "./components/Meals";
 import { FoodLibrary } from "./components/FoodLibrary";
+import { Recipes } from "./components/Recipes";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -27,6 +28,11 @@ const TABS = [
     route: "ration/foodLibrary",
     label: "Food library",
     component: <FoodLibrary />,
+  },
+  {
+    route: "ration/recipes",
+    label: "Recipes",
+    component: <Recipes />,
   },
 ];
 

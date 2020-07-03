@@ -1,24 +1,3 @@
-query MealsListing {
-  meal {
-    id
-    time
-    name
-    meal_items {
-      id
-      foodDesc {
-        id
-        name
-        energy_cal
-        energy_kj
-        carbohydrates
-        fats
-        proteins
-      }
-      weight
-    }
-  }
-}
-
 subscription MealsByDate($_eq: date = "") {
   meal(where: { date: { _eq: $_eq } }, order_by: { name: asc_nulls_first }) {
     id
@@ -108,9 +87,41 @@ query FoodSelectFieldListing {
   }
 }
 
-query FoodTypes{
-  food_type{
+query FoodTypes {
+  food_type {
     value
     decription
+  }
+}
+
+subscription RecipeListing {
+  recipe {
+    id
+    name
+    description
+    recipe_items {
+      id
+      food {
+        id
+        name
+      }
+      proteins
+      fats
+      carbohydrates
+      energy_cal
+      energy_kj
+      weight
+    }
+    recipe_items_aggregate {
+      aggregate {
+        sum {
+          carbohydrates
+          fats
+          proteins
+          energy_kj
+          energy_cal
+        }
+      }
+    }
   }
 }

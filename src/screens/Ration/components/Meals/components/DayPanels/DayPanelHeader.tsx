@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import moment from "moment";
 import {
-  Avatar,
-  Chip,
   ExpansionPanelSummary,
   Grid,
   IconButton,
@@ -20,6 +18,7 @@ import {
   useMealItemMacrosSumByDateSubscription,
 } from "src/graphql/generated/graphql";
 import { AddMealDialog } from "../../../AddMealDialog";
+import { AggregationChips } from "../../../../../../components/AggredationChips";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -34,14 +33,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const INITIAL_STATE = {
-  energy_cal: 0,
-  energy_kj: 0,
-  proteins: 0,
-  fats: 0,
-  carbohydrates: 0,
-};
-
 interface Props {
   date: string;
 }
@@ -54,11 +45,6 @@ export const DayPanelHeader = ({ date }: Props) => {
   const [success, setOpenSuccessMessage] = React.useState(false);
   const [openAddDialog, setOpenAddMealDialog] = useState(false);
 
-  const [
-    { energy_cal, energy_kj, proteins, fats, carbohydrates },
-    setSum,
-  ] = useState(INITIAL_STATE);
-
   const { data } = useMealItemMacrosSumByDateSubscription({
     variables: { date },
   });
@@ -67,19 +53,6 @@ export const DayPanelHeader = ({ date }: Props) => {
     onCompleted: () => setOpenAddMealDialog(false),
     onError: (error) => setOpenErrorMessage(error),
   });
-
-  useEffect(() => {
-    if (data?.meal_item_aggregate?.aggregate?.sum) {
-      setSum({
-        energy_cal: data?.meal_item_aggregate?.aggregate?.sum.energy_cal || 0,
-        energy_kj: data?.meal_item_aggregate?.aggregate?.sum.energy_kj || 0,
-        proteins: data?.meal_item_aggregate?.aggregate?.sum.proteins || 0,
-        carbohydrates:
-          data?.meal_item_aggregate?.aggregate?.sum.carbohydrates || 0,
-        fats: data?.meal_item_aggregate?.aggregate?.sum.fats || 0,
-      });
-    }
-  }, [data]);
 
   const handleOpenAddMealDialog = () => setOpenAddMealDialog(true);
 
@@ -90,14 +63,7 @@ export const DayPanelHeader = ({ date }: Props) => {
     event.stopPropagation();
   };
 
-  const macronutrientsInPersents = () => {
-    const sum = carbohydrates + fats + proteins;
-    return {
-      proteins: ((proteins * 100) / sum)?.toFixed(2),
-      carbohydrates: ((carbohydrates * 100) / sum)?.toFixed(2),
-      fats: ((fats * 100) / sum)?.toFixed(2),
-    };
-  };
+  const macronutrients = data?.meal_item_aggregate?.aggregate?.sum;
 
   return (
     <React.Fragment>
@@ -113,49 +79,13 @@ export const DayPanelHeader = ({ date }: Props) => {
               </Typography>
             </Grid>
             <Grid item xs alignItems={"center"}>
-              {energy_cal ? (
-                <Chip
-                  label={`${energy_cal?.toFixed(2)} kcal`}
-                  variant={"outlined"}
-                  size={"small"}
-                  color={"secondary"}
-                  className={classes.chip}
-                />
-              ) : null}
-              {proteins ? (
-                <Chip
-                  avatar={<Avatar>P</Avatar>}
-                  label={`${proteins?.toFixed(2)} | ${
-                    macronutrientsInPersents().proteins
-                  }%`}
-                  variant={"outlined"}
-                  size={"small"}
-                  color={"primary"}
-                  className={classes.chip}
-                />
-              ) : null}
-              {carbohydrates ? (
-                <Chip
-                  avatar={<Avatar>C</Avatar>}
-                  label={`${carbohydrates?.toFixed(2)} | ${
-                    macronutrientsInPersents().carbohydrates
-                  }%`}
-                  variant={"outlined"}
-                  size={"small"}
-                  color={"primary"}
-                  className={classes.chip}
-                />
-              ) : null}
-              {fats ? (
-                <Chip
-                  avatar={<Avatar>F</Avatar>}
-                  label={`${fats?.toFixed(2)} | ${
-                    macronutrientsInPersents().fats
-                  }%`}
-                  variant={"outlined"}
-                  size={"small"}
-                  color={"primary"}
-                  className={classes.chip}
+              {macronutrients?.energy_kj ? (
+                <AggregationChips
+                  energy_cal={macronutrients.energy_cal}
+                  energy_kj={macronutrients.energy_kj}
+                  proteins={macronutrients.proteins}
+                  carbohydrates={macronutrients.carbohydrates}
+                  fats={macronutrients.fats}
                 />
               ) : null}
             </Grid>
@@ -169,6 +99,7 @@ export const DayPanelHeader = ({ date }: Props) => {
               />
             </Grid>
           </Grid>
+
           <AddMealDialog
             open={openAddDialog}
             setOpen={setOpenAddMealDialog}

@@ -1,8 +1,5 @@
 import React from "react";
-import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-} from "@material-ui/core";
+import { ExpansionPanel, ExpansionPanelDetails } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Meal_Item,
@@ -81,7 +78,12 @@ export const DayPanels = ({ date }: Props) => {
               expanded: classes.expanded,
             }}
           >
-            <PanelSummary id={item.id} name={item.name} time={item.time} />
+            <PanelSummary
+              id={item.id}
+              name={item.name}
+              time={item.time}
+              key={key}
+            />
             <ExpansionPanelDetails className={classes.parentExpPanelDetails}>
               <PanelDetailTable meal_items={item?.meal_items as Meal_Item[]} />
             </ExpansionPanelDetails>
