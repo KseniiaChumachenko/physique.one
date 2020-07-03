@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   CardContent,
   CardHeader,
@@ -11,9 +11,11 @@ import { AggregationChips } from "../../../../components/AggredationChips";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Recipe_Item_Aggregate,
+  useAddRecipeMutation,
   useDeleteRecipeByPkMutation,
   useUpdateRecipeByPkMutation,
 } from "../../../../graphql/generated/graphql";
+import { HARDCODED_U_ID } from "../AddMealDialog";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -58,6 +60,20 @@ export const RecipeCardHeader = ({
     onError: (error) => console.log(error),
   });
 
+  const [insert_recipe_one] = useAddRecipeMutation({
+    variables: {
+      u_id: HARDCODED_U_ID,
+      name: updatedName,
+      description: updatedDesc,
+    },
+  });
+
+  useEffect(() => {
+    if (!id) {
+      setEditMode(true);
+    }
+  }, [id]);
+
   const macronutrients = recipe_items_aggregate?.aggregate?.sum;
 
   return (
@@ -80,7 +96,11 @@ export const RecipeCardHeader = ({
             onConfirmClick={
               isInEditMode
                 ? () => {
-                    update_recipe_by_pk();
+                    if (id) {
+                      update_recipe_by_pk();
+                    } else {
+                      insert_recipe_one();
+                    }
                     setEditMode(false);
                   }
                 : undefined

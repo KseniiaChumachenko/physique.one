@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   createStyles,
   MenuItem,
@@ -11,15 +11,18 @@ import { Trans } from "@lingui/react";
 import { EditDeleteButtonGroup } from "../EditDeletButtonGroup";
 import {
   Recipe_Item,
+  useAddRecipeItemMutation,
   useDeleteRecipeItemByPkMutation,
   useFoodSelectFieldListingQuery,
   useUpdateRecipeItemByPkMutation,
 } from "../../../../graphql/generated/graphql";
 import { makeStyles } from "@material-ui/core/styles";
+import { HARDCODED_U_ID } from "../AddMealDialog";
 
 interface Props {
+  recipe_id?: string;
   row: Partial<Recipe_Item>;
-  mode?: boolean;
+  mode?: "add" | "regularRow";
 }
 
 const useStyles = makeStyles((theme) =>
@@ -39,22 +42,43 @@ const useStyles = makeStyles((theme) =>
 
 // TODO: unify food selector across app
 
-export const RecipeTableEditableRow = ({ row, mode = false }: Props) => {
-  const [isInEditMode, setEditMode] = useState(mode);
+export const RecipeTableEditableRow = ({ recipe_id, row, mode }: Props) => {
+  const [isInEditMode, setEditMode] = useState(false);
 
   const [updatedRowFood, setUpdatedRowFood] = useState(row?.food?.id);
-  const [updatedRowWeight, setUpdatedRowWeight] = useState(row?.weight);
+  const [updatedRowWeight, setUpdatedRowWeight] = useState(row?.weight || 100);
 
   const { data } = useFoodSelectFieldListingQuery();
+
   const [update_recipe_item_by_pk] = useUpdateRecipeItemByPkMutation({
     onCompleted: () => setEditMode(false),
     onError: (props) => console.log("Failed to updated:", props.message),
   });
+
   const [delete_recipe_item_by_pk] = useDeleteRecipeItemByPkMutation({
     onCompleted: () => setEditMode(false),
   });
 
+  const [incert_recipe_item_one] = useAddRecipeItemMutation({
+    onError: (error) => console.log(error),
+  });
+
   const classes = useStyles();
+
+  useEffect(() => {
+    if (mode === "add") {
+      setEditMode(true);
+    }
+  }, [mode]);
+
+  const foodById = data?.food.find((item) => item.id === updatedRowFood);
+  const macronutrients = {
+    energy_cal: (foodById?.energy_cal / 100) * updatedRowWeight,
+    energy_kj: (foodById?.energy_kj / 100) * updatedRowWeight,
+    proteins: (foodById?.proteins / 100) * updatedRowWeight,
+    carbohydrates: (foodById?.carbohydrates / 100) * updatedRowWeight,
+    fats: (foodById?.fats / 100) * updatedRowWeight,
+  };
 
   return (
     <TableRow>
@@ -87,7 +111,7 @@ export const RecipeTableEditableRow = ({ row, mode = false }: Props) => {
             scope="row"
             children={
               <TextField
-                defaultValue={row.weight}
+                defaultValue={row?.weight || 100}
                 type={"number"}
                 onChange={(event: any) =>
                   setUpdatedRowWeight(event?.target?.value)
@@ -113,22 +137,42 @@ export const RecipeTableEditableRow = ({ row, mode = false }: Props) => {
         scope="row"
         children={
           <React.Fragment>
-            {row?.energy_cal?.toFixed(2)}&nbsp;|&nbsp;
-            {row?.energy_kj?.toFixed(2)}
+            {(isInEditMode || mode === "add"
+              ? macronutrients.energy_cal
+              : row?.energy_cal
+            )?.toFixed(2)}
+            &nbsp;|&nbsp;
+            {(isInEditMode || mode === "add"
+              ? macronutrients.energy_kj
+              : row?.energy_kj
+            )?.toFixed(2)}
           </React.Fragment>
         }
       />
       <TableCell
         component="th"
         scope="row"
-        children={row?.proteins?.toFixed(2)}
+        children={(isInEditMode || mode === "add"
+          ? macronutrients.proteins
+          : row?.proteins
+        )?.toFixed(2)}
       />
       <TableCell
         component="th"
         scope="row"
-        children={row?.carbohydrates?.toFixed(2)}
+        children={(isInEditMode || mode === "add"
+          ? macronutrients.carbohydrates
+          : row?.carbohydrates
+        )?.toFixed(2)}
       />
-      <TableCell component="th" scope="row" children={row?.fats?.toFixed(2)} />
+      <TableCell
+        component="th"
+        scope="row"
+        children={(isInEditMode || mode === "add"
+          ? macronutrients.fats
+          : row?.fats
+        )?.toFixed(2)}
+      />
       <TableCell
         component="th"
         scope="row"
@@ -136,22 +180,45 @@ export const RecipeTableEditableRow = ({ row, mode = false }: Props) => {
           <EditDeleteButtonGroup
             onConfirmClick={
               isInEditMode
-                ? () =>
-                    update_recipe_item_by_pk({
-                      variables: {
-                        id: row.id,
-                        food_id: updatedRowFood,
-                        weight: updatedRowWeight,
-                      },
-                    })
+                ? mode === "add"
+                  ? () =>
+                      incert_recipe_item_one({
+                        variables: {
+                          recipe_id,
+                          u_id: HARDCODED_U_ID,
+                          food_id: updatedRowFood,
+                          weight: updatedRowWeight,
+                          ...macronutrients,
+                        },
+                      })
+                  : () =>
+                      update_recipe_item_by_pk({
+                        variables: {
+                          id: row.id,
+                          food_id: updatedRowFood,
+                          weight: updatedRowWeight,
+                          ...macronutrients,
+                        },
+                      })
                 : undefined
             }
-            onCancelClick={isInEditMode ? () => setEditMode(false) : undefined}
-            onEditClick={isInEditMode ? undefined : () => setEditMode(row.id)}
-            onDeleteClick={() =>
-              delete_recipe_item_by_pk({
-                variables: { id: row.id },
-              })
+            onCancelClick={
+              isInEditMode && !(mode === "add")
+                ? () => setEditMode(false)
+                : undefined
+            }
+            onEditClick={
+              isInEditMode && mode === "add"
+                ? undefined
+                : () => setEditMode(row.id)
+            }
+            onDeleteClick={
+              !(mode === "add")
+                ? () =>
+                    delete_recipe_item_by_pk({
+                      variables: { id: row.id },
+                    })
+                : undefined
             }
           />
         }

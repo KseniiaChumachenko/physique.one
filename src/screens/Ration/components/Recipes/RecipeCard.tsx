@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  Button,
   Card,
   CardContent,
   createStyles,
@@ -12,10 +11,8 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Recipe_Item } from "../../../../graphql/generated/graphql";
-import { Trans } from "@lingui/react";
 import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
 import { RecipeTableEditableRow } from "./RecipeTableEditableRow";
-import { AddRounded } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -41,7 +38,6 @@ export const RecipeCard = ({
   recipe_items_aggregate,
 }: Props) => {
   const classes = useStyles();
-
   return (
     <Card className={classes.root}>
       <RecipeCardHeader
@@ -65,16 +61,16 @@ export const RecipeCard = ({
           </TableHead>
           <TableBody>
             {recipe_items?.map((row, key) => (
-              <RecipeTableEditableRow row={row} key={key} />
+              <RecipeTableEditableRow
+                recipe_id={id}
+                row={row}
+                key={key}
+                mode={"regularRow"}
+              />
             ))}
+            <RecipeTableEditableRow recipe_id={id} row={{}} mode={"add"} />
           </TableBody>
         </Table>
-        <Button
-          color="primary"
-          startIcon={<AddRounded />}
-          className={classes.addButton}
-          children={<Trans>Add ingredient</Trans>}
-        />
       </CardContent>
     </Card>
   );

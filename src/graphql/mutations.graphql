@@ -116,14 +116,15 @@ mutation DeleteFood($id: uuid!) {
 
 mutation AddMealItem(
   $u_id: uuid = "7040b96b-0994-4f79-ac7e-6e0299fcad04"
-  $proteins: numeric = ""
-  $fats: numeric = ""
-  $energy_kj: numeric = ""
-  $energy_cal: numeric = ""
-  $carbohydrates: numeric = ""
-  $food: uuid = ""
-  $meal_id: uuid = ""
-  $weight: numeric = ""
+  $proteins: numeric
+  $fats: numeric
+  $energy_kj: numeric
+  $energy_cal: numeric
+  $carbohydrates: numeric
+  $food: uuid
+  $meal_id: uuid
+  $weight: numeric
+  $recipe_id: uuid
 ) {
   insert_meal_item_one(
     object: {
@@ -136,6 +137,7 @@ mutation AddMealItem(
       proteins: $proteins
       u_id: $u_id
       weight: $weight
+      recipe_id: $recipe_id
     }
   ) {
     id
@@ -178,6 +180,42 @@ mutation DeleteMealItemByPrimaryKey($id: uuid!) {
   }
 }
 
+mutation AddRecipe($u_id: uuid!, $name: String, $description: String) {
+  insert_recipe_one(
+    object: { u_id: $u_id, name: $name, description: $description }
+  ) {
+    id
+  }
+}
+
+mutation AddRecipeItem(
+  $energy_cal: numeric
+  $energy_kj: numeric
+  $proteins: numeric
+  $carbohydrates: numeric
+  $fats: numeric
+  $recipe_id: uuid!
+  $food_id: uuid!
+  $u_id: uuid!
+  $weight: numeric!
+) {
+  insert_recipe_item_one(
+    object: {
+      u_id: $u_id
+      food_id: $food_id
+      recipe_id: $recipe_id
+      weight: $weight
+      energy_cal: $energy_cal
+      energy_kj: $energy_kj
+      proteins: $proteins
+      carbohydrates: $carbohydrates
+      fats: $fats
+    }
+  ) {
+    id
+  }
+}
+
 mutation UpdateRecipeByPK($id: uuid!, $name: String, $description: String) {
   update_recipe_by_pk(
     pk_columns: { id: $id }
@@ -186,10 +224,27 @@ mutation UpdateRecipeByPK($id: uuid!, $name: String, $description: String) {
     id
   }
 }
-mutation UpdateRecipeItemByPK($id: uuid!, $food_id: uuid!, $weight: Int) {
+mutation UpdateRecipeItemByPK(
+  $id: uuid!
+  $food_id: uuid!
+  $weight: numeric
+  $energy_cal: numeric
+  $energy_kj: numeric
+  $proteins: numeric
+  $carbohydrates: numeric
+  $fats: numeric
+) {
   update_recipe_item_by_pk(
     pk_columns: { id: $id }
-    _set: { food_id: $food_id, weight: $weight }
+    _set: {
+      food_id: $food_id
+      weight: $weight
+      energy_cal: $energy_cal
+      energy_kj: $energy_kj
+      proteins: $proteins
+      carbohydrates: $carbohydrates
+      fats: $fats
+    }
   ) {
     id
   }

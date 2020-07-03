@@ -9,6 +9,7 @@ export const Recipes = ({}: Props) => {
 
   return (
     <>
+      <RecipeCard name={"Add new recipe"} description={""} />
       {data?.recipe.map((recipe) => (
         <RecipeCard
           id={recipe.id}

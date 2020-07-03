@@ -9,6 +9,7 @@ import {
   Select,
   Snackbar,
   TextField,
+  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
@@ -42,7 +43,34 @@ export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
   const [food, setFood] = useState();
   const [weight, setWeight] = useState(100);
 
-  const foodById = data?.food.find((item) => item.id === food);
+  const foodById =
+    data?.food.find((item) => item.id === food) ??
+    data?.recipe.find((item) => item.id === food)?.recipe_items_aggregate
+      .aggregate?.sum;
+
+  const weightOfRecipe = data?.recipe.find((item) => item.id === food)
+    ?.recipe_items_aggregate.aggregate?.sum?.weight;
+
+  const recipeOrFoodProps = data?.recipe.find((item) => item.id === food)?.id
+    ? {
+        recipe_id: data?.recipe.find((item) => item.id === food)?.id,
+        food: null,
+
+        energy_cal: (foodById?.energy_cal / weightOfRecipe) * weight,
+        energy_kj: (foodById?.energy_kj / weightOfRecipe) * weight,
+        proteins: (foodById?.proteins / weightOfRecipe) * weight,
+        carbohydrates: (foodById?.carbohydrates / weightOfRecipe) * weight,
+        fats: (foodById?.fats / weightOfRecipe) * weight,
+      }
+    : {
+        food,
+        energy_cal: (foodById?.energy_cal / 100) * weight,
+        energy_kj: (foodById?.energy_kj / 100) * weight,
+        proteins: (foodById?.proteins / 100) * weight,
+        carbohydrates: (foodById?.carbohydrates / 100) * weight,
+        fats: (foodById?.fats / 100) * weight,
+        recipe_id: null,
+      };
 
   const [addMealItem] = useAddMealItemMutation({
     onError: (error1) => setOpenErrorMessage(error1),
@@ -54,12 +82,7 @@ export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
       u_id: HARDCODED_U_ID,
       weight,
       meal_id,
-      food,
-      energy_cal: (foodById?.energy_cal / 100) * weight,
-      energy_kj: (foodById?.energy_kj / 100) * weight,
-      proteins: (foodById?.proteins / 100) * weight,
-      carbohydrates: (foodById?.carbohydrates / 100) * weight,
-      fats: (foodById?.fats / 100) * weight,
+      ...recipeOrFoodProps,
     },
   });
 
@@ -79,18 +102,35 @@ export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
         <DialogTitle>Meal item</DialogTitle>
         <DialogContent>
           {data && (
-            <Select
-              label={<Trans>Food</Trans>}
-              defaultValue={food || data?.food[0].id}
-              onChange={(event) => setFood(event.target.value as any)}
-              className={classes.field}
-            >
-              {data?.food.map((food, key) => (
-                <MenuItem value={food.id} key={key}>
-                  {food.name}
-                </MenuItem>
-              ))}
-            </Select>
+            <>
+              <Select
+                label={<Trans>Food</Trans>}
+                defaultValue={food || data?.food[0].id}
+                onChange={(event) => setFood(event.target.value as any)}
+                className={classes.field}
+              >
+                {data?.food.map((food, key) => (
+                  <MenuItem value={food.id} key={key}>
+                    {food.name}
+                  </MenuItem>
+                ))}
+              </Select>
+              <Typography color={"secondary"} variant={"h4"}>
+                OR
+              </Typography>
+              <Select
+                label={<Trans>Recipe</Trans>}
+                defaultValue={food || data?.recipe[0].id}
+                onChange={(event) => setFood(event.target.value as any)}
+                className={classes.field}
+              >
+                {data?.recipe.map((recipe, key) => (
+                  <MenuItem value={recipe.id} key={key}>
+                    {recipe.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </>
           )}
           <TextField
             label={<Trans>Weight (g)</Trans>}

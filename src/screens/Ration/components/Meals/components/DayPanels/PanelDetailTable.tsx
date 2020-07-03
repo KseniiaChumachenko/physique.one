@@ -95,7 +95,7 @@ export const PanelDetailTable = ({
                   <TableCell
                     component="th"
                     scope="row"
-                    children={row.foodDesc.name}
+                    children={row.foodDesc?.name || row.recipe?.name}
                   />
                   <TableCell
                     component="th"
