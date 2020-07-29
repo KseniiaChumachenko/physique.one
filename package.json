@@ -2,6 +2,9 @@
   "name": "body-monitor",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "13.x"
+  },
   "dependencies": {
     "@apollo/client": "^3.0.0-rc.0",
     "@apollo/link-ws": "^2.0.0-beta.3",
@@ -11,8 +14,6 @@
     "@material-ui/lab": "^4.0.0-alpha.55",
     "@material-ui/pickers": "^4.0.0-alpha.7",
     "axios": "^0.19.2",
-    "express": "^4.17.1",
-    "http-proxy-middleware": "^1.0.3",
     "lodash.omit": "^4.5.0",
     "mobx": "^5.15.4",
     "mobx-react-lite": "^2.0.6",
@@ -22,11 +23,12 @@
     "react-dom": "^16.13.1",
     "react-router-dom": "^5.1.2",
     "regenerator-runtime": "^0.13.5",
+    "serve": "^11.3.2",
     "subscriptions-transport-ws": "^0.9.16"
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --hot",
-    "start": "node server.js",
+    "start": "serve -s build",
     "build": "cross-env NODE_ENV=production webpack",
     "gql": "graphql-codegen --config codegen.yml",
     "check-types": "tsc --noEmit",
