@@ -9,6 +9,7 @@
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
+    "noUnusedLocals": true,
     "removeComments": false, // prevent tsc from removing webpack magic comments
     "importsNotUsedAsValues": "preserve",
 

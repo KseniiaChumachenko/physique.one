@@ -1,23 +1,16 @@
-import React, { useState } from "react";
-import { Trans } from "@lingui/react";
-import { Snackbar } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
-import {
-  Meal,
-  useDeleteMealByIdMutation,
-} from "../../../../../../graphql/generated/graphql";
-import { EditDeleteButtonGroup } from "../../../EditDeletButtonGroup";
-import { AddMealItemDialog } from "../../../MealItemDialog/AddMealItemDialog";
-
-const useStyles = makeStyles((theme) => ({}));
+import React, {useState} from "react";
+import {Trans} from "@lingui/react";
+import {Snackbar} from "@material-ui/core";
+import {Alert} from "@material-ui/lab";
+import {Meal, useDeleteMealByIdMutation,} from "../../../../graphql/generated/graphql";
+import {EditDeleteButtonGroup} from "../../../components/EditDeletButtonGroup";
+import {AddMealItemDialog} from "../../../components/MealItemDialog/AddMealItemDialog";
 
 type MealItem = Pick<Meal, "id">;
 
 interface Props extends MealItem {}
 
 export const PanelDetailActions = ({ id }: Props) => {
-  const classes = useStyles();
   const [openAddMealItemDialog, setAddMealItemDialog] = useState(false);
 
   const [error, setOpenErrorMessage] = React.useState();

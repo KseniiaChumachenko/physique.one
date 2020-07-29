@@ -1,14 +1,11 @@
 import React from "react";
-import { ExpansionPanel, ExpansionPanelDetails } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import {
-  Meal_Item,
-  useMealsByDateSubscription,
-} from "src/graphql/generated/graphql";
-import { ToastMessage } from "src/components/ToastMessage";
-import { DayPanelHeader } from "./DayPanelHeader";
-import { PanelSummary } from "./PanelSummary";
-import { PanelDetailTable } from "./PanelDetailTable";
+import {ExpansionPanel, ExpansionPanelDetails} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+import {Meal_Item, useMealsByDateSubscription,} from "src/graphql/generated/graphql";
+import {ToastMessage} from "src/components/ToastMessage";
+import {DayPanelHeader} from "./DayPanelHeader";
+import {PanelSummary} from "./PanelSummary";
+import {PanelDetailTable} from "./PanelDetailTable";
 
 const useStyles = makeStyles((theme) => ({
   parentExpPanel: {

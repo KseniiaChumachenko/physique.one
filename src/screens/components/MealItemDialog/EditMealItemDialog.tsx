@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
+import React, {useState} from "react";
+import {makeStyles} from "@material-ui/core/styles";
+import {Alert} from "@material-ui/lab";
 import {
   Button,
   Dialog,
@@ -12,16 +12,16 @@ import {
   Snackbar,
   TextField,
 } from "@material-ui/core";
-import { Trans } from "@lingui/react";
+import {Trans} from "@lingui/react";
 import {
   Meal_Item,
   useFoodSelectFieldListingQuery,
   useUpdateMealItemMutation,
-} from "../../../../graphql/generated/graphql";
-import { ToastMessage } from "../../../../components/ToastMessage";
-import { HARDCODED_U_ID } from "../AddMealDialog";
+} from "../../../graphql/generated/graphql";
+import {ToastMessage} from "../../../components/ToastMessage";
+import {HARDCODED_U_ID} from "../AddMealDialog";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   field: {
     width: "100%",
   },

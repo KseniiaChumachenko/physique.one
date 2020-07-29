@@ -1,24 +1,18 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import moment from "moment";
+import {ExpansionPanelSummary, Grid, IconButton, Snackbar, Typography,} from "@material-ui/core";
+import {AddRounded, ExpandMoreRounded} from "@material-ui/icons";
+import {makeStyles} from "@material-ui/core/styles";
+import {Trans} from "@lingui/react";
+import {ApolloError} from "@apollo/client";
+import {Alert} from "@material-ui/lab";
 import {
-  ExpansionPanelSummary,
-  Grid,
-  IconButton,
-  Snackbar,
-  Typography,
-} from "@material-ui/core";
-import { AddRounded, ExpandMoreRounded } from "@material-ui/icons";
-import { makeStyles } from "@material-ui/core/styles";
-import { Trans } from "@lingui/react";
-import { ApolloError } from "@apollo/client";
-import { Alert } from "@material-ui/lab";
-import {
-  AddMealMutationVariables,
-  useAddMealMutation,
-  useMealItemMacrosSumByDateSubscription,
+    AddMealMutationVariables,
+    useAddMealMutation,
+    useMealItemMacrosSumByDateSubscription,
 } from "src/graphql/generated/graphql";
-import { AddMealDialog } from "../../../AddMealDialog";
-import { AggregationChips } from "../../../../../../components/AggredationChips";
+import {AddMealDialog} from "../../../components/AddMealDialog";
+import {AggregationChips} from "../../../../components/AggredationChips";
 
 const useStyles = makeStyles((theme) => ({
   content: {

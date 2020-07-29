@@ -1,21 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
+import {CardContent, CardHeader, createStyles, TextField, Typography,} from "@material-ui/core";
+import {EditDeleteButtonGroup} from "../components/EditDeletButtonGroup";
+import {AggregationChips} from "../../components/AggredationChips";
+import {makeStyles} from "@material-ui/core/styles";
 import {
-  CardContent,
-  CardHeader,
-  createStyles,
-  TextField,
-  Typography,
-} from "@material-ui/core";
-import { EditDeleteButtonGroup } from "../EditDeletButtonGroup";
-import { AggregationChips } from "../../../../components/AggredationChips";
-import { makeStyles } from "@material-ui/core/styles";
-import {
-  Recipe_Item_Aggregate,
-  useAddRecipeMutation,
-  useDeleteRecipeByPkMutation,
-  useUpdateRecipeByPkMutation,
-} from "../../../../graphql/generated/graphql";
-import { HARDCODED_U_ID } from "../AddMealDialog";
+    Recipe_Item_Aggregate,
+    useAddRecipeMutation,
+    useDeleteRecipeByPkMutation,
+    useUpdateRecipeByPkMutation,
+} from "../../graphql/generated/graphql";
+import {HARDCODED_U_ID} from "../components/AddMealDialog";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

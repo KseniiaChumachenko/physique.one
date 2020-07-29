@@ -1,6 +1,6 @@
 import React from "react";
-import { useRecipeListingSubscription } from "../../../../graphql/generated/graphql";
-import { RecipeCard } from "./RecipeCard";
+import {useRecipeListingSubscription} from "../../graphql/generated/graphql";
+import {RecipeCard} from "./RecipeCard";
 
 interface Props {}
 

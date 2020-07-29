@@ -4,16 +4,16 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogTitle,
   DialogContentText,
+  DialogTitle,
   MenuItem,
   Select,
   TextField,
 } from "@material-ui/core";
-import { Trans } from "@lingui/react";
-import { makeStyles } from "@material-ui/core/styles";
-import { useFoodTypesQuery } from "../../../../graphql/generated/graphql";
-import { useStore, State } from "./useStore";
+import {Trans} from "@lingui/react";
+import {makeStyles} from "@material-ui/core/styles";
+import {useFoodTypesQuery} from "../../../graphql/generated/graphql";
+import {State, useStore} from "./useStore";
 
 interface Props extends State {
   open: boolean;

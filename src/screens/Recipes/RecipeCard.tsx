@@ -1,18 +1,9 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  createStyles,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { Recipe_Item } from "../../../../graphql/generated/graphql";
-import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
-import { RecipeTableEditableRow } from "./RecipeTableEditableRow";
+import {Card, CardContent, createStyles, Table, TableBody, TableCell, TableHead, TableRow,} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+import {Recipe_Item} from "../../graphql/generated/graphql";
+import {RecipeCardHeader, RecipeCardHeaderProps} from "./RecipeCardHeader";
+import {RecipeTableEditableRow} from "./RecipeTableEditableRow";
 
 const useStyles = makeStyles((theme) =>
   createStyles({

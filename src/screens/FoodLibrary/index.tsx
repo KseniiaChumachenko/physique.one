@@ -1,27 +1,18 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Trans } from "@lingui/react";
-import { AddRounded } from "@material-ui/icons";
+import React, {useState} from "react";
+import {makeStyles} from "@material-ui/core/styles";
+import {Trans} from "@lingui/react";
+import {AddRounded} from "@material-ui/icons";
+import {Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,} from "@material-ui/core";
 import {
-  Button,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
-import {
-  useAddFoodMutation,
-  useDeleteFoodMutation,
-  useFoodSelectFieldListingQuery,
-  useUpdateFoodMutation,
-} from "../../../../graphql/generated/graphql";
-import { ToastMessage } from "../../../../components/ToastMessage";
-import { AddFoodDialog } from "../AddFoodDialog";
-import { State } from "../AddFoodDialog/useStore";
-import { EditDeleteButtonGroup } from "../EditDeletButtonGroup";
+    useAddFoodMutation,
+    useDeleteFoodMutation,
+    useFoodSelectFieldListingQuery,
+    useUpdateFoodMutation,
+} from "../../graphql/generated/graphql";
+import {ToastMessage} from "../../components/ToastMessage";
+import {AddFoodDialog} from "../components/AddFoodDialog";
+import {State} from "../components/AddFoodDialog/useStore";
+import {EditDeleteButtonGroup} from "../components/EditDeletButtonGroup";
 
 const useStyles = makeStyles((theme) => ({
   tableToolbar: {

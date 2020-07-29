@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import {
   Button,
   Dialog,
@@ -11,17 +11,14 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
-import { Trans } from "@lingui/react";
-import {
-  useAddMealItemMutation,
-  useFoodSelectFieldListingQuery,
-} from "../../../../graphql/generated/graphql";
-import { ToastMessage } from "../../../../components/ToastMessage";
-import { HARDCODED_U_ID } from "../AddMealDialog";
+import {makeStyles} from "@material-ui/core/styles";
+import {Alert} from "@material-ui/lab";
+import {Trans} from "@lingui/react";
+import {useAddMealItemMutation, useFoodSelectFieldListingQuery,} from "../../../graphql/generated/graphql";
+import {ToastMessage} from "../../../components/ToastMessage";
+import {HARDCODED_U_ID} from "../AddMealDialog";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   field: {
     width: "100%",
   },

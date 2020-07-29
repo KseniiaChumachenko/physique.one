@@ -1,11 +1,11 @@
-import React, { useMemo, useState } from "react";
+import React, {useMemo, useState} from "react";
 import moment from "moment";
-import { Trans } from "@lingui/react";
-import { makeStyles } from "@material-ui/core/styles";
-import { Pagination } from "@material-ui/lab";
-import { Typography } from "@material-ui/core";
+import {Trans} from "@lingui/react";
+import {makeStyles} from "@material-ui/core/styles";
+import {Pagination} from "@material-ui/lab";
+import {Typography} from "@material-ui/core";
 
-import { MealsListing } from "./components/MealsListing";
+import {MealsListing} from "./components/MealsListing";
 
 const NUMBER_OF_WEEKS_IN_YEAR = 52;
 
@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme) => ({
     flexWrap: "wrap",
     justifyContent: "center",
     marginBottom: theme.spacing(1),
+    marginTop: theme.spacing(1),
     marginLeft: theme.spacing(2),
   },
   paginationTitle: {

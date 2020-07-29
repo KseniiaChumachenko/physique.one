@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
+import {createStyles, MenuItem, Select, TableCell, TableRow, TextField,} from "@material-ui/core";
+import {Trans} from "@lingui/react";
+import {EditDeleteButtonGroup} from "../components/EditDeletButtonGroup";
 import {
-  createStyles,
-  MenuItem,
-  Select,
-  TableCell,
-  TableRow,
-  TextField,
-} from "@material-ui/core";
-import { Trans } from "@lingui/react";
-import { EditDeleteButtonGroup } from "../EditDeletButtonGroup";
-import {
-  Recipe_Item,
-  useAddRecipeItemMutation,
-  useDeleteRecipeItemByPkMutation,
-  useFoodSelectFieldListingQuery,
-  useUpdateRecipeItemByPkMutation,
-} from "../../../../graphql/generated/graphql";
-import { makeStyles } from "@material-ui/core/styles";
-import { HARDCODED_U_ID } from "../AddMealDialog";
+    Recipe_Item,
+    useAddRecipeItemMutation,
+    useDeleteRecipeItemByPkMutation,
+    useFoodSelectFieldListingQuery,
+    useUpdateRecipeItemByPkMutation,
+} from "../../graphql/generated/graphql";
+import {makeStyles} from "@material-ui/core/styles";
+import {HARDCODED_U_ID} from "../components/AddMealDialog";
 
 interface Props {
   recipe_id?: string;

@@ -1,5 +1,5 @@
 import React from "react";
-import { DayPanels } from "./DayPanels";
+import {DayPanels} from "./DayPanels";
 
 interface Props {
   days: string[];

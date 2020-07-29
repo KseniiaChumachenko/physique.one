@@ -1,26 +1,14 @@
-import React, { useState } from "react";
-import {
-  Snackbar,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { ApolloError } from "@apollo/client";
-import { Alert } from "@material-ui/lab";
-import { Trans } from "@lingui/react";
-import {
-  Food,
-  Meal_Item,
-  useDeleteMealItemByPrimaryKeyMutation,
-} from "src/graphql/generated/graphql";
-import { EditDeleteButtonGroup } from "../../../EditDeletButtonGroup";
-import { EditMealItemDialog } from "../../../MealItemDialog/EditMealItemDialog";
+import React, {useState} from "react";
+import {Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,} from "@material-ui/core";
+import {makeStyles} from "@material-ui/core/styles";
+import {ApolloError} from "@apollo/client";
+import {Alert} from "@material-ui/lab";
+import {Trans} from "@lingui/react";
+import {Food, Meal_Item, useDeleteMealItemByPrimaryKeyMutation,} from "src/graphql/generated/graphql";
+import {EditDeleteButtonGroup} from "../../../components/EditDeletButtonGroup";
+import {EditMealItemDialog} from "../../../components/MealItemDialog/EditMealItemDialog";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   table: {
     minWidth: 650,
   },

@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
-import { Trans } from "@lingui/react";
-import { makeStyles } from "@material-ui/core/styles";
-import {
-  BottomNavigation as MaterialBottomNavigation,
-  BottomNavigationAction,
-  Paper,
-} from "@material-ui/core";
-import { FastfoodRounded, DashboardRounded } from "@material-ui/icons";
+import React, {useState} from "react";
+import {useHistory, useLocation} from "react-router-dom";
+import {Trans} from "@lingui/react";
+import {makeStyles} from "@material-ui/core/styles";
+import {BottomNavigation as MaterialBottomNavigation, BottomNavigationAction, Paper,} from "@material-ui/core";
+import {DashboardRounded, FastfoodRounded, LocalGroceryStoreRounded, MenuBookRounded,} from "@material-ui/icons";
 
 const useStyles = makeStyles({
   root: {
@@ -40,8 +36,18 @@ export const BottomNavigation = () => {
         />
         <BottomNavigationAction
           value={"/ration"}
-          label={<Trans>Ration</Trans>}
+          label={<Trans>Meals</Trans>}
           icon={<FastfoodRounded />}
+        />
+        <BottomNavigationAction
+          value={"/recipes"}
+          label={<Trans>Recipes</Trans>}
+          icon={<MenuBookRounded />}
+        />
+        <BottomNavigationAction
+          value={"/foodLibrary"}
+          label={<Trans>Food Library</Trans>}
+          icon={<LocalGroceryStoreRounded />}
         />
       </MaterialBottomNavigation>
     </Paper>
