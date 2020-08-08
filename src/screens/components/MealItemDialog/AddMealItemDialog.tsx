@@ -1,26 +1,25 @@
-import React, {useEffect, useState} from "react";
+import React, { useState } from "react";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  MenuItem,
-  Select,
   Snackbar,
   TextField,
-  Typography,
 } from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
-import {Alert} from "@material-ui/lab";
-import {Trans} from "@lingui/react";
-import {useAddMealItemMutation, useFoodSelectFieldListingQuery,} from "../../../graphql/generated/graphql";
-import {ToastMessage} from "../../../components/ToastMessage";
-import {HARDCODED_U_ID} from "../AddMealDialog";
+import { makeStyles } from "@material-ui/core/styles";
+import { Alert } from "@material-ui/lab";
+import { Trans } from "@lingui/react";
+import { useAddMealItemMutation } from "../../../graphql/generated/graphql";
+import { ToastMessage } from "../../../components/ToastMessage";
+import { HARDCODED_U_ID } from "../AddMealDialog";
+import { MealAutocomplete } from "../../../components/MealAutocomplete";
 
 const useStyles = makeStyles(() => ({
   field: {
     width: "100%",
+    minWidth: 250,
   },
 }));
 
@@ -36,38 +35,19 @@ export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
   const [error, setOpenErrorMessage] = React.useState();
   const [success, setOpenSuccessMessage] = React.useState();
 
-  const { data } = useFoodSelectFieldListingQuery();
   const [food, setFood] = useState();
   const [weight, setWeight] = useState(100);
 
-  const foodById =
-    data?.food.find((item) => item.id === food) ??
-    data?.recipe.find((item) => item.id === food)?.recipe_items_aggregate
-      .aggregate?.sum;
+  const mealItemProps = {
+    recipe_id: food?.recipe ? food?.id : null,
+    food: !food?.recipe ? food?.id : null,
 
-  const weightOfRecipe = data?.recipe.find((item) => item.id === food)
-    ?.recipe_items_aggregate.aggregate?.sum?.weight;
-
-  const recipeOrFoodProps = data?.recipe.find((item) => item.id === food)?.id
-    ? {
-        recipe_id: data?.recipe.find((item) => item.id === food)?.id,
-        food: null,
-
-        energy_cal: (foodById?.energy_cal / weightOfRecipe) * weight,
-        energy_kj: (foodById?.energy_kj / weightOfRecipe) * weight,
-        proteins: (foodById?.proteins / weightOfRecipe) * weight,
-        carbohydrates: (foodById?.carbohydrates / weightOfRecipe) * weight,
-        fats: (foodById?.fats / weightOfRecipe) * weight,
-      }
-    : {
-        food,
-        energy_cal: (foodById?.energy_cal / 100) * weight,
-        energy_kj: (foodById?.energy_kj / 100) * weight,
-        proteins: (foodById?.proteins / 100) * weight,
-        carbohydrates: (foodById?.carbohydrates / 100) * weight,
-        fats: (foodById?.fats / 100) * weight,
-        recipe_id: null,
-      };
+    energy_cal: (food?.energy_cal / (food?.weight || 100)) * weight,
+    energy_kj: (food?.energy_kj / (food?.weight || 100)) * weight,
+    proteins: (food?.proteins / (food?.weight || 100)) * weight,
+    carbohydrates: (food?.carbohydrates / (food?.weight || 100)) * weight,
+    fats: (food?.fats / (food?.weight || 100)) * weight,
+  };
 
   const [addMealItem] = useAddMealItemMutation({
     onError: (error1) => setOpenErrorMessage(error1),
@@ -79,15 +59,9 @@ export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
       u_id: HARDCODED_U_ID,
       weight,
       meal_id,
-      ...recipeOrFoodProps,
+      ...mealItemProps,
     },
   });
-
-  useEffect(() => {
-    if (data) {
-      setFood(data.food[0].id);
-    }
-  }, [data]);
 
   if (error) {
     return <ToastMessage severity={"error"} children={error?.message as any} />;
@@ -98,42 +72,19 @@ export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Meal item</DialogTitle>
         <DialogContent>
-          {data && (
-            <>
-              <Select
-                label={<Trans>Food</Trans>}
-                defaultValue={food || data?.food[0].id}
-                onChange={(event) => setFood(event.target.value as any)}
-                className={classes.field}
-              >
-                {data?.food.map((food, key) => (
-                  <MenuItem value={food.id} key={key}>
-                    {food.name}
-                  </MenuItem>
-                ))}
-              </Select>
-              <Typography color={"secondary"} variant={"h4"}>
-                OR
-              </Typography>
-              <Select
-                label={<Trans>Recipe</Trans>}
-                defaultValue={food || data?.recipe[0].id}
-                onChange={(event) => setFood(event.target.value as any)}
-                className={classes.field}
-              >
-                {data?.recipe.map((recipe, key) => (
-                  <MenuItem value={recipe.id} key={key}>
-                    {recipe.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </>
-          )}
+          <MealAutocomplete
+            value={food}
+            setValue={setFood}
+            className={classes.field}
+          />
           <TextField
             label={<Trans>Weight (g)</Trans>}
             defaultValue={weight}
             type={"number"}
-            onChange={(event: any) => setWeight(event?.target?.value)}
+            onChange={(event: any) => {
+              setWeight(event?.target?.value);
+              event.stopPropagation();
+            }}
             className={classes.field}
           />
         </DialogContent>

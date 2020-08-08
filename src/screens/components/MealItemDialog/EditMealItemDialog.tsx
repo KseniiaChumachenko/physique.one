@@ -1,29 +1,28 @@
-import React, {useState} from "react";
-import {makeStyles} from "@material-ui/core/styles";
-import {Alert} from "@material-ui/lab";
+import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Alert } from "@material-ui/lab";
 import {
   Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogTitle,
-  MenuItem,
-  Select,
   Snackbar,
   TextField,
 } from "@material-ui/core";
-import {Trans} from "@lingui/react";
+import { Trans } from "@lingui/react";
 import {
   Meal_Item,
-  useFoodSelectFieldListingQuery,
   useUpdateMealItemMutation,
 } from "../../../graphql/generated/graphql";
-import {ToastMessage} from "../../../components/ToastMessage";
-import {HARDCODED_U_ID} from "../AddMealDialog";
+import { ToastMessage } from "../../../components/ToastMessage";
+import { HARDCODED_U_ID } from "../AddMealDialog";
+import { MealAutocomplete } from "../../../components/MealAutocomplete";
 
 const useStyles = makeStyles(() => ({
   field: {
     width: "100%",
+    minWidth: 250,
   },
 }));
 
@@ -39,11 +38,19 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
   const [error, setOpenErrorMessage] = React.useState();
   const [success, setOpenSuccessMessage] = React.useState();
 
-  const { data, loading } = useFoodSelectFieldListingQuery();
   const [food, setFood] = useState(mealItem.food);
   const [weight, setWeight] = useState(mealItem.weight);
 
-  const foodById = data?.food.find((item) => item.id === food);
+  const mealItemProps = {
+    recipe_id: food?.recipe ? food?.id : null,
+    food: !food?.recipe ? food?.id : null,
+
+    energy_cal: (food?.energy_cal / (food?.weight || 100)) * weight,
+    energy_kj: (food?.energy_kj / (food?.weight || 100)) * weight,
+    proteins: (food?.proteins / (food?.weight || 100)) * weight,
+    carbohydrates: (food?.carbohydrates / (food?.weight || 100)) * weight,
+    fats: (food?.fats / (food?.weight || 100)) * weight,
+  };
 
   const [addMealItem] = useUpdateMealItemMutation({
     onError: (error1) => setOpenErrorMessage(error1),
@@ -56,12 +63,7 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
       u_id: HARDCODED_U_ID,
       weight,
       meal_id: mealItem.meal_id,
-      food,
-      energy_cal: (foodById?.energy_cal / 100) * weight,
-      energy_kj: (foodById?.energy_kj / 100) * weight,
-      proteins: (foodById?.proteins / 100) * weight,
-      carbohydrates: (foodById?.carbohydrates / 100) * weight,
-      fats: (foodById?.fats / 100) * weight,
+      ...mealItemProps,
     },
   });
 
@@ -74,20 +76,11 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Meal item</DialogTitle>
         <DialogContent>
-          {data && (
-            <Select
-              label={<Trans>Food</Trans>}
-              defaultValue={food}
-              onChange={(event) => setFood(event.target.value as any)}
-              className={classes.field}
-            >
-              {data?.food.map((food, key) => (
-                <MenuItem value={food.id} key={key}>
-                  {food.name}
-                </MenuItem>
-              ))}
-            </Select>
-          )}
+          <MealAutocomplete
+            value={food}
+            setValue={setFood}
+            className={classes.field}
+          />
           <TextField
             label={<Trans>Weight (g)</Trans>}
             defaultValue={weight}
@@ -112,7 +105,6 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
               addMealItem();
               event.stopPropagation();
             }}
-            disabled={loading}
           />
         </DialogActions>
       </Dialog>

@@ -59,6 +59,7 @@ export type Food = {
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
   type: Scalars["String"];
+  weight?: Maybe<Scalars["Int"]>;
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -142,6 +143,7 @@ export type Food_Avg_Fields = {
   proteins?: Maybe<Scalars["Float"]>;
   selenium?: Maybe<Scalars["Float"]>;
   sodium?: Maybe<Scalars["Float"]>;
+  weight?: Maybe<Scalars["Float"]>;
   zinc?: Maybe<Scalars["Float"]>;
 };
 
@@ -180,6 +182,7 @@ export type Food_Max_Fields = {
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
   type?: Maybe<Scalars["String"]>;
+  weight?: Maybe<Scalars["Int"]>;
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -218,6 +221,7 @@ export type Food_Min_Fields = {
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
   type?: Maybe<Scalars["String"]>;
+  weight?: Maybe<Scalars["Int"]>;
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -263,6 +267,7 @@ export type Food_Stddev_Fields = {
   proteins?: Maybe<Scalars["Float"]>;
   selenium?: Maybe<Scalars["Float"]>;
   sodium?: Maybe<Scalars["Float"]>;
+  weight?: Maybe<Scalars["Float"]>;
   zinc?: Maybe<Scalars["Float"]>;
 };
 
@@ -299,6 +304,7 @@ export type Food_Stddev_Pop_Fields = {
   proteins?: Maybe<Scalars["Float"]>;
   selenium?: Maybe<Scalars["Float"]>;
   sodium?: Maybe<Scalars["Float"]>;
+  weight?: Maybe<Scalars["Float"]>;
   zinc?: Maybe<Scalars["Float"]>;
 };
 
@@ -335,6 +341,7 @@ export type Food_Stddev_Samp_Fields = {
   proteins?: Maybe<Scalars["Float"]>;
   selenium?: Maybe<Scalars["Float"]>;
   sodium?: Maybe<Scalars["Float"]>;
+  weight?: Maybe<Scalars["Float"]>;
   zinc?: Maybe<Scalars["Float"]>;
 };
 
@@ -371,6 +378,7 @@ export type Food_Sum_Fields = {
   proteins?: Maybe<Scalars["numeric"]>;
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
+  weight?: Maybe<Scalars["Int"]>;
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -480,6 +488,7 @@ export type Food_Var_Pop_Fields = {
   proteins?: Maybe<Scalars["Float"]>;
   selenium?: Maybe<Scalars["Float"]>;
   sodium?: Maybe<Scalars["Float"]>;
+  weight?: Maybe<Scalars["Float"]>;
   zinc?: Maybe<Scalars["Float"]>;
 };
 
@@ -516,6 +525,7 @@ export type Food_Var_Samp_Fields = {
   proteins?: Maybe<Scalars["Float"]>;
   selenium?: Maybe<Scalars["Float"]>;
   sodium?: Maybe<Scalars["Float"]>;
+  weight?: Maybe<Scalars["Float"]>;
   zinc?: Maybe<Scalars["Float"]>;
 };
 
@@ -552,6 +562,7 @@ export type Food_Variance_Fields = {
   proteins?: Maybe<Scalars["Float"]>;
   selenium?: Maybe<Scalars["Float"]>;
   sodium?: Maybe<Scalars["Float"]>;
+  weight?: Maybe<Scalars["Float"]>;
   zinc?: Maybe<Scalars["Float"]>;
 };
 
@@ -2023,6 +2034,8 @@ export enum Food_Select_Column {
   /** column name */
   Type = "type",
   /** column name */
+  Weight = "weight",
+  /** column name */
   Zinc = "zinc",
 }
 
@@ -2116,6 +2129,8 @@ export enum Food_Update_Column {
   Sodium = "sodium",
   /** column name */
   Type = "type",
+  /** column name */
+  Weight = "weight",
   /** column name */
   Zinc = "zinc",
 }
@@ -2461,6 +2476,7 @@ export type Food_Avg_Order_By = {
   proteins?: Maybe<Order_By>;
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -2504,6 +2520,7 @@ export type Food_Bool_Exp = {
   selenium?: Maybe<Numeric_Comparison_Exp>;
   sodium?: Maybe<Numeric_Comparison_Exp>;
   type?: Maybe<String_Comparison_Exp>;
+  weight?: Maybe<Int_Comparison_Exp>;
   zinc?: Maybe<Numeric_Comparison_Exp>;
 };
 
@@ -2539,6 +2556,7 @@ export type Food_Inc_Input = {
   proteins?: Maybe<Scalars["numeric"]>;
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
+  weight?: Maybe<Scalars["Int"]>;
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -2579,6 +2597,7 @@ export type Food_Insert_Input = {
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
   type?: Maybe<Scalars["String"]>;
+  weight?: Maybe<Scalars["Int"]>;
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -2616,6 +2635,7 @@ export type Food_Max_Order_By = {
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
   type?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -2653,6 +2673,7 @@ export type Food_Min_Order_By = {
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
   type?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -2706,6 +2727,7 @@ export type Food_Order_By = {
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
   type?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -2749,6 +2771,7 @@ export type Food_Set_Input = {
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
   type?: Maybe<Scalars["String"]>;
+  weight?: Maybe<Scalars["Int"]>;
   zinc?: Maybe<Scalars["numeric"]>;
 };
 
@@ -2784,6 +2807,7 @@ export type Food_Stddev_Order_By = {
   proteins?: Maybe<Order_By>;
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -2819,6 +2843,7 @@ export type Food_Stddev_Pop_Order_By = {
   proteins?: Maybe<Order_By>;
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -2854,6 +2879,7 @@ export type Food_Stddev_Samp_Order_By = {
   proteins?: Maybe<Order_By>;
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -2889,6 +2915,7 @@ export type Food_Sum_Order_By = {
   proteins?: Maybe<Order_By>;
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -2997,6 +3024,7 @@ export type Food_Var_Pop_Order_By = {
   proteins?: Maybe<Order_By>;
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -3032,6 +3060,7 @@ export type Food_Var_Samp_Order_By = {
   proteins?: Maybe<Order_By>;
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 
@@ -3067,6 +3096,7 @@ export type Food_Variance_Order_By = {
   proteins?: Maybe<Order_By>;
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
   zinc?: Maybe<Order_By>;
 };
 

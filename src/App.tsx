@@ -55,7 +55,7 @@ const client = new ApolloClient({
 });
 
 function App() {
-  const { i18n, locale, setLocale } = useLanguageSetup();
+  const { i18n, locale } = useLanguageSetup();
 
   return (
     <ApolloProvider client={client}>

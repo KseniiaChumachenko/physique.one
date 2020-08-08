@@ -69,6 +69,7 @@ type food {
     selenium: numeric
     sodium: numeric
     type: String!
+    weight: Int
     zinc: numeric
 }
 
@@ -125,6 +126,7 @@ type food_avg_fields {
     proteins: Float
     selenium: Float
     sodium: Float
+    weight: Float
     zinc: Float
 }
 
@@ -162,6 +164,7 @@ type food_max_fields {
     selenium: numeric
     sodium: numeric
     type: String
+    weight: Int
     zinc: numeric
 }
 
@@ -199,6 +202,7 @@ type food_min_fields {
     selenium: numeric
     sodium: numeric
     type: String
+    weight: Int
     zinc: numeric
 }
 
@@ -242,6 +246,7 @@ type food_stddev_fields {
     proteins: Float
     selenium: Float
     sodium: Float
+    weight: Float
     zinc: Float
 }
 
@@ -277,6 +282,7 @@ type food_stddev_pop_fields {
     proteins: Float
     selenium: Float
     sodium: Float
+    weight: Float
     zinc: Float
 }
 
@@ -312,6 +318,7 @@ type food_stddev_samp_fields {
     proteins: Float
     selenium: Float
     sodium: Float
+    weight: Float
     zinc: Float
 }
 
@@ -347,6 +354,7 @@ type food_sum_fields {
     proteins: numeric
     selenium: numeric
     sodium: numeric
+    weight: Int
     zinc: numeric
 }
 
@@ -447,6 +455,7 @@ type food_var_pop_fields {
     proteins: Float
     selenium: Float
     sodium: Float
+    weight: Float
     zinc: Float
 }
 
@@ -482,6 +491,7 @@ type food_var_samp_fields {
     proteins: Float
     selenium: Float
     sodium: Float
+    weight: Float
     zinc: Float
 }
 
@@ -517,6 +527,7 @@ type food_variance_fields {
     proteins: Float
     selenium: Float
     sodium: Float
+    weight: Float
     zinc: Float
 }
 
@@ -1820,6 +1831,8 @@ enum food_select_column {
     "column name"
     type
     "column name"
+    weight
+    "column name"
     zinc
 }
 
@@ -1913,6 +1926,8 @@ enum food_update_column {
     sodium
     "column name"
     type
+    "column name"
+    weight
     "column name"
     zinc
 }
@@ -2258,6 +2273,7 @@ input food_avg_order_by {
     proteins: order_by
     selenium: order_by
     sodium: order_by
+    weight: order_by
     zinc: order_by
 }
 
@@ -2301,6 +2317,7 @@ input food_bool_exp {
     selenium: numeric_comparison_exp
     sodium: numeric_comparison_exp
     type: String_comparison_exp
+    weight: Int_comparison_exp
     zinc: numeric_comparison_exp
 }
 
@@ -2336,6 +2353,7 @@ input food_inc_input {
     proteins: numeric
     selenium: numeric
     sodium: numeric
+    weight: Int
     zinc: numeric
 }
 
@@ -2376,6 +2394,7 @@ input food_insert_input {
     selenium: numeric
     sodium: numeric
     type: String
+    weight: Int
     zinc: numeric
 }
 
@@ -2413,6 +2432,7 @@ input food_max_order_by {
     selenium: order_by
     sodium: order_by
     type: order_by
+    weight: order_by
     zinc: order_by
 }
 
@@ -2450,6 +2470,7 @@ input food_min_order_by {
     selenium: order_by
     sodium: order_by
     type: order_by
+    weight: order_by
     zinc: order_by
 }
 
@@ -2503,6 +2524,7 @@ input food_order_by {
     selenium: order_by
     sodium: order_by
     type: order_by
+    weight: order_by
     zinc: order_by
 }
 
@@ -2546,6 +2568,7 @@ input food_set_input {
     selenium: numeric
     sodium: numeric
     type: String
+    weight: Int
     zinc: numeric
 }
 
@@ -2581,6 +2604,7 @@ input food_stddev_order_by {
     proteins: order_by
     selenium: order_by
     sodium: order_by
+    weight: order_by
     zinc: order_by
 }
 
@@ -2616,6 +2640,7 @@ input food_stddev_pop_order_by {
     proteins: order_by
     selenium: order_by
     sodium: order_by
+    weight: order_by
     zinc: order_by
 }
 
@@ -2651,6 +2676,7 @@ input food_stddev_samp_order_by {
     proteins: order_by
     selenium: order_by
     sodium: order_by
+    weight: order_by
     zinc: order_by
 }
 
@@ -2686,6 +2712,7 @@ input food_sum_order_by {
     proteins: order_by
     selenium: order_by
     sodium: order_by
+    weight: order_by
     zinc: order_by
 }
 
@@ -2794,6 +2821,7 @@ input food_var_pop_order_by {
     proteins: order_by
     selenium: order_by
     sodium: order_by
+    weight: order_by
     zinc: order_by
 }
 
@@ -2829,6 +2857,7 @@ input food_var_samp_order_by {
     proteins: order_by
     selenium: order_by
     sodium: order_by
+    weight: order_by
     zinc: order_by
 }
 
@@ -2864,6 +2893,7 @@ input food_variance_order_by {
     proteins: order_by
     selenium: order_by
     sodium: order_by
+    weight: order_by
     zinc: order_by
 }
 
