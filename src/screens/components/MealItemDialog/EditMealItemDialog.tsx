@@ -109,34 +109,24 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
         </DialogActions>
       </Dialog>
 
-      {success && (
-        <Snackbar
-          open={success}
-          autoHideDuration={6000}
-          onClose={() => setOpenErrorMessage(false)}
-        >
-          <Alert
-            severity={"success"}
-            onClose={() => setOpenErrorMessage(false)}
-          >
-            <Trans>Meals successfully updated</Trans>
-          </Alert>
-        </Snackbar>
-      )}
-      {!!error && (
-        <Snackbar
-          open={!!error}
-          autoHideDuration={6000}
-          onClose={() => setOpenSuccessMessage(false)}
-        >
-          <Alert
-            severity={"error"}
-            onClose={() => setOpenSuccessMessage(false)}
-          >
-            {error?.message as any}
-          </Alert>
-        </Snackbar>
-      )}
+      <Snackbar
+        open={success}
+        autoHideDuration={6000}
+        onClose={() => setOpenErrorMessage(false)}
+      >
+        <Alert severity={"success"} onClose={() => setOpenErrorMessage(false)}>
+          <Trans>Meals successfully updated</Trans>
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={!!error}
+        autoHideDuration={6000}
+        onClose={() => setOpenSuccessMessage(false)}
+      >
+        <Alert severity={"error"} onClose={() => setOpenSuccessMessage(false)}>
+          {error?.message as any}
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 };

@@ -1,9 +1,19 @@
-import React, {useState} from "react";
-import {useHistory, useLocation} from "react-router-dom";
-import {Trans} from "@lingui/react";
-import {makeStyles} from "@material-ui/core/styles";
-import {BottomNavigation as MaterialBottomNavigation, BottomNavigationAction, Paper,} from "@material-ui/core";
-import {DashboardRounded, FastfoodRounded, LocalGroceryStoreRounded, MenuBookRounded,} from "@material-ui/icons";
+import React, { useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
+import moment from "moment";
+import { Trans } from "@lingui/react";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  BottomNavigation as MaterialBottomNavigation,
+  BottomNavigationAction,
+  Paper,
+} from "@material-ui/core";
+import {
+  DashboardRounded,
+  FastfoodRounded,
+  LocalGroceryStoreRounded,
+  MenuBookRounded,
+} from "@material-ui/icons";
 
 const useStyles = makeStyles({
   root: {
@@ -35,7 +45,7 @@ export const BottomNavigation = () => {
           icon={<DashboardRounded />}
         />
         <BottomNavigationAction
-          value={"/ration"}
+          value={`/ration/${moment().week()}`}
           label={<Trans>Meals</Trans>}
           icon={<FastfoodRounded />}
         />

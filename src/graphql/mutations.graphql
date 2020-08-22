@@ -155,6 +155,7 @@ mutation UpdateMealItem(
   $food: uuid
   $meal_id: uuid
   $id: uuid!
+  $recipe_id: uuid
 ) {
   update_meal_item_by_pk(
     pk_columns: { id: $id }
@@ -168,6 +169,7 @@ mutation UpdateMealItem(
       proteins: $proteins
       weight: $weight
       u_id: $u_id
+      recipe_id: $recipe_id
     }
   ) {
     id

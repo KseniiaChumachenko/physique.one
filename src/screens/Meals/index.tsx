@@ -1,11 +1,12 @@
-import React, {useMemo, useState} from "react";
+import React, { useMemo } from "react";
 import moment from "moment";
-import {Trans} from "@lingui/react";
-import {makeStyles} from "@material-ui/core/styles";
-import {Pagination} from "@material-ui/lab";
-import {Typography} from "@material-ui/core";
+import { Trans } from "@lingui/react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Pagination } from "@material-ui/lab";
+import { Typography } from "@material-ui/core";
 
-import {MealsListing} from "./components/MealsListing";
+import { MealsListing } from "./components/MealsListing";
+import { useParams, useHistory } from "react-router-dom";
 
 const NUMBER_OF_WEEKS_IN_YEAR = 52;
 
@@ -27,34 +28,34 @@ const useStyles = makeStyles((theme) => ({
 
 export const Meals = ({}: Props) => {
   const classes = useStyles();
-
-  const [selectedWeek, setSelectedWeek] = useState<number>(moment().week()); // current week of the year
+  const { weekNumber } = useParams();
+  const history = useHistory();
 
   const currentYear = moment().year();
 
   const days = useMemo(
     () =>
       [0, 1, 2, 3, 4, 5, 6].map((d) =>
-        moment(`${currentYear}-${selectedWeek}-` + d, "YYYY-w-e").format()
+        moment(`${currentYear}-${weekNumber}-` + d, "YYYY-w-e").format()
       ),
-    [currentYear, selectedWeek]
+    [currentYear, weekNumber]
   );
 
   const handlePaginationClick = (
     event: React.ChangeEvent<unknown>,
     page: number
-  ) => setSelectedWeek(page);
+  ) => history.push(`/ration/${page}`);
 
   return (
     <div className={classes.root}>
-      {selectedWeek && (
+      {weekNumber && (
         <div className={classes.paginationContainer}>
           <Typography variant={"subtitle1"}>
             <Trans>Select week of the year: </Trans>
           </Typography>
           <Pagination
             count={NUMBER_OF_WEEKS_IN_YEAR}
-            defaultPage={selectedWeek}
+            page={Number(weekNumber)}
             onChange={handlePaginationClick}
             variant="outlined"
             color={"primary"}

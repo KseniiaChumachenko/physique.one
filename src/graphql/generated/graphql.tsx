@@ -4042,6 +4042,7 @@ export type UpdateMealItemMutationVariables = {
   food?: Maybe<Scalars["uuid"]>;
   meal_id?: Maybe<Scalars["uuid"]>;
   id: Scalars["uuid"];
+  recipe_id?: Maybe<Scalars["uuid"]>;
 };
 
 export type UpdateMealItemMutation = { __typename?: "mutation_root" } & {
@@ -4634,6 +4635,7 @@ export const UpdateMealItemDocument = gql`
     $food: uuid
     $meal_id: uuid
     $id: uuid!
+    $recipe_id: uuid
   ) {
     update_meal_item_by_pk(
       pk_columns: { id: $id }
@@ -4647,6 +4649,7 @@ export const UpdateMealItemDocument = gql`
         proteins: $proteins
         weight: $weight
         u_id: $u_id
+        recipe_id: $recipe_id
       }
     ) {
       id
