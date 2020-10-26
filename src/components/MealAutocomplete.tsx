@@ -25,27 +25,23 @@ export function MealAutocomplete({
   const { data } = useFoodSelectFieldListingQuery();
   const [mealSelection, setMealSelection] = useState(value);
 
-  const remappedOptions = useMemo(
+  const remappedOptions: MealAutocompleteListItem[] | undefined = useMemo(
     () =>
       data && [
         ...data.food,
-        ...data.recipe.map((r) => {
-          const food: MealAutocompleteListItem = {
-            id: r.id,
-            name: r.name,
-            type: "Custom",
-            carbohydrates:
-              r.recipe_items_aggregate.aggregate?.sum?.carbohydrates || 0,
-            proteins: r.recipe_items_aggregate.aggregate?.sum?.proteins || 0,
-            fats: r.recipe_items_aggregate.aggregate?.sum?.fats || 0,
-            energy_cal:
-              r.recipe_items_aggregate.aggregate?.sum?.energy_cal || 0,
-            energy_kj: r.recipe_items_aggregate.aggregate?.sum?.energy_kj || 0,
-            weight: r.recipe_items_aggregate.aggregate?.sum?.weight,
-            recipe: true,
-          };
-          return food;
-        }),
+        ...data.recipe.map((r) => ({
+          id: r.id,
+          name: r.name,
+          type: "Recipe",
+          carbohydrates:
+            r.recipe_items_aggregate.aggregate?.sum?.carbohydrates || 0,
+          proteins: r.recipe_items_aggregate.aggregate?.sum?.proteins || 0,
+          fats: r.recipe_items_aggregate.aggregate?.sum?.fats || 0,
+          energy_cal: r.recipe_items_aggregate.aggregate?.sum?.energy_cal || 0,
+          energy_kj: r.recipe_items_aggregate.aggregate?.sum?.energy_kj || 0,
+          weight: r.recipe_items_aggregate.aggregate?.sum?.weight,
+          recipe: true,
+        })),
       ],
     [data]
   );
@@ -64,6 +60,7 @@ export function MealAutocomplete({
           getOptionLabel={(option: MealAutocompleteListItem) => option.name}
           value={mealSelection}
           onChange={(event: any, newValue: Food_Insert_Input | null) => {
+            setMealSelection(newValue);
             setValue(newValue);
             event.stopPropagation();
           }}

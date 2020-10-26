@@ -38,23 +38,30 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
   const [error, setOpenErrorMessage] = React.useState();
   const [success, setOpenSuccessMessage] = React.useState();
 
-  const [food, setFood] = useState(mealItem.food);
+  const [selectedFood, setSelectedFood] = useState(
+    mealItem.food || mealItem.recipe_id
+  );
   const [weight, setWeight] = useState(mealItem.weight);
 
   const mealItemProps = {
-    recipe_id: food?.recipe ? food?.id : null,
-    food: !food?.recipe ? food?.id : null,
+    recipe_id: selectedFood?.recipe ? selectedFood?.id : null,
+    food: !selectedFood?.recipe ? selectedFood?.id : null,
 
-    energy_cal: (food?.energy_cal / (food?.weight || 100)) * weight,
-    energy_kj: (food?.energy_kj / (food?.weight || 100)) * weight,
-    proteins: (food?.proteins / (food?.weight || 100)) * weight,
-    carbohydrates: (food?.carbohydrates / (food?.weight || 100)) * weight,
-    fats: (food?.fats / (food?.weight || 100)) * weight,
+    energy_cal:
+      (selectedFood?.energy_cal / (selectedFood?.weight || 100)) * weight,
+    energy_kj:
+      (selectedFood?.energy_kj / (selectedFood?.weight || 100)) * weight,
+    proteins: (selectedFood?.proteins / (selectedFood?.weight || 100)) * weight,
+    carbohydrates:
+      (selectedFood?.carbohydrates / (selectedFood?.weight || 100)) * weight,
+    fats: (selectedFood?.fats / (selectedFood?.weight || 100)) * weight,
   };
 
-  const [addMealItem] = useUpdateMealItemMutation({
-    onError: (error1) => setOpenErrorMessage(error1),
-    onCompleted: () => {
+  const [update_meal_item_by_pk] = useUpdateMealItemMutation({
+    onError: (error1) => {
+      setOpenErrorMessage(error1);
+    },
+    onCompleted: (v) => {
       setOpenSuccessMessage(true);
       setOpen(false);
     },
@@ -76,11 +83,13 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Meal item</DialogTitle>
         <DialogContent>
-          <MealAutocomplete
-            value={food}
-            setValue={setFood}
-            className={classes.field}
-          />
+          {selectedFood && (
+            <MealAutocomplete
+              value={selectedFood}
+              setValue={setSelectedFood}
+              className={classes.field}
+            />
+          )}
           <TextField
             label={<Trans>Weight (g)</Trans>}
             defaultValue={weight}
@@ -102,7 +111,7 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
             variant={"text"}
             children={<Trans>Submit</Trans>}
             onClick={(event) => {
-              addMealItem();
+              update_meal_item_by_pk();
               event.stopPropagation();
             }}
           />
