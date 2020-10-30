@@ -147,3 +147,21 @@ subscription RecipeListing {
     }
   }
 }
+
+query LogIn($user_name: name!, $password: String!) {
+  users(where: {user_name: {_eq: $user_name}, password: {_eq: $password}}) {
+    id
+    full_name
+    fb_id
+    fb_picture_url
+  }
+}
+
+query IsFacebookUser($fb_id: String!){
+  users(where: {fb_id: {_eq: $fb_id}}) {
+    id
+    full_name
+    fb_id
+    fb_picture_url
+  }
+}

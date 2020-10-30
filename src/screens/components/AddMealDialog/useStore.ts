@@ -1,7 +1,10 @@
 import omit from "lodash.omit";
-import {useLocalStore} from "mobx-react-lite";
-import {Food, Meal_Item_Insert_Input,} from "../../../graphql/generated/graphql";
-import moment, {Moment} from "moment";
+import { useLocalStore } from "mobx-react-lite";
+import {
+  Food,
+  Meal_Item_Insert_Input,
+} from "../../../graphql/generated/graphql";
+import moment, { Moment } from "moment";
 
 interface State {
   name?: string | null;
@@ -25,7 +28,6 @@ interface State {
   }): void;
   remove_meal_item(indexOfItem: number): void;
 }
-const HARDCODED_U_ID = "7040b96b-0994-4f79-ac7e-6e0299fcad04";
 
 const calculateMacronutrient = (nutrientPer100G: number, weight: number) =>
   (nutrientPer100G / 100) * weight;
@@ -33,7 +35,6 @@ const calculateMacronutrient = (nutrientPer100G: number, weight: number) =>
 const standardMealItem = (food: Food, weight = 100) => ({
   food: food.id,
   weight: weight,
-  u_id: HARDCODED_U_ID,
   carbohydrates: calculateMacronutrient(food.carbohydrates, weight),
   proteins: calculateMacronutrient(food.proteins, weight),
   fats: calculateMacronutrient(food.fats, weight),

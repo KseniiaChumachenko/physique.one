@@ -1911,10 +1911,14 @@ export type Subscription_RootUsers_By_PkArgs = {
  */
 export type Users = {
   __typename?: "users";
+  fb_id?: Maybe<Scalars["String"]>;
+  fb_picture_url?: Maybe<Scalars["String"]>;
   first_name?: Maybe<Scalars["name"]>;
+  full_name?: Maybe<Scalars["String"]>;
   id: Scalars["uuid"];
   last_name?: Maybe<Scalars["name"]>;
-  user_name: Scalars["name"];
+  password?: Maybe<Scalars["String"]>;
+  user_name?: Maybe<Scalars["name"]>;
 };
 
 /** aggregated selection of "users" */
@@ -1941,13 +1945,21 @@ export type Users_Aggregate_FieldsCountArgs = {
 /** aggregate max on columns */
 export type Users_Max_Fields = {
   __typename?: "users_max_fields";
+  fb_id?: Maybe<Scalars["String"]>;
+  fb_picture_url?: Maybe<Scalars["String"]>;
+  full_name?: Maybe<Scalars["String"]>;
   id?: Maybe<Scalars["uuid"]>;
+  password?: Maybe<Scalars["String"]>;
 };
 
 /** aggregate min on columns */
 export type Users_Min_Fields = {
   __typename?: "users_min_fields";
+  fb_id?: Maybe<Scalars["String"]>;
+  fb_picture_url?: Maybe<Scalars["String"]>;
+  full_name?: Maybe<Scalars["String"]>;
   id?: Maybe<Scalars["uuid"]>;
+  password?: Maybe<Scalars["String"]>;
 };
 
 /** response of any mutation on the table "users" */
@@ -2336,6 +2348,12 @@ export enum Recipe_Update_Column {
 /** unique or primary key constraints on table "users" */
 export enum Users_Constraint {
   /** unique or primary key constraint */
+  UsersFbIdKey = "users_fb_id_key",
+  /** unique or primary key constraint */
+  UsersFbPictureUrlKey = "users_fb_picture_url_key",
+  /** unique or primary key constraint */
+  UsersPasswordKey = "users_password_key",
+  /** unique or primary key constraint */
   UsersPkey = "users_pkey",
   /** unique or primary key constraint */
   UsersUserNameKey = "users_user_name_key",
@@ -2344,11 +2362,19 @@ export enum Users_Constraint {
 /** select columns of table "users" */
 export enum Users_Select_Column {
   /** column name */
+  FbId = "fb_id",
+  /** column name */
+  FbPictureUrl = "fb_picture_url",
+  /** column name */
   FirstName = "first_name",
+  /** column name */
+  FullName = "full_name",
   /** column name */
   Id = "id",
   /** column name */
   LastName = "last_name",
+  /** column name */
+  Password = "password",
   /** column name */
   UserName = "user_name",
 }
@@ -2356,11 +2382,19 @@ export enum Users_Select_Column {
 /** update columns of table "users" */
 export enum Users_Update_Column {
   /** column name */
+  FbId = "fb_id",
+  /** column name */
+  FbPictureUrl = "fb_picture_url",
+  /** column name */
   FirstName = "first_name",
+  /** column name */
+  FullName = "full_name",
   /** column name */
   Id = "id",
   /** column name */
   LastName = "last_name",
+  /** column name */
+  Password = "password",
   /** column name */
   UserName = "user_name",
 }
@@ -3855,28 +3889,44 @@ export type Users_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Users_Bool_Exp>>>;
   _not?: Maybe<Users_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Users_Bool_Exp>>>;
+  fb_id?: Maybe<String_Comparison_Exp>;
+  fb_picture_url?: Maybe<String_Comparison_Exp>;
   first_name?: Maybe<Name_Comparison_Exp>;
+  full_name?: Maybe<String_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   last_name?: Maybe<Name_Comparison_Exp>;
+  password?: Maybe<String_Comparison_Exp>;
   user_name?: Maybe<Name_Comparison_Exp>;
 };
 
 /** input type for inserting data into table "users" */
 export type Users_Insert_Input = {
+  fb_id?: Maybe<Scalars["String"]>;
+  fb_picture_url?: Maybe<Scalars["String"]>;
   first_name?: Maybe<Scalars["name"]>;
+  full_name?: Maybe<Scalars["String"]>;
   id?: Maybe<Scalars["uuid"]>;
   last_name?: Maybe<Scalars["name"]>;
+  password?: Maybe<Scalars["String"]>;
   user_name?: Maybe<Scalars["name"]>;
 };
 
 /** order by max() on columns of table "users" */
 export type Users_Max_Order_By = {
+  fb_id?: Maybe<Order_By>;
+  fb_picture_url?: Maybe<Order_By>;
+  full_name?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  password?: Maybe<Order_By>;
 };
 
 /** order by min() on columns of table "users" */
 export type Users_Min_Order_By = {
+  fb_id?: Maybe<Order_By>;
+  fb_picture_url?: Maybe<Order_By>;
+  full_name?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
+  password?: Maybe<Order_By>;
 };
 
 /** input type for inserting object relation for remote table "users" */
@@ -3894,9 +3944,13 @@ export type Users_On_Conflict = {
 
 /** ordering options when selecting data from "users" */
 export type Users_Order_By = {
+  fb_id?: Maybe<Order_By>;
+  fb_picture_url?: Maybe<Order_By>;
   first_name?: Maybe<Order_By>;
+  full_name?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   last_name?: Maybe<Order_By>;
+  password?: Maybe<Order_By>;
   user_name?: Maybe<Order_By>;
 };
 
@@ -3907,9 +3961,13 @@ export type Users_Pk_Columns_Input = {
 
 /** input type for updating data in table "users" */
 export type Users_Set_Input = {
+  fb_id?: Maybe<Scalars["String"]>;
+  fb_picture_url?: Maybe<Scalars["String"]>;
   first_name?: Maybe<Scalars["name"]>;
+  full_name?: Maybe<Scalars["String"]>;
   id?: Maybe<Scalars["uuid"]>;
   last_name?: Maybe<Scalars["name"]>;
+  password?: Maybe<Scalars["String"]>;
   user_name?: Maybe<Scalars["name"]>;
 };
 
@@ -4136,6 +4194,30 @@ export type DeleteRecipeItemByPkMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
+export type RegisterMutationVariables = {
+  user_name: Scalars["name"];
+  password: Scalars["String"];
+};
+
+export type RegisterMutation = { __typename?: "mutation_root" } & {
+  insert_users_one?: Maybe<{ __typename?: "users" } & Pick<Users, "id">>;
+};
+
+export type RegisterFacebookUserMutationVariables = {
+  fb_id: Scalars["String"];
+  fb_picture_url: Scalars["String"];
+  full_name: Scalars["String"];
+};
+
+export type RegisterFacebookUserMutation = { __typename?: "mutation_root" } & {
+  insert_users_one?: Maybe<
+    { __typename?: "users" } & Pick<
+      Users,
+      "id" | "fb_id" | "fb_picture_url" | "full_name"
+    >
+  >;
+};
+
 export type MealsByDateSubscriptionVariables = {
   _eq?: Maybe<Scalars["date"]>;
 };
@@ -4324,6 +4406,33 @@ export type RecipeListingSubscription = { __typename?: "subscription_root" } & {
           >;
         };
       }
+  >;
+};
+
+export type LogInQueryVariables = {
+  user_name: Scalars["name"];
+  password: Scalars["String"];
+};
+
+export type LogInQuery = { __typename?: "query_root" } & {
+  users: Array<
+    { __typename?: "users" } & Pick<
+      Users,
+      "id" | "full_name" | "fb_id" | "fb_picture_url"
+    >
+  >;
+};
+
+export type IsFacebookUserQueryVariables = {
+  fb_id: Scalars["String"];
+};
+
+export type IsFacebookUserQuery = { __typename?: "query_root" } & {
+  users: Array<
+    { __typename?: "users" } & Pick<
+      Users,
+      "id" | "full_name" | "fb_id" | "fb_picture_url"
+    >
   >;
 };
 
@@ -4573,7 +4682,7 @@ export type DeleteFoodMutationOptions = ApolloReactCommon.BaseMutationOptions<
 >;
 export const AddMealItemDocument = gql`
   mutation AddMealItem(
-    $u_id: uuid = "7040b96b-0994-4f79-ac7e-6e0299fcad04"
+    $u_id: uuid
     $proteins: numeric
     $fats: numeric
     $energy_kj: numeric
@@ -4625,7 +4734,7 @@ export type AddMealItemMutationOptions = ApolloReactCommon.BaseMutationOptions<
 >;
 export const UpdateMealItemDocument = gql`
   mutation UpdateMealItem(
-    $u_id: uuid = "7040b96b-0994-4f79-ac7e-6e0299fcad04"
+    $u_id: uuid
     $carbohydrates: numeric
     $energy_cal: numeric
     $energy_kj: numeric
@@ -4919,6 +5028,73 @@ export type DeleteRecipeItemByPkMutationResult = ApolloReactCommon.MutationResul
 export type DeleteRecipeItemByPkMutationOptions = ApolloReactCommon.BaseMutationOptions<
   DeleteRecipeItemByPkMutation,
   DeleteRecipeItemByPkMutationVariables
+>;
+export const RegisterDocument = gql`
+  mutation Register($user_name: name!, $password: String!) {
+    insert_users_one(object: { user_name: $user_name, password: $password }) {
+      id
+    }
+  }
+`;
+export function useRegisterMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    RegisterMutation,
+    RegisterMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    RegisterMutation,
+    RegisterMutationVariables
+  >(RegisterDocument, baseOptions);
+}
+export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
+export type RegisterMutationResult = ApolloReactCommon.MutationResult<
+  RegisterMutation
+>;
+export type RegisterMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  RegisterMutation,
+  RegisterMutationVariables
+>;
+export const RegisterFacebookUserDocument = gql`
+  mutation RegisterFacebookUser(
+    $fb_id: String!
+    $fb_picture_url: String!
+    $full_name: String!
+  ) {
+    insert_users_one(
+      object: {
+        fb_id: $fb_id
+        fb_picture_url: $fb_picture_url
+        full_name: $full_name
+      }
+    ) {
+      id
+      fb_id
+      fb_picture_url
+      full_name
+    }
+  }
+`;
+export function useRegisterFacebookUserMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    RegisterFacebookUserMutation,
+    RegisterFacebookUserMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    RegisterFacebookUserMutation,
+    RegisterFacebookUserMutationVariables
+  >(RegisterFacebookUserDocument, baseOptions);
+}
+export type RegisterFacebookUserMutationHookResult = ReturnType<
+  typeof useRegisterFacebookUserMutation
+>;
+export type RegisterFacebookUserMutationResult = ApolloReactCommon.MutationResult<
+  RegisterFacebookUserMutation
+>;
+export type RegisterFacebookUserMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  RegisterFacebookUserMutation,
+  RegisterFacebookUserMutationVariables
 >;
 export const MealsByDateDocument = gql`
   subscription MealsByDate($_eq: date = "") {
@@ -5235,4 +5411,86 @@ export type RecipeListingSubscriptionHookResult = ReturnType<
 >;
 export type RecipeListingSubscriptionResult = ApolloReactCommon.SubscriptionResult<
   RecipeListingSubscription
+>;
+export const LogInDocument = gql`
+  query LogIn($user_name: name!, $password: String!) {
+    users(
+      where: { user_name: { _eq: $user_name }, password: { _eq: $password } }
+    ) {
+      id
+      full_name
+      fb_id
+      fb_picture_url
+    }
+  }
+`;
+export function useLogInQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    LogInQuery,
+    LogInQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<LogInQuery, LogInQueryVariables>(
+    LogInDocument,
+    baseOptions
+  );
+}
+export function useLogInLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    LogInQuery,
+    LogInQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<LogInQuery, LogInQueryVariables>(
+    LogInDocument,
+    baseOptions
+  );
+}
+export type LogInQueryHookResult = ReturnType<typeof useLogInQuery>;
+export type LogInLazyQueryHookResult = ReturnType<typeof useLogInLazyQuery>;
+export type LogInQueryResult = ApolloReactCommon.QueryResult<
+  LogInQuery,
+  LogInQueryVariables
+>;
+export const IsFacebookUserDocument = gql`
+  query IsFacebookUser($fb_id: String!) {
+    users(where: { fb_id: { _eq: $fb_id } }) {
+      id
+      full_name
+      fb_id
+      fb_picture_url
+    }
+  }
+`;
+export function useIsFacebookUserQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    IsFacebookUserQuery,
+    IsFacebookUserQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<
+    IsFacebookUserQuery,
+    IsFacebookUserQueryVariables
+  >(IsFacebookUserDocument, baseOptions);
+}
+export function useIsFacebookUserLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    IsFacebookUserQuery,
+    IsFacebookUserQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<
+    IsFacebookUserQuery,
+    IsFacebookUserQueryVariables
+  >(IsFacebookUserDocument, baseOptions);
+}
+export type IsFacebookUserQueryHookResult = ReturnType<
+  typeof useIsFacebookUserQuery
+>;
+export type IsFacebookUserLazyQueryHookResult = ReturnType<
+  typeof useIsFacebookUserLazyQuery
+>;
+export type IsFacebookUserQueryResult = ApolloReactCommon.QueryResult<
+  IsFacebookUserQuery,
+  IsFacebookUserQueryVariables
 >;

@@ -1,16 +1,23 @@
-import React, {useEffect, useState} from "react";
-import {createStyles, MenuItem, Select, TableCell, TableRow, TextField,} from "@material-ui/core";
-import {Trans} from "@lingui/react";
-import {EditDeleteButtonGroup} from "../components/EditDeletButtonGroup";
+import React, { useEffect, useState } from "react";
 import {
-    Recipe_Item,
-    useAddRecipeItemMutation,
-    useDeleteRecipeItemByPkMutation,
-    useFoodSelectFieldListingQuery,
-    useUpdateRecipeItemByPkMutation,
+  createStyles,
+  MenuItem,
+  Select,
+  TableCell,
+  TableRow,
+  TextField,
+} from "@material-ui/core";
+import { Trans } from "@lingui/react";
+import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
+import {
+  Recipe_Item,
+  useAddRecipeItemMutation,
+  useDeleteRecipeItemByPkMutation,
+  useFoodSelectFieldListingQuery,
+  useUpdateRecipeItemByPkMutation,
 } from "../../graphql/generated/graphql";
-import {makeStyles} from "@material-ui/core/styles";
-import {HARDCODED_U_ID} from "../components/AddMealDialog";
+import { makeStyles } from "@material-ui/core/styles";
+import { useUser } from "../context/userContext";
 
 interface Props {
   recipe_id?: string;
@@ -36,6 +43,7 @@ const useStyles = makeStyles((theme) =>
 // TODO: unify food selector across app
 
 export const RecipeTableEditableRow = ({ recipe_id, row, mode }: Props) => {
+  const { user } = useUser();
   const [isInEditMode, setEditMode] = useState(false);
 
   const [updatedRowFood, setUpdatedRowFood] = useState(row?.food?.id);
@@ -178,7 +186,7 @@ export const RecipeTableEditableRow = ({ recipe_id, row, mode }: Props) => {
                       incert_recipe_item_one({
                         variables: {
                           recipe_id,
-                          u_id: HARDCODED_U_ID,
+                          u_id: user?.id,
                           food_id: updatedRowFood,
                           weight: updatedRowWeight,
                           ...macronutrients,

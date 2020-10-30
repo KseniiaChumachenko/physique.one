@@ -15,14 +15,15 @@ import {
 import { LocalizationProvider } from "@material-ui/pickers";
 import MomentAdapter from "@material-ui/pickers/adapter/moment";
 import { useLanguageSetup } from "./hooks/useLanguageSetup";
-import { Router } from "./components/Router";
+import { Router } from "./screens/Router";
+import { UserProvider } from "./screens/context/userContext";
 
-const GQL_WS_ENDPOINT = "wss://body-monitor-be.herokuapp.com/v1/graphql";
-const GQL_HTTPS_ENDPOINT = "https://body-monitor-be.herokuapp.com/v1/graphql";
+const GQL_WS_ENDPOINT = process.env.GQL_WS_ENDPOINT || "";
+const GQL_HTTPS_ENDPOINT = process.env.GQL_HTTPS_ENDPOINT || "";
 
 const headers = {
   headers: {
-    "x-hasura-admin-secret": "KsChu1606",
+    "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET,
   },
 };
 
@@ -45,7 +46,7 @@ const link = split(
       defs.kind === "OperationDefinition" && defs.operation === "subscription"
     );
   },
-  wsLink,
+  wsLink as any,
   httpLink
 );
 
@@ -64,7 +65,9 @@ function App() {
           dateLibInstance={moment}
           dateAdapter={MomentAdapter}
         >
-          <Router />
+          <UserProvider>
+            <Router />
+          </UserProvider>
         </LocalizationProvider>
       </I18nProvider>
     </ApolloProvider>

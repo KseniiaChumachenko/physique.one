@@ -1,15 +1,21 @@
-import React, {useEffect, useState} from "react";
-import {CardContent, CardHeader, createStyles, TextField, Typography,} from "@material-ui/core";
-import {EditDeleteButtonGroup} from "../components/EditDeletButtonGroup";
-import {AggregationChips} from "../../components/AggredationChips";
-import {makeStyles} from "@material-ui/core/styles";
+import React, { useEffect, useState } from "react";
 import {
-    Recipe_Item_Aggregate,
-    useAddRecipeMutation,
-    useDeleteRecipeByPkMutation,
-    useUpdateRecipeByPkMutation,
+  CardContent,
+  CardHeader,
+  createStyles,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
+import { AggregationChips } from "../../components/AggredationChips";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Recipe_Item_Aggregate,
+  useAddRecipeMutation,
+  useDeleteRecipeByPkMutation,
+  useUpdateRecipeByPkMutation,
 } from "../../graphql/generated/graphql";
-import {HARDCODED_U_ID} from "../components/AddMealDialog";
+import { useUser } from "../context/userContext";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -39,6 +45,7 @@ export const RecipeCardHeader = ({
   description,
 }: RecipeCardHeaderProps) => {
   const classes = useStyles();
+  const { user } = useUser();
   const [isInEditMode, setEditMode] = useState();
   const [updatedName, setUpdatedName] = useState(name);
   const [updatedDesc, setUpdatedDesc] = useState(description);
@@ -56,7 +63,7 @@ export const RecipeCardHeader = ({
 
   const [insert_recipe_one] = useAddRecipeMutation({
     variables: {
-      u_id: HARDCODED_U_ID,
+      u_id: user?.id,
       name: updatedName,
       description: updatedDesc,
     },

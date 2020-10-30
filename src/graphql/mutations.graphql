@@ -115,7 +115,7 @@ mutation DeleteFood($id: uuid!) {
 }
 
 mutation AddMealItem(
-  $u_id: uuid = "7040b96b-0994-4f79-ac7e-6e0299fcad04"
+  $u_id: uuid
   $proteins: numeric
   $fats: numeric
   $energy_kj: numeric
@@ -145,7 +145,7 @@ mutation AddMealItem(
 }
 
 mutation UpdateMealItem(
-  $u_id: uuid = "7040b96b-0994-4f79-ac7e-6e0299fcad04"
+  $u_id: uuid
   $carbohydrates: numeric
   $energy_cal: numeric
   $energy_kj: numeric
@@ -261,5 +261,20 @@ mutation DeleteRecipeByPK($id: uuid!) {
 mutation DeleteRecipeItemByPK($id: uuid!) {
   delete_recipe_item_by_pk(id: $id) {
     id
+  }
+}
+
+mutation Register($user_name: name!, $password: String!) {
+  insert_users_one(object: {user_name: $user_name, password: $password}) {
+    id
+  }
+}
+
+mutation RegisterFacebookUser($fb_id: String!, $fb_picture_url: String!, $full_name: String!){
+  insert_users_one(object: {fb_id: $fb_id, fb_picture_url: $fb_picture_url, full_name: $full_name}) {
+    id
+    fb_id
+    fb_picture_url
+    full_name
   }
 }

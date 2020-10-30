@@ -1,6 +1,6 @@
 import React from "react";
-import {useRecipeListingSubscription} from "../../graphql/generated/graphql";
-import {RecipeCard} from "./RecipeCard";
+import { useRecipeListingSubscription } from "../../graphql/generated/graphql";
+import { RecipeCard } from "./RecipeCard";
 
 interface Props {}
 
@@ -10,8 +10,9 @@ export const Recipes = ({}: Props) => {
   return (
     <>
       <RecipeCard name={"Add new recipe"} description={""} />
-      {data?.recipe.map((recipe) => (
+      {data?.recipe.map((recipe, index) => (
         <RecipeCard
+          key={index}
           id={recipe.id}
           name={recipe.name}
           description={recipe.description}

@@ -28,6 +28,7 @@ import {
 import { ToastMessage } from "src/components/ToastMessage";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
 import { useStore } from "./useStore";
+import { useUser } from "../../context/userContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -57,8 +58,6 @@ interface Props {
   time?: any;
   meal_items?: Meal_Item_Insert_Input[];
 }
-
-export const HARDCODED_U_ID = "7040b96b-0994-4f79-ac7e-6e0299fcad04";
 
 export const AddMealDialog = ({
   open,
@@ -112,6 +111,7 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     onConfirm,
   }) => {
     const classes = useStyles();
+    const { user } = useUser();
     const stateEndRef = useRef(null);
     const store = useStore(fetchedFoods, name, date, time, meal_items);
 
@@ -228,8 +228,8 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
               name: store.name,
               date,
               time: moment(store.time).format("HH:mm"),
-              data: store.meal_items,
-              u_id: HARDCODED_U_ID,
+              data: store.meal_items.map((i) => ({ u_id: user?.id, ...i })),
+              u_id: user?.id,
             })}
             color="primary"
             autoFocus

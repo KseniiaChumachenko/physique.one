@@ -16,6 +16,11 @@ import {
 } from "@material-ui/icons";
 
 const useStyles = makeStyles({
+  container: {
+    position: "sticky",
+    bottom: 0,
+    left: 0,
+  },
   root: {
     height: "8vh",
     width: "100%",
@@ -29,7 +34,7 @@ export const BottomNavigation = () => {
   const [value, setValue] = useState(location.pathname);
 
   return (
-    <Paper elevation={2}>
+    <Paper elevation={2} className={classes.container}>
       <MaterialBottomNavigation
         value={value}
         onChange={(event, newValue) => {

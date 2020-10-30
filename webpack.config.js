@@ -1,6 +1,7 @@
 /* eslint-env node */
 const path = require("path");
 const webpack = require("webpack");
+const Dotenv = require("dotenv-webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
 
@@ -109,6 +110,7 @@ module.exports = (/* env = {} */) => {
       new MomentLocalesPlugin({
         localesToKeep: ["es-us", "ru", "uk", "cs"],
       }),
+      new Dotenv(),
     ],
 
     devServer: {

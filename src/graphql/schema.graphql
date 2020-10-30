@@ -1719,10 +1719,14 @@ List of users
 columns and relationships of "users"
 """
 type users {
+    fb_id: String
+    fb_picture_url: String
     first_name: name
+    full_name: String
     id: uuid!
     last_name: name
-    user_name: name!
+    password: String
+    user_name: name
 }
 
 "aggregated selection of \"users\""
@@ -1740,12 +1744,20 @@ type users_aggregate_fields {
 
 "aggregate max on columns"
 type users_max_fields {
+    fb_id: String
+    fb_picture_url: String
+    full_name: String
     id: uuid
+    password: String
 }
 
 "aggregate min on columns"
 type users_min_fields {
+    fb_id: String
+    fb_picture_url: String
+    full_name: String
     id: uuid
+    password: String
 }
 
 "response of any mutation on the table \"users\""
@@ -2133,6 +2145,12 @@ enum recipe_update_column {
 "unique or primary key constraints on table \"users\""
 enum users_constraint {
     "unique or primary key constraint"
+    users_fb_id_key
+    "unique or primary key constraint"
+    users_fb_picture_url_key
+    "unique or primary key constraint"
+    users_password_key
+    "unique or primary key constraint"
     users_pkey
     "unique or primary key constraint"
     users_user_name_key
@@ -2141,11 +2159,19 @@ enum users_constraint {
 "select columns of table \"users\""
 enum users_select_column {
     "column name"
+    fb_id
+    "column name"
+    fb_picture_url
+    "column name"
     first_name
+    "column name"
+    full_name
     "column name"
     id
     "column name"
     last_name
+    "column name"
+    password
     "column name"
     user_name
 }
@@ -2153,11 +2179,19 @@ enum users_select_column {
 "update columns of table \"users\""
 enum users_update_column {
     "column name"
+    fb_id
+    "column name"
+    fb_picture_url
+    "column name"
     first_name
+    "column name"
+    full_name
     "column name"
     id
     "column name"
     last_name
+    "column name"
+    password
     "column name"
     user_name
 }
@@ -3652,28 +3686,44 @@ input users_bool_exp {
     _and: [users_bool_exp]
     _not: users_bool_exp
     _or: [users_bool_exp]
+    fb_id: String_comparison_exp
+    fb_picture_url: String_comparison_exp
     first_name: name_comparison_exp
+    full_name: String_comparison_exp
     id: uuid_comparison_exp
     last_name: name_comparison_exp
+    password: String_comparison_exp
     user_name: name_comparison_exp
 }
 
 "input type for inserting data into table \"users\""
 input users_insert_input {
+    fb_id: String
+    fb_picture_url: String
     first_name: name
+    full_name: String
     id: uuid
     last_name: name
+    password: String
     user_name: name
 }
 
 "order by max() on columns of table \"users\""
 input users_max_order_by {
+    fb_id: order_by
+    fb_picture_url: order_by
+    full_name: order_by
     id: order_by
+    password: order_by
 }
 
 "order by min() on columns of table \"users\""
 input users_min_order_by {
+    fb_id: order_by
+    fb_picture_url: order_by
+    full_name: order_by
     id: order_by
+    password: order_by
 }
 
 "input type for inserting object relation for remote table \"users\""
@@ -3691,9 +3741,13 @@ input users_on_conflict {
 
 "ordering options when selecting data from \"users\""
 input users_order_by {
+    fb_id: order_by
+    fb_picture_url: order_by
     first_name: order_by
+    full_name: order_by
     id: order_by
     last_name: order_by
+    password: order_by
     user_name: order_by
 }
 
@@ -3704,9 +3758,13 @@ input users_pk_columns_input {
 
 "input type for updating data in table \"users\""
 input users_set_input {
+    fb_id: String
+    fb_picture_url: String
     first_name: name
+    full_name: String
     id: uuid
     last_name: name
+    password: String
     user_name: name
 }
 

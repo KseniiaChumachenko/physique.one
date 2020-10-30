@@ -13,8 +13,8 @@ import { Alert } from "@material-ui/lab";
 import { Trans } from "@lingui/react";
 import { useAddMealItemMutation } from "../../../graphql/generated/graphql";
 import { ToastMessage } from "../../../components/ToastMessage";
-import { HARDCODED_U_ID } from "../AddMealDialog";
 import { MealAutocomplete } from "../../../components/MealAutocomplete";
+import { useUser } from "../../context/userContext";
 
 const useStyles = makeStyles(() => ({
   field: {
@@ -31,6 +31,7 @@ interface Props {
 
 export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
   const classes = useStyles();
+  const { user } = useUser();
 
   const [error, setOpenErrorMessage] = React.useState();
   const [success, setOpenSuccessMessage] = React.useState();
@@ -56,7 +57,7 @@ export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
       setOpen(false);
     },
     variables: {
-      u_id: HARDCODED_U_ID,
+      u_id: user?.id,
       weight,
       meal_id,
       ...mealItemProps,

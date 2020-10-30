@@ -16,8 +16,8 @@ import {
   useUpdateMealItemMutation,
 } from "../../../graphql/generated/graphql";
 import { ToastMessage } from "../../../components/ToastMessage";
-import { HARDCODED_U_ID } from "../AddMealDialog";
 import { MealAutocomplete } from "../../../components/MealAutocomplete";
+import { useUser } from "../../context/userContext";
 
 const useStyles = makeStyles(() => ({
   field: {
@@ -34,6 +34,7 @@ interface Props {
 
 export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
   const classes = useStyles();
+  const { user } = useUser();
 
   const [error, setOpenErrorMessage] = React.useState();
   const [success, setOpenSuccessMessage] = React.useState();
@@ -67,7 +68,7 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
     },
     variables: {
       id: mealItem.id,
-      u_id: HARDCODED_U_ID,
+      u_id: user?.id,
       weight,
       meal_id: mealItem.meal_id,
       ...mealItemProps,
