@@ -15,7 +15,6 @@
     "mobx": "^5.15.4",
     "mobx-react-lite": "^2.0.6",
     "moment": "^2.25.3",
-    "moment-locales-webpack-plugin": "^1.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-facebook-login": "^4.1.1",
@@ -25,9 +24,9 @@
     "subscriptions-transport-ws": "^0.9.16"
   },
   "scripts": {
-    "dev": "cross-env NODE_ENV=development  webpack-dev-server --hot",
+    "dev": "webpack-dev-server --hot",
     "start": "serve -s build",
-    "build": "cross-env NODE_ENV=production webpack",
+    "build": "webpack",
     "gql": "graphql-codegen --config codegen.yml",
     "check-types": "tsc --noEmit",
     "add-locale": "lingui add-locale",
@@ -80,7 +79,6 @@
     "babel-loader": "^8.1.0",
     "babel-plugin-macros": "^2.8.0",
     "copy-webpack-plugin": "^5.1.1",
-    "cross-env": "^7.0.2",
     "dotenv-webpack": "^5.0.0",
     "file-loader": "^6.0.0",
     "graphql": "^15.0.0",
