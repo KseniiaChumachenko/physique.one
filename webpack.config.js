@@ -94,7 +94,15 @@ module.exports = (/* env = {} */) => {
     },
 
     plugins: [
-      new Dotenv(),
+      NODE_ENV === "development"
+        ? new Dotenv()
+        : new webpack.EnvironmentPlugin([
+            "NODE_ENV",
+            "GQL_WS_ENDPOINT",
+            "GQL_HTTPS_ENDPOINT",
+            "FACEBOOK_APP_ID",
+            "HASURA_ADMIN_SECRET",
+          ]),
 
       new webpack.optimize.MinChunkSizePlugin({
         minChunkSize: 20000,
