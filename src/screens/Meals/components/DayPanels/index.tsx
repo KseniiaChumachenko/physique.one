@@ -9,6 +9,7 @@ import { ToastMessage } from "src/components/ToastMessage";
 import { DayPanelHeader } from "./DayPanelHeader";
 import { PanelSummary } from "./PanelSummary";
 import { PanelDetailTable } from "./PanelDetailTable";
+import { useUser } from "../../../context/userContext";
 
 const useStyles = makeStyles((theme) => ({
   parentExpPanel: {
@@ -57,8 +58,9 @@ interface Props {
 
 export const DayPanels = ({ date }: Props) => {
   const classes = useStyles();
+  const { user } = useUser();
   const { data, error } = useMealsByDateSubscription({
-    variables: { _eq: date },
+    variables: { date, u_id: user?.id },
   });
 
   if (error) {
@@ -66,11 +68,11 @@ export const DayPanels = ({ date }: Props) => {
   }
 
   return (
-    <ExpansionPanel className={classes.parentExpPanel} key={date + 'Header'}>
+    <ExpansionPanel className={classes.parentExpPanel} key={date + "Header"}>
       <DayPanelHeader date={date} />
       <ExpansionPanelDetails
         className={classes.parentExpPanelDetails}
-        key={date + 'panelDetail'}
+        key={date + "panelDetail"}
       >
         {data?.meal.map((item, key) => (
           <ExpansionPanel

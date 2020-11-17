@@ -2,6 +2,9 @@ import gql from "graphql-tag";
 import * as ApolloReactCommon from "@apollo/client";
 import * as ApolloReactHooks from "@apollo/client";
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -3984,26 +3987,26 @@ export type Uuid_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars["uuid"]>>;
 };
 
-export type AddMealMutationVariables = {
+export type AddMealMutationVariables = Exact<{
   name?: Maybe<Scalars["String"]>;
   date?: Maybe<Scalars["date"]>;
   time?: Maybe<Scalars["time"]>;
   data: Array<Meal_Item_Insert_Input>;
   u_id: Scalars["uuid"];
-};
+}>;
 
 export type AddMealMutation = { __typename?: "mutation_root" } & {
   insert_meal_one?: Maybe<{ __typename?: "meal" } & Pick<Meal, "name">>;
 };
 
-export type UpdateMealMutationVariables = {
+export type UpdateMealMutationVariables = Exact<{
   id: Scalars["uuid"];
   name?: Maybe<Scalars["String"]>;
   date?: Maybe<Scalars["date"]>;
   time?: Maybe<Scalars["time"]>;
   data: Array<Meal_Item_Insert_Input>;
   u_id: Scalars["uuid"];
-};
+}>;
 
 export type UpdateMealMutation = { __typename?: "mutation_root" } & {
   delete_meal_item?: Maybe<
@@ -4015,9 +4018,9 @@ export type UpdateMealMutation = { __typename?: "mutation_root" } & {
   insert_meal_one?: Maybe<{ __typename?: "meal" } & Pick<Meal, "name">>;
 };
 
-export type DeleteMealByIdMutationVariables = {
+export type DeleteMealByIdMutationVariables = Exact<{
   id: Scalars["uuid"];
-};
+}>;
 
 export type DeleteMealByIdMutation = { __typename?: "mutation_root" } & {
   delete_meal_item?: Maybe<
@@ -4028,7 +4031,7 @@ export type DeleteMealByIdMutation = { __typename?: "mutation_root" } & {
   delete_meal_by_pk?: Maybe<{ __typename?: "meal" } & Pick<Meal, "u_id">>;
 };
 
-export type AddFoodMutationVariables = {
+export type AddFoodMutationVariables = Exact<{
   name?: Maybe<Scalars["bpchar"]>;
   proteins?: Maybe<Scalars["numeric"]>;
   fats?: Maybe<Scalars["numeric"]>;
@@ -4036,7 +4039,7 @@ export type AddFoodMutationVariables = {
   energy_cal?: Maybe<Scalars["numeric"]>;
   carbohydrates?: Maybe<Scalars["numeric"]>;
   type?: Maybe<Scalars["String"]>;
-};
+}>;
 
 export type AddFoodMutation = { __typename?: "mutation_root" } & {
   insert_food?: Maybe<
@@ -4047,7 +4050,7 @@ export type AddFoodMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
-export type UpdateFoodMutationVariables = {
+export type UpdateFoodMutationVariables = Exact<{
   id: Scalars["uuid"];
   name?: Maybe<Scalars["bpchar"]>;
   proteins?: Maybe<Scalars["numeric"]>;
@@ -4056,21 +4059,21 @@ export type UpdateFoodMutationVariables = {
   energy_cal?: Maybe<Scalars["numeric"]>;
   carbohydrates?: Maybe<Scalars["numeric"]>;
   type?: Maybe<Scalars["String"]>;
-};
+}>;
 
 export type UpdateFoodMutation = { __typename?: "mutation_root" } & {
   update_food_by_pk?: Maybe<{ __typename?: "food" } & Pick<Food, "id">>;
 };
 
-export type DeleteFoodMutationVariables = {
+export type DeleteFoodMutationVariables = Exact<{
   id: Scalars["uuid"];
-};
+}>;
 
 export type DeleteFoodMutation = { __typename?: "mutation_root" } & {
   delete_food_by_pk?: Maybe<{ __typename?: "food" } & Pick<Food, "id">>;
 };
 
-export type AddMealItemMutationVariables = {
+export type AddMealItemMutationVariables = Exact<{
   u_id?: Maybe<Scalars["uuid"]>;
   proteins?: Maybe<Scalars["numeric"]>;
   fats?: Maybe<Scalars["numeric"]>;
@@ -4081,7 +4084,7 @@ export type AddMealItemMutationVariables = {
   meal_id?: Maybe<Scalars["uuid"]>;
   weight?: Maybe<Scalars["numeric"]>;
   recipe_id?: Maybe<Scalars["uuid"]>;
-};
+}>;
 
 export type AddMealItemMutation = { __typename?: "mutation_root" } & {
   insert_meal_item_one?: Maybe<
@@ -4089,7 +4092,7 @@ export type AddMealItemMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
-export type UpdateMealItemMutationVariables = {
+export type UpdateMealItemMutationVariables = Exact<{
   u_id?: Maybe<Scalars["uuid"]>;
   carbohydrates?: Maybe<Scalars["numeric"]>;
   energy_cal?: Maybe<Scalars["numeric"]>;
@@ -4101,7 +4104,7 @@ export type UpdateMealItemMutationVariables = {
   meal_id?: Maybe<Scalars["uuid"]>;
   id: Scalars["uuid"];
   recipe_id?: Maybe<Scalars["uuid"]>;
-};
+}>;
 
 export type UpdateMealItemMutation = { __typename?: "mutation_root" } & {
   update_meal_item_by_pk?: Maybe<
@@ -4109,9 +4112,9 @@ export type UpdateMealItemMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
-export type DeleteMealItemByPrimaryKeyMutationVariables = {
+export type DeleteMealItemByPrimaryKeyMutationVariables = Exact<{
   id: Scalars["uuid"];
-};
+}>;
 
 export type DeleteMealItemByPrimaryKeyMutation = {
   __typename?: "mutation_root";
@@ -4121,17 +4124,17 @@ export type DeleteMealItemByPrimaryKeyMutation = {
   >;
 };
 
-export type AddRecipeMutationVariables = {
+export type AddRecipeMutationVariables = Exact<{
   u_id: Scalars["uuid"];
   name?: Maybe<Scalars["String"]>;
   description?: Maybe<Scalars["String"]>;
-};
+}>;
 
 export type AddRecipeMutation = { __typename?: "mutation_root" } & {
   insert_recipe_one?: Maybe<{ __typename?: "recipe" } & Pick<Recipe, "id">>;
 };
 
-export type AddRecipeItemMutationVariables = {
+export type AddRecipeItemMutationVariables = Exact<{
   energy_cal?: Maybe<Scalars["numeric"]>;
   energy_kj?: Maybe<Scalars["numeric"]>;
   proteins?: Maybe<Scalars["numeric"]>;
@@ -4141,7 +4144,7 @@ export type AddRecipeItemMutationVariables = {
   food_id: Scalars["uuid"];
   u_id: Scalars["uuid"];
   weight: Scalars["numeric"];
-};
+}>;
 
 export type AddRecipeItemMutation = { __typename?: "mutation_root" } & {
   insert_recipe_item_one?: Maybe<
@@ -4149,17 +4152,17 @@ export type AddRecipeItemMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
-export type UpdateRecipeByPkMutationVariables = {
+export type UpdateRecipeByPkMutationVariables = Exact<{
   id: Scalars["uuid"];
   name?: Maybe<Scalars["String"]>;
   description?: Maybe<Scalars["String"]>;
-};
+}>;
 
 export type UpdateRecipeByPkMutation = { __typename?: "mutation_root" } & {
   update_recipe_by_pk?: Maybe<{ __typename?: "recipe" } & Pick<Recipe, "id">>;
 };
 
-export type UpdateRecipeItemByPkMutationVariables = {
+export type UpdateRecipeItemByPkMutationVariables = Exact<{
   id: Scalars["uuid"];
   food_id: Scalars["uuid"];
   weight?: Maybe<Scalars["numeric"]>;
@@ -4168,7 +4171,7 @@ export type UpdateRecipeItemByPkMutationVariables = {
   proteins?: Maybe<Scalars["numeric"]>;
   carbohydrates?: Maybe<Scalars["numeric"]>;
   fats?: Maybe<Scalars["numeric"]>;
-};
+}>;
 
 export type UpdateRecipeItemByPkMutation = { __typename?: "mutation_root" } & {
   update_recipe_item_by_pk?: Maybe<
@@ -4176,17 +4179,17 @@ export type UpdateRecipeItemByPkMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
-export type DeleteRecipeByPkMutationVariables = {
+export type DeleteRecipeByPkMutationVariables = Exact<{
   id: Scalars["uuid"];
-};
+}>;
 
 export type DeleteRecipeByPkMutation = { __typename?: "mutation_root" } & {
   delete_recipe_by_pk?: Maybe<{ __typename?: "recipe" } & Pick<Recipe, "id">>;
 };
 
-export type DeleteRecipeItemByPkMutationVariables = {
+export type DeleteRecipeItemByPkMutationVariables = Exact<{
   id: Scalars["uuid"];
-};
+}>;
 
 export type DeleteRecipeItemByPkMutation = { __typename?: "mutation_root" } & {
   delete_recipe_item_by_pk?: Maybe<
@@ -4194,20 +4197,20 @@ export type DeleteRecipeItemByPkMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
-export type RegisterMutationVariables = {
+export type RegisterMutationVariables = Exact<{
   user_name: Scalars["name"];
   password: Scalars["String"];
-};
+}>;
 
 export type RegisterMutation = { __typename?: "mutation_root" } & {
   insert_users_one?: Maybe<{ __typename?: "users" } & Pick<Users, "id">>;
 };
 
-export type RegisterFacebookUserMutationVariables = {
+export type RegisterFacebookUserMutationVariables = Exact<{
   fb_id: Scalars["String"];
   fb_picture_url: Scalars["String"];
   full_name: Scalars["String"];
-};
+}>;
 
 export type RegisterFacebookUserMutation = { __typename?: "mutation_root" } & {
   insert_users_one?: Maybe<
@@ -4218,9 +4221,10 @@ export type RegisterFacebookUserMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
-export type MealsByDateSubscriptionVariables = {
-  _eq?: Maybe<Scalars["date"]>;
-};
+export type MealsByDateSubscriptionVariables = Exact<{
+  date?: Maybe<Scalars["date"]>;
+  u_id?: Maybe<Scalars["uuid"]>;
+}>;
 
 export type MealsByDateSubscription = { __typename?: "subscription_root" } & {
   meal: Array<
@@ -4258,9 +4262,10 @@ export type MealsByDateSubscription = { __typename?: "subscription_root" } & {
   >;
 };
 
-export type MealItemMacrosSumByIdSubscriptionVariables = {
+export type MealItemMacrosSumByIdSubscriptionVariables = Exact<{
   meal_id?: Maybe<Scalars["uuid"]>;
-};
+  u_id?: Maybe<Scalars["uuid"]>;
+}>;
 
 export type MealItemMacrosSumByIdSubscription = {
   __typename?: "subscription_root";
@@ -4279,9 +4284,10 @@ export type MealItemMacrosSumByIdSubscription = {
   };
 };
 
-export type MealItemMacrosSumByDateSubscriptionVariables = {
+export type MealItemMacrosSumByDateSubscriptionVariables = Exact<{
   date?: Maybe<Scalars["date"]>;
-};
+  u_id?: Maybe<Scalars["uuid"]>;
+}>;
 
 export type MealItemMacrosSumByDateSubscription = {
   __typename?: "subscription_root";
@@ -4300,9 +4306,9 @@ export type MealItemMacrosSumByDateSubscription = {
   };
 };
 
-export type MealByIdQueryVariables = {
+export type MealByIdQueryVariables = Exact<{
   id: Scalars["uuid"];
-};
+}>;
 
 export type MealByIdQuery = { __typename?: "query_root" } & {
   meal_by_pk?: Maybe<
@@ -4325,7 +4331,9 @@ export type MealByIdQuery = { __typename?: "query_root" } & {
   >;
 };
 
-export type FoodSelectFieldListingQueryVariables = {};
+export type FoodSelectFieldListingQueryVariables = Exact<{
+  [key: string]: never;
+}>;
 
 export type FoodSelectFieldListingQuery = { __typename?: "query_root" } & {
   food: Array<
@@ -4364,7 +4372,7 @@ export type FoodSelectFieldListingQuery = { __typename?: "query_root" } & {
   >;
 };
 
-export type FoodTypesQueryVariables = {};
+export type FoodTypesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type FoodTypesQuery = { __typename?: "query_root" } & {
   food_type: Array<
@@ -4372,7 +4380,9 @@ export type FoodTypesQuery = { __typename?: "query_root" } & {
   >;
 };
 
-export type RecipeListingSubscriptionVariables = {};
+export type RecipeListingSubscriptionVariables = Exact<{
+  [key: string]: never;
+}>;
 
 export type RecipeListingSubscription = { __typename?: "subscription_root" } & {
   recipe: Array<
@@ -4409,10 +4419,10 @@ export type RecipeListingSubscription = { __typename?: "subscription_root" } & {
   >;
 };
 
-export type LogInQueryVariables = {
+export type LogInQueryVariables = Exact<{
   user_name: Scalars["name"];
   password: Scalars["String"];
-};
+}>;
 
 export type LogInQuery = { __typename?: "query_root" } & {
   users: Array<
@@ -4423,9 +4433,9 @@ export type LogInQuery = { __typename?: "query_root" } & {
   >;
 };
 
-export type IsFacebookUserQueryVariables = {
+export type IsFacebookUserQueryVariables = Exact<{
   fb_id: Scalars["String"];
-};
+}>;
 
 export type IsFacebookUserQuery = { __typename?: "query_root" } & {
   users: Array<
@@ -5097,8 +5107,11 @@ export type RegisterFacebookUserMutationOptions = ApolloReactCommon.BaseMutation
   RegisterFacebookUserMutationVariables
 >;
 export const MealsByDateDocument = gql`
-  subscription MealsByDate($_eq: date = "") {
-    meal(where: { date: { _eq: $_eq } }, order_by: { name: asc_nulls_first }) {
+  subscription MealsByDate($date: date = "", $u_id: uuid) {
+    meal(
+      where: { date: { _eq: $date }, u_id: { _eq: $u_id } }
+      order_by: { name: asc_nulls_first }
+    ) {
       id
       date
       time
@@ -5148,8 +5161,10 @@ export type MealsByDateSubscriptionResult = ApolloReactCommon.SubscriptionResult
   MealsByDateSubscription
 >;
 export const MealItemMacrosSumByIdDocument = gql`
-  subscription MealItemMacrosSumById($meal_id: uuid = "") {
-    meal_item_aggregate(where: { meal_id: { _eq: $meal_id } }) {
+  subscription MealItemMacrosSumById($meal_id: uuid = "", $u_id: uuid) {
+    meal_item_aggregate(
+      where: { meal_id: { _eq: $meal_id }, u_id: { _eq: $u_id } }
+    ) {
       aggregate {
         sum {
           carbohydrates
@@ -5180,8 +5195,10 @@ export type MealItemMacrosSumByIdSubscriptionResult = ApolloReactCommon.Subscrip
   MealItemMacrosSumByIdSubscription
 >;
 export const MealItemMacrosSumByDateDocument = gql`
-  subscription MealItemMacrosSumByDate($date: date = "") {
-    meal_item_aggregate(where: { meal: { date: { _eq: $date } } }) {
+  subscription MealItemMacrosSumByDate($date: date = "", $u_id: uuid) {
+    meal_item_aggregate(
+      where: { meal: { date: { _eq: $date } }, u_id: { _eq: $u_id } }
+    ) {
       aggregate {
         sum {
           carbohydrates

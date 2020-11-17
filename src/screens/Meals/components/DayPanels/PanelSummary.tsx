@@ -1,11 +1,15 @@
 import React from "react";
 import moment from "moment";
-import {ExpandMoreRounded} from "@material-ui/icons";
-import {ExpansionPanelSummary, Grid, Typography} from "@material-ui/core";
-import {makeStyles} from "@material-ui/core/styles";
-import {Meal, useMealItemMacrosSumByIdSubscription,} from "src/graphql/generated/graphql";
-import {PanelDetailActions} from "./PanelDetailActions";
-import {AggregationChips} from "../../../../components/AggredationChips";
+import { ExpandMoreRounded } from "@material-ui/icons";
+import { ExpansionPanelSummary, Grid, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Meal,
+  useMealItemMacrosSumByIdSubscription,
+} from "src/graphql/generated/graphql";
+import { PanelDetailActions } from "./PanelDetailActions";
+import { AggregationChips } from "../../../../components/AggredationChips";
+import { useUser } from "../../../context/userContext";
 
 const useStyles = makeStyles((theme) => ({
   chip: {
@@ -20,9 +24,10 @@ type SummaryProps = Pick<Meal, "name" | "time"> & Pick<Meal, "id">;
 
 export const PanelSummary = ({ name, id, time }: SummaryProps) => {
   const classes = useStyles();
+  const { user } = useUser();
 
   const { data } = useMealItemMacrosSumByIdSubscription({
-    variables: { meal_id: id },
+    variables: { meal_id: id, u_id: user?.id },
   });
 
   const macronutrients = data?.meal_item_aggregate?.aggregate?.sum;

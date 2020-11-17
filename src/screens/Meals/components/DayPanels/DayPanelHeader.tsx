@@ -1,18 +1,25 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import moment from "moment";
-import {ExpansionPanelSummary, Grid, IconButton, Snackbar, Typography,} from "@material-ui/core";
-import {AddRounded, ExpandMoreRounded} from "@material-ui/icons";
-import {makeStyles} from "@material-ui/core/styles";
-import {Trans} from "@lingui/react";
-import {ApolloError} from "@apollo/client";
-import {Alert} from "@material-ui/lab";
 import {
-    AddMealMutationVariables,
-    useAddMealMutation,
-    useMealItemMacrosSumByDateSubscription,
+  ExpansionPanelSummary,
+  Grid,
+  IconButton,
+  Snackbar,
+  Typography,
+} from "@material-ui/core";
+import { AddRounded, ExpandMoreRounded } from "@material-ui/icons";
+import { makeStyles } from "@material-ui/core/styles";
+import { Trans } from "@lingui/react";
+import { ApolloError } from "@apollo/client";
+import { Alert } from "@material-ui/lab";
+import {
+  AddMealMutationVariables,
+  useAddMealMutation,
+  useMealItemMacrosSumByDateSubscription,
 } from "src/graphql/generated/graphql";
-import {AddMealDialog} from "../../../components/AddMealDialog";
-import {AggregationChips} from "../../../../components/AggredationChips";
+import { AddMealDialog } from "../../../components/AddMealDialog";
+import { AggregationChips } from "../../../../components/AggredationChips";
+import { useUser } from "../../../context/userContext";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -33,6 +40,7 @@ interface Props {
 
 export const DayPanelHeader = ({ date }: Props) => {
   const classes = useStyles();
+  const { user } = useUser();
   const [error, setOpenErrorMessage] = React.useState<ApolloError | boolean>(
     false
   );
@@ -40,7 +48,7 @@ export const DayPanelHeader = ({ date }: Props) => {
   const [openAddDialog, setOpenAddMealDialog] = useState(false);
 
   const { data } = useMealItemMacrosSumByDateSubscription({
-    variables: { date },
+    variables: { date, u_id: user?.id },
   });
 
   const [insert_meal_one] = useAddMealMutation({

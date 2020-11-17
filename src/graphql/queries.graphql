@@ -1,5 +1,8 @@
-subscription MealsByDate($_eq: date = "") {
-  meal(where: { date: { _eq: $_eq } }, order_by: { name: asc_nulls_first }) {
+subscription MealsByDate($date: date = "", $u_id: uuid) {
+  meal(
+    where: { date: { _eq: $date }, u_id: { _eq: $u_id } }
+    order_by: { name: asc_nulls_first }
+  ) {
     id
     date
     time
@@ -32,8 +35,10 @@ subscription MealsByDate($_eq: date = "") {
   }
 }
 
-subscription MealItemMacrosSumById($meal_id: uuid = "") {
-  meal_item_aggregate(where: { meal_id: { _eq: $meal_id } }) {
+subscription MealItemMacrosSumById($meal_id: uuid = "", $u_id: uuid) {
+  meal_item_aggregate(
+    where: { meal_id: { _eq: $meal_id }, u_id: { _eq: $u_id } }
+  ) {
     aggregate {
       sum {
         carbohydrates
@@ -46,8 +51,10 @@ subscription MealItemMacrosSumById($meal_id: uuid = "") {
   }
 }
 
-subscription MealItemMacrosSumByDate($date: date = "") {
-  meal_item_aggregate(where: { meal: { date: { _eq: $date } } }) {
+subscription MealItemMacrosSumByDate($date: date = "", $u_id: uuid) {
+  meal_item_aggregate(
+    where: { meal: { date: { _eq: $date } }, u_id: { _eq: $u_id } }
+  ) {
     aggregate {
       sum {
         carbohydrates
@@ -149,7 +156,9 @@ subscription RecipeListing {
 }
 
 query LogIn($user_name: name!, $password: String!) {
-  users(where: {user_name: {_eq: $user_name}, password: {_eq: $password}}) {
+  users(
+    where: { user_name: { _eq: $user_name }, password: { _eq: $password } }
+  ) {
     id
     full_name
     fb_id
@@ -157,8 +166,8 @@ query LogIn($user_name: name!, $password: String!) {
   }
 }
 
-query IsFacebookUser($fb_id: String!){
-  users(where: {fb_id: {_eq: $fb_id}}) {
+query IsFacebookUser($fb_id: String!) {
+  users(where: { fb_id: { _eq: $fb_id } }) {
     id
     full_name
     fb_id
