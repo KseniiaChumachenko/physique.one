@@ -39,14 +39,12 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
   const [error, setOpenErrorMessage] = React.useState();
   const [success, setOpenSuccessMessage] = React.useState();
 
-  const [selectedFood, setSelectedFood] = useState(
-    mealItem.food || mealItem.recipe_id
-  );
+  const [selectedFood, setSelectedFood] = useState(mealItem);
   const [weight, setWeight] = useState(mealItem.weight);
 
   const mealItemProps = {
-    recipe_id: selectedFood?.recipe ? selectedFood?.id : null,
-    food: !selectedFood?.recipe ? selectedFood?.id : null,
+    recipe_id: selectedFood?.recipe ? selectedFood?.recipe_id : null,
+    food: !selectedFood?.recipe ? selectedFood?.food : null,
 
     energy_cal:
       (selectedFood?.energy_cal / (selectedFood?.weight || 100)) * weight,
@@ -86,8 +84,8 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
         <DialogContent>
           {selectedFood && (
             <MealAutocomplete
-              value={selectedFood}
-              setValue={setSelectedFood}
+              value={selectedFood.food || selectedFood.recipe_id}
+              setValue={setSelectedFood as any}
               className={classes.field}
             />
           )}

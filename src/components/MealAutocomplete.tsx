@@ -9,7 +9,7 @@ import { Trans } from "@lingui/react";
 
 export type MealAutocompleteListItem = Food_Insert_Input & { recipe?: boolean };
 
-type FoodOptionalType = MealAutocompleteListItem | null | undefined;
+type FoodOptionalType = MealAutocompleteListItem | string | null | undefined;
 
 interface MealAutocompleteProps
   extends Partial<AutocompleteProps<any, any, any, any>> {
@@ -23,7 +23,7 @@ export function MealAutocomplete({
   ...restProps
 }: MealAutocompleteProps) {
   const { data } = useFoodSelectFieldListingQuery();
-  const [mealSelection, setMealSelection] = useState(value);
+  const [mealSelection, setMealSelection] = useState();
 
   const remappedOptions: MealAutocompleteListItem[] | undefined = useMemo(
     () =>
@@ -47,14 +47,14 @@ export function MealAutocomplete({
   );
 
   useEffect(() => {
-    if (!(value instanceof Object) && remappedOptions) {
+    if (typeof value === "string" && remappedOptions) {
       setMealSelection(remappedOptions.find((item) => item.id === value));
     }
   }, [value, remappedOptions]);
 
   return (
     <div>
-      {remappedOptions && (
+      {remappedOptions && mealSelection && (
         <Autocomplete
           options={remappedOptions}
           getOptionLabel={(option: MealAutocompleteListItem) => option.name}
