@@ -1,4 +1,4 @@
-import React, { Dispatch, useEffect, useMemo, useState } from "react";
+import React, { Dispatch, useEffect, useMemo } from "react";
 import { TextField } from "@material-ui/core";
 import { Autocomplete, AutocompleteProps } from "@material-ui/lab";
 import {
@@ -7,9 +7,17 @@ import {
 } from "../graphql/generated/graphql";
 import { Trans } from "@lingui/react";
 
-export type MealAutocompleteListItem = Food_Insert_Input & { recipe?: boolean };
+export type MealAutocompleteListItem = Food_Insert_Input & {
+  recipe?: boolean;
+  food?: string;
+  recipe_id?: string;
+};
 
-type FoodOptionalType = MealAutocompleteListItem | string | null | undefined;
+export type FoodOptionalType =
+  | MealAutocompleteListItem
+  | string
+  | null
+  | undefined;
 
 interface MealAutocompleteProps
   extends Partial<AutocompleteProps<any, any, any, any>> {
@@ -23,7 +31,6 @@ export function MealAutocomplete({
   ...restProps
 }: MealAutocompleteProps) {
   const { data } = useFoodSelectFieldListingQuery();
-  const [mealSelection, setMealSelection] = useState();
 
   const remappedOptions: MealAutocompleteListItem[] | undefined = useMemo(
     () =>
@@ -31,6 +38,7 @@ export function MealAutocomplete({
         ...data.food,
         ...data.recipe.map((r) => ({
           id: r.id,
+          recipe_id: r.id,
           name: r.name,
           type: "Recipe",
           carbohydrates:
@@ -48,19 +56,21 @@ export function MealAutocomplete({
 
   useEffect(() => {
     if (typeof value === "string" && remappedOptions) {
-      setMealSelection(remappedOptions.find((item) => item.id === value));
+      const foodFromOptions = remappedOptions.find((item) => item.id === value);
+      setValue(foodFromOptions);
     }
   }, [value, remappedOptions]);
 
+  const withValue = !(typeof value === "string") && remappedOptions;
+
   return (
     <div>
-      {remappedOptions && mealSelection && (
+      {withValue && (
         <Autocomplete
-          options={remappedOptions}
+          options={remappedOptions!}
           getOptionLabel={(option: MealAutocompleteListItem) => option.name}
-          value={mealSelection}
+          value={value}
           onChange={(event: any, newValue: Food_Insert_Input | null) => {
-            setMealSelection(newValue);
             setValue(newValue);
             event.stopPropagation();
           }}

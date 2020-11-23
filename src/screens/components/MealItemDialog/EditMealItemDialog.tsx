@@ -16,7 +16,10 @@ import {
   useUpdateMealItemMutation,
 } from "../../../graphql/generated/graphql";
 import { ToastMessage } from "../../../components/ToastMessage";
-import { MealAutocomplete } from "../../../components/MealAutocomplete";
+import {
+  FoodOptionalType,
+  MealAutocomplete,
+} from "../../../components/MealAutocomplete";
 import { useUser } from "../../context/userContext";
 
 const useStyles = makeStyles(() => ({
@@ -39,12 +42,14 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
   const [error, setOpenErrorMessage] = React.useState();
   const [success, setOpenSuccessMessage] = React.useState();
 
-  const [selectedFood, setSelectedFood] = useState(mealItem);
+  const [selectedFood, setSelectedFood] = useState<FoodOptionalType>(
+    mealItem.recipe_id || mealItem.food
+  );
   const [weight, setWeight] = useState(mealItem.weight);
 
-  const mealItemProps = {
+  const mealItemProps = !(typeof selectedFood === "string") && {
     recipe_id: selectedFood?.recipe ? selectedFood?.recipe_id : null,
-    food: !selectedFood?.recipe ? selectedFood?.food : null,
+    food: !selectedFood?.recipe ? selectedFood?.id : null,
 
     energy_cal:
       (selectedFood?.energy_cal / (selectedFood?.weight || 100)) * weight,
@@ -84,8 +89,8 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
         <DialogContent>
           {selectedFood && (
             <MealAutocomplete
-              value={selectedFood.food || selectedFood.recipe_id}
-              setValue={setSelectedFood as any}
+              value={selectedFood}
+              setValue={setSelectedFood}
               className={classes.field}
             />
           )}
