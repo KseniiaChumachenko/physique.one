@@ -211,7 +211,6 @@ export const Login = () => {
           {FB_APP_ID && (
             <FacebookLoginWithButton
               appId={FB_APP_ID}
-              autoLoad={true}
               size={"small"}
               scope={"public_profile,email,picture"}
               fields={"email, name, picture"}
