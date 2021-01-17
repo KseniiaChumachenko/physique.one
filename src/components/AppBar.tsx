@@ -60,7 +60,7 @@ export const AppBar = () => {
       <MAppBar position={"sticky"}>
         <Toolbar>
           <Typography variant={"h6"}>
-            <Trans>Body monitor</Trans>
+            <Trans>ONE | Physique</Trans>
           </Typography>
           {user && (
             <IconButton

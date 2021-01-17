@@ -59,6 +59,10 @@ export type Food = {
   phosphorus?: Maybe<Scalars["numeric"]>;
   potassium?: Maybe<Scalars["numeric"]>;
   proteins: Scalars["numeric"];
+  /** An array relationship */
+  recipe_items: Array<Recipe_Item>;
+  /** An aggregated array relationship */
+  recipe_items_aggregate: Recipe_Item_Aggregate;
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
   type: Scalars["String"];
@@ -82,6 +86,24 @@ export type FoodMeal_Items_AggregateArgs = {
   offset?: Maybe<Scalars["Int"]>;
   order_by?: Maybe<Array<Meal_Item_Order_By>>;
   where?: Maybe<Meal_Item_Bool_Exp>;
+};
+
+/** columns and relationships of "food" */
+export type FoodRecipe_ItemsArgs = {
+  distinct_on?: Maybe<Array<Recipe_Item_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Recipe_Item_Order_By>>;
+  where?: Maybe<Recipe_Item_Bool_Exp>;
+};
+
+/** columns and relationships of "food" */
+export type FoodRecipe_Items_AggregateArgs = {
+  distinct_on?: Maybe<Array<Recipe_Item_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Recipe_Item_Order_By>>;
+  where?: Maybe<Recipe_Item_Bool_Exp>;
 };
 
 /** aggregated selection of "food" */
@@ -1387,6 +1409,10 @@ export type Recipe = {
   description?: Maybe<Scalars["String"]>;
   id: Scalars["uuid"];
   increment: Scalars["Int"];
+  /** An array relationship */
+  meal_items: Array<Meal_Item>;
+  /** An aggregated array relationship */
+  meal_items_aggregate: Meal_Item_Aggregate;
   name: Scalars["String"];
   /** An array relationship */
   recipe_items: Array<Recipe_Item>;
@@ -1395,6 +1421,24 @@ export type Recipe = {
   u_id: Scalars["uuid"];
   /** An object relationship */
   user: Users;
+};
+
+/** columns and relationships of "recipe" */
+export type RecipeMeal_ItemsArgs = {
+  distinct_on?: Maybe<Array<Meal_Item_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Meal_Item_Order_By>>;
+  where?: Maybe<Meal_Item_Bool_Exp>;
+};
+
+/** columns and relationships of "recipe" */
+export type RecipeMeal_Items_AggregateArgs = {
+  distinct_on?: Maybe<Array<Meal_Item_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Meal_Item_Order_By>>;
+  where?: Maybe<Meal_Item_Bool_Exp>;
 };
 
 /** columns and relationships of "recipe" */
@@ -1914,14 +1958,143 @@ export type Subscription_RootUsers_By_PkArgs = {
  */
 export type Users = {
   __typename?: "users";
+  email?: Maybe<Scalars["String"]>;
   fb_id?: Maybe<Scalars["String"]>;
   fb_picture_url?: Maybe<Scalars["String"]>;
   first_name?: Maybe<Scalars["name"]>;
   full_name?: Maybe<Scalars["String"]>;
   id: Scalars["uuid"];
   last_name?: Maybe<Scalars["name"]>;
+  /** An array relationship */
+  meal_items: Array<Meal_Item>;
+  /** An aggregated array relationship */
+  meal_items_aggregate: Meal_Item_Aggregate;
+  /** An array relationship */
+  meals: Array<Meal>;
+  /** An aggregated array relationship */
+  meals_aggregate: Meal_Aggregate;
   password?: Maybe<Scalars["String"]>;
+  /** An array relationship */
+  recipe_items: Array<Recipe_Item>;
+  /** An aggregated array relationship */
+  recipe_items_aggregate: Recipe_Item_Aggregate;
+  /** An array relationship */
+  recipes: Array<Recipe>;
+  /** An aggregated array relationship */
+  recipes_aggregate: Recipe_Aggregate;
   user_name?: Maybe<Scalars["name"]>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersMeal_ItemsArgs = {
+  distinct_on?: Maybe<Array<Meal_Item_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Meal_Item_Order_By>>;
+  where?: Maybe<Meal_Item_Bool_Exp>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersMeal_Items_AggregateArgs = {
+  distinct_on?: Maybe<Array<Meal_Item_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Meal_Item_Order_By>>;
+  where?: Maybe<Meal_Item_Bool_Exp>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersMealsArgs = {
+  distinct_on?: Maybe<Array<Meal_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Meal_Order_By>>;
+  where?: Maybe<Meal_Bool_Exp>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersMeals_AggregateArgs = {
+  distinct_on?: Maybe<Array<Meal_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Meal_Order_By>>;
+  where?: Maybe<Meal_Bool_Exp>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersRecipe_ItemsArgs = {
+  distinct_on?: Maybe<Array<Recipe_Item_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Recipe_Item_Order_By>>;
+  where?: Maybe<Recipe_Item_Bool_Exp>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersRecipe_Items_AggregateArgs = {
+  distinct_on?: Maybe<Array<Recipe_Item_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Recipe_Item_Order_By>>;
+  where?: Maybe<Recipe_Item_Bool_Exp>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersRecipesArgs = {
+  distinct_on?: Maybe<Array<Recipe_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Recipe_Order_By>>;
+  where?: Maybe<Recipe_Bool_Exp>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersRecipes_AggregateArgs = {
+  distinct_on?: Maybe<Array<Recipe_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Recipe_Order_By>>;
+  where?: Maybe<Recipe_Bool_Exp>;
 };
 
 /** aggregated selection of "users" */
@@ -1948,6 +2121,7 @@ export type Users_Aggregate_FieldsCountArgs = {
 /** aggregate max on columns */
 export type Users_Max_Fields = {
   __typename?: "users_max_fields";
+  email?: Maybe<Scalars["String"]>;
   fb_id?: Maybe<Scalars["String"]>;
   fb_picture_url?: Maybe<Scalars["String"]>;
   full_name?: Maybe<Scalars["String"]>;
@@ -1958,6 +2132,7 @@ export type Users_Max_Fields = {
 /** aggregate min on columns */
 export type Users_Min_Fields = {
   __typename?: "users_min_fields";
+  email?: Maybe<Scalars["String"]>;
   fb_id?: Maybe<Scalars["String"]>;
   fb_picture_url?: Maybe<Scalars["String"]>;
   full_name?: Maybe<Scalars["String"]>;
@@ -2365,6 +2540,8 @@ export enum Users_Constraint {
 /** select columns of table "users" */
 export enum Users_Select_Column {
   /** column name */
+  Email = "email",
+  /** column name */
   FbId = "fb_id",
   /** column name */
   FbPictureUrl = "fb_picture_url",
@@ -2384,6 +2561,8 @@ export enum Users_Select_Column {
 
 /** update columns of table "users" */
 export enum Users_Update_Column {
+  /** column name */
+  Email = "email",
   /** column name */
   FbId = "fb_id",
   /** column name */
@@ -2554,6 +2733,7 @@ export type Food_Bool_Exp = {
   phosphorus?: Maybe<Numeric_Comparison_Exp>;
   potassium?: Maybe<Numeric_Comparison_Exp>;
   proteins?: Maybe<Numeric_Comparison_Exp>;
+  recipe_items?: Maybe<Recipe_Item_Bool_Exp>;
   selenium?: Maybe<Numeric_Comparison_Exp>;
   sodium?: Maybe<Numeric_Comparison_Exp>;
   type?: Maybe<String_Comparison_Exp>;
@@ -2631,6 +2811,7 @@ export type Food_Insert_Input = {
   phosphorus?: Maybe<Scalars["numeric"]>;
   potassium?: Maybe<Scalars["numeric"]>;
   proteins?: Maybe<Scalars["numeric"]>;
+  recipe_items?: Maybe<Recipe_Item_Arr_Rel_Insert_Input>;
   selenium?: Maybe<Scalars["numeric"]>;
   sodium?: Maybe<Scalars["numeric"]>;
   type?: Maybe<Scalars["String"]>;
@@ -2761,6 +2942,7 @@ export type Food_Order_By = {
   phosphorus?: Maybe<Order_By>;
   potassium?: Maybe<Order_By>;
   proteins?: Maybe<Order_By>;
+  recipe_items_aggregate?: Maybe<Recipe_Item_Aggregate_Order_By>;
   selenium?: Maybe<Order_By>;
   sodium?: Maybe<Order_By>;
   type?: Maybe<Order_By>;
@@ -3523,6 +3705,7 @@ export type Recipe_Bool_Exp = {
   description?: Maybe<String_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   increment?: Maybe<Int_Comparison_Exp>;
+  meal_items?: Maybe<Meal_Item_Bool_Exp>;
   name?: Maybe<String_Comparison_Exp>;
   recipe_items?: Maybe<Recipe_Item_Bool_Exp>;
   u_id?: Maybe<Uuid_Comparison_Exp>;
@@ -3539,6 +3722,7 @@ export type Recipe_Insert_Input = {
   description?: Maybe<Scalars["String"]>;
   id?: Maybe<Scalars["uuid"]>;
   increment?: Maybe<Scalars["Int"]>;
+  meal_items?: Maybe<Meal_Item_Arr_Rel_Insert_Input>;
   name?: Maybe<Scalars["String"]>;
   recipe_items?: Maybe<Recipe_Item_Arr_Rel_Insert_Input>;
   u_id?: Maybe<Scalars["uuid"]>;
@@ -3806,6 +3990,7 @@ export type Recipe_Order_By = {
   description?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   increment?: Maybe<Order_By>;
+  meal_items_aggregate?: Maybe<Meal_Item_Aggregate_Order_By>;
   name?: Maybe<Order_By>;
   recipe_items_aggregate?: Maybe<Recipe_Item_Aggregate_Order_By>;
   u_id?: Maybe<Order_By>;
@@ -3892,30 +4077,41 @@ export type Users_Bool_Exp = {
   _and?: Maybe<Array<Maybe<Users_Bool_Exp>>>;
   _not?: Maybe<Users_Bool_Exp>;
   _or?: Maybe<Array<Maybe<Users_Bool_Exp>>>;
+  email?: Maybe<String_Comparison_Exp>;
   fb_id?: Maybe<String_Comparison_Exp>;
   fb_picture_url?: Maybe<String_Comparison_Exp>;
   first_name?: Maybe<Name_Comparison_Exp>;
   full_name?: Maybe<String_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   last_name?: Maybe<Name_Comparison_Exp>;
+  meal_items?: Maybe<Meal_Item_Bool_Exp>;
+  meals?: Maybe<Meal_Bool_Exp>;
   password?: Maybe<String_Comparison_Exp>;
+  recipe_items?: Maybe<Recipe_Item_Bool_Exp>;
+  recipes?: Maybe<Recipe_Bool_Exp>;
   user_name?: Maybe<Name_Comparison_Exp>;
 };
 
 /** input type for inserting data into table "users" */
 export type Users_Insert_Input = {
+  email?: Maybe<Scalars["String"]>;
   fb_id?: Maybe<Scalars["String"]>;
   fb_picture_url?: Maybe<Scalars["String"]>;
   first_name?: Maybe<Scalars["name"]>;
   full_name?: Maybe<Scalars["String"]>;
   id?: Maybe<Scalars["uuid"]>;
   last_name?: Maybe<Scalars["name"]>;
+  meal_items?: Maybe<Meal_Item_Arr_Rel_Insert_Input>;
+  meals?: Maybe<Meal_Arr_Rel_Insert_Input>;
   password?: Maybe<Scalars["String"]>;
+  recipe_items?: Maybe<Recipe_Item_Arr_Rel_Insert_Input>;
+  recipes?: Maybe<Recipe_Arr_Rel_Insert_Input>;
   user_name?: Maybe<Scalars["name"]>;
 };
 
 /** order by max() on columns of table "users" */
 export type Users_Max_Order_By = {
+  email?: Maybe<Order_By>;
   fb_id?: Maybe<Order_By>;
   fb_picture_url?: Maybe<Order_By>;
   full_name?: Maybe<Order_By>;
@@ -3925,6 +4121,7 @@ export type Users_Max_Order_By = {
 
 /** order by min() on columns of table "users" */
 export type Users_Min_Order_By = {
+  email?: Maybe<Order_By>;
   fb_id?: Maybe<Order_By>;
   fb_picture_url?: Maybe<Order_By>;
   full_name?: Maybe<Order_By>;
@@ -3947,13 +4144,18 @@ export type Users_On_Conflict = {
 
 /** ordering options when selecting data from "users" */
 export type Users_Order_By = {
+  email?: Maybe<Order_By>;
   fb_id?: Maybe<Order_By>;
   fb_picture_url?: Maybe<Order_By>;
   first_name?: Maybe<Order_By>;
   full_name?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   last_name?: Maybe<Order_By>;
+  meal_items_aggregate?: Maybe<Meal_Item_Aggregate_Order_By>;
+  meals_aggregate?: Maybe<Meal_Aggregate_Order_By>;
   password?: Maybe<Order_By>;
+  recipe_items_aggregate?: Maybe<Recipe_Item_Aggregate_Order_By>;
+  recipes_aggregate?: Maybe<Recipe_Aggregate_Order_By>;
   user_name?: Maybe<Order_By>;
 };
 
@@ -3964,6 +4166,7 @@ export type Users_Pk_Columns_Input = {
 
 /** input type for updating data in table "users" */
 export type Users_Set_Input = {
+  email?: Maybe<Scalars["String"]>;
   fb_id?: Maybe<Scalars["String"]>;
   fb_picture_url?: Maybe<Scalars["String"]>;
   first_name?: Maybe<Scalars["name"]>;
@@ -4198,12 +4401,27 @@ export type DeleteRecipeItemByPkMutation = { __typename?: "mutation_root" } & {
 };
 
 export type RegisterMutationVariables = Exact<{
-  user_name: Scalars["name"];
-  password: Scalars["String"];
+  first_name?: Maybe<Scalars["name"]>;
+  full_name?: Maybe<Scalars["String"]>;
+  last_name?: Maybe<Scalars["name"]>;
+  password?: Maybe<Scalars["String"]>;
+  user_name?: Maybe<Scalars["name"]>;
+  email?: Maybe<Scalars["String"]>;
 }>;
 
 export type RegisterMutation = { __typename?: "mutation_root" } & {
-  insert_users_one?: Maybe<{ __typename?: "users" } & Pick<Users, "id">>;
+  insert_users_one?: Maybe<
+    { __typename?: "users" } & Pick<
+      Users,
+      | "id"
+      | "first_name"
+      | "full_name"
+      | "last_name"
+      | "password"
+      | "user_name"
+      | "email"
+    >
+  >;
 };
 
 export type RegisterFacebookUserMutationVariables = Exact<{
@@ -4420,7 +4638,7 @@ export type RecipeListingSubscription = { __typename?: "subscription_root" } & {
 };
 
 export type LogInQueryVariables = Exact<{
-  user_name: Scalars["name"];
+  email: Scalars["String"];
   password: Scalars["String"];
 }>;
 
@@ -4428,7 +4646,14 @@ export type LogInQuery = { __typename?: "query_root" } & {
   users: Array<
     { __typename?: "users" } & Pick<
       Users,
-      "id" | "full_name" | "fb_id" | "fb_picture_url"
+      | "id"
+      | "email"
+      | "user_name"
+      | "first_name"
+      | "last_name"
+      | "full_name"
+      | "fb_id"
+      | "fb_picture_url"
     >
   >;
 };
@@ -4444,6 +4669,14 @@ export type IsFacebookUserQuery = { __typename?: "query_root" } & {
       "id" | "full_name" | "fb_id" | "fb_picture_url"
     >
   >;
+};
+
+export type GetForgottenPasswordByEmailQueryVariables = Exact<{
+  email: Scalars["String"];
+}>;
+
+export type GetForgottenPasswordByEmailQuery = { __typename?: "query_root" } & {
+  users: Array<{ __typename?: "users" } & Pick<Users, "password">>;
 };
 
 export const AddMealDocument = gql`
@@ -5040,9 +5273,31 @@ export type DeleteRecipeItemByPkMutationOptions = ApolloReactCommon.BaseMutation
   DeleteRecipeItemByPkMutationVariables
 >;
 export const RegisterDocument = gql`
-  mutation Register($user_name: name!, $password: String!) {
-    insert_users_one(object: { user_name: $user_name, password: $password }) {
+  mutation Register(
+    $first_name: name
+    $full_name: String
+    $last_name: name
+    $password: String
+    $user_name: name
+    $email: String
+  ) {
+    insert_users_one(
+      object: {
+        first_name: $first_name
+        full_name: $full_name
+        last_name: $last_name
+        password: $password
+        user_name: $user_name
+        email: $email
+      }
+    ) {
       id
+      first_name
+      full_name
+      last_name
+      password
+      user_name
+      email
     }
   }
 `;
@@ -5430,11 +5685,13 @@ export type RecipeListingSubscriptionResult = ApolloReactCommon.SubscriptionResu
   RecipeListingSubscription
 >;
 export const LogInDocument = gql`
-  query LogIn($user_name: name!, $password: String!) {
-    users(
-      where: { user_name: { _eq: $user_name }, password: { _eq: $password } }
-    ) {
+  query LogIn($email: String!, $password: String!) {
+    users(where: { email: { _eq: $email }, password: { _eq: $password } }) {
       id
+      email
+      user_name
+      first_name
+      last_name
       full_name
       fb_id
       fb_picture_url
@@ -5510,4 +5767,43 @@ export type IsFacebookUserLazyQueryHookResult = ReturnType<
 export type IsFacebookUserQueryResult = ApolloReactCommon.QueryResult<
   IsFacebookUserQuery,
   IsFacebookUserQueryVariables
+>;
+export const GetForgottenPasswordByEmailDocument = gql`
+  query GetForgottenPasswordByEmail($email: String!) {
+    users(where: { email: { _eq: $email } }) {
+      password
+    }
+  }
+`;
+export function useGetForgottenPasswordByEmailQuery(
+  baseOptions?: ApolloReactHooks.QueryHookOptions<
+    GetForgottenPasswordByEmailQuery,
+    GetForgottenPasswordByEmailQueryVariables
+  >
+) {
+  return ApolloReactHooks.useQuery<
+    GetForgottenPasswordByEmailQuery,
+    GetForgottenPasswordByEmailQueryVariables
+  >(GetForgottenPasswordByEmailDocument, baseOptions);
+}
+export function useGetForgottenPasswordByEmailLazyQuery(
+  baseOptions?: ApolloReactHooks.LazyQueryHookOptions<
+    GetForgottenPasswordByEmailQuery,
+    GetForgottenPasswordByEmailQueryVariables
+  >
+) {
+  return ApolloReactHooks.useLazyQuery<
+    GetForgottenPasswordByEmailQuery,
+    GetForgottenPasswordByEmailQueryVariables
+  >(GetForgottenPasswordByEmailDocument, baseOptions);
+}
+export type GetForgottenPasswordByEmailQueryHookResult = ReturnType<
+  typeof useGetForgottenPasswordByEmailQuery
+>;
+export type GetForgottenPasswordByEmailLazyQueryHookResult = ReturnType<
+  typeof useGetForgottenPasswordByEmailLazyQuery
+>;
+export type GetForgottenPasswordByEmailQueryResult = ApolloReactCommon.QueryResult<
+  GetForgottenPasswordByEmailQuery,
+  GetForgottenPasswordByEmailQueryVariables
 >;

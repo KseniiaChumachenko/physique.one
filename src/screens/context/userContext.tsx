@@ -5,7 +5,7 @@ import React, {
   useContext,
   useReducer,
 } from "react";
-import { Users } from "../../graphql/generated/graphql";
+import { Users_Insert_Input } from "../../graphql/generated/graphql";
 
 enum ActionTypes {
   UPDATE = "UPDATE",
@@ -15,7 +15,7 @@ interface Action {
   type: ActionTypes;
   payload: StateType;
 }
-type StateType = Users | null | undefined;
+type StateType = Users_Insert_Input | null | undefined;
 
 function reducer(state: StateType, action: Action) {
   switch (action.type) {

@@ -164,7 +164,7 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
               value={store.time}
               onChange={(time) => store.setTime(time as any)}
               label={<Trans>When</Trans>}
-              autoOk={true}
+              //autoOk={true}
             />
           </div>
           {store.meal_items.map((item, key) => (

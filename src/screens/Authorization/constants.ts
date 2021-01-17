@@ -1,0 +1,7 @@
+export const FB_APP_ID = process.env.FACEBOOK_APP_ID;
+export const EMAILJS_SERVICE_ID = process.env.EMAILJS_SERVICE_ID || "";
+export const EMAILJS_USER_ID = process.env.EMAILJS_USER_ID || "";
+export const EMAILJS_RESET_PASSWORD_TEMPLATE_ID =
+  process.env.EMAILJS_RESET_PASSWORD_TEMPLATE_ID || "";
+export const EMAILJS_REGISTRATION_CONFIRMATION_TEMPLATE_ID =
+  process.env.EMAILJS_REGISTRATION_CONFIRMATION_TEMPLATE_ID || "";

@@ -155,11 +155,15 @@ subscription RecipeListing {
   }
 }
 
-query LogIn($user_name: name!, $password: String!) {
+query LogIn($email: String!, $password: String!) {
   users(
-    where: { user_name: { _eq: $user_name }, password: { _eq: $password } }
+    where: { email: { _eq: $email }, password: { _eq: $password } }
   ) {
     id
+    email
+    user_name
+    first_name
+    last_name
     full_name
     fb_id
     fb_picture_url
@@ -172,5 +176,11 @@ query IsFacebookUser($fb_id: String!) {
     full_name
     fb_id
     fb_picture_url
+  }
+}
+
+query GetForgottenPasswordByEmail($email: String!) {
+  users(where: { email: { _eq: $email } }) {
+    password
   }
 }

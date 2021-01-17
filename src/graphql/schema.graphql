@@ -66,6 +66,32 @@ type food {
     phosphorus: numeric
     potassium: numeric
     proteins: numeric!
+    "An array relationship"
+    recipe_items(
+        "distinct select on columns"
+        distinct_on: [recipe_item_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [recipe_item_order_by!],
+        "filter the rows returned"
+        where: recipe_item_bool_exp
+    ): [recipe_item!]!
+    "An aggregated array relationship"
+    recipe_items_aggregate(
+        "distinct select on columns"
+        distinct_on: [recipe_item_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [recipe_item_order_by!],
+        "filter the rows returned"
+        where: recipe_item_bool_exp
+    ): recipe_item_aggregate!
     selenium: numeric
     sodium: numeric
     type: String!
@@ -1235,6 +1261,32 @@ type recipe {
     description: String
     id: uuid!
     increment: Int!
+    "An array relationship"
+    meal_items(
+        "distinct select on columns"
+        distinct_on: [meal_item_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [meal_item_order_by!],
+        "filter the rows returned"
+        where: meal_item_bool_exp
+    ): [meal_item!]!
+    "An aggregated array relationship"
+    meal_items_aggregate(
+        "distinct select on columns"
+        distinct_on: [meal_item_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [meal_item_order_by!],
+        "filter the rows returned"
+        where: meal_item_bool_exp
+    ): meal_item_aggregate!
     name: String!
     "An array relationship"
     recipe_items(
@@ -1719,13 +1771,118 @@ List of users
 columns and relationships of "users"
 """
 type users {
+    email: String
     fb_id: String
     fb_picture_url: String
     first_name: name
     full_name: String
     id: uuid!
     last_name: name
+    "An array relationship"
+    meal_items(
+        "distinct select on columns"
+        distinct_on: [meal_item_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [meal_item_order_by!],
+        "filter the rows returned"
+        where: meal_item_bool_exp
+    ): [meal_item!]!
+    "An aggregated array relationship"
+    meal_items_aggregate(
+        "distinct select on columns"
+        distinct_on: [meal_item_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [meal_item_order_by!],
+        "filter the rows returned"
+        where: meal_item_bool_exp
+    ): meal_item_aggregate!
+    "An array relationship"
+    meals(
+        "distinct select on columns"
+        distinct_on: [meal_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [meal_order_by!],
+        "filter the rows returned"
+        where: meal_bool_exp
+    ): [meal!]!
+    "An aggregated array relationship"
+    meals_aggregate(
+        "distinct select on columns"
+        distinct_on: [meal_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [meal_order_by!],
+        "filter the rows returned"
+        where: meal_bool_exp
+    ): meal_aggregate!
     password: String
+    "An array relationship"
+    recipe_items(
+        "distinct select on columns"
+        distinct_on: [recipe_item_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [recipe_item_order_by!],
+        "filter the rows returned"
+        where: recipe_item_bool_exp
+    ): [recipe_item!]!
+    "An aggregated array relationship"
+    recipe_items_aggregate(
+        "distinct select on columns"
+        distinct_on: [recipe_item_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [recipe_item_order_by!],
+        "filter the rows returned"
+        where: recipe_item_bool_exp
+    ): recipe_item_aggregate!
+    "An array relationship"
+    recipes(
+        "distinct select on columns"
+        distinct_on: [recipe_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [recipe_order_by!],
+        "filter the rows returned"
+        where: recipe_bool_exp
+    ): [recipe!]!
+    "An aggregated array relationship"
+    recipes_aggregate(
+        "distinct select on columns"
+        distinct_on: [recipe_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [recipe_order_by!],
+        "filter the rows returned"
+        where: recipe_bool_exp
+    ): recipe_aggregate!
     user_name: name
 }
 
@@ -1744,6 +1901,7 @@ type users_aggregate_fields {
 
 "aggregate max on columns"
 type users_max_fields {
+    email: String
     fb_id: String
     fb_picture_url: String
     full_name: String
@@ -1753,6 +1911,7 @@ type users_max_fields {
 
 "aggregate min on columns"
 type users_min_fields {
+    email: String
     fb_id: String
     fb_picture_url: String
     full_name: String
@@ -2159,6 +2318,8 @@ enum users_constraint {
 "select columns of table \"users\""
 enum users_select_column {
     "column name"
+    email
+    "column name"
     fb_id
     "column name"
     fb_picture_url
@@ -2178,6 +2339,8 @@ enum users_select_column {
 
 "update columns of table \"users\""
 enum users_update_column {
+    "column name"
+    email
     "column name"
     fb_id
     "column name"
@@ -2348,6 +2511,7 @@ input food_bool_exp {
     phosphorus: numeric_comparison_exp
     potassium: numeric_comparison_exp
     proteins: numeric_comparison_exp
+    recipe_items: recipe_item_bool_exp
     selenium: numeric_comparison_exp
     sodium: numeric_comparison_exp
     type: String_comparison_exp
@@ -2425,6 +2589,7 @@ input food_insert_input {
     phosphorus: numeric
     potassium: numeric
     proteins: numeric
+    recipe_items: recipe_item_arr_rel_insert_input
     selenium: numeric
     sodium: numeric
     type: String
@@ -2555,6 +2720,7 @@ input food_order_by {
     phosphorus: order_by
     potassium: order_by
     proteins: order_by
+    recipe_items_aggregate: recipe_item_aggregate_order_by
     selenium: order_by
     sodium: order_by
     type: order_by
@@ -3317,6 +3483,7 @@ input recipe_bool_exp {
     description: String_comparison_exp
     id: uuid_comparison_exp
     increment: Int_comparison_exp
+    meal_items: meal_item_bool_exp
     name: String_comparison_exp
     recipe_items: recipe_item_bool_exp
     u_id: uuid_comparison_exp
@@ -3333,6 +3500,7 @@ input recipe_insert_input {
     description: String
     id: uuid
     increment: Int
+    meal_items: meal_item_arr_rel_insert_input
     name: String
     recipe_items: recipe_item_arr_rel_insert_input
     u_id: uuid
@@ -3600,6 +3768,7 @@ input recipe_order_by {
     description: order_by
     id: order_by
     increment: order_by
+    meal_items_aggregate: meal_item_aggregate_order_by
     name: order_by
     recipe_items_aggregate: recipe_item_aggregate_order_by
     u_id: order_by
@@ -3686,30 +3855,41 @@ input users_bool_exp {
     _and: [users_bool_exp]
     _not: users_bool_exp
     _or: [users_bool_exp]
+    email: String_comparison_exp
     fb_id: String_comparison_exp
     fb_picture_url: String_comparison_exp
     first_name: name_comparison_exp
     full_name: String_comparison_exp
     id: uuid_comparison_exp
     last_name: name_comparison_exp
+    meal_items: meal_item_bool_exp
+    meals: meal_bool_exp
     password: String_comparison_exp
+    recipe_items: recipe_item_bool_exp
+    recipes: recipe_bool_exp
     user_name: name_comparison_exp
 }
 
 "input type for inserting data into table \"users\""
 input users_insert_input {
+    email: String
     fb_id: String
     fb_picture_url: String
     first_name: name
     full_name: String
     id: uuid
     last_name: name
+    meal_items: meal_item_arr_rel_insert_input
+    meals: meal_arr_rel_insert_input
     password: String
+    recipe_items: recipe_item_arr_rel_insert_input
+    recipes: recipe_arr_rel_insert_input
     user_name: name
 }
 
 "order by max() on columns of table \"users\""
 input users_max_order_by {
+    email: order_by
     fb_id: order_by
     fb_picture_url: order_by
     full_name: order_by
@@ -3719,6 +3899,7 @@ input users_max_order_by {
 
 "order by min() on columns of table \"users\""
 input users_min_order_by {
+    email: order_by
     fb_id: order_by
     fb_picture_url: order_by
     full_name: order_by
@@ -3741,13 +3922,18 @@ input users_on_conflict {
 
 "ordering options when selecting data from \"users\""
 input users_order_by {
+    email: order_by
     fb_id: order_by
     fb_picture_url: order_by
     first_name: order_by
     full_name: order_by
     id: order_by
     last_name: order_by
+    meal_items_aggregate: meal_item_aggregate_order_by
+    meals_aggregate: meal_aggregate_order_by
     password: order_by
+    recipe_items_aggregate: recipe_item_aggregate_order_by
+    recipes_aggregate: recipe_aggregate_order_by
     user_name: order_by
 }
 
@@ -3758,6 +3944,7 @@ input users_pk_columns_input {
 
 "input type for updating data in table \"users\""
 input users_set_input {
+    email: String
     fb_id: String
     fb_picture_url: String
     first_name: name
