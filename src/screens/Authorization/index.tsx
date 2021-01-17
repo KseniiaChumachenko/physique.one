@@ -26,7 +26,7 @@ const ColoredSection = ({
 
   return (
     <Slide
-      direction={state === Form.LOGIN ? "right" : "left"}
+      direction={state === Form.LOGIN ? "left" : "right"}
       in={true}
       mountOnEnter
       unmountOnExit
@@ -66,13 +66,13 @@ export const Authorization = () => {
       <div className={classes.container}>
         {state === Form.LOGIN ? (
           <>
-            <LoginForm />
             <ColoredSection state={state} setState={setState} />
+            <LoginForm />
           </>
         ) : (
           <>
-            <ColoredSection state={state} setState={setState} />
             <RegisterForm />
+            <ColoredSection state={state} setState={setState} />
           </>
         )}
       </div>

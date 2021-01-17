@@ -8,12 +8,20 @@ export const useStyles = makeStyles((theme) =>
       display: "flex",
       width: "100%",
       height: "100vh",
+      [theme.breakpoints.down("md")]: {
+        display: "block",
+      },
     },
     section: {
       width: "50%",
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
+      padding: theme.spacing(1),
+      [theme.breakpoints.down("md")]: {
+        width: "100%",
+        height: "100%",
+      },
     },
     coloredSection: {
       width: "50%",
@@ -21,8 +29,13 @@ export const useStyles = makeStyles((theme) =>
       flexDirection: "column",
       alignItems: "center",
       justifyContent: "center",
+      padding: theme.spacing(1),
       backgroundColor: theme.palette.primary.main,
       color: "white",
+      [theme.breakpoints.down("md")]: {
+        width: "100%",
+        height: "100%",
+      },
     },
     buttonOverride: {
       color: "white",
