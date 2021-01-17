@@ -10,7 +10,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.55",
     "@material-ui/pickers": "^4.0.0-alpha.12",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "emailjs-com": "^2.6.4",
     "lodash.omit": "^4.5.0",
     "mobx": "^5.15.4",
