@@ -1,8 +1,8 @@
 import React from "react";
+import moment from "moment";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import { BottomNavigation } from "../components/BottomNavigation";
 import { makeStyles } from "@material-ui/core/styles";
-import { Summary } from "./Summary";
 import { Meals } from "./Meals";
 import { FoodLibrary } from "./FoodLibrary";
 import { Recipes } from "./Recipes";
@@ -34,14 +34,18 @@ export const Router = () => {
       {/* Public routes*/}
       <Route path={"/auth"} component={Authorization} exact />
       <Route path={"/privacyPolicy"} component={PrivacyPolicy} exact />
-      {!user ? <Redirect to={"/auth"} /> : <Redirect to={"/"} />}
+      {!user ? (
+        <Redirect to={"/auth"} />
+      ) : (
+        <Redirect to={`/ration/${moment().week()}`} />
+      )}
       {/* Private routes*/}
       {user && (
         <>
           <AppBar />
           <main className={classes.childrenContainer}>
             <div className={classes.childrenPadding}>
-              <Route path={"/"} component={Summary} exact />
+              {/*<Route path={"/"} component={Summary} exact />*/}
               <Route path={"/ration/:weekNumber"} component={Meals} exact />
               <Route path={"/foodLibrary"} component={FoodLibrary} exact />
               <Route path={"/recipes"} component={Recipes} exact />

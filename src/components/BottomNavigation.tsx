@@ -9,7 +9,6 @@ import {
   Paper,
 } from "@material-ui/core";
 import {
-  DashboardRounded,
   FastfoodRounded,
   LocalGroceryStoreRounded,
   MenuBookRounded,
@@ -44,11 +43,11 @@ export const BottomNavigation = () => {
         showLabels
         className={classes.root}
       >
-        <BottomNavigationAction
-          value={"/"}
-          label={<Trans>Summary</Trans>}
-          icon={<DashboardRounded />}
-        />
+        {/*<BottomNavigationAction*/}
+        {/*  value={"/"}*/}
+        {/*  label={<Trans>Summary</Trans>}*/}
+        {/*  icon={<DashboardRounded />}*/}
+        {/*/>*/}
         <BottomNavigationAction
           value={`/ration/${moment().week()}`}
           label={<Trans>Meals</Trans>}
