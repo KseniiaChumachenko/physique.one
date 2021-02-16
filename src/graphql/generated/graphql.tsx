@@ -415,6 +415,7 @@ export type Food_Type = {
   food: Array<Food>;
   /** An aggregated array relationship */
   food_aggregate: Food_Aggregate;
+  img_url?: Maybe<Scalars["String"]>;
   value: Scalars["String"];
 };
 
@@ -461,6 +462,7 @@ export type Food_Type_Aggregate_FieldsCountArgs = {
 export type Food_Type_Max_Fields = {
   __typename?: "food_type_max_fields";
   decription?: Maybe<Scalars["String"]>;
+  img_url?: Maybe<Scalars["String"]>;
   value?: Maybe<Scalars["String"]>;
 };
 
@@ -468,6 +470,7 @@ export type Food_Type_Max_Fields = {
 export type Food_Type_Min_Fields = {
   __typename?: "food_type_min_fields";
   decription?: Maybe<Scalars["String"]>;
+  img_url?: Maybe<Scalars["String"]>;
   value?: Maybe<Scalars["String"]>;
 };
 
@@ -1973,7 +1976,7 @@ export type Users = {
   meals: Array<Meal>;
   /** An aggregated array relationship */
   meals_aggregate: Meal_Aggregate;
-  password?: Maybe<Scalars["String"]>;
+  password: Scalars["String"];
   /** An array relationship */
   recipe_items: Array<Recipe_Item>;
   /** An aggregated array relationship */
@@ -2240,6 +2243,8 @@ export enum Food_Type_Select_Column {
   /** column name */
   Decription = "decription",
   /** column name */
+  ImgUrl = "img_url",
+  /** column name */
   Value = "value",
 }
 
@@ -2247,6 +2252,8 @@ export enum Food_Type_Select_Column {
 export enum Food_Type_Update_Column {
   /** column name */
   Decription = "decription",
+  /** column name */
+  ImgUrl = "img_url",
   /** column name */
   Value = "value",
 }
@@ -2525,6 +2532,8 @@ export enum Recipe_Update_Column {
 
 /** unique or primary key constraints on table "users" */
 export enum Users_Constraint {
+  /** unique or primary key constraint */
+  UsersEmailKey = "users_email_key",
   /** unique or primary key constraint */
   UsersFbIdKey = "users_fb_id_key",
   /** unique or primary key constraint */
@@ -3158,6 +3167,7 @@ export type Food_Type_Bool_Exp = {
   _or?: Maybe<Array<Maybe<Food_Type_Bool_Exp>>>;
   decription?: Maybe<String_Comparison_Exp>;
   food?: Maybe<Food_Bool_Exp>;
+  img_url?: Maybe<String_Comparison_Exp>;
   value?: Maybe<String_Comparison_Exp>;
 };
 
@@ -3165,18 +3175,21 @@ export type Food_Type_Bool_Exp = {
 export type Food_Type_Insert_Input = {
   decription?: Maybe<Scalars["String"]>;
   food?: Maybe<Food_Arr_Rel_Insert_Input>;
+  img_url?: Maybe<Scalars["String"]>;
   value?: Maybe<Scalars["String"]>;
 };
 
 /** order by max() on columns of table "food_type" */
 export type Food_Type_Max_Order_By = {
   decription?: Maybe<Order_By>;
+  img_url?: Maybe<Order_By>;
   value?: Maybe<Order_By>;
 };
 
 /** order by min() on columns of table "food_type" */
 export type Food_Type_Min_Order_By = {
   decription?: Maybe<Order_By>;
+  img_url?: Maybe<Order_By>;
   value?: Maybe<Order_By>;
 };
 
@@ -3197,6 +3210,7 @@ export type Food_Type_On_Conflict = {
 export type Food_Type_Order_By = {
   decription?: Maybe<Order_By>;
   food_aggregate?: Maybe<Food_Aggregate_Order_By>;
+  img_url?: Maybe<Order_By>;
   value?: Maybe<Order_By>;
 };
 
@@ -3208,6 +3222,7 @@ export type Food_Type_Pk_Columns_Input = {
 /** input type for updating data in table "food_type" */
 export type Food_Type_Set_Input = {
   decription?: Maybe<Scalars["String"]>;
+  img_url?: Maybe<Scalars["String"]>;
   value?: Maybe<Scalars["String"]>;
 };
 
@@ -4594,7 +4609,10 @@ export type FoodTypesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type FoodTypesQuery = { __typename?: "query_root" } & {
   food_type: Array<
-    { __typename?: "food_type" } & Pick<Food_Type, "value" | "decription">
+    { __typename?: "food_type" } & Pick<
+      Food_Type,
+      "value" | "decription" | "img_url"
+    >
   >;
 };
 
@@ -5601,6 +5619,7 @@ export const FoodTypesDocument = gql`
     food_type {
       value
       decription
+      img_url
     }
   }
 `;

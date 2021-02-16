@@ -120,6 +120,7 @@ query FoodTypes {
   food_type {
     value
     decription
+    img_url
   }
 }
 

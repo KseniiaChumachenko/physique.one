@@ -3,6 +3,7 @@ import moment from "moment";
 import { BrowserRouter, Route, Redirect } from "react-router-dom";
 import { BottomNavigation } from "../components/BottomNavigation";
 import { makeStyles } from "@material-ui/core/styles";
+import { AppBar } from "src/components/AppBar";
 import { Meals } from "./Meals";
 import { FoodLibrary } from "./FoodLibrary";
 import { Recipes } from "./Recipes";
@@ -10,7 +11,7 @@ import { Authorization } from "./Authorization";
 import { PrivacyPolicy } from "./PrivacyPolicy";
 import { useUser } from "./context/userContext";
 import { Profile } from "./Profile";
-import { AppBar } from "src/components/AppBar";
+import { Pantry } from "./Pantry";
 
 const useStyles = makeStyles(() => ({
   childrenContainer: {
@@ -50,6 +51,7 @@ export const Router = () => {
               <Route path={"/foodLibrary"} component={FoodLibrary} exact />
               <Route path={"/recipes"} component={Recipes} exact />
               <Route path={"/profile"} component={Profile} exact />
+              <Route path={"/pantry"} component={Pantry} exact />
             </div>
           </main>
           <BottomNavigation />
