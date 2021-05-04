@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import moment from "moment";
 import { useHistory } from "react-router-dom";
 import { send } from "emailjs-com";
 import { Button, TextField } from "@material-ui/core";
 import { ApolloError } from "@apollo/client";
 import { Trans } from "@lingui/react";
+
 import { useUpdateUser } from "../context/userContext";
 import {
   useRegisterMutation,
@@ -31,7 +33,11 @@ export const RegisterForm = () => {
   const [error, setError] = useState<ApolloError | undefined>(undefined);
 
   const [insert_users_one] = useRegisterMutation({
-    variables: state,
+    variables: {
+      ...state,
+      password:
+        password.confirmation === password.initial ? password.confirmation : "",
+    },
     onCompleted: ({ insert_users_one }) => {
       setUser(insert_users_one);
       send(
@@ -44,18 +50,21 @@ export const RegisterForm = () => {
         },
         EMAILJS_USER_ID
       );
-      history.push("/");
+      history.push(`/ration/${moment().week()}`);
     },
     onError: (error1) => setError(error1),
   });
 
   const handleRegister = () => insert_users_one();
 
-  const validationUnmet =
-    !!state?.email ||
-    !!state?.password ||
-    !!state?.first_name ||
-    !!state?.last_name;
+  const validationUnmet = !(
+    state?.email &&
+    password?.initial &&
+    password?.confirmation &&
+    password?.initial === password?.confirmation &&
+    state?.first_name &&
+    state?.last_name
+  );
 
   return (
     <FormCard
@@ -111,9 +120,6 @@ export const RegisterForm = () => {
             }
             onChange={(e) => {
               setPassword({ ...password, confirmation: e.target.value });
-              if (password.confirmation === password.initial) {
-                setState({ ...state, password: e.target.value });
-              }
             }}
           />
         </>
