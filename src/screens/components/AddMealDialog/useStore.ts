@@ -1,10 +1,11 @@
 import omit from "lodash.omit";
-import { useLocalStore } from "mobx-react-lite";
+import { useLocalObservable } from "mobx-react-lite";
 import {
   Food,
   Meal_Item_Insert_Input,
 } from "../../../graphql/generated/graphql";
 import moment, { Moment } from "moment";
+import { v4 } from "uuid";
 
 interface State {
   name?: string | null;
@@ -26,13 +27,14 @@ interface State {
     foodId?: string;
     weight?: number;
   }): void;
-  remove_meal_item(indexOfItem: number): void;
+  remove_meal_item(id: string): void;
 }
 
 const calculateMacronutrient = (nutrientPer100G: number, weight: number) =>
   (nutrientPer100G / 100) * weight;
 
 const standardMealItem = (food: Food, weight = 100) => ({
+  id: v4(),
   food: food.id,
   weight: weight,
   carbohydrates: calculateMacronutrient(food.carbohydrates, weight),
@@ -49,46 +51,42 @@ export function useStore(
   time?: any,
   meal_items?: Meal_Item_Insert_Input[]
 ) {
-  const store: State = useLocalStore(
-    () => ({
-      name: name,
-      setName: (newName) => {
-        store.name = newName;
-      },
+  const store: State = useLocalObservable(() => ({
+    name: name,
+    setName: (newName) => {
+      store.name = newName;
+    },
 
-      time: moment(time + " " + date).format() || new Date(),
-      setTime: (newTime) => {
-        store.time = newTime;
-      },
+    time: moment(time + " " + date).format() || new Date(),
+    setTime: (newTime) => {
+      store.time = newTime;
+    },
 
-      foods: fetchedFoods,
+    foods: fetchedFoods,
 
-      meal_items: meal_items?.map((item) => omit(item, "__typename")) || [
-        standardMealItem(fetchedFoods[0]),
-      ],
+    meal_items: meal_items?.map((item) => omit(item, "__typename")) || [
+      standardMealItem(fetchedFoods[0]),
+    ],
 
-      add_meal_item: () => {
-        store.meal_items.push(standardMealItem(fetchedFoods[0]));
-      },
-      update_meal_item: ({
-        indexOfItem = 0,
-        foodId = fetchedFoods[0].id,
-        weight = 100,
-      }) => {
-        const foodById: Food | undefined = fetchedFoods.find(
-          (item: Food) => item.id === foodId
-        );
+    add_meal_item: () => {
+      store.meal_items.push(standardMealItem(fetchedFoods[0]));
+    },
+    update_meal_item: ({
+      indexOfItem = 0,
+      foodId = fetchedFoods[0].id,
+      weight = 100,
+    }) => {
+      const foodById: Food | undefined = fetchedFoods.find(
+        (item: Food) => item.id === foodId
+      );
 
-        store.meal_items[indexOfItem] = standardMealItem(foodById!, weight);
-      },
-      remove_meal_item: (indexOfItem: number) => {
-        store.meal_items = store.meal_items.filter(
-          (item, index) => indexOfItem !== index
-        );
-      },
-    }),
-    { name, time, meal_items }
-  );
+      store.meal_items[indexOfItem] = standardMealItem(foodById!, weight);
+    },
+    //TODO: broken
+    remove_meal_item: (id: string) => {
+      store.meal_items = store.meal_items.filter((item) => id !== item.id);
+    },
+  }));
 
   return store;
 }

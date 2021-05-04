@@ -1,4 +1,5 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React from "react";
+import { observer } from "mobx-react-lite";
 import {
   Card,
   CardActions,
@@ -10,105 +11,109 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Trans } from "@lingui/react";
-import { EditRounded } from "@material-ui/icons";
+import { EditRounded, DeleteRounded } from "@material-ui/icons";
+
+import { usePantryStore } from "./store/usePantryStore";
+import { PantryCardType } from "./store/model";
 
 const useStyles = makeStyles((theme) => ({
   tileImg: {
     height: "inherit",
     width: "auto",
   },
+  nameContainer: {
+    display: "flex",
+  },
   editCard: {
     height: "inherit",
   },
 }));
 
-interface P {
-  mode: "edit" | "regular";
-  name?: string;
-  img_url?: string;
-  description?: string;
-  setAddCategory?: Dispatch<SetStateAction<boolean>>;
-}
+export const CategoryCard = observer(
+  ({ data, loading, error, isActive }: PantryCardType) => {
+    const classes = useStyles();
+    const {
+      handleSetActiveCard,
+      handleResetActiveCards,
+      handleDeleteFoodType,
+      handleFoodTypeSubmit,
+      handleFoodTypeUpdate,
+    } = usePantryStore();
+    //const [state, setMode] = useState(mode);
 
-export function CategoryCard({
-  mode = "regular",
-  name = "",
-  description = "",
-  img_url = "",
-  setAddCategory,
-}: P) {
-  const [state, setMode] = useState(mode);
-  const [title, setTitle] = useState(name);
-  const [img, setImg] = useState(img_url);
-  const [desc, setDesc] = useState(description);
-  const [unit, setUnit] = useState("");
-  const classes = useStyles();
-  return (
-    <>
-      {state === "regular" ? (
-        <>
-          <img src={img} alt={"image url"} className={classes.tileImg} />
-          <GridListTileBar
-            title={title}
-            subtitle={desc}
-            actionIcon={
-              <IconButton
-                onClick={() => setMode("edit")}
-                children={<EditRounded />}
-              />
-            }
-          />
-        </>
-      ) : (
-        <>
-          <Card variant={"outlined"} className={classes.editCard}>
-            <CardContent>
-              <TextField
-                className={""}
-                variant={"outlined"}
-                label={<Trans>Category title</Trans>}
-                defaultValue={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <TextField
-                className={""}
-                variant={"outlined"}
-                label={<Trans>Description</Trans>}
-                defaultValue={desc}
-                onChange={(e) => setDesc(e.target.value)}
-              />
-              <TextField
-                className={""}
-                variant={"outlined"}
-                label={<Trans>Image URL</Trans>}
-                defaultValue={img_url}
-                onChange={(e) => setImg(e.target.value)}
-              />
-              <TextField
-                className={""}
-                variant={"outlined"}
-                label={<Trans>Unit</Trans>}
-                defaultValue={unit}
-                onChange={(e) => setUnit(e.target.value)}
-              />
-            </CardContent>
-            <CardActions>
-              <Button color={"primary"}>
-                <Trans>Save</Trans>
-              </Button>
-              <Button
-                onClick={
-                  setAddCategory
-                    ? () => setAddCategory(false)
-                    : () => setMode("regular")
-                }
-              >
-                <Trans>Cancel</Trans>
-              </Button>
-            </CardActions>
-          </Card>
-        </>
-      )}
-    </>
-  );
-}
+    return (
+      <>
+        {!isActive ? (
+          <>
+            <img
+              src={data?.img_url as string}
+              alt={"image url"}
+              className={classes.tileImg}
+            />
+            <GridListTileBar
+              title={data?.value}
+              subtitle={data?.decription}
+              actionIcon={
+                <div className={classes.nameContainer}>
+                  <IconButton
+                    onClick={() => handleSetActiveCard(data!.value)}
+                    children={<EditRounded />}
+                  />
+                  <IconButton
+                    onClick={handleDeleteFoodType(data!.value)}
+                    disabled={(data?.food_aggregate?.aggregate?.count || 0) > 0}
+                    children={<DeleteRounded />}
+                  />
+                </div>
+              }
+            />
+          </>
+        ) : (
+          <>
+            <Card variant={"outlined"} className={classes.editCard}>
+              <CardContent>
+                <TextField
+                  required={true}
+                  error={error && !data?.value}
+                  className={""}
+                  variant={"outlined"}
+                  label={<Trans>Category title</Trans>}
+                  defaultValue={data?.value}
+                  onChange={handleFoodTypeUpdate("value")}
+                />
+                <TextField
+                  required={true}
+                  error={error && !data?.decription}
+                  className={""}
+                  variant={"outlined"}
+                  label={<Trans>Description</Trans>}
+                  defaultValue={data?.decription}
+                  onChange={handleFoodTypeUpdate("decription")}
+                />
+                <TextField
+                  className={""}
+                  variant={"outlined"}
+                  label={<Trans>Image URL</Trans>}
+                  defaultValue={data?.img_url}
+                  onChange={handleFoodTypeUpdate("img_url")}
+                />
+              </CardContent>
+              <CardActions>
+                <Button
+                  color={"primary"}
+                  onClick={handleFoodTypeSubmit}
+                  disabled={loading}
+                >
+                  <Trans>Save</Trans>
+                </Button>
+                <Button onClick={handleResetActiveCards} disabled={loading}>
+                  <Trans>Cancel</Trans>
+                </Button>
+              </CardActions>
+            </Card>
+          </>
+        )}
+      </>
+    );
+  }
+);

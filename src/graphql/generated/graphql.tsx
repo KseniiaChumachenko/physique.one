@@ -4454,6 +4454,40 @@ export type RegisterFacebookUserMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
+export type AddFoodTypeMutationVariables = Exact<{
+  decription?: Maybe<Scalars["String"]>;
+  img_url?: Maybe<Scalars["String"]>;
+  value: Scalars["String"];
+}>;
+
+export type AddFoodTypeMutation = { __typename?: "mutation_root" } & {
+  insert_food_type_one?: Maybe<
+    { __typename?: "food_type" } & Pick<Food_Type, "value">
+  >;
+};
+
+export type DeleteFoodTypeMutationVariables = Exact<{
+  value: Scalars["String"];
+}>;
+
+export type DeleteFoodTypeMutation = { __typename?: "mutation_root" } & {
+  delete_food_type_by_pk?: Maybe<
+    { __typename?: "food_type" } & Pick<Food_Type, "value">
+  >;
+};
+
+export type UpdateFoodTypeMutationVariables = Exact<{
+  decription?: Maybe<Scalars["String"]>;
+  img_url?: Maybe<Scalars["String"]>;
+  value: Scalars["String"];
+}>;
+
+export type UpdateFoodTypeMutation = { __typename?: "mutation_root" } & {
+  update_food_type_by_pk?: Maybe<
+    { __typename?: "food_type" } & Pick<Food_Type, "value">
+  >;
+};
+
 export type MealsByDateSubscriptionVariables = Exact<{
   date?: Maybe<Scalars["date"]>;
   u_id?: Maybe<Scalars["uuid"]>;
@@ -5378,6 +5412,99 @@ export type RegisterFacebookUserMutationResult = ApolloReactCommon.MutationResul
 export type RegisterFacebookUserMutationOptions = ApolloReactCommon.BaseMutationOptions<
   RegisterFacebookUserMutation,
   RegisterFacebookUserMutationVariables
+>;
+export const AddFoodTypeDocument = gql`
+  mutation AddFoodType($decription: String, $img_url: String, $value: String!) {
+    insert_food_type_one(
+      object: { img_url: $img_url, decription: $decription, value: $value }
+    ) {
+      value
+    }
+  }
+`;
+export function useAddFoodTypeMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    AddFoodTypeMutation,
+    AddFoodTypeMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    AddFoodTypeMutation,
+    AddFoodTypeMutationVariables
+  >(AddFoodTypeDocument, baseOptions);
+}
+export type AddFoodTypeMutationHookResult = ReturnType<
+  typeof useAddFoodTypeMutation
+>;
+export type AddFoodTypeMutationResult = ApolloReactCommon.MutationResult<
+  AddFoodTypeMutation
+>;
+export type AddFoodTypeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  AddFoodTypeMutation,
+  AddFoodTypeMutationVariables
+>;
+export const DeleteFoodTypeDocument = gql`
+  mutation DeleteFoodType($value: String!) {
+    delete_food_type_by_pk(value: $value) {
+      value
+    }
+  }
+`;
+export function useDeleteFoodTypeMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    DeleteFoodTypeMutation,
+    DeleteFoodTypeMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    DeleteFoodTypeMutation,
+    DeleteFoodTypeMutationVariables
+  >(DeleteFoodTypeDocument, baseOptions);
+}
+export type DeleteFoodTypeMutationHookResult = ReturnType<
+  typeof useDeleteFoodTypeMutation
+>;
+export type DeleteFoodTypeMutationResult = ApolloReactCommon.MutationResult<
+  DeleteFoodTypeMutation
+>;
+export type DeleteFoodTypeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  DeleteFoodTypeMutation,
+  DeleteFoodTypeMutationVariables
+>;
+export const UpdateFoodTypeDocument = gql`
+  mutation UpdateFoodType(
+    $decription: String
+    $img_url: String
+    $value: String!
+  ) {
+    update_food_type_by_pk(
+      pk_columns: { value: $value }
+      _set: { value: $value, decription: $decription, img_url: $img_url }
+    ) {
+      value
+    }
+  }
+`;
+export function useUpdateFoodTypeMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    UpdateFoodTypeMutation,
+    UpdateFoodTypeMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    UpdateFoodTypeMutation,
+    UpdateFoodTypeMutationVariables
+  >(UpdateFoodTypeDocument, baseOptions);
+}
+export type UpdateFoodTypeMutationHookResult = ReturnType<
+  typeof useUpdateFoodTypeMutation
+>;
+export type UpdateFoodTypeMutationResult = ApolloReactCommon.MutationResult<
+  UpdateFoodTypeMutation
+>;
+export type UpdateFoodTypeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  UpdateFoodTypeMutation,
+  UpdateFoodTypeMutationVariables
 >;
 export const MealsByDateDocument = gql`
   subscription MealsByDate($date: date = "", $u_id: uuid) {

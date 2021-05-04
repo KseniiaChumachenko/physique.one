@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   LinearProgress,
   GridList,
@@ -8,10 +8,10 @@ import {
 import { AlertTitle, Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { useFoodTypesQuery } from "../../graphql/generated/graphql";
-import { EMPTY_STATE_IMG } from "../../constants";
 import { CategoryCard } from "./CategoryCard";
 import { Trans } from "@lingui/react";
+import { observer } from "mobx-react-lite";
+import { usePantryStore } from "./store/usePantryStore";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,10 +23,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export function Pantry() {
+export const Pantry = observer(() => {
+  const {
+    categories,
+    loading,
+    error,
+    handleAddNewCategoryStore,
+    activeCard,
+  } = usePantryStore();
   const classes = useStyles();
-  const { data, loading, error } = useFoodTypesQuery();
-  const [addCategory, setAddCategory] = useState(false);
 
   if (loading) {
     return <LinearProgress />;
@@ -44,27 +49,18 @@ export function Pantry() {
   return (
     <div className={classes.root}>
       <GridList cellHeight={230} cols={3}>
-        {data?.food_type.map(({ value, decription, img_url }, i) => (
+        {categories.map((card, i) => (
           <GridListTile key={i}>
-            <CategoryCard
-              mode={"regular"}
-              name={value}
-              description={decription}
-              img_url={img_url || EMPTY_STATE_IMG}
-            />
+            <CategoryCard {...card} />
           </GridListTile>
         ))}
 
-        {addCategory ? (
-          <GridListTile>
-            <CategoryCard mode={"edit"} setAddCategory={setAddCategory} />
-          </GridListTile>
-        ) : (
-          <Button onClick={() => setAddCategory(true)}>
+        {!activeCard && (
+          <Button onClick={handleAddNewCategoryStore}>
             <Trans>Add category</Trans>
           </Button>
         )}
       </GridList>
     </div>
   );
-}
+});

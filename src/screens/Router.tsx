@@ -12,6 +12,7 @@ import { PrivacyPolicy } from "./PrivacyPolicy";
 import { useUser } from "./context/userContext";
 import { Profile } from "./Profile";
 import { Pantry } from "./Pantry";
+import { StoreProvider } from "../store";
 
 const useStyles = makeStyles(() => ({
   childrenContainer: {
@@ -42,7 +43,7 @@ export const Router = () => {
       )}
       {/* Private routes*/}
       {user && (
-        <>
+        <StoreProvider>
           <AppBar />
           <main className={classes.childrenContainer}>
             <div className={classes.childrenPadding}>
@@ -55,7 +56,7 @@ export const Router = () => {
             </div>
           </main>
           <BottomNavigation />
-        </>
+        </StoreProvider>
       )}
     </BrowserRouter>
   );

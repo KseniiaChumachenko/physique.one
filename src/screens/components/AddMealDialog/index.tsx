@@ -29,6 +29,7 @@ import { ToastMessage } from "src/components/ToastMessage";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
 import { useStore } from "./useStore";
 import { useUser } from "../../context/userContext";
+import { toJS } from "mobx";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -107,7 +108,7 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     fetchedFoods,
     name,
     time,
-    meal_items,
+    meal_items, //fetched data
     onConfirm,
   }) => {
     const classes = useStyles();
@@ -122,7 +123,9 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
       event.stopPropagation();
     };
 
-    const handleDeleteItem = (key: number) => () => store.remove_meal_item(key);
+    const handleDeleteItem = (id: string) => () => {
+      store.remove_meal_item(id);
+    };
 
     return (
       <Dialog
@@ -204,7 +207,7 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
                 <IconButton
                   className={classes.deleteIcon}
                   children={<DeleteRounded />}
-                  onClick={handleDeleteItem(key)}
+                  onClick={handleDeleteItem(item.id)}
                 />
               )}
             </div>
