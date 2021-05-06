@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import moment from "moment";
 import { useHistory } from "react-router-dom";
 import { Button, Link, TextField, Typography } from "@material-ui/core";
 import { Trans } from "@lingui/react";
@@ -73,7 +74,7 @@ export const LoginForm = () => {
 
       if (withRegularUser) {
         setUser(data?.users[0]);
-        history.push("/");
+        history.push(`/ration/${moment().week()}`);
       } else {
         setError(
           "Entered credentials are invalid. Check correctness of entered email and password."
@@ -99,7 +100,7 @@ export const LoginForm = () => {
       const withUser = users.length > 0;
       if (withUser) {
         setUser(checkFacebookUserResponse.data?.users[0]);
-        history.push("/");
+        history.push(`/ration/${moment().week()}`);
       } else {
         insert_fb_user({
           variables: {
