@@ -36,7 +36,10 @@ export const Meals = ({}: Props) => {
   const days = useMemo(
     () =>
       [0, 1, 2, 3, 4, 5, 6].map((d) =>
-        moment(`${currentYear}-${weekNumber}-` + d, "YYYY-w-e").format()
+        moment(
+          `${currentYear}-${weekNumber || moment().week()}-` + d,
+          "YYYY-w-e"
+        ).format()
       ),
     [currentYear, weekNumber]
   );
