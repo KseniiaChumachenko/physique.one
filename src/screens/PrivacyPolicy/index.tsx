@@ -5,7 +5,7 @@ export const PrivacyPolicy = () => (
     <h1>Privacy Policy for body-monitor</h1>
 
     <p>
-      At body-monitor, accessible from https://body-monitor.com/, one of our
+      At body-monitor, accessible from https://www.physique.one/, one of our
       main priorities is the privacy of our visitors. This Privacy Policy
       document contains types of information that is collected and recorded by
       body-monitor and how we use it.

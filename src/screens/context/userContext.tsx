@@ -5,6 +5,7 @@ import React, {
   useContext,
   useReducer,
 } from "react";
+import { useHistory } from "react-router-dom";
 import { Users_Insert_Input } from "../../graphql/generated/graphql";
 
 enum ActionTypes {
@@ -61,8 +62,12 @@ export function useUpdateUser() {
 }
 
 export function useLogOut() {
+  const { push } = useHistory();
   const { user, dispatch } = useUser();
-  const logout = () => dispatch({ type: ActionTypes.UPDATE, payload: null });
+  const logout = () => {
+    dispatch({ type: ActionTypes.UPDATE, payload: null });
+    push("/auth");
+  };
 
   return { user, logout };
 }
