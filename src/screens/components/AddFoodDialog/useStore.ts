@@ -8,6 +8,7 @@ export interface State {
   proteins?: number;
   carbohydrates?: number;
   fats?: number;
+  u_id: string;
 }
 
 export function useStore({
@@ -18,9 +19,11 @@ export function useStore({
   proteins,
   carbohydrates,
   fats,
+  u_id,
 }: State) {
   const store = useLocalStore(
     () => ({
+      u_id: u_id,
       name: name,
       setName: (newName: string) => {
         store.name = newName;

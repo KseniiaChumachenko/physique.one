@@ -66,6 +66,7 @@ mutation AddFood(
   $energy_cal: numeric
   $carbohydrates: numeric
   $type: String
+  $u_id: uuid!
 ) {
   insert_food(
     objects: {
@@ -76,6 +77,7 @@ mutation AddFood(
       proteins: $proteins
       carbohydrates: $carbohydrates
       fats: $fats
+      u_id: $u_id
     }
   ) {
     affected_rows

@@ -95,6 +95,9 @@ type food {
     selenium: numeric
     sodium: numeric
     type: String!
+    u_id: uuid
+    "An object relationship"
+    user: users
     weight: Int
     zinc: numeric
 }
@@ -190,6 +193,7 @@ type food_max_fields {
     selenium: numeric
     sodium: numeric
     type: String
+    u_id: uuid
     weight: Int
     zinc: numeric
 }
@@ -228,6 +232,7 @@ type food_min_fields {
     selenium: numeric
     sodium: numeric
     type: String
+    u_id: uuid
     weight: Int
     zinc: numeric
 }
@@ -413,6 +418,7 @@ type food_type {
         "filter the rows returned"
         where: food_bool_exp
     ): food_aggregate!
+    img_url: String
     value: String!
 }
 
@@ -432,12 +438,14 @@ type food_type_aggregate_fields {
 "aggregate max on columns"
 type food_type_max_fields {
     decription: String
+    img_url: String
     value: String
 }
 
 "aggregate min on columns"
 type food_type_min_fields {
     decription: String
+    img_url: String
     value: String
 }
 
@@ -1830,7 +1838,7 @@ type users {
         "filter the rows returned"
         where: meal_bool_exp
     ): meal_aggregate!
-    password: String
+    password: String!
     "An array relationship"
     recipe_items(
         "distinct select on columns"
@@ -2002,6 +2010,8 @@ enum food_select_column {
     "column name"
     type
     "column name"
+    u_id
+    "column name"
     weight
     "column name"
     zinc
@@ -2018,6 +2028,8 @@ enum food_type_select_column {
     "column name"
     decription
     "column name"
+    img_url
+    "column name"
     value
 }
 
@@ -2025,6 +2037,8 @@ enum food_type_select_column {
 enum food_type_update_column {
     "column name"
     decription
+    "column name"
+    img_url
     "column name"
     value
 }
@@ -2097,6 +2111,8 @@ enum food_update_column {
     sodium
     "column name"
     type
+    "column name"
+    u_id
     "column name"
     weight
     "column name"
@@ -2303,6 +2319,8 @@ enum recipe_update_column {
 
 "unique or primary key constraints on table \"users\""
 enum users_constraint {
+    "unique or primary key constraint"
+    users_email_key
     "unique or primary key constraint"
     users_fb_id_key
     "unique or primary key constraint"
@@ -2515,6 +2533,8 @@ input food_bool_exp {
     selenium: numeric_comparison_exp
     sodium: numeric_comparison_exp
     type: String_comparison_exp
+    u_id: uuid_comparison_exp
+    user: users_bool_exp
     weight: Int_comparison_exp
     zinc: numeric_comparison_exp
 }
@@ -2593,6 +2613,8 @@ input food_insert_input {
     selenium: numeric
     sodium: numeric
     type: String
+    u_id: uuid
+    user: users_obj_rel_insert_input
     weight: Int
     zinc: numeric
 }
@@ -2631,6 +2653,7 @@ input food_max_order_by {
     selenium: order_by
     sodium: order_by
     type: order_by
+    u_id: order_by
     weight: order_by
     zinc: order_by
 }
@@ -2669,6 +2692,7 @@ input food_min_order_by {
     selenium: order_by
     sodium: order_by
     type: order_by
+    u_id: order_by
     weight: order_by
     zinc: order_by
 }
@@ -2724,6 +2748,8 @@ input food_order_by {
     selenium: order_by
     sodium: order_by
     type: order_by
+    u_id: order_by
+    user: users_order_by
     weight: order_by
     zinc: order_by
 }
@@ -2768,6 +2794,7 @@ input food_set_input {
     selenium: numeric
     sodium: numeric
     type: String
+    u_id: uuid
     weight: Int
     zinc: numeric
 }
@@ -2936,6 +2963,7 @@ input food_type_bool_exp {
     _or: [food_type_bool_exp]
     decription: String_comparison_exp
     food: food_bool_exp
+    img_url: String_comparison_exp
     value: String_comparison_exp
 }
 
@@ -2943,18 +2971,21 @@ input food_type_bool_exp {
 input food_type_insert_input {
     decription: String
     food: food_arr_rel_insert_input
+    img_url: String
     value: String
 }
 
 "order by max() on columns of table \"food_type\""
 input food_type_max_order_by {
     decription: order_by
+    img_url: order_by
     value: order_by
 }
 
 "order by min() on columns of table \"food_type\""
 input food_type_min_order_by {
     decription: order_by
+    img_url: order_by
     value: order_by
 }
 
@@ -2975,6 +3006,7 @@ input food_type_on_conflict {
 input food_type_order_by {
     decription: order_by
     food_aggregate: food_aggregate_order_by
+    img_url: order_by
     value: order_by
 }
 
@@ -2986,6 +3018,7 @@ input food_type_pk_columns_input {
 "input type for updating data in table \"food_type\""
 input food_type_set_input {
     decription: String
+    img_url: String
     value: String
 }
 

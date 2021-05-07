@@ -18,11 +18,13 @@ import {
 } from "../../graphql/generated/graphql";
 import { makeStyles } from "@material-ui/core/styles";
 import { useUser } from "../context/userContext";
+import { usePermissions } from "../../hooks/usePermissions";
 
 interface Props {
   recipe_id?: string;
   row: Partial<Recipe_Item>;
   mode?: "add" | "regularRow";
+  u_id: string;
 }
 
 const useStyles = makeStyles((theme) =>
@@ -40,10 +42,16 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-// TODO: unify food selector across app
+// TODO: https://github.com/KseniiaChumachenko/physique.one/issues/8 unify food selector across app
 
-export const RecipeTableEditableRow = ({ recipe_id, row, mode }: Props) => {
+export const RecipeTableEditableRow = ({
+  recipe_id,
+  row,
+  mode,
+  u_id,
+}: Props) => {
   const { user } = useUser();
+  const { isPermitted } = usePermissions(u_id);
   const [isInEditMode, setEditMode] = useState(false);
 
   const [updatedRowFood, setUpdatedRowFood] = useState(row?.food?.id);
@@ -178,50 +186,52 @@ export const RecipeTableEditableRow = ({ recipe_id, row, mode }: Props) => {
         component="th"
         scope="row"
         children={
-          <EditDeleteButtonGroup
-            onConfirmClick={
-              isInEditMode
-                ? mode === "add"
+          isPermitted && (
+            <EditDeleteButtonGroup
+              onConfirmClick={
+                isInEditMode
+                  ? mode === "add"
+                    ? () =>
+                        incert_recipe_item_one({
+                          variables: {
+                            recipe_id,
+                            u_id: user?.id,
+                            food_id: updatedRowFood,
+                            weight: updatedRowWeight,
+                            ...macronutrients,
+                          },
+                        })
+                    : () =>
+                        update_recipe_item_by_pk({
+                          variables: {
+                            id: row.id,
+                            food_id: updatedRowFood,
+                            weight: updatedRowWeight,
+                            ...macronutrients,
+                          },
+                        })
+                  : undefined
+              }
+              onCancelClick={
+                isInEditMode && !(mode === "add")
+                  ? () => setEditMode(false)
+                  : undefined
+              }
+              onEditClick={
+                isInEditMode && mode === "add"
+                  ? undefined
+                  : () => setEditMode(row.id)
+              }
+              onDeleteClick={
+                !(mode === "add")
                   ? () =>
-                      incert_recipe_item_one({
-                        variables: {
-                          recipe_id,
-                          u_id: user?.id,
-                          food_id: updatedRowFood,
-                          weight: updatedRowWeight,
-                          ...macronutrients,
-                        },
+                      delete_recipe_item_by_pk({
+                        variables: { id: row.id },
                       })
-                  : () =>
-                      update_recipe_item_by_pk({
-                        variables: {
-                          id: row.id,
-                          food_id: updatedRowFood,
-                          weight: updatedRowWeight,
-                          ...macronutrients,
-                        },
-                      })
-                : undefined
-            }
-            onCancelClick={
-              isInEditMode && !(mode === "add")
-                ? () => setEditMode(false)
-                : undefined
-            }
-            onEditClick={
-              isInEditMode && mode === "add"
-                ? undefined
-                : () => setEditMode(row.id)
-            }
-            onDeleteClick={
-              !(mode === "add")
-                ? () =>
-                    delete_recipe_item_by_pk({
-                      variables: { id: row.id },
-                    })
-                : undefined
-            }
-          />
+                  : undefined
+              }
+            />
+          )
         }
       />
     </TableRow>
