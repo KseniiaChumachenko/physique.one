@@ -16,6 +16,7 @@ import {
   useUpdateRecipeByPkMutation,
 } from "../../graphql/generated/graphql";
 import { useUser } from "../context/userContext";
+import { usePermissions } from "../../hooks/usePermissions";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -36,6 +37,7 @@ export interface RecipeCardHeaderProps {
   name?: string | null;
   description?: string | null;
   recipe_items_aggregate?: Recipe_Item_Aggregate;
+  u_id: string;
 }
 
 export const RecipeCardHeader = ({
@@ -43,9 +45,11 @@ export const RecipeCardHeader = ({
   name,
   recipe_items_aggregate,
   description,
+  u_id,
 }: RecipeCardHeaderProps) => {
   const classes = useStyles();
   const { user } = useUser();
+  const { isPermitted } = usePermissions(u_id);
   const [isInEditMode, setEditMode] = useState();
   const [updatedName, setUpdatedName] = useState(name);
   const [updatedDesc, setUpdatedDesc] = useState(description);
@@ -93,23 +97,31 @@ export const RecipeCardHeader = ({
           )
         }
         action={
-          <EditDeleteButtonGroup
-            onConfirmClick={
-              isInEditMode
-                ? () => {
-                    if (id) {
-                      update_recipe_by_pk();
-                    } else {
-                      insert_recipe_one();
-                    }
-                    setEditMode(false);
-                  }
-                : undefined
-            }
-            onCancelClick={isInEditMode ? () => setEditMode(false) : undefined}
-            onEditClick={isInEditMode ? undefined : () => setEditMode(true)}
-            onDeleteClick={delete_recipe_by_pk}
-          />
+          u_id === "0" ? (
+            <EditDeleteButtonGroup onConfirmClick={insert_recipe_one} />
+          ) : (
+            isPermitted && (
+              <EditDeleteButtonGroup
+                onConfirmClick={
+                  isInEditMode
+                    ? () => {
+                        if (id) {
+                          update_recipe_by_pk();
+                        } else {
+                          insert_recipe_one();
+                        }
+                        setEditMode(false);
+                      }
+                    : undefined
+                }
+                onCancelClick={
+                  isInEditMode ? () => setEditMode(false) : undefined
+                }
+                onEditClick={isInEditMode ? undefined : () => setEditMode(true)}
+                onDeleteClick={delete_recipe_by_pk}
+              />
+            )
+          )
         }
       />
       <CardContent>

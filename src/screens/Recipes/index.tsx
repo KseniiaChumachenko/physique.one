@@ -9,7 +9,7 @@ export const Recipes = ({}: Props) => {
 
   return (
     <>
-      <RecipeCard name={"Add new recipe"} description={""} />
+      <RecipeCard name={"Add new recipe"} description={""} u_id={"0"} />
       {data?.recipe.map((recipe, index) => (
         <RecipeCard
           key={index}
@@ -18,6 +18,7 @@ export const Recipes = ({}: Props) => {
           description={recipe.description}
           recipe_items={recipe.recipe_items as any}
           recipe_items_aggregate={recipe.recipe_items_aggregate as any}
+          u_id={recipe.u_id}
         />
       ))}
     </>
