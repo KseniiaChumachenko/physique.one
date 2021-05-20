@@ -10,13 +10,12 @@ import {
   Button,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Trans } from "@lingui/react";
 import { EditRounded, DeleteRounded } from "@material-ui/icons";
-
+import { Trans } from "@lingui/react";
 import { usePantryStore } from "./store/usePantryStore";
 import { PantryCardType } from "./store/model";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   tileImg: {
     height: "inherit",
     width: "auto",
@@ -39,7 +38,6 @@ export const CategoryCard = observer(
       handleFoodTypeSubmit,
       handleFoodTypeUpdate,
     } = usePantryStore();
-    //const [state, setMode] = useState(mode);
 
     return (
       <>

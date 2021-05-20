@@ -1,8 +1,8 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { Button, Slide, Typography } from "@material-ui/core";
+import { Trans } from "@lingui/react";
 import { LoginForm } from "./LoginForm";
 import { RegisterForm } from "./RegisterForm";
-import { Trans } from "@lingui/react";
 import { useStyles } from "./styled";
 
 enum Form {

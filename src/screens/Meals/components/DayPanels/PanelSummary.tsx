@@ -7,9 +7,9 @@ import {
   Meal,
   useMealItemMacrosSumByIdSubscription,
 } from "src/graphql/generated/graphql";
-import { PanelDetailActions } from "./PanelDetailActions";
 import { AggregationChips } from "../../../../components/AggredationChips";
 import { useUser } from "../../../context/userContext";
+import { PanelDetailActions } from "./PanelDetailActions";
 
 const useStyles = makeStyles((theme) => ({
   chip: {

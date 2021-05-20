@@ -6,10 +6,10 @@ import {
   useMealsByDateSubscription,
 } from "src/graphql/generated/graphql";
 import { ToastMessage } from "src/components/ToastMessage";
+import { useUser } from "../../../context/userContext";
 import { DayPanelHeader } from "./DayPanelHeader";
 import { PanelSummary } from "./PanelSummary";
 import { PanelDetailTable } from "./PanelDetailTable";
-import { useUser } from "../../../context/userContext";
 
 const useStyles = makeStyles((theme) => ({
   parentExpPanel: {

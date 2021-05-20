@@ -1,8 +1,9 @@
 import React from "react";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
-import { BottomNavigation } from "../components/BottomNavigation";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar } from "src/components/AppBar";
+import { BottomNavigation } from "../components/BottomNavigation";
+import { StoreProvider } from "../store";
 import { Meals } from "./Meals";
 import { FoodLibrary } from "./FoodLibrary";
 import { Recipes } from "./Recipes";
@@ -11,7 +12,6 @@ import { PrivacyPolicy } from "./PrivacyPolicy";
 import { useUser } from "./context/userContext";
 import { Profile } from "./Profile";
 import { Pantry } from "./Pantry";
-import { StoreProvider } from "../store";
 
 const useStyles = makeStyles(() => ({
   childrenContainer: {
@@ -34,7 +34,7 @@ export const Router = () => {
       <Switch>
         <Route path={"/auth"} component={Authorization} exact />
         <Route path={"/privacyPolicy"} component={PrivacyPolicy} exact />
-        {user ? (
+        {user.id !== "0" ? (
           <StoreProvider>
             <AppBar />
             <main className={classes.childrenContainer}>
@@ -45,7 +45,7 @@ export const Router = () => {
                 <Route path={"/foodLibrary"} component={FoodLibrary} exact />
                 <Route path={"/recipes"} component={Recipes} exact />
                 <Route path={"/profile"} component={Profile} exact />
-                Route path={"/pantry"} component={Pantry} exact />
+                <Route path={"/pantry"} component={Pantry} exact />
               </div>
             </main>
             <BottomNavigation />

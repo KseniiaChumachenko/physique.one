@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ApolloError } from "@apollo/client";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import {
@@ -39,8 +40,8 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
   const classes = useStyles();
   const { user } = useUser();
 
-  const [error, setOpenErrorMessage] = React.useState();
-  const [success, setOpenSuccessMessage] = React.useState();
+  const [error, setOpenErrorMessage] = React.useState<ApolloError | null>();
+  const [success, setOpenSuccessMessage] = React.useState(false);
 
   const [selectedFood, setSelectedFood] = useState<FoodOptionalType>(
     mealItem.recipe_id || mealItem.food
@@ -65,7 +66,7 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
     onError: (error1) => {
       setOpenErrorMessage(error1);
     },
-    onCompleted: (v) => {
+    onCompleted: () => {
       setOpenSuccessMessage(true);
       setOpen(false);
     },
@@ -125,19 +126,25 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
       <Snackbar
         open={success}
         autoHideDuration={6000}
-        onClose={() => setOpenErrorMessage(false)}
+        onClose={() => setOpenErrorMessage(undefined)}
       >
-        <Alert severity={"success"} onClose={() => setOpenErrorMessage(false)}>
+        <Alert
+          severity={"success"}
+          onClose={() => setOpenErrorMessage(undefined)}
+        >
           <Trans>Meals successfully updated</Trans>
         </Alert>
       </Snackbar>
       <Snackbar
         open={!!error}
         autoHideDuration={6000}
-        onClose={() => setOpenSuccessMessage(false)}
+        onClose={() => setOpenErrorMessage(undefined)}
       >
-        <Alert severity={"error"} onClose={() => setOpenSuccessMessage(false)}>
-          {error?.message as any}
+        <Alert
+          severity={"error"}
+          onClose={() => setOpenErrorMessage(undefined)}
+        >
+          {error!.message as any}
         </Alert>
       </Snackbar>
     </React.Fragment>

@@ -1,18 +1,28 @@
-import React, {useState} from "react";
-import {makeStyles} from "@material-ui/core/styles";
-import {Trans} from "@lingui/react";
-import {AddRounded} from "@material-ui/icons";
-import {Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,} from "@material-ui/core";
+import React, { useState } from "react";
+import { ApolloError } from "@apollo/client";
+import { Trans } from "@lingui/react";
+import { makeStyles } from "@material-ui/core/styles";
+import { AddRounded } from "@material-ui/icons";
 import {
-    useAddFoodMutation,
-    useDeleteFoodMutation,
-    useFoodSelectFieldListingQuery,
-    useUpdateFoodMutation,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@material-ui/core";
+import {
+  useAddFoodMutation,
+  useDeleteFoodMutation,
+  useFoodSelectFieldListingQuery,
+  useUpdateFoodMutation,
 } from "../../graphql/generated/graphql";
-import {ToastMessage} from "../../components/ToastMessage";
-import {AddFoodDialog} from "../components/AddFoodDialog";
-import {State} from "../components/AddFoodDialog/useStore";
-import {EditDeleteButtonGroup} from "../components/EditDeletButtonGroup";
+import { ToastMessage } from "../../components/ToastMessage";
+import { AddFoodDialog } from "../components/AddFoodDialog";
+import { State } from "../components/AddFoodDialog/useStore";
+import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 
 const useStyles = makeStyles((theme) => ({
   tableToolbar: {
@@ -22,14 +32,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props {}
-
-export const FoodLibrary = ({}: Props) => {
+export const FoodLibrary = () => {
   const classes = useStyles();
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState<any>(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState<ApolloError>();
   const { data, refetch } = useFoodSelectFieldListingQuery({
     onError: (error1) => setError(error1),
   });
@@ -134,7 +142,7 @@ export const FoodLibrary = ({}: Props) => {
         severity={"error"}
         children={error?.message as any}
         open={!!error}
-        controledClose={() => setError(false)}
+        controledClose={() => setError(undefined)}
       />
       <ToastMessage
         severity={"success"}

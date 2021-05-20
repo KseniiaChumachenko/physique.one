@@ -18,7 +18,6 @@ import {
 import { AddRounded, DeleteRounded } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { TimePicker } from "@material-ui/pickers";
-
 import {
   AddMealMutationVariables,
   Food,
@@ -27,9 +26,8 @@ import {
 } from "src/graphql/generated/graphql";
 import { ToastMessage } from "src/components/ToastMessage";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
-import { useStore } from "./useStore";
 import { useUser } from "../../context/userContext";
-import { toJS } from "mobx";
+import { useStore } from "./useStore";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -59,42 +57,6 @@ interface Props {
   time?: any;
   meal_items?: Meal_Item_Insert_Input[];
 }
-
-export const AddMealDialog = ({
-  open,
-  setOpen,
-  date,
-  name,
-  time,
-  meal_items,
-  onConfirm,
-}: Props) => {
-  const { data, loading, error } = useFoodSelectFieldListingQuery();
-  if (error) {
-    return <ToastMessage severity={"error"} children={error?.message as any} />;
-  }
-
-  if (loading) {
-    return <LinearProgress />;
-  }
-
-  return (
-    <React.Fragment>
-      {data && (
-        <AddMealDialogDataFlow
-          open={open}
-          setOpen={setOpen}
-          date={date}
-          fetchedFoods={data.food as Food[]}
-          name={name}
-          time={time}
-          meal_items={meal_items}
-          onConfirm={onConfirm}
-        />
-      )}
-    </React.Fragment>
-  );
-};
 
 interface AddMealDialogProps extends Props {
   fetchedFoods: Food[];
@@ -244,3 +206,39 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     );
   }
 );
+
+export const AddMealDialog = ({
+  open,
+  setOpen,
+  date,
+  name,
+  time,
+  meal_items,
+  onConfirm,
+}: Props) => {
+  const { data, loading, error } = useFoodSelectFieldListingQuery();
+  if (error) {
+    return <ToastMessage severity={"error"} children={error?.message as any} />;
+  }
+
+  if (loading) {
+    return <LinearProgress />;
+  }
+
+  return (
+    <React.Fragment>
+      {data && (
+        <AddMealDialogDataFlow
+          open={open}
+          setOpen={setOpen}
+          date={date}
+          fetchedFoods={data.food as Food[]}
+          name={name}
+          time={time}
+          meal_items={meal_items}
+          onConfirm={onConfirm}
+        />
+      )}
+    </React.Fragment>
+  );
+};

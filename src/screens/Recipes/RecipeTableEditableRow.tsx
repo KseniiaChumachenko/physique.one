@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   createStyles,
   MenuItem,
@@ -16,7 +17,6 @@ import {
   useFoodSelectFieldListingQuery,
   useUpdateRecipeItemByPkMutation,
 } from "../../graphql/generated/graphql";
-import { makeStyles } from "@material-ui/core/styles";
 import { useUser } from "../context/userContext";
 
 interface Props {
@@ -40,7 +40,8 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-// TODO: unify food selector across app
+// TODO(#8): unify food selector across app
+// TODO: error handling
 
 export const RecipeTableEditableRow = ({ recipe_id, row, mode }: Props) => {
   const { user } = useUser();
@@ -53,16 +54,13 @@ export const RecipeTableEditableRow = ({ recipe_id, row, mode }: Props) => {
 
   const [update_recipe_item_by_pk] = useUpdateRecipeItemByPkMutation({
     onCompleted: () => setEditMode(false),
-    onError: (props) => console.log("Failed to updated:", props.message),
   });
 
   const [delete_recipe_item_by_pk] = useDeleteRecipeItemByPkMutation({
     onCompleted: () => setEditMode(false),
   });
 
-  const [incert_recipe_item_one] = useAddRecipeItemMutation({
-    onError: (error) => console.log(error),
-  });
+  const [incert_recipe_item_one] = useAddRecipeItemMutation();
 
   const classes = useStyles();
 

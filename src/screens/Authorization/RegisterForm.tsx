@@ -5,19 +5,19 @@ import { send } from "emailjs-com";
 import { Button, TextField } from "@material-ui/core";
 import { ApolloError } from "@apollo/client";
 import { Trans } from "@lingui/react";
-
 import { useUpdateUser } from "../context/userContext";
 import {
   useRegisterMutation,
+  Users,
   Users_Insert_Input,
 } from "../../graphql/generated/graphql";
+import { FormCard } from "./FormCard";
 import {
   EMAILJS_REGISTRATION_CONFIRMATION_TEMPLATE_ID,
   EMAILJS_SERVICE_ID,
   EMAILJS_USER_ID,
 } from "./constants";
 import { useStyles } from "./styled";
-import { FormCard } from "./FormCard";
 
 export const RegisterForm = () => {
   const history = useHistory();
@@ -39,7 +39,7 @@ export const RegisterForm = () => {
         password.confirmation === password.initial ? password.confirmation : "",
     },
     onCompleted: ({ insert_users_one }) => {
-      setUser(insert_users_one);
+      setUser((insert_users_one as unknown) as Users);
       send(
         EMAILJS_SERVICE_ID,
         EMAILJS_REGISTRATION_CONFIRMATION_TEMPLATE_ID,

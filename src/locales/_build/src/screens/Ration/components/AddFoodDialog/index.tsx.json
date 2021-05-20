@@ -1,82 +1,32 @@
 {
   "Add food": {
-    "origin": [
-      [
-        "src/screens/Ration/components/AddFoodDialog/index.tsx",
-        33
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/AddFoodDialog/index.tsx", 33]]
   },
   "Always add attributes per 100g": {
-    "origin": [
-      [
-        "src/screens/Ration/components/AddFoodDialog/index.tsx",
-        37
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/AddFoodDialog/index.tsx", 37]]
   },
   "Name": {
-    "origin": [
-      [
-        "src/screens/Ration/components/AddFoodDialog/index.tsx",
-        39
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/AddFoodDialog/index.tsx", 39]]
   },
   "Energy (cal)": {
-    "origin": [
-      [
-        "src/screens/Ration/components/AddFoodDialog/index.tsx",
-        51
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/AddFoodDialog/index.tsx", 51]]
   },
   "Energy (kJ)": {
-    "origin": [
-      [
-        "src/screens/Ration/components/AddFoodDialog/index.tsx",
-        52
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/AddFoodDialog/index.tsx", 52]]
   },
   "Proteins (g)": {
-    "origin": [
-      [
-        "src/screens/Ration/components/AddFoodDialog/index.tsx",
-        53
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/AddFoodDialog/index.tsx", 53]]
   },
   "Carbohydrates (g)": {
-    "origin": [
-      [
-        "src/screens/Ration/components/AddFoodDialog/index.tsx",
-        54
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/AddFoodDialog/index.tsx", 54]]
   },
   "Fats (g)": {
-    "origin": [
-      [
-        "src/screens/Ration/components/AddFoodDialog/index.tsx",
-        55
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/AddFoodDialog/index.tsx", 55]]
   },
   "Cancel": {
-    "origin": [
-      [
-        "src/screens/Ration/components/AddFoodDialog/index.tsx",
-        59
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/AddFoodDialog/index.tsx", 59]]
   },
   "Submit": {
-    "origin": [
-      [
-        "src/screens/Ration/components/AddFoodDialog/index.tsx",
-        62
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/AddFoodDialog/index.tsx", 62]]
   }
 }

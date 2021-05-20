@@ -1,11 +1,11 @@
 import omit from "lodash.omit";
 import { useLocalObservable } from "mobx-react-lite";
+import moment, { Moment } from "moment";
+import { v4 } from "uuid";
 import {
   Food,
   Meal_Item_Insert_Input,
 } from "../../../graphql/generated/graphql";
-import moment, { Moment } from "moment";
-import { v4 } from "uuid";
 
 interface State {
   name?: string | null;

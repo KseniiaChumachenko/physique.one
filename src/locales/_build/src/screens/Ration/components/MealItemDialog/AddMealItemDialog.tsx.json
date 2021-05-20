@@ -1,42 +1,27 @@
 {
   "Food": {
     "origin": [
-      [
-        "src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx",
-        57
-      ]
+      ["src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx", 57]
     ]
   },
   "Weight (g)": {
     "origin": [
-      [
-        "src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx",
-        62
-      ]
+      ["src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx", 62]
     ]
   },
   "Cancel": {
     "origin": [
-      [
-        "src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx",
-        65
-      ]
+      ["src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx", 65]
     ]
   },
   "Submit": {
     "origin": [
-      [
-        "src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx",
-        66
-      ]
+      ["src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx", 66]
     ]
   },
   "Meals successfully updated": {
     "origin": [
-      [
-        "src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx",
-        72
-      ]
+      ["src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx", 72]
     ]
   }
 }

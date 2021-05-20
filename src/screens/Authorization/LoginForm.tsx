@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
+import FacebookLoginWithButton from "react-facebook-login";
 import { Button, Link, TextField, Typography } from "@material-ui/core";
 import { Trans } from "@lingui/react";
 import { useUpdateUser } from "../context/userContext";
@@ -8,8 +9,8 @@ import {
   useIsFacebookUserLazyQuery,
   useLogInLazyQuery,
   useRegisterFacebookUserMutation,
+  Users,
 } from "../../graphql/generated/graphql";
-import FacebookLoginWithButton from "react-facebook-login";
 import { useStyles } from "./styled";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
 import { FormCard } from "./FormCard";
@@ -73,7 +74,7 @@ export const LoginForm = () => {
       const withRegularUser = data?.users && data?.users.length > 0;
 
       if (withRegularUser) {
-        setUser(data?.users[0]);
+        setUser((data?.users[0] as unknown) as Users);
         history.push(`/ration/${moment().week()}`);
       } else {
         setError(
@@ -86,7 +87,7 @@ export const LoginForm = () => {
 
   const [insert_fb_user] = useRegisterFacebookUserMutation({
     onCompleted: ({ insert_users_one }) => {
-      setUser(insert_users_one);
+      setUser((insert_users_one as unknown) as Users);
     },
     onError: (error1) => setError(error1.message),
   });
@@ -99,7 +100,7 @@ export const LoginForm = () => {
     onCompleted: ({ users }) => {
       const withUser = users.length > 0;
       if (withUser) {
-        setUser(checkFacebookUserResponse.data?.users[0]);
+        setUser((checkFacebookUserResponse.data?.users[0] as unknown) as Users);
         history.push(`/ration/${moment().week()}`);
       } else {
         insert_fb_user({

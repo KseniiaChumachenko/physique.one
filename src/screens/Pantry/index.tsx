@@ -1,4 +1,5 @@
 import React from "react";
+import { observer } from "mobx-react-lite";
 import {
   LinearProgress,
   GridList,
@@ -7,10 +8,8 @@ import {
 } from "@material-ui/core";
 import { AlertTitle, Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
-
-import { CategoryCard } from "./CategoryCard";
 import { Trans } from "@lingui/react";
-import { observer } from "mobx-react-lite";
+import { CategoryCard } from "./CategoryCard";
 import { usePantryStore } from "./store/usePantryStore";
 
 const useStyles = makeStyles((theme) => ({

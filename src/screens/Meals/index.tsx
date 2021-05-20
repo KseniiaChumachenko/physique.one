@@ -1,16 +1,14 @@
 import React, { useMemo } from "react";
+import { useParams, useHistory } from "react-router-dom";
 import moment from "moment";
 import { Trans } from "@lingui/react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Pagination } from "@material-ui/lab";
 import { Typography } from "@material-ui/core";
-
 import { MealsListing } from "./components/MealsListing";
-import { useParams, useHistory } from "react-router-dom";
 
 const NUMBER_OF_WEEKS_IN_YEAR = 52;
 
-interface Props {}
 const useStyles = makeStyles((theme) => ({
   root: {},
   paginationContainer: {
@@ -26,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Meals = ({}: Props) => {
+export const Meals = () => {
   const classes = useStyles();
-  const { weekNumber } = useParams();
+  const { weekNumber } = useParams<{ weekNumber: string }>();
   const history = useHistory();
 
   const currentYear = moment().year();

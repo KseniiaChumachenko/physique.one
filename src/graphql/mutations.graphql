@@ -325,7 +325,11 @@ mutation DeleteFoodType($value: String!) {
   }
 }
 
-mutation UpdateFoodType($decription: String, $img_url: String, $value: String!) {
+mutation UpdateFoodType(
+  $decription: String
+  $img_url: String
+  $value: String!
+) {
   update_food_type_by_pk(
     pk_columns: { value: $value }
     _set: { value: $value, decription: $decription, img_url: $img_url }

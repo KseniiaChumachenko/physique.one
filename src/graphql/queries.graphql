@@ -157,9 +157,7 @@ subscription RecipeListing {
 }
 
 query LogIn($email: String!, $password: String!) {
-  users(
-    where: { email: { _eq: $email }, password: { _eq: $password } }
-  ) {
+  users(where: { email: { _eq: $email }, password: { _eq: $password } }) {
     id
     email
     user_name

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   CardContent,
   CardHeader,
@@ -8,7 +9,6 @@ import {
 } from "@material-ui/core";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { AggregationChips } from "../../components/AggredationChips";
-import { makeStyles } from "@material-ui/core/styles";
 import {
   Recipe_Item_Aggregate,
   useAddRecipeMutation,
@@ -38,6 +38,7 @@ export interface RecipeCardHeaderProps {
   recipe_items_aggregate?: Recipe_Item_Aggregate;
 }
 
+// TODO: error handling
 export const RecipeCardHeader = ({
   id,
   name,
@@ -46,19 +47,15 @@ export const RecipeCardHeader = ({
 }: RecipeCardHeaderProps) => {
   const classes = useStyles();
   const { user } = useUser();
-  const [isInEditMode, setEditMode] = useState();
+  const [isInEditMode, setEditMode] = useState(false);
   const [updatedName, setUpdatedName] = useState(name);
   const [updatedDesc, setUpdatedDesc] = useState(description);
 
   const [update_recipe_by_pk] = useUpdateRecipeByPkMutation({
     variables: { id, name: updatedName, description: updatedDesc },
-    onCompleted: (data) => console.log("Success ", data),
-    onError: (error) => console.log(error),
   });
   const [delete_recipe_by_pk] = useDeleteRecipeByPkMutation({
     variables: { id },
-    onCompleted: (data) => console.log("Success ", data),
-    onError: (error) => console.log(error),
   });
 
   const [insert_recipe_one] = useAddRecipeMutation({

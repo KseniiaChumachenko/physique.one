@@ -6,7 +6,7 @@ import React, {
   useReducer,
 } from "react";
 import { useHistory } from "react-router-dom";
-import { Users_Insert_Input } from "../../graphql/generated/graphql";
+import { Users } from "../../graphql/generated/graphql";
 
 enum ActionTypes {
   UPDATE = "UPDATE",
@@ -14,27 +14,41 @@ enum ActionTypes {
 
 interface Action {
   type: ActionTypes;
-  payload: StateType;
+  payload: Users;
 }
-type StateType = Users_Insert_Input | null | undefined;
 
-function reducer(state: StateType, action: Action) {
+const INITIAL_STATE: Users = {
+  id: "0",
+  meal_items: [],
+  meal_items_aggregate: { nodes: [] },
+  meals: [],
+  meals_aggregate: { nodes: [] },
+  password: "",
+  recipes: [],
+  recipes_aggregate: { nodes: [] },
+  recipe_items: [],
+  recipe_items_aggregate: { nodes: [] },
+  food: [],
+  food_aggregate: { nodes: [] },
+  pantry: [],
+  pantry_aggregate: { nodes: [] },
+};
+
+function reducer(state: Users, action: Action) {
   switch (action.type) {
     case ActionTypes.UPDATE:
       return action.payload;
     default:
-      return;
+      return INITIAL_STATE;
   }
 }
 
-const INITIAL_STATE: StateType = null;
-
 export const UserContext = createContext<{
-  state: StateType;
+  state: Users;
   dispatch: Dispatch<Action>;
 }>({
-  state: INITIAL_STATE as StateType,
-  dispatch: (action: Action) => {},
+  state: INITIAL_STATE,
+  dispatch: () => {},
 });
 
 export function UserProvider({ children }: { children: ReactNode }) {
@@ -55,7 +69,7 @@ export function useUser() {
 
 export function useUpdateUser() {
   const { user, dispatch } = useUser();
-  const setUser = (newUser: StateType) =>
+  const setUser = (newUser: Users) =>
     dispatch({ type: ActionTypes.UPDATE, payload: newUser });
 
   return { user, setUser };
@@ -65,7 +79,7 @@ export function useLogOut() {
   const { push } = useHistory();
   const { user, dispatch } = useUser();
   const logout = () => {
-    dispatch({ type: ActionTypes.UPDATE, payload: null });
+    dispatch({ type: ActionTypes.UPDATE, payload: INITIAL_STATE });
     push("/auth");
   };
 

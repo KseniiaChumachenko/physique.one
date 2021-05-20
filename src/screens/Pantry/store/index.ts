@@ -1,6 +1,6 @@
+import { ChangeEvent } from "react";
 import { makeAutoObservable, runInAction } from "mobx";
 import { ApolloError } from "@apollo/client";
-
 import { RootStore } from "../../../store/RootStore";
 import {
   ADD_FOOD_TYPE_DOCUMENT,
@@ -11,7 +11,6 @@ import {
 import { api } from "../../../api";
 import { Food_Type, PantryCardType } from "./model";
 import { EMPTY_FOOD_TYPE } from "./constants";
-import { ChangeEvent } from "react";
 
 export class PantryStore {
   rootStore: RootStore;

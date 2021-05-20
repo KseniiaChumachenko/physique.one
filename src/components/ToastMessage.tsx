@@ -17,8 +17,7 @@ export const ToastMessage = ({
 }: Props) => {
   const [localOpen, setOpen] = React.useState(true);
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) =>
-    setOpen(false);
+  const handleClose = () => setOpen(false);
 
   return (
     <Snackbar

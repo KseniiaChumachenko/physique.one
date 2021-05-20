@@ -1,7 +1,5 @@
 import React from "react";
 
-interface Props {}
-
-export const Summary = ({}: Props) => {
+export const Summary = () => {
   return <div>Summary</div>;
 };

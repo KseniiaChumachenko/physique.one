@@ -2,9 +2,7 @@ import React from "react";
 import { useRecipeListingSubscription } from "../../graphql/generated/graphql";
 import { RecipeCard } from "./RecipeCard";
 
-interface Props {}
-
-export const Recipes = ({}: Props) => {
+export const Recipes = () => {
   const { data } = useRecipeListingSubscription();
 
   return (

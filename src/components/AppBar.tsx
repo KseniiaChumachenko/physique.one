@@ -10,8 +10,8 @@ import {
 } from "@material-ui/core";
 import { Trans } from "@lingui/react";
 import { AccountCircle } from "@material-ui/icons";
-import { useLogOut } from "../screens/context/userContext";
 import { makeStyles } from "@material-ui/core/styles";
+import { useLogOut } from "../screens/context/userContext";
 
 const useStyles = makeStyles({
   userIcon: {
