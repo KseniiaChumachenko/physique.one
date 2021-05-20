@@ -7,7 +7,7 @@ type PantryCardType = {
   error?: ApolloError;
 
   initialState?: Food_Type;
-  isActive?: boolean;
+  isActive: boolean;
   isNewCategory?: boolean;
 };
 

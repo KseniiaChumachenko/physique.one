@@ -1,11 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react-lite";
-import {
-  LinearProgress,
-  GridList,
-  Button,
-  GridListTile,
-} from "@material-ui/core";
+import { LinearProgress, Grid, Button } from "@material-ui/core";
 import { AlertTitle, Alert } from "@material-ui/lab";
 import { makeStyles } from "@material-ui/core/styles";
 import { Trans } from "@lingui/react";
@@ -14,11 +9,14 @@ import { usePantryStore } from "./store/usePantryStore";
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "flex",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-    overflow: "hidden",
+    flexGrow: 1,
     padding: theme.spacing(2),
+  },
+  button: {
+    display: "flex",
+    justifyContent: "center",
+    maxWidth: 400,
+    minWidth: 330,
   },
 }));
 
@@ -47,19 +45,20 @@ export const Pantry = observer(() => {
 
   return (
     <div className={classes.root}>
-      <GridList cellHeight={230} cols={3}>
+      <Grid container={true} spacing={3}>
         {categories.map((card, i) => (
-          <GridListTile key={i}>
+          <Grid key={i} item={true} xs={true}>
             <CategoryCard {...card} />
-          </GridListTile>
+          </Grid>
         ))}
-
         {!activeCard && (
-          <Button onClick={handleAddNewCategoryStore}>
-            <Trans>Add category</Trans>
-          </Button>
+          <Grid item={true} xs={true} className={classes.button}>
+            <Button onClick={handleAddNewCategoryStore}>
+              <Trans>Add category</Trans>
+            </Button>
+          </Grid>
         )}
-      </GridList>
+      </Grid>
     </div>
   );
 });
