@@ -1,15 +1,16 @@
 import React from "react";
+import { NIL } from "uuid";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar } from "src/components/AppBar";
+import { observer } from "mobx-react-lite";
 import { BottomNavigation } from "../components/BottomNavigation";
-import { StoreProvider } from "../store";
+import { useStore } from "../store";
 import { Meals } from "./Meals";
 import { FoodLibrary } from "./FoodLibrary";
 import { Recipes } from "./Recipes";
 import { Authorization } from "./Authorization";
 import { PrivacyPolicy } from "./PrivacyPolicy";
-import { useUser } from "./context/userContext";
 import { Profile } from "./Profile";
 import { Pantry } from "./Pantry";
 
@@ -25,17 +26,19 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const Router = () => {
+export const Router = observer(() => {
   const classes = useStyles();
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
 
   return (
     <BrowserRouter>
       <Switch>
         <Route path={"/auth"} component={Authorization} exact />
         <Route path={"/privacyPolicy"} component={PrivacyPolicy} exact />
-        {user.id !== "0" ? (
-          <StoreProvider>
+        {user?.id !== NIL ? (
+          <>
             <AppBar />
             <main className={classes.childrenContainer}>
               <div className={classes.childrenPadding}>
@@ -49,11 +52,11 @@ export const Router = () => {
               </div>
             </main>
             <BottomNavigation />
-          </StoreProvider>
+          </>
         ) : (
           <Redirect to={"/auth"} />
         )}
       </Switch>
     </BrowserRouter>
   );
-};
+});

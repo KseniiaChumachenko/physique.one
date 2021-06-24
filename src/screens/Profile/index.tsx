@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Avatar, Card, CardHeader, createStyles } from "@material-ui/core";
-import { useUser } from "../context/userContext";
+import { useStore } from "src/store";
 
 export const useStyles = makeStyles((theme) =>
   createStyles({
@@ -14,7 +14,10 @@ export const useStyles = makeStyles((theme) =>
 
 export const Profile = () => {
   const { avatar } = useStyles();
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
+
   return (
     <div>
       <Card>

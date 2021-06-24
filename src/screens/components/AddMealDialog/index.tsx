@@ -18,6 +18,7 @@ import {
 import { AddRounded, DeleteRounded } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { TimePicker } from "@material-ui/pickers";
+import { useStore as useGlobalStore } from "src/store";
 import {
   AddMealMutationVariables,
   Food,
@@ -26,7 +27,6 @@ import {
 } from "src/graphql/generated/graphql";
 import { ToastMessage } from "src/components/ToastMessage";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
-import { useUser } from "../../context/userContext";
 import { useStore } from "./useStore";
 
 const useStyles = makeStyles((theme) => ({
@@ -74,7 +74,9 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     onConfirm,
   }) => {
     const classes = useStyles();
-    const { user } = useUser();
+    const {
+      userStore: { user },
+    } = useGlobalStore();
     const stateEndRef = useRef(null);
     const store = useStore(fetchedFoods, name, date, time, meal_items);
 

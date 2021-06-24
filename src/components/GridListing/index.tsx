@@ -23,7 +23,7 @@ interface GridListingProps {
   items: ComponentProps<typeof Card>[];
   loading: boolean;
   activeCard: boolean;
-  handleAdd(): void;
+  onAddCardClick(): void;
   error?: ApolloError;
 }
 
@@ -32,7 +32,7 @@ export const GridListing = ({
   loading,
   error,
   activeCard,
-  handleAdd,
+  onAddCardClick,
 }: GridListingProps) => {
   const classes = useStyles();
 
@@ -59,8 +59,8 @@ export const GridListing = ({
         ))}
         {!activeCard && (
           <Grid item={true} xs={true} className={classes.button}>
-            <Button onClick={handleAdd}>
-              <Trans>Add category</Trans>
+            <Button onClick={onAddCardClick}>
+              <Trans>Add new item</Trans>
             </Button>
           </Grid>
         )}

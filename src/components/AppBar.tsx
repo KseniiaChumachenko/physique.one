@@ -11,7 +11,7 @@ import {
 import { Trans } from "@lingui/react";
 import { AccountCircle } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
-import { useLogOut } from "../screens/context/userContext";
+import { useStore } from "src/store";
 
 const useStyles = makeStyles({
   userIcon: {
@@ -20,7 +20,9 @@ const useStyles = makeStyles({
 });
 
 export const AppBar = () => {
-  const { user, logout } = useLogOut();
+  const {
+    userStore: { user, resetUser },
+  } = useStore();
   const history = useHistory();
   const classes = useStyles();
 
@@ -37,8 +39,9 @@ export const AppBar = () => {
   const handleRedirectToProfile = () => history.push("/profile");
 
   const handleLogOut = () => {
-    logout();
+    resetUser();
     handleMenuClose();
+    history.push("/auth");
   };
 
   const renderMenu = (

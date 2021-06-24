@@ -12,6 +12,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import { Trans } from "@lingui/react";
+import { useStore } from "src/store";
 import {
   Meal_Item,
   useUpdateMealItemMutation,
@@ -21,7 +22,6 @@ import {
   FoodOptionalType,
   MealAutocomplete,
 } from "../../../components/MealAutocomplete";
-import { useUser } from "../../context/userContext";
 
 const useStyles = makeStyles(() => ({
   field: {
@@ -38,7 +38,9 @@ interface Props {
 
 export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
   const classes = useStyles();
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
 
   const [error, setOpenErrorMessage] = React.useState<ApolloError | null>();
   const [success, setOpenSuccessMessage] = React.useState(false);

@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { useHistory } from "react-router-dom";
 import { Users } from "../../graphql/generated/graphql";
+import { useStore } from "../../store";
 
 enum ActionTypes {
   UPDATE = "UPDATE",
@@ -17,7 +18,7 @@ interface Action {
   payload: Users;
 }
 
-const INITIAL_STATE: Users = {
+export const INITIAL_STATE: Users = {
   id: "0",
   meal_items: [],
   meal_items_aggregate: { nodes: [] },
@@ -78,8 +79,13 @@ export function useUpdateUser() {
 export function useLogOut() {
   const { push } = useHistory();
   const { user, dispatch } = useUser();
+  const {
+    userStore: { resetUser },
+  } = useStore();
+
   const logout = () => {
     dispatch({ type: ActionTypes.UPDATE, payload: INITIAL_STATE });
+    resetUser();
     push("/auth");
   };
 

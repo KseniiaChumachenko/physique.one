@@ -7,7 +7,7 @@ import { LocalizationProvider } from "@material-ui/pickers";
 import MomentAdapter from "@material-ui/pickers/adapter/moment";
 import { useLanguageSetup } from "./hooks/useLanguageSetup";
 import { Router } from "./screens/Router";
-import { UserProvider } from "./screens/context/userContext";
+import { StoreProvider } from "./store";
 import { api } from "./api";
 
 function App() {
@@ -20,9 +20,9 @@ function App() {
           dateLibInstance={moment}
           dateAdapter={MomentAdapter}
         >
-          <UserProvider>
+          <StoreProvider>
             <Router />
-          </UserProvider>
+          </StoreProvider>
         </LocalizationProvider>
       </I18nProvider>
     </ApolloProvider>

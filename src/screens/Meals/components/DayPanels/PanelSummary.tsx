@@ -7,8 +7,8 @@ import {
   Meal,
   useMealItemMacrosSumByIdSubscription,
 } from "src/graphql/generated/graphql";
+import { useStore } from "src/store";
 import { AggregationChips } from "../../../../components/AggredationChips";
-import { useUser } from "../../../context/userContext";
 import { PanelDetailActions } from "./PanelDetailActions";
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +24,9 @@ type SummaryProps = Pick<Meal, "name" | "time"> & Pick<Meal, "id">;
 
 export const PanelSummary = ({ name, id, time }: SummaryProps) => {
   const classes = useStyles();
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
 
   const { data } = useMealItemMacrosSumByIdSubscription({
     variables: { meal_id: id, u_id: user?.id },

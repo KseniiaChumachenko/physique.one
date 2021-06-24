@@ -48,11 +48,13 @@ export const RegularModeCard = ({
           </>
         }
       />
-      <M.CardMedia
-        image={data?.img_url}
-        title={"img"}
-        className={classes.tileImg}
-      />
+      {data?.img_url && (
+        <M.CardMedia
+          image={data?.img_url}
+          title={"img"}
+          className={classes.tileImg}
+        />
+      )}
 
       <M.CardContent>
         <M.Typography variant="body2" color="textSecondary" component="p">

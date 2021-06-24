@@ -4,13 +4,13 @@ import { useHistory } from "react-router-dom";
 import FacebookLoginWithButton from "react-facebook-login";
 import { Button, Link, TextField, Typography } from "@material-ui/core";
 import { Trans } from "@lingui/react";
-import { useUpdateUser } from "../context/userContext";
 import {
   useIsFacebookUserLazyQuery,
   useLogInLazyQuery,
   useRegisterFacebookUserMutation,
   Users,
 } from "../../graphql/generated/graphql";
+import { useStore } from "../../store";
 import { useStyles } from "./styled";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
 import { FormCard } from "./FormCard";
@@ -58,7 +58,9 @@ export const LoginForm = () => {
   const history = useHistory();
   const classes = useStyles();
 
-  const { setUser } = useUpdateUser();
+  const {
+    userStore: { setUser },
+  } = useStore();
 
   const [isResetForm, setResetForm] = useState(false);
   const [email, setEmail] = useState("");

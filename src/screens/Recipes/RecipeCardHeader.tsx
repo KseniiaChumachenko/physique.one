@@ -7,6 +7,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
+import { useStore } from "src/store";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { AggregationChips } from "../../components/AggredationChips";
 import {
@@ -15,7 +16,6 @@ import {
   useDeleteRecipeByPkMutation,
   useUpdateRecipeByPkMutation,
 } from "../../graphql/generated/graphql";
-import { useUser } from "../context/userContext";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -46,7 +46,9 @@ export const RecipeCardHeader = ({
   description,
 }: RecipeCardHeaderProps) => {
   const classes = useStyles();
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
   const [isInEditMode, setEditMode] = useState(false);
   const [updatedName, setUpdatedName] = useState(name);
   const [updatedDesc, setUpdatedDesc] = useState(description);

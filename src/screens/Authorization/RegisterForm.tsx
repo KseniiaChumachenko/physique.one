@@ -5,7 +5,7 @@ import { send } from "emailjs-com";
 import { Button, TextField } from "@material-ui/core";
 import { ApolloError } from "@apollo/client";
 import { Trans } from "@lingui/react";
-import { useUpdateUser } from "../context/userContext";
+import { useStore } from "src/store";
 import {
   useRegisterMutation,
   Users,
@@ -23,7 +23,9 @@ export const RegisterForm = () => {
   const history = useHistory();
   const classes = useStyles();
 
-  const { setUser } = useUpdateUser();
+  const {
+    userStore: { setUser },
+  } = useStore();
 
   const [state, setState] = useState<Users_Insert_Input>();
   const [password, setPassword] = useState({

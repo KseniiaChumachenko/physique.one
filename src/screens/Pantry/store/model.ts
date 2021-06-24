@@ -1,7 +1,7 @@
 import { ApolloError } from "@apollo/client";
 import { Food_Type } from "../../../graphql/generated/graphql";
 
-type PantryCardType = {
+type FoodTypeCardType = {
   data?: Food_Type;
   loading?: boolean;
   error?: ApolloError;
@@ -11,4 +11,4 @@ type PantryCardType = {
   isNewCategory?: boolean;
 };
 
-export { Food_Type, PantryCardType };
+export { Food_Type, FoodTypeCardType };

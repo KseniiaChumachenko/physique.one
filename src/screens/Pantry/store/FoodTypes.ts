@@ -9,16 +9,16 @@ import {
   FOOD_TYPES_DOCUMENT,
 } from "../gql";
 import { api } from "../../../api";
-import { Food_Type, PantryCardType } from "./model";
+import { Food_Type, FoodTypeCardType } from "./model";
 import { EMPTY_FOOD_TYPE } from "./constants";
 
-export class PantryStore {
+export class FoodTypes {
   rootStore: RootStore;
-  categories: PantryCardType[] = [];
+  categories: FoodTypeCardType[] = [];
   loading = true;
   error?: ApolloError;
 
-  newCategory?: PantryCardType;
+  newCategory?: FoodTypeCardType;
 
   constructor(rootStore: RootStore) {
     makeAutoObservable(this /*{ rootStore: false }*/, {}, { autoBind: true });

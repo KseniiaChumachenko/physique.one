@@ -9,6 +9,7 @@ import {
   TextField,
 } from "@material-ui/core";
 import { Trans } from "@lingui/react";
+import { useStore } from "src/store";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import {
   Recipe_Item,
@@ -17,7 +18,6 @@ import {
   useFoodSelectFieldListingQuery,
   useUpdateRecipeItemByPkMutation,
 } from "../../graphql/generated/graphql";
-import { useUser } from "../context/userContext";
 
 interface Props {
   recipe_id?: string;
@@ -44,7 +44,9 @@ const useStyles = makeStyles((theme) =>
 // TODO: error handling
 
 export const RecipeTableEditableRow = ({ recipe_id, row, mode }: Props) => {
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
   const [isInEditMode, setEditMode] = useState(false);
 
   const [updatedRowFood, setUpdatedRowFood] = useState(row?.food?.id);
