@@ -66,7 +66,10 @@ export const RecipeTableEditableRow = ({
 
   const { data } = useFoodSelectFieldListingQuery();
 
-  const [update_recipe_item_by_pk] = useUpdateRecipeItemByPkMutation({
+  const [
+    update_recipe_item_by_pk,
+    { loading: updateLoading },
+  ] = useUpdateRecipeItemByPkMutation({
     onCompleted: () => setEditMode(false),
   });
 
@@ -77,7 +80,10 @@ export const RecipeTableEditableRow = ({
     },
   });
 
-  const [incert_recipe_item_one] = useAddRecipeItemMutation({
+  const [
+    incert_recipe_item_one,
+    { loading: addLoading },
+  ] = useAddRecipeItemMutation({
     onCompleted: onClickOutside,
   });
 
@@ -98,6 +104,7 @@ export const RecipeTableEditableRow = ({
     fats: (foodById?.fats / 100) * updatedRowWeight,
   };
 
+  const loading = updateLoading || addLoading;
   return (
     <TableRow>
       {isInEditMode ? (
@@ -109,6 +116,7 @@ export const RecipeTableEditableRow = ({
             children={
               data && (
                 <Select
+                  disabled={loading}
                   label={<Trans>Food</Trans>}
                   defaultValue={row?.food?.id || data?.food[0].id}
                   onChange={(event) =>
@@ -129,6 +137,7 @@ export const RecipeTableEditableRow = ({
             scope="row"
             children={
               <TextField
+                disabled={loading}
                 defaultValue={row?.weight || 100}
                 type={"number"}
                 onChange={(event: any) =>
@@ -230,9 +239,9 @@ export const RecipeTableEditableRow = ({
                   : undefined
               }
               onEditClick={
-                isInEditMode && mode === "add"
-                  ? undefined
-                  : () => setEditMode(row.id)
+                !(isInEditMode || mode === "add")
+                  ? () => setEditMode(row.id)
+                  : undefined
               }
               onDeleteClick={
                 !(mode === "add")

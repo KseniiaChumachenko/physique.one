@@ -152,6 +152,7 @@ subscription RecipeListing {
           proteins
           energy_kj
           energy_cal
+          weight
         }
       }
     }

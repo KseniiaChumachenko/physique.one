@@ -77,36 +77,26 @@ export const RecipeCard = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {recipe_items?.map((row, key) => (
+            {recipe_items?.map((row) => (
               <RecipeTableEditableRow
                 recipe_id={id}
                 row={row}
-                key={key}
+                key={row.id}
                 mode={"regularRow"}
                 u_id={u_id}
                 onClickOutside={handleResetAddRow}
               />
             ))}
-            {withAddRow &&
-              (u_id === "0" ? (
-                <RecipeTableEditableRow
-                  recipe_id={id}
-                  row={{}}
-                  mode={"add"}
-                  u_id={u_id}
-                  onClickOutside={handleResetAddRow}
-                />
-              ) : (
-                isPermitted && (
-                  <RecipeTableEditableRow
-                    recipe_id={id}
-                    row={{}}
-                    mode={"add"}
-                    u_id={u_id}
-                    onClickOutside={handleResetAddRow}
-                  />
-                )
-              ))}
+            {withAddRow && isPermitted && (
+              <RecipeTableEditableRow
+                key={id}
+                recipe_id={id}
+                row={{}}
+                mode={"add"}
+                u_id={u_id}
+                onClickOutside={handleResetAddRow}
+              />
+            )}
           </TableBody>
         </Table>
         {!withAddRow && (
