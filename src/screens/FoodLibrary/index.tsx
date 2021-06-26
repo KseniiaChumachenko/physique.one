@@ -12,7 +12,6 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
-import { ApolloError } from "@apollo/client";
 import {
   useAddFoodMutation,
   useDeleteFoodMutation,
@@ -23,7 +22,7 @@ import { ToastMessage } from "../../components/ToastMessage";
 import { AddFoodDialog } from "../components/AddFoodDialog";
 import { State } from "../components/AddFoodDialog/useStore";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
-import { useUser } from "../context/userContext";
+import { useStore } from "../../store";
 
 const useStyles = makeStyles((theme) => ({
   tableToolbar: {
@@ -35,13 +34,15 @@ const useStyles = makeStyles((theme) => ({
 
 export const FoodLibrary = () => {
   const classes = useStyles();
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState<any>(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<ApolloError>(false);
+  const [error, setError] = useState<string>("");
   const { data, refetch } = useFoodSelectFieldListingQuery({
-    onError: (error1) => setError(error1),
+    onError: (error1) => setError(error1.message),
   });
 
   const [insert_food] = useAddFoodMutation({
@@ -50,7 +51,7 @@ export const FoodLibrary = () => {
       setOpenAddDialog(false);
       setSuccess(true);
     },
-    onError: (error1) => setError(error1),
+    onError: (error1) => setError(error1.message),
   });
 
   const [update_food] = useUpdateFoodMutation({
@@ -59,7 +60,7 @@ export const FoodLibrary = () => {
       setOpenEditDialog(false);
       setSuccess(true);
     },
-    onError: (error1) => setError(error1),
+    onError: (error1) => setError(error1.message),
   });
 
   const [delete_food] = useDeleteFoodMutation({
@@ -67,7 +68,7 @@ export const FoodLibrary = () => {
       refetch();
       setSuccess(true);
     },
-    onError: (error1) => setError(error1),
+    onError: (error1) => setError(error1.message),
   });
 
   const handleAddFood = (props: State) => (event: any) => {
@@ -145,9 +146,9 @@ export const FoodLibrary = () => {
       )}
       <ToastMessage
         severity={"error"}
-        children={error?.message as any}
+        children={<>{error}</>}
         open={!!error}
-        controledClose={() => setError(undefined)}
+        controledClose={() => setError("")}
       />
       <ToastMessage
         severity={"success"}

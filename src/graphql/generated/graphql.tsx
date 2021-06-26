@@ -5715,6 +5715,7 @@ export type AddFoodMutationVariables = Exact<{
   energy_cal?: Maybe<Scalars["numeric"]>;
   carbohydrates?: Maybe<Scalars["numeric"]>;
   type?: Maybe<Scalars["String"]>;
+  u_id: Scalars["uuid"];
 }>;
 
 export type AddFoodMutation = { __typename?: "mutation_root" } & {
@@ -6072,6 +6073,7 @@ export type FoodSelectFieldListingQuery = { __typename?: "query_root" } & {
       | "fats"
       | "energy_cal"
       | "energy_kj"
+      | "u_id"
     >
   >;
   recipe: Array<
@@ -6114,7 +6116,10 @@ export type RecipeListingSubscriptionVariables = Exact<{
 
 export type RecipeListingSubscription = { __typename?: "subscription_root" } & {
   recipe: Array<
-    { __typename?: "recipe" } & Pick<Recipe, "id" | "name" | "description"> & {
+    { __typename?: "recipe" } & Pick<
+      Recipe,
+      "id" | "name" | "description" | "u_id"
+    > & {
         recipe_items: Array<
           { __typename?: "recipe_item" } & Pick<
             Recipe_Item,
@@ -6322,6 +6327,7 @@ export const AddFoodDocument = gql`
     $energy_cal: numeric
     $carbohydrates: numeric
     $type: String
+    $u_id: uuid!
   ) {
     insert_food(
       objects: {
@@ -6332,6 +6338,7 @@ export const AddFoodDocument = gql`
         proteins: $proteins
         carbohydrates: $carbohydrates
         fats: $fats
+        u_id: $u_id
       }
     ) {
       affected_rows
@@ -7147,6 +7154,7 @@ export const FoodSelectFieldListingDocument = gql`
       fats
       energy_cal
       energy_kj
+      u_id
     }
     recipe {
       id
@@ -7244,6 +7252,7 @@ export const RecipeListingDocument = gql`
       id
       name
       description
+      u_id
       recipe_items {
         id
         food {

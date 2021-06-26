@@ -15,7 +15,7 @@ import {
   useDeleteRecipeByPkMutation,
   useUpdateRecipeByPkMutation,
 } from "../../graphql/generated/graphql";
-import { usePermissions } from "../../hooks/usePermissions";
+import { useStore } from "../../store";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -48,7 +48,12 @@ export const RecipeCardHeader = ({
   u_id,
 }: RecipeCardHeaderProps) => {
   const classes = useStyles();
-  const { isPermitted } = usePermissions(u_id);
+  const {
+    userStore: {
+      user: { id: userId },
+    },
+  } = useStore();
+  const isPermitted = userId === u_id;
   const [isInEditMode, setEditMode] = useState(false);
   const [updatedName, setUpdatedName] = useState(name);
   const [updatedDesc, setUpdatedDesc] = useState(description);

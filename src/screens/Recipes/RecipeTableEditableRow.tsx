@@ -17,7 +17,7 @@ import {
   useFoodSelectFieldListingQuery,
   useUpdateRecipeItemByPkMutation,
 } from "../../graphql/generated/graphql";
-import { usePermissions } from "../../hooks/usePermissions";
+import { useStore } from "../../store";
 
 interface Props {
   recipe_id?: string;
@@ -50,7 +50,13 @@ export const RecipeTableEditableRow = ({
   mode,
   u_id,
 }: Props) => {
-  const { isPermitted } = usePermissions(u_id);
+  const {
+    userStore: {
+      user: { id: userId },
+    },
+  } = useStore();
+
+  const isPermitted = userId === u_id;
   const [isInEditMode, setEditMode] = useState(false);
 
   const [updatedRowFood, setUpdatedRowFood] = useState(row?.food?.id);
