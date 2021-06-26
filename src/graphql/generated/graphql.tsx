@@ -5829,13 +5829,21 @@ export type AddRecipeItemMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
-export type UpdateRecipeByPkMutationVariables = Exact<{
+export type UpdateRecipeNameByPkMutationVariables = Exact<{
   id: Scalars["uuid"];
   name?: Maybe<Scalars["String"]>;
+}>;
+
+export type UpdateRecipeNameByPkMutation = { __typename?: "mutation_root" } & {
+  update_recipe_by_pk?: Maybe<{ __typename?: "recipe" } & Pick<Recipe, "id">>;
+};
+
+export type UpdateRecipeDescByPkMutationVariables = Exact<{
+  id: Scalars["uuid"];
   description?: Maybe<Scalars["String"]>;
 }>;
 
-export type UpdateRecipeByPkMutation = { __typename?: "mutation_root" } & {
+export type UpdateRecipeDescByPkMutation = { __typename?: "mutation_root" } & {
   update_recipe_by_pk?: Maybe<{ __typename?: "recipe" } & Pick<Recipe, "id">>;
 };
 
@@ -6143,6 +6151,7 @@ export type RecipeListingSubscription = { __typename?: "subscription_root" } & {
                   | "proteins"
                   | "energy_kj"
                   | "energy_cal"
+                  | "weight"
                 >
               >;
             }
@@ -6654,36 +6663,64 @@ export type AddRecipeItemMutationOptions = ApolloReactCommon.BaseMutationOptions
   AddRecipeItemMutation,
   AddRecipeItemMutationVariables
 >;
-export const UpdateRecipeByPkDocument = gql`
-  mutation UpdateRecipeByPK($id: uuid!, $name: String, $description: String) {
+export const UpdateRecipeNameByPkDocument = gql`
+  mutation UpdateRecipeNameByPK($id: uuid!, $name: String) {
+    update_recipe_by_pk(pk_columns: { id: $id }, _set: { name: $name }) {
+      id
+    }
+  }
+`;
+export function useUpdateRecipeNameByPkMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    UpdateRecipeNameByPkMutation,
+    UpdateRecipeNameByPkMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    UpdateRecipeNameByPkMutation,
+    UpdateRecipeNameByPkMutationVariables
+  >(UpdateRecipeNameByPkDocument, baseOptions);
+}
+export type UpdateRecipeNameByPkMutationHookResult = ReturnType<
+  typeof useUpdateRecipeNameByPkMutation
+>;
+export type UpdateRecipeNameByPkMutationResult = ApolloReactCommon.MutationResult<
+  UpdateRecipeNameByPkMutation
+>;
+export type UpdateRecipeNameByPkMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  UpdateRecipeNameByPkMutation,
+  UpdateRecipeNameByPkMutationVariables
+>;
+export const UpdateRecipeDescByPkDocument = gql`
+  mutation UpdateRecipeDescByPK($id: uuid!, $description: String) {
     update_recipe_by_pk(
       pk_columns: { id: $id }
-      _set: { name: $name, description: $description }
+      _set: { description: $description }
     ) {
       id
     }
   }
 `;
-export function useUpdateRecipeByPkMutation(
+export function useUpdateRecipeDescByPkMutation(
   baseOptions?: ApolloReactHooks.MutationHookOptions<
-    UpdateRecipeByPkMutation,
-    UpdateRecipeByPkMutationVariables
+    UpdateRecipeDescByPkMutation,
+    UpdateRecipeDescByPkMutationVariables
   >
 ) {
   return ApolloReactHooks.useMutation<
-    UpdateRecipeByPkMutation,
-    UpdateRecipeByPkMutationVariables
-  >(UpdateRecipeByPkDocument, baseOptions);
+    UpdateRecipeDescByPkMutation,
+    UpdateRecipeDescByPkMutationVariables
+  >(UpdateRecipeDescByPkDocument, baseOptions);
 }
-export type UpdateRecipeByPkMutationHookResult = ReturnType<
-  typeof useUpdateRecipeByPkMutation
+export type UpdateRecipeDescByPkMutationHookResult = ReturnType<
+  typeof useUpdateRecipeDescByPkMutation
 >;
-export type UpdateRecipeByPkMutationResult = ApolloReactCommon.MutationResult<
-  UpdateRecipeByPkMutation
+export type UpdateRecipeDescByPkMutationResult = ApolloReactCommon.MutationResult<
+  UpdateRecipeDescByPkMutation
 >;
-export type UpdateRecipeByPkMutationOptions = ApolloReactCommon.BaseMutationOptions<
-  UpdateRecipeByPkMutation,
-  UpdateRecipeByPkMutationVariables
+export type UpdateRecipeDescByPkMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  UpdateRecipeDescByPkMutation,
+  UpdateRecipeDescByPkMutationVariables
 >;
 export const UpdateRecipeItemByPkDocument = gql`
   mutation UpdateRecipeItemByPK(
@@ -7274,6 +7311,7 @@ export const RecipeListingDocument = gql`
             proteins
             energy_kj
             energy_cal
+            weight
           }
         }
       }

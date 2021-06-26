@@ -1,29 +1,34 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   CardContent,
   CardHeader,
+  ClickAwayListener,
   createStyles,
   TextField,
   Typography,
 } from "@material-ui/core";
+import { Trans } from "@lingui/react";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { AggregationChips } from "../../components/AggredationChips";
 import {
   Recipe_Item_Aggregate,
   useAddRecipeMutation,
   useDeleteRecipeByPkMutation,
-  useUpdateRecipeByPkMutation,
+  useUpdateRecipeDescByPkMutation,
+  useUpdateRecipeNameByPkMutation,
 } from "../../graphql/generated/graphql";
 import { useStore } from "../../store";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     title: {
-      width: 220,
+      width: 250,
+      cursor: "pointer",
     },
     description: {
       margin: theme.spacing(1),
+      cursor: "pointer",
     },
     editableDescription: {
       width: "100%",
@@ -54,13 +59,20 @@ export const RecipeCardHeader = ({
     },
   } = useStore();
   const isPermitted = userId === u_id;
-  const [isInEditMode, setEditMode] = useState(false);
+  const [isEditTitle, setIsEditTitle] = useState(false);
+  const [isEditDesc, setIsEditDesc] = useState(false);
+
   const [updatedName, setUpdatedName] = useState(name);
   const [updatedDesc, setUpdatedDesc] = useState(description);
 
-  const [update_recipe_by_pk] = useUpdateRecipeByPkMutation({
-    variables: { id, name: updatedName, description: updatedDesc },
-  });
+  const [
+    update_recipe_name_by_pk,
+    { loading: titleLoading },
+  ] = useUpdateRecipeNameByPkMutation();
+  const [
+    update_recipe_desc_by_pk,
+    { loading: descLoading },
+  ] = useUpdateRecipeDescByPkMutation();
   const [delete_recipe_by_pk] = useDeleteRecipeByPkMutation({
     variables: { id },
   });
@@ -73,27 +85,46 @@ export const RecipeCardHeader = ({
     },
   });
 
-  useEffect(() => {
-    if (!id) {
-      setEditMode(true);
-    }
-  }, [id]);
-
   const macronutrients = recipe_items_aggregate?.aggregate?.sum;
+
+  const handleSubmitTitle = () => {
+    update_recipe_name_by_pk({
+      variables: {
+        id,
+        name: updatedName,
+      },
+    });
+    setIsEditTitle(false);
+  };
+
+  const handleSubmitDesc = () => {
+    update_recipe_desc_by_pk({
+      variables: {
+        id,
+        description: updatedDesc,
+      },
+    });
+    setIsEditDesc(false);
+  };
 
   return (
     <>
       <CardHeader
         title={
-          isInEditMode ? (
-            <TextField
-              defaultValue={name || updatedName}
-              type={"text"}
-              onChange={(event: any) => setUpdatedName(event?.target?.value)}
-              className={classes.title}
-            />
+          isEditTitle ? (
+            <ClickAwayListener onClickAway={handleSubmitTitle}>
+              <TextField
+                defaultValue={name || updatedName}
+                type={"text"}
+                onChange={(event: any) => setUpdatedName(event?.target?.value)}
+                className={classes.title}
+                disabled={titleLoading}
+              />
+            </ClickAwayListener>
           ) : (
-            name
+            <div onClick={() => setIsEditTitle(true)} className={classes.title}>
+              {updatedName}
+            </div>
           )
         }
         action={
@@ -101,25 +132,7 @@ export const RecipeCardHeader = ({
             <EditDeleteButtonGroup onConfirmClick={insert_recipe_one} />
           ) : (
             isPermitted && (
-              <EditDeleteButtonGroup
-                onConfirmClick={
-                  isInEditMode
-                    ? () => {
-                        if (id) {
-                          update_recipe_by_pk();
-                        } else {
-                          insert_recipe_one();
-                        }
-                        setEditMode(false);
-                      }
-                    : undefined
-                }
-                onCancelClick={
-                  isInEditMode ? () => setEditMode(false) : undefined
-                }
-                onEditClick={isInEditMode ? undefined : () => setEditMode(true)}
-                onDeleteClick={delete_recipe_by_pk}
-              />
+              <EditDeleteButtonGroup onDeleteClick={delete_recipe_by_pk} />
             )
           )
         }
@@ -132,24 +145,29 @@ export const RecipeCardHeader = ({
             proteins={macronutrients.proteins!}
             carbohydrates={macronutrients.carbohydrates!}
             fats={macronutrients.fats!}
+            weight={macronutrients.weight}
           />
         ) : null}
 
-        {isInEditMode ? (
-          <TextField
-            defaultValue={description || updatedDesc}
-            type={"text"}
-            onChange={(event: any) => setUpdatedDesc(event?.target?.value)}
-            className={classes.editableDescription}
-          />
+        {isEditDesc ? (
+          <ClickAwayListener onClickAway={handleSubmitDesc}>
+            <TextField
+              disabled={descLoading}
+              defaultValue={description || updatedDesc}
+              type={"text"}
+              onChange={(event: any) => setUpdatedDesc(event?.target?.value)}
+              className={classes.editableDescription}
+            />
+          </ClickAwayListener>
         ) : (
           <Typography
             variant="body2"
             color="textSecondary"
             component="p"
             className={classes.description}
+            onClick={() => setIsEditDesc(true)}
           >
-            {description}
+            {updatedDesc || <Trans>Description is empty</Trans>}
           </Typography>
         )}
       </CardContent>

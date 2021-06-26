@@ -17,6 +17,7 @@ interface Props {
   proteins: number;
   carbohydrates: number;
   fats: number;
+  weight?: number;
 }
 
 export const AggregationChips = ({
@@ -25,6 +26,7 @@ export const AggregationChips = ({
   proteins,
   carbohydrates,
   fats,
+  weight,
 }: Props) => {
   const classes = useStyles();
 
@@ -74,6 +76,15 @@ export const AggregationChips = ({
         color={"primary"}
         className={classes.chip}
       />
+      {weight && (
+        <Chip
+          label={`Total weight: ${weight} (g)`}
+          variant={"outlined"}
+          size={"small"}
+          color={"default"}
+          className={classes.chip}
+        />
+      )}
     </>
   );
 };
