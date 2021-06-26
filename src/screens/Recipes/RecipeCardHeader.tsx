@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   CardContent,
   CardHeader,
@@ -8,15 +9,13 @@ import {
 } from "@material-ui/core";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { AggregationChips } from "../../components/AggredationChips";
-import { makeStyles } from "@material-ui/core/styles";
 import {
   Recipe_Item_Aggregate,
   useAddRecipeMutation,
   useDeleteRecipeByPkMutation,
   useUpdateRecipeByPkMutation,
 } from "../../graphql/generated/graphql";
-import { useUser } from "../context/userContext";
-import { usePermissions } from "../../hooks/usePermissions";
+import { useStore } from "../../store";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -40,6 +39,7 @@ export interface RecipeCardHeaderProps {
   u_id: string;
 }
 
+// TODO: error handling
 export const RecipeCardHeader = ({
   id,
   name,
@@ -48,26 +48,26 @@ export const RecipeCardHeader = ({
   u_id,
 }: RecipeCardHeaderProps) => {
   const classes = useStyles();
-  const { user } = useUser();
-  const { isPermitted } = usePermissions(u_id);
-  const [isInEditMode, setEditMode] = useState();
+  const {
+    userStore: {
+      user: { id: userId },
+    },
+  } = useStore();
+  const isPermitted = userId === u_id;
+  const [isInEditMode, setEditMode] = useState(false);
   const [updatedName, setUpdatedName] = useState(name);
   const [updatedDesc, setUpdatedDesc] = useState(description);
 
   const [update_recipe_by_pk] = useUpdateRecipeByPkMutation({
     variables: { id, name: updatedName, description: updatedDesc },
-    onCompleted: (data) => console.log("Success ", data),
-    onError: (error) => console.log(error),
   });
   const [delete_recipe_by_pk] = useDeleteRecipeByPkMutation({
     variables: { id },
-    onCompleted: (data) => console.log("Success ", data),
-    onError: (error) => console.log(error),
   });
 
   const [insert_recipe_one] = useAddRecipeMutation({
     variables: {
-      u_id: user?.id,
+      u_id,
       name: updatedName,
       description: updatedDesc,
     },

@@ -1,11 +1,11 @@
 import React, { Dispatch, useEffect, useMemo } from "react";
-import { TextField } from "@material-ui/core";
 import { Autocomplete, AutocompleteProps } from "@material-ui/lab";
+import { TextField } from "@material-ui/core";
+import { Trans } from "@lingui/react";
 import {
   Food_Insert_Input,
   useFoodSelectFieldListingQuery,
 } from "../graphql/generated/graphql";
-import { Trans } from "@lingui/react";
 
 export type MealAutocompleteListItem = Food_Insert_Input & {
   recipe?: boolean;
@@ -59,7 +59,7 @@ export function MealAutocomplete({
       const foodFromOptions = remappedOptions.find((item) => item.id === value);
       setValue(foodFromOptions);
     }
-  }, [value, remappedOptions]);
+  }, [value, remappedOptions, setValue]);
 
   const withValue = !(typeof value === "string") && remappedOptions;
 

@@ -887,6 +887,22 @@ export type Mutation_Root = {
   delete_meal_item?: Maybe<Meal_Item_Mutation_Response>;
   /** delete single row from the table: "meal_item" */
   delete_meal_item_by_pk?: Maybe<Meal_Item>;
+  /** delete data from the table: "pantry" */
+  delete_pantry?: Maybe<Pantry_Mutation_Response>;
+  /** delete single row from the table: "pantry" */
+  delete_pantry_by_pk?: Maybe<Pantry>;
+  /** delete data from the table: "pantry_items" */
+  delete_pantry_items?: Maybe<Pantry_Items_Mutation_Response>;
+  /** delete single row from the table: "pantry_items" */
+  delete_pantry_items_by_pk?: Maybe<Pantry_Items>;
+  /** delete data from the table: "pantry_jars" */
+  delete_pantry_jars?: Maybe<Pantry_Jars_Mutation_Response>;
+  /** delete single row from the table: "pantry_jars" */
+  delete_pantry_jars_by_pk?: Maybe<Pantry_Jars>;
+  /** delete data from the table: "pantry_user" */
+  delete_pantry_user?: Maybe<Pantry_User_Mutation_Response>;
+  /** delete single row from the table: "pantry_user" */
+  delete_pantry_user_by_pk?: Maybe<Pantry_User>;
   /** delete data from the table: "recipe" */
   delete_recipe?: Maybe<Recipe_Mutation_Response>;
   /** delete single row from the table: "recipe" */
@@ -915,6 +931,22 @@ export type Mutation_Root = {
   insert_meal_item_one?: Maybe<Meal_Item>;
   /** insert a single row into the table: "meal" */
   insert_meal_one?: Maybe<Meal>;
+  /** insert data into the table: "pantry" */
+  insert_pantry?: Maybe<Pantry_Mutation_Response>;
+  /** insert data into the table: "pantry_items" */
+  insert_pantry_items?: Maybe<Pantry_Items_Mutation_Response>;
+  /** insert a single row into the table: "pantry_items" */
+  insert_pantry_items_one?: Maybe<Pantry_Items>;
+  /** insert data into the table: "pantry_jars" */
+  insert_pantry_jars?: Maybe<Pantry_Jars_Mutation_Response>;
+  /** insert a single row into the table: "pantry_jars" */
+  insert_pantry_jars_one?: Maybe<Pantry_Jars>;
+  /** insert a single row into the table: "pantry" */
+  insert_pantry_one?: Maybe<Pantry>;
+  /** insert data into the table: "pantry_user" */
+  insert_pantry_user?: Maybe<Pantry_User_Mutation_Response>;
+  /** insert a single row into the table: "pantry_user" */
+  insert_pantry_user_one?: Maybe<Pantry_User>;
   /** insert data into the table: "recipe" */
   insert_recipe?: Maybe<Recipe_Mutation_Response>;
   /** insert data into the table: "recipe_item" */
@@ -943,6 +975,22 @@ export type Mutation_Root = {
   update_meal_item?: Maybe<Meal_Item_Mutation_Response>;
   /** update single row of the table: "meal_item" */
   update_meal_item_by_pk?: Maybe<Meal_Item>;
+  /** update data of the table: "pantry" */
+  update_pantry?: Maybe<Pantry_Mutation_Response>;
+  /** update single row of the table: "pantry" */
+  update_pantry_by_pk?: Maybe<Pantry>;
+  /** update data of the table: "pantry_items" */
+  update_pantry_items?: Maybe<Pantry_Items_Mutation_Response>;
+  /** update single row of the table: "pantry_items" */
+  update_pantry_items_by_pk?: Maybe<Pantry_Items>;
+  /** update data of the table: "pantry_jars" */
+  update_pantry_jars?: Maybe<Pantry_Jars_Mutation_Response>;
+  /** update single row of the table: "pantry_jars" */
+  update_pantry_jars_by_pk?: Maybe<Pantry_Jars>;
+  /** update data of the table: "pantry_user" */
+  update_pantry_user?: Maybe<Pantry_User_Mutation_Response>;
+  /** update single row of the table: "pantry_user" */
+  update_pantry_user_by_pk?: Maybe<Pantry_User>;
   /** update data of the table: "recipe" */
   update_recipe?: Maybe<Recipe_Mutation_Response>;
   /** update single row of the table: "recipe" */
@@ -994,6 +1042,46 @@ export type Mutation_RootDelete_Meal_ItemArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Meal_Item_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_PantryArgs = {
+  where: Pantry_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Pantry_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Pantry_ItemsArgs = {
+  where: Pantry_Items_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Pantry_Items_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Pantry_JarsArgs = {
+  where: Pantry_Jars_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Pantry_Jars_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Pantry_UserArgs = {
+  where: Pantry_User_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootDelete_Pantry_User_By_PkArgs = {
   id: Scalars["uuid"];
 };
 
@@ -1073,6 +1161,54 @@ export type Mutation_RootInsert_Meal_Item_OneArgs = {
 export type Mutation_RootInsert_Meal_OneArgs = {
   object: Meal_Insert_Input;
   on_conflict?: Maybe<Meal_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_PantryArgs = {
+  objects: Array<Pantry_Insert_Input>;
+  on_conflict?: Maybe<Pantry_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Pantry_ItemsArgs = {
+  objects: Array<Pantry_Items_Insert_Input>;
+  on_conflict?: Maybe<Pantry_Items_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Pantry_Items_OneArgs = {
+  object: Pantry_Items_Insert_Input;
+  on_conflict?: Maybe<Pantry_Items_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Pantry_JarsArgs = {
+  objects: Array<Pantry_Jars_Insert_Input>;
+  on_conflict?: Maybe<Pantry_Jars_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Pantry_Jars_OneArgs = {
+  object: Pantry_Jars_Insert_Input;
+  on_conflict?: Maybe<Pantry_Jars_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Pantry_OneArgs = {
+  object: Pantry_Insert_Input;
+  on_conflict?: Maybe<Pantry_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Pantry_UserArgs = {
+  objects: Array<Pantry_User_Insert_Input>;
+  on_conflict?: Maybe<Pantry_User_On_Conflict>;
+};
+
+/** mutation root */
+export type Mutation_RootInsert_Pantry_User_OneArgs = {
+  object: Pantry_User_Insert_Input;
+  on_conflict?: Maybe<Pantry_User_On_Conflict>;
 };
 
 /** mutation root */
@@ -1164,6 +1300,58 @@ export type Mutation_RootUpdate_Meal_Item_By_PkArgs = {
 };
 
 /** mutation root */
+export type Mutation_RootUpdate_PantryArgs = {
+  _set?: Maybe<Pantry_Set_Input>;
+  where: Pantry_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Pantry_By_PkArgs = {
+  _set?: Maybe<Pantry_Set_Input>;
+  pk_columns: Pantry_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Pantry_ItemsArgs = {
+  _inc?: Maybe<Pantry_Items_Inc_Input>;
+  _set?: Maybe<Pantry_Items_Set_Input>;
+  where: Pantry_Items_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Pantry_Items_By_PkArgs = {
+  _inc?: Maybe<Pantry_Items_Inc_Input>;
+  _set?: Maybe<Pantry_Items_Set_Input>;
+  pk_columns: Pantry_Items_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Pantry_JarsArgs = {
+  _inc?: Maybe<Pantry_Jars_Inc_Input>;
+  _set?: Maybe<Pantry_Jars_Set_Input>;
+  where: Pantry_Jars_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Pantry_Jars_By_PkArgs = {
+  _inc?: Maybe<Pantry_Jars_Inc_Input>;
+  _set?: Maybe<Pantry_Jars_Set_Input>;
+  pk_columns: Pantry_Jars_Pk_Columns_Input;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Pantry_UserArgs = {
+  _set?: Maybe<Pantry_User_Set_Input>;
+  where: Pantry_User_Bool_Exp;
+};
+
+/** mutation root */
+export type Mutation_RootUpdate_Pantry_User_By_PkArgs = {
+  _set?: Maybe<Pantry_User_Set_Input>;
+  pk_columns: Pantry_User_Pk_Columns_Input;
+};
+
+/** mutation root */
 export type Mutation_RootUpdate_RecipeArgs = {
   _inc?: Maybe<Recipe_Inc_Input>;
   _set?: Maybe<Recipe_Set_Input>;
@@ -1203,6 +1391,393 @@ export type Mutation_RootUpdate_Users_By_PkArgs = {
   pk_columns: Users_Pk_Columns_Input;
 };
 
+/** columns and relationships of "pantry" */
+export type Pantry = {
+  __typename?: "pantry";
+  id: Scalars["uuid"];
+  name: Scalars["name"];
+  /** An array relationship */
+  pantry_items: Array<Pantry_Items>;
+  /** An aggregated array relationship */
+  pantry_items_aggregate: Pantry_Items_Aggregate;
+  /** An array relationship */
+  pantry_users: Array<Pantry_User>;
+  /** An aggregated array relationship */
+  pantry_users_aggregate: Pantry_User_Aggregate;
+};
+
+/** columns and relationships of "pantry" */
+export type PantryPantry_ItemsArgs = {
+  distinct_on?: Maybe<Array<Pantry_Items_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Items_Order_By>>;
+  where?: Maybe<Pantry_Items_Bool_Exp>;
+};
+
+/** columns and relationships of "pantry" */
+export type PantryPantry_Items_AggregateArgs = {
+  distinct_on?: Maybe<Array<Pantry_Items_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Items_Order_By>>;
+  where?: Maybe<Pantry_Items_Bool_Exp>;
+};
+
+/** columns and relationships of "pantry" */
+export type PantryPantry_UsersArgs = {
+  distinct_on?: Maybe<Array<Pantry_User_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_User_Order_By>>;
+  where?: Maybe<Pantry_User_Bool_Exp>;
+};
+
+/** columns and relationships of "pantry" */
+export type PantryPantry_Users_AggregateArgs = {
+  distinct_on?: Maybe<Array<Pantry_User_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_User_Order_By>>;
+  where?: Maybe<Pantry_User_Bool_Exp>;
+};
+
+/** aggregated selection of "pantry" */
+export type Pantry_Aggregate = {
+  __typename?: "pantry_aggregate";
+  aggregate?: Maybe<Pantry_Aggregate_Fields>;
+  nodes: Array<Pantry>;
+};
+
+/** aggregate fields of "pantry" */
+export type Pantry_Aggregate_Fields = {
+  __typename?: "pantry_aggregate_fields";
+  count?: Maybe<Scalars["Int"]>;
+  max?: Maybe<Pantry_Max_Fields>;
+  min?: Maybe<Pantry_Min_Fields>;
+};
+
+/** aggregate fields of "pantry" */
+export type Pantry_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Pantry_Select_Column>>;
+  distinct?: Maybe<Scalars["Boolean"]>;
+};
+
+/** columns and relationships of "pantry_items" */
+export type Pantry_Items = {
+  __typename?: "pantry_items";
+  /** An object relationship */
+  food: Food;
+  id: Scalars["uuid"];
+  item: Scalars["uuid"];
+  jar?: Maybe<Scalars["uuid"]>;
+  /** An object relationship */
+  pantry: Pantry;
+  pantry_id: Scalars["uuid"];
+  weight: Scalars["Int"];
+};
+
+/** aggregated selection of "pantry_items" */
+export type Pantry_Items_Aggregate = {
+  __typename?: "pantry_items_aggregate";
+  aggregate?: Maybe<Pantry_Items_Aggregate_Fields>;
+  nodes: Array<Pantry_Items>;
+};
+
+/** aggregate fields of "pantry_items" */
+export type Pantry_Items_Aggregate_Fields = {
+  __typename?: "pantry_items_aggregate_fields";
+  avg?: Maybe<Pantry_Items_Avg_Fields>;
+  count?: Maybe<Scalars["Int"]>;
+  max?: Maybe<Pantry_Items_Max_Fields>;
+  min?: Maybe<Pantry_Items_Min_Fields>;
+  stddev?: Maybe<Pantry_Items_Stddev_Fields>;
+  stddev_pop?: Maybe<Pantry_Items_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Pantry_Items_Stddev_Samp_Fields>;
+  sum?: Maybe<Pantry_Items_Sum_Fields>;
+  var_pop?: Maybe<Pantry_Items_Var_Pop_Fields>;
+  var_samp?: Maybe<Pantry_Items_Var_Samp_Fields>;
+  variance?: Maybe<Pantry_Items_Variance_Fields>;
+};
+
+/** aggregate fields of "pantry_items" */
+export type Pantry_Items_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Pantry_Items_Select_Column>>;
+  distinct?: Maybe<Scalars["Boolean"]>;
+};
+
+/** aggregate avg on columns */
+export type Pantry_Items_Avg_Fields = {
+  __typename?: "pantry_items_avg_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate max on columns */
+export type Pantry_Items_Max_Fields = {
+  __typename?: "pantry_items_max_fields";
+  id?: Maybe<Scalars["uuid"]>;
+  item?: Maybe<Scalars["uuid"]>;
+  jar?: Maybe<Scalars["uuid"]>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** aggregate min on columns */
+export type Pantry_Items_Min_Fields = {
+  __typename?: "pantry_items_min_fields";
+  id?: Maybe<Scalars["uuid"]>;
+  item?: Maybe<Scalars["uuid"]>;
+  jar?: Maybe<Scalars["uuid"]>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** response of any mutation on the table "pantry_items" */
+export type Pantry_Items_Mutation_Response = {
+  __typename?: "pantry_items_mutation_response";
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"];
+  /** data of the affected rows by the mutation */
+  returning: Array<Pantry_Items>;
+};
+
+/** aggregate stddev on columns */
+export type Pantry_Items_Stddev_Fields = {
+  __typename?: "pantry_items_stddev_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Pantry_Items_Stddev_Pop_Fields = {
+  __typename?: "pantry_items_stddev_pop_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Pantry_Items_Stddev_Samp_Fields = {
+  __typename?: "pantry_items_stddev_samp_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate sum on columns */
+export type Pantry_Items_Sum_Fields = {
+  __typename?: "pantry_items_sum_fields";
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** aggregate var_pop on columns */
+export type Pantry_Items_Var_Pop_Fields = {
+  __typename?: "pantry_items_var_pop_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate var_samp on columns */
+export type Pantry_Items_Var_Samp_Fields = {
+  __typename?: "pantry_items_var_samp_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate variance on columns */
+export type Pantry_Items_Variance_Fields = {
+  __typename?: "pantry_items_variance_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** columns and relationships of "pantry_jars" */
+export type Pantry_Jars = {
+  __typename?: "pantry_jars";
+  id: Scalars["uuid"];
+  name: Scalars["name"];
+  pantry_id: Scalars["uuid"];
+  /** An object relationship */
+  user: Users;
+  user_id: Scalars["uuid"];
+  weight: Scalars["Int"];
+};
+
+/** aggregated selection of "pantry_jars" */
+export type Pantry_Jars_Aggregate = {
+  __typename?: "pantry_jars_aggregate";
+  aggregate?: Maybe<Pantry_Jars_Aggregate_Fields>;
+  nodes: Array<Pantry_Jars>;
+};
+
+/** aggregate fields of "pantry_jars" */
+export type Pantry_Jars_Aggregate_Fields = {
+  __typename?: "pantry_jars_aggregate_fields";
+  avg?: Maybe<Pantry_Jars_Avg_Fields>;
+  count?: Maybe<Scalars["Int"]>;
+  max?: Maybe<Pantry_Jars_Max_Fields>;
+  min?: Maybe<Pantry_Jars_Min_Fields>;
+  stddev?: Maybe<Pantry_Jars_Stddev_Fields>;
+  stddev_pop?: Maybe<Pantry_Jars_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Pantry_Jars_Stddev_Samp_Fields>;
+  sum?: Maybe<Pantry_Jars_Sum_Fields>;
+  var_pop?: Maybe<Pantry_Jars_Var_Pop_Fields>;
+  var_samp?: Maybe<Pantry_Jars_Var_Samp_Fields>;
+  variance?: Maybe<Pantry_Jars_Variance_Fields>;
+};
+
+/** aggregate fields of "pantry_jars" */
+export type Pantry_Jars_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Pantry_Jars_Select_Column>>;
+  distinct?: Maybe<Scalars["Boolean"]>;
+};
+
+/** aggregate avg on columns */
+export type Pantry_Jars_Avg_Fields = {
+  __typename?: "pantry_jars_avg_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate max on columns */
+export type Pantry_Jars_Max_Fields = {
+  __typename?: "pantry_jars_max_fields";
+  id?: Maybe<Scalars["uuid"]>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  user_id?: Maybe<Scalars["uuid"]>;
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** aggregate min on columns */
+export type Pantry_Jars_Min_Fields = {
+  __typename?: "pantry_jars_min_fields";
+  id?: Maybe<Scalars["uuid"]>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  user_id?: Maybe<Scalars["uuid"]>;
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** response of any mutation on the table "pantry_jars" */
+export type Pantry_Jars_Mutation_Response = {
+  __typename?: "pantry_jars_mutation_response";
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"];
+  /** data of the affected rows by the mutation */
+  returning: Array<Pantry_Jars>;
+};
+
+/** aggregate stddev on columns */
+export type Pantry_Jars_Stddev_Fields = {
+  __typename?: "pantry_jars_stddev_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Pantry_Jars_Stddev_Pop_Fields = {
+  __typename?: "pantry_jars_stddev_pop_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Pantry_Jars_Stddev_Samp_Fields = {
+  __typename?: "pantry_jars_stddev_samp_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate sum on columns */
+export type Pantry_Jars_Sum_Fields = {
+  __typename?: "pantry_jars_sum_fields";
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** aggregate var_pop on columns */
+export type Pantry_Jars_Var_Pop_Fields = {
+  __typename?: "pantry_jars_var_pop_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate var_samp on columns */
+export type Pantry_Jars_Var_Samp_Fields = {
+  __typename?: "pantry_jars_var_samp_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate variance on columns */
+export type Pantry_Jars_Variance_Fields = {
+  __typename?: "pantry_jars_variance_fields";
+  weight?: Maybe<Scalars["Float"]>;
+};
+
+/** aggregate max on columns */
+export type Pantry_Max_Fields = {
+  __typename?: "pantry_max_fields";
+  id?: Maybe<Scalars["uuid"]>;
+};
+
+/** aggregate min on columns */
+export type Pantry_Min_Fields = {
+  __typename?: "pantry_min_fields";
+  id?: Maybe<Scalars["uuid"]>;
+};
+
+/** response of any mutation on the table "pantry" */
+export type Pantry_Mutation_Response = {
+  __typename?: "pantry_mutation_response";
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"];
+  /** data of the affected rows by the mutation */
+  returning: Array<Pantry>;
+};
+
+/** columns and relationships of "pantry_user" */
+export type Pantry_User = {
+  __typename?: "pantry_user";
+  id: Scalars["uuid"];
+  /** An object relationship */
+  pantry: Pantry;
+  pantry_id: Scalars["uuid"];
+  /** An object relationship */
+  user: Users;
+  user_id: Scalars["uuid"];
+};
+
+/** aggregated selection of "pantry_user" */
+export type Pantry_User_Aggregate = {
+  __typename?: "pantry_user_aggregate";
+  aggregate?: Maybe<Pantry_User_Aggregate_Fields>;
+  nodes: Array<Pantry_User>;
+};
+
+/** aggregate fields of "pantry_user" */
+export type Pantry_User_Aggregate_Fields = {
+  __typename?: "pantry_user_aggregate_fields";
+  count?: Maybe<Scalars["Int"]>;
+  max?: Maybe<Pantry_User_Max_Fields>;
+  min?: Maybe<Pantry_User_Min_Fields>;
+};
+
+/** aggregate fields of "pantry_user" */
+export type Pantry_User_Aggregate_FieldsCountArgs = {
+  columns?: Maybe<Array<Pantry_User_Select_Column>>;
+  distinct?: Maybe<Scalars["Boolean"]>;
+};
+
+/** aggregate max on columns */
+export type Pantry_User_Max_Fields = {
+  __typename?: "pantry_user_max_fields";
+  id?: Maybe<Scalars["uuid"]>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  user_id?: Maybe<Scalars["uuid"]>;
+};
+
+/** aggregate min on columns */
+export type Pantry_User_Min_Fields = {
+  __typename?: "pantry_user_min_fields";
+  id?: Maybe<Scalars["uuid"]>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  user_id?: Maybe<Scalars["uuid"]>;
+};
+
+/** response of any mutation on the table "pantry_user" */
+export type Pantry_User_Mutation_Response = {
+  __typename?: "pantry_user_mutation_response";
+  /** number of affected rows by the mutation */
+  affected_rows: Scalars["Int"];
+  /** data of the affected rows by the mutation */
+  returning: Array<Pantry_User>;
+};
+
 /** query root */
 export type Query_Root = {
   __typename?: "query_root";
@@ -1230,6 +1805,30 @@ export type Query_Root = {
   meal_item_aggregate: Meal_Item_Aggregate;
   /** fetch data from the table: "meal_item" using primary key columns */
   meal_item_by_pk?: Maybe<Meal_Item>;
+  /** fetch data from the table: "pantry" */
+  pantry: Array<Pantry>;
+  /** fetch aggregated fields from the table: "pantry" */
+  pantry_aggregate: Pantry_Aggregate;
+  /** fetch data from the table: "pantry" using primary key columns */
+  pantry_by_pk?: Maybe<Pantry>;
+  /** fetch data from the table: "pantry_items" */
+  pantry_items: Array<Pantry_Items>;
+  /** fetch aggregated fields from the table: "pantry_items" */
+  pantry_items_aggregate: Pantry_Items_Aggregate;
+  /** fetch data from the table: "pantry_items" using primary key columns */
+  pantry_items_by_pk?: Maybe<Pantry_Items>;
+  /** fetch data from the table: "pantry_jars" */
+  pantry_jars: Array<Pantry_Jars>;
+  /** fetch aggregated fields from the table: "pantry_jars" */
+  pantry_jars_aggregate: Pantry_Jars_Aggregate;
+  /** fetch data from the table: "pantry_jars" using primary key columns */
+  pantry_jars_by_pk?: Maybe<Pantry_Jars>;
+  /** fetch data from the table: "pantry_user" */
+  pantry_user: Array<Pantry_User>;
+  /** fetch aggregated fields from the table: "pantry_user" */
+  pantry_user_aggregate: Pantry_User_Aggregate;
+  /** fetch data from the table: "pantry_user" using primary key columns */
+  pantry_user_by_pk?: Maybe<Pantry_User>;
   /** fetch data from the table: "recipe" */
   recipe: Array<Recipe>;
   /** fetch aggregated fields from the table: "recipe" */
@@ -1339,6 +1938,98 @@ export type Query_RootMeal_Item_AggregateArgs = {
 
 /** query root */
 export type Query_RootMeal_Item_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** query root */
+export type Query_RootPantryArgs = {
+  distinct_on?: Maybe<Array<Pantry_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Order_By>>;
+  where?: Maybe<Pantry_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootPantry_AggregateArgs = {
+  distinct_on?: Maybe<Array<Pantry_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Order_By>>;
+  where?: Maybe<Pantry_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootPantry_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** query root */
+export type Query_RootPantry_ItemsArgs = {
+  distinct_on?: Maybe<Array<Pantry_Items_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Items_Order_By>>;
+  where?: Maybe<Pantry_Items_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootPantry_Items_AggregateArgs = {
+  distinct_on?: Maybe<Array<Pantry_Items_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Items_Order_By>>;
+  where?: Maybe<Pantry_Items_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootPantry_Items_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** query root */
+export type Query_RootPantry_JarsArgs = {
+  distinct_on?: Maybe<Array<Pantry_Jars_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Jars_Order_By>>;
+  where?: Maybe<Pantry_Jars_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootPantry_Jars_AggregateArgs = {
+  distinct_on?: Maybe<Array<Pantry_Jars_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Jars_Order_By>>;
+  where?: Maybe<Pantry_Jars_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootPantry_Jars_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** query root */
+export type Query_RootPantry_UserArgs = {
+  distinct_on?: Maybe<Array<Pantry_User_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_User_Order_By>>;
+  where?: Maybe<Pantry_User_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootPantry_User_AggregateArgs = {
+  distinct_on?: Maybe<Array<Pantry_User_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_User_Order_By>>;
+  where?: Maybe<Pantry_User_Bool_Exp>;
+};
+
+/** query root */
+export type Query_RootPantry_User_By_PkArgs = {
   id: Scalars["uuid"];
 };
 
@@ -1777,6 +2468,30 @@ export type Subscription_Root = {
   meal_item_aggregate: Meal_Item_Aggregate;
   /** fetch data from the table: "meal_item" using primary key columns */
   meal_item_by_pk?: Maybe<Meal_Item>;
+  /** fetch data from the table: "pantry" */
+  pantry: Array<Pantry>;
+  /** fetch aggregated fields from the table: "pantry" */
+  pantry_aggregate: Pantry_Aggregate;
+  /** fetch data from the table: "pantry" using primary key columns */
+  pantry_by_pk?: Maybe<Pantry>;
+  /** fetch data from the table: "pantry_items" */
+  pantry_items: Array<Pantry_Items>;
+  /** fetch aggregated fields from the table: "pantry_items" */
+  pantry_items_aggregate: Pantry_Items_Aggregate;
+  /** fetch data from the table: "pantry_items" using primary key columns */
+  pantry_items_by_pk?: Maybe<Pantry_Items>;
+  /** fetch data from the table: "pantry_jars" */
+  pantry_jars: Array<Pantry_Jars>;
+  /** fetch aggregated fields from the table: "pantry_jars" */
+  pantry_jars_aggregate: Pantry_Jars_Aggregate;
+  /** fetch data from the table: "pantry_jars" using primary key columns */
+  pantry_jars_by_pk?: Maybe<Pantry_Jars>;
+  /** fetch data from the table: "pantry_user" */
+  pantry_user: Array<Pantry_User>;
+  /** fetch aggregated fields from the table: "pantry_user" */
+  pantry_user_aggregate: Pantry_User_Aggregate;
+  /** fetch data from the table: "pantry_user" using primary key columns */
+  pantry_user_by_pk?: Maybe<Pantry_User>;
   /** fetch data from the table: "recipe" */
   recipe: Array<Recipe>;
   /** fetch aggregated fields from the table: "recipe" */
@@ -1890,6 +2605,98 @@ export type Subscription_RootMeal_Item_By_PkArgs = {
 };
 
 /** subscription root */
+export type Subscription_RootPantryArgs = {
+  distinct_on?: Maybe<Array<Pantry_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Order_By>>;
+  where?: Maybe<Pantry_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootPantry_AggregateArgs = {
+  distinct_on?: Maybe<Array<Pantry_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Order_By>>;
+  where?: Maybe<Pantry_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootPantry_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** subscription root */
+export type Subscription_RootPantry_ItemsArgs = {
+  distinct_on?: Maybe<Array<Pantry_Items_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Items_Order_By>>;
+  where?: Maybe<Pantry_Items_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootPantry_Items_AggregateArgs = {
+  distinct_on?: Maybe<Array<Pantry_Items_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Items_Order_By>>;
+  where?: Maybe<Pantry_Items_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootPantry_Items_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** subscription root */
+export type Subscription_RootPantry_JarsArgs = {
+  distinct_on?: Maybe<Array<Pantry_Jars_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Jars_Order_By>>;
+  where?: Maybe<Pantry_Jars_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootPantry_Jars_AggregateArgs = {
+  distinct_on?: Maybe<Array<Pantry_Jars_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_Jars_Order_By>>;
+  where?: Maybe<Pantry_Jars_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootPantry_Jars_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** subscription root */
+export type Subscription_RootPantry_UserArgs = {
+  distinct_on?: Maybe<Array<Pantry_User_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_User_Order_By>>;
+  where?: Maybe<Pantry_User_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootPantry_User_AggregateArgs = {
+  distinct_on?: Maybe<Array<Pantry_User_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_User_Order_By>>;
+  where?: Maybe<Pantry_User_Bool_Exp>;
+};
+
+/** subscription root */
+export type Subscription_RootPantry_User_By_PkArgs = {
+  id: Scalars["uuid"];
+};
+
+/** subscription root */
 export type Subscription_RootRecipeArgs = {
   distinct_on?: Maybe<Array<Recipe_Select_Column>>;
   limit?: Maybe<Scalars["Int"]>;
@@ -1970,6 +2777,10 @@ export type Users = {
   fb_id?: Maybe<Scalars["String"]>;
   fb_picture_url?: Maybe<Scalars["String"]>;
   first_name?: Maybe<Scalars["name"]>;
+  /** An array relationship */
+  food: Array<Food>;
+  /** An aggregated array relationship */
+  food_aggregate: Food_Aggregate;
   full_name?: Maybe<Scalars["String"]>;
   id: Scalars["uuid"];
   last_name?: Maybe<Scalars["name"]>;
@@ -1981,6 +2792,10 @@ export type Users = {
   meals: Array<Meal>;
   /** An aggregated array relationship */
   meals_aggregate: Meal_Aggregate;
+  /** An array relationship */
+  pantry: Array<Pantry_User>;
+  /** An aggregated array relationship */
+  pantry_aggregate: Pantry_User_Aggregate;
   password: Scalars["String"];
   /** An array relationship */
   recipe_items: Array<Recipe_Item>;
@@ -1991,6 +2806,34 @@ export type Users = {
   /** An aggregated array relationship */
   recipes_aggregate: Recipe_Aggregate;
   user_name?: Maybe<Scalars["name"]>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersFoodArgs = {
+  distinct_on?: Maybe<Array<Food_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Food_Order_By>>;
+  where?: Maybe<Food_Bool_Exp>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersFood_AggregateArgs = {
+  distinct_on?: Maybe<Array<Food_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Food_Order_By>>;
+  where?: Maybe<Food_Bool_Exp>;
 };
 
 /**
@@ -2047,6 +2890,34 @@ export type UsersMeals_AggregateArgs = {
   offset?: Maybe<Scalars["Int"]>;
   order_by?: Maybe<Array<Meal_Order_By>>;
   where?: Maybe<Meal_Bool_Exp>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersPantryArgs = {
+  distinct_on?: Maybe<Array<Pantry_User_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_User_Order_By>>;
+  where?: Maybe<Pantry_User_Bool_Exp>;
+};
+
+/**
+ * List of users
+ *
+ *
+ * columns and relationships of "users"
+ */
+export type UsersPantry_AggregateArgs = {
+  distinct_on?: Maybe<Array<Pantry_User_Select_Column>>;
+  limit?: Maybe<Scalars["Int"]>;
+  offset?: Maybe<Scalars["Int"]>;
+  order_by?: Maybe<Array<Pantry_User_Order_By>>;
+  where?: Maybe<Pantry_User_Bool_Exp>;
 };
 
 /**
@@ -2447,6 +3318,124 @@ export enum Order_By {
   DescNullsFirst = "desc_nulls_first",
   /** in the descending order, nulls last */
   DescNullsLast = "desc_nulls_last",
+}
+
+/** unique or primary key constraints on table "pantry" */
+export enum Pantry_Constraint {
+  /** unique or primary key constraint */
+  PantryNameKey = "pantry_name_key",
+  /** unique or primary key constraint */
+  PantryPkey = "pantry_pkey",
+}
+
+/** unique or primary key constraints on table "pantry_items" */
+export enum Pantry_Items_Constraint {
+  /** unique or primary key constraint */
+  PantryItemsPkey = "pantry_items_pkey",
+}
+
+/** select columns of table "pantry_items" */
+export enum Pantry_Items_Select_Column {
+  /** column name */
+  Id = "id",
+  /** column name */
+  Item = "item",
+  /** column name */
+  Jar = "jar",
+  /** column name */
+  PantryId = "pantry_id",
+  /** column name */
+  Weight = "weight",
+}
+
+/** update columns of table "pantry_items" */
+export enum Pantry_Items_Update_Column {
+  /** column name */
+  Id = "id",
+  /** column name */
+  Item = "item",
+  /** column name */
+  Jar = "jar",
+  /** column name */
+  PantryId = "pantry_id",
+  /** column name */
+  Weight = "weight",
+}
+
+/** unique or primary key constraints on table "pantry_jars" */
+export enum Pantry_Jars_Constraint {
+  /** unique or primary key constraint */
+  PantryJarsPkey = "pantry_jars_pkey",
+}
+
+/** select columns of table "pantry_jars" */
+export enum Pantry_Jars_Select_Column {
+  /** column name */
+  Id = "id",
+  /** column name */
+  Name = "name",
+  /** column name */
+  PantryId = "pantry_id",
+  /** column name */
+  UserId = "user_id",
+  /** column name */
+  Weight = "weight",
+}
+
+/** update columns of table "pantry_jars" */
+export enum Pantry_Jars_Update_Column {
+  /** column name */
+  Id = "id",
+  /** column name */
+  Name = "name",
+  /** column name */
+  PantryId = "pantry_id",
+  /** column name */
+  UserId = "user_id",
+  /** column name */
+  Weight = "weight",
+}
+
+/** select columns of table "pantry" */
+export enum Pantry_Select_Column {
+  /** column name */
+  Id = "id",
+  /** column name */
+  Name = "name",
+}
+
+/** update columns of table "pantry" */
+export enum Pantry_Update_Column {
+  /** column name */
+  Id = "id",
+  /** column name */
+  Name = "name",
+}
+
+/** unique or primary key constraints on table "pantry_user" */
+export enum Pantry_User_Constraint {
+  /** unique or primary key constraint */
+  PantryUserPkey = "pantry_user_pkey",
+}
+
+/** select columns of table "pantry_user" */
+export enum Pantry_User_Select_Column {
+  /** column name */
+  Id = "id",
+  /** column name */
+  PantryId = "pantry_id",
+  /** column name */
+  UserId = "user_id",
+}
+
+/** update columns of table "pantry_user" */
+export enum Pantry_User_Update_Column {
+  /** column name */
+  Id = "id",
+  /** column name */
+  PantryId = "pantry_id",
+  /** column name */
+  UserId = "user_id",
 }
 
 /** unique or primary key constraints on table "recipe" */
@@ -3704,6 +4693,451 @@ export type Numeric_Comparison_Exp = {
   _nin?: Maybe<Array<Scalars["numeric"]>>;
 };
 
+/** order by aggregate values of table "pantry" */
+export type Pantry_Aggregate_Order_By = {
+  count?: Maybe<Order_By>;
+  max?: Maybe<Pantry_Max_Order_By>;
+  min?: Maybe<Pantry_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "pantry" */
+export type Pantry_Arr_Rel_Insert_Input = {
+  data: Array<Pantry_Insert_Input>;
+  on_conflict?: Maybe<Pantry_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "pantry". All fields are combined with a logical 'AND'. */
+export type Pantry_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Pantry_Bool_Exp>>>;
+  _not?: Maybe<Pantry_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Pantry_Bool_Exp>>>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  name?: Maybe<Name_Comparison_Exp>;
+  pantry_items?: Maybe<Pantry_Items_Bool_Exp>;
+  pantry_users?: Maybe<Pantry_User_Bool_Exp>;
+};
+
+/** input type for inserting data into table "pantry" */
+export type Pantry_Insert_Input = {
+  id?: Maybe<Scalars["uuid"]>;
+  name?: Maybe<Scalars["name"]>;
+  pantry_items?: Maybe<Pantry_Items_Arr_Rel_Insert_Input>;
+  pantry_users?: Maybe<Pantry_User_Arr_Rel_Insert_Input>;
+};
+
+/** order by aggregate values of table "pantry_items" */
+export type Pantry_Items_Aggregate_Order_By = {
+  avg?: Maybe<Pantry_Items_Avg_Order_By>;
+  count?: Maybe<Order_By>;
+  max?: Maybe<Pantry_Items_Max_Order_By>;
+  min?: Maybe<Pantry_Items_Min_Order_By>;
+  stddev?: Maybe<Pantry_Items_Stddev_Order_By>;
+  stddev_pop?: Maybe<Pantry_Items_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Pantry_Items_Stddev_Samp_Order_By>;
+  sum?: Maybe<Pantry_Items_Sum_Order_By>;
+  var_pop?: Maybe<Pantry_Items_Var_Pop_Order_By>;
+  var_samp?: Maybe<Pantry_Items_Var_Samp_Order_By>;
+  variance?: Maybe<Pantry_Items_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "pantry_items" */
+export type Pantry_Items_Arr_Rel_Insert_Input = {
+  data: Array<Pantry_Items_Insert_Input>;
+  on_conflict?: Maybe<Pantry_Items_On_Conflict>;
+};
+
+/** order by avg() on columns of table "pantry_items" */
+export type Pantry_Items_Avg_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "pantry_items". All fields are combined with a logical 'AND'. */
+export type Pantry_Items_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Pantry_Items_Bool_Exp>>>;
+  _not?: Maybe<Pantry_Items_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Pantry_Items_Bool_Exp>>>;
+  food?: Maybe<Food_Bool_Exp>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  item?: Maybe<Uuid_Comparison_Exp>;
+  jar?: Maybe<Uuid_Comparison_Exp>;
+  pantry?: Maybe<Pantry_Bool_Exp>;
+  pantry_id?: Maybe<Uuid_Comparison_Exp>;
+  weight?: Maybe<Int_Comparison_Exp>;
+};
+
+/** input type for incrementing integer column in table "pantry_items" */
+export type Pantry_Items_Inc_Input = {
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** input type for inserting data into table "pantry_items" */
+export type Pantry_Items_Insert_Input = {
+  food?: Maybe<Food_Obj_Rel_Insert_Input>;
+  id?: Maybe<Scalars["uuid"]>;
+  item?: Maybe<Scalars["uuid"]>;
+  jar?: Maybe<Scalars["uuid"]>;
+  pantry?: Maybe<Pantry_Obj_Rel_Insert_Input>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** order by max() on columns of table "pantry_items" */
+export type Pantry_Items_Max_Order_By = {
+  id?: Maybe<Order_By>;
+  item?: Maybe<Order_By>;
+  jar?: Maybe<Order_By>;
+  pantry_id?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
+};
+
+/** order by min() on columns of table "pantry_items" */
+export type Pantry_Items_Min_Order_By = {
+  id?: Maybe<Order_By>;
+  item?: Maybe<Order_By>;
+  jar?: Maybe<Order_By>;
+  pantry_id?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
+};
+
+/** input type for inserting object relation for remote table "pantry_items" */
+export type Pantry_Items_Obj_Rel_Insert_Input = {
+  data: Pantry_Items_Insert_Input;
+  on_conflict?: Maybe<Pantry_Items_On_Conflict>;
+};
+
+/** on conflict condition type for table "pantry_items" */
+export type Pantry_Items_On_Conflict = {
+  constraint: Pantry_Items_Constraint;
+  update_columns: Array<Pantry_Items_Update_Column>;
+  where?: Maybe<Pantry_Items_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "pantry_items" */
+export type Pantry_Items_Order_By = {
+  food?: Maybe<Food_Order_By>;
+  id?: Maybe<Order_By>;
+  item?: Maybe<Order_By>;
+  jar?: Maybe<Order_By>;
+  pantry?: Maybe<Pantry_Order_By>;
+  pantry_id?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "pantry_items" */
+export type Pantry_Items_Pk_Columns_Input = {
+  id: Scalars["uuid"];
+};
+
+/** input type for updating data in table "pantry_items" */
+export type Pantry_Items_Set_Input = {
+  id?: Maybe<Scalars["uuid"]>;
+  item?: Maybe<Scalars["uuid"]>;
+  jar?: Maybe<Scalars["uuid"]>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** order by stddev() on columns of table "pantry_items" */
+export type Pantry_Items_Stddev_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by stddev_pop() on columns of table "pantry_items" */
+export type Pantry_Items_Stddev_Pop_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by stddev_samp() on columns of table "pantry_items" */
+export type Pantry_Items_Stddev_Samp_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by sum() on columns of table "pantry_items" */
+export type Pantry_Items_Sum_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by var_pop() on columns of table "pantry_items" */
+export type Pantry_Items_Var_Pop_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by var_samp() on columns of table "pantry_items" */
+export type Pantry_Items_Var_Samp_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by variance() on columns of table "pantry_items" */
+export type Pantry_Items_Variance_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by aggregate values of table "pantry_jars" */
+export type Pantry_Jars_Aggregate_Order_By = {
+  avg?: Maybe<Pantry_Jars_Avg_Order_By>;
+  count?: Maybe<Order_By>;
+  max?: Maybe<Pantry_Jars_Max_Order_By>;
+  min?: Maybe<Pantry_Jars_Min_Order_By>;
+  stddev?: Maybe<Pantry_Jars_Stddev_Order_By>;
+  stddev_pop?: Maybe<Pantry_Jars_Stddev_Pop_Order_By>;
+  stddev_samp?: Maybe<Pantry_Jars_Stddev_Samp_Order_By>;
+  sum?: Maybe<Pantry_Jars_Sum_Order_By>;
+  var_pop?: Maybe<Pantry_Jars_Var_Pop_Order_By>;
+  var_samp?: Maybe<Pantry_Jars_Var_Samp_Order_By>;
+  variance?: Maybe<Pantry_Jars_Variance_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "pantry_jars" */
+export type Pantry_Jars_Arr_Rel_Insert_Input = {
+  data: Array<Pantry_Jars_Insert_Input>;
+  on_conflict?: Maybe<Pantry_Jars_On_Conflict>;
+};
+
+/** order by avg() on columns of table "pantry_jars" */
+export type Pantry_Jars_Avg_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** Boolean expression to filter rows from the table "pantry_jars". All fields are combined with a logical 'AND'. */
+export type Pantry_Jars_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Pantry_Jars_Bool_Exp>>>;
+  _not?: Maybe<Pantry_Jars_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Pantry_Jars_Bool_Exp>>>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  name?: Maybe<Name_Comparison_Exp>;
+  pantry_id?: Maybe<Uuid_Comparison_Exp>;
+  user?: Maybe<Users_Bool_Exp>;
+  user_id?: Maybe<Uuid_Comparison_Exp>;
+  weight?: Maybe<Int_Comparison_Exp>;
+};
+
+/** input type for incrementing integer column in table "pantry_jars" */
+export type Pantry_Jars_Inc_Input = {
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** input type for inserting data into table "pantry_jars" */
+export type Pantry_Jars_Insert_Input = {
+  id?: Maybe<Scalars["uuid"]>;
+  name?: Maybe<Scalars["name"]>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  user?: Maybe<Users_Obj_Rel_Insert_Input>;
+  user_id?: Maybe<Scalars["uuid"]>;
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** order by max() on columns of table "pantry_jars" */
+export type Pantry_Jars_Max_Order_By = {
+  id?: Maybe<Order_By>;
+  pantry_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
+};
+
+/** order by min() on columns of table "pantry_jars" */
+export type Pantry_Jars_Min_Order_By = {
+  id?: Maybe<Order_By>;
+  pantry_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
+};
+
+/** input type for inserting object relation for remote table "pantry_jars" */
+export type Pantry_Jars_Obj_Rel_Insert_Input = {
+  data: Pantry_Jars_Insert_Input;
+  on_conflict?: Maybe<Pantry_Jars_On_Conflict>;
+};
+
+/** on conflict condition type for table "pantry_jars" */
+export type Pantry_Jars_On_Conflict = {
+  constraint: Pantry_Jars_Constraint;
+  update_columns: Array<Pantry_Jars_Update_Column>;
+  where?: Maybe<Pantry_Jars_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "pantry_jars" */
+export type Pantry_Jars_Order_By = {
+  id?: Maybe<Order_By>;
+  name?: Maybe<Order_By>;
+  pantry_id?: Maybe<Order_By>;
+  user?: Maybe<Users_Order_By>;
+  user_id?: Maybe<Order_By>;
+  weight?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "pantry_jars" */
+export type Pantry_Jars_Pk_Columns_Input = {
+  id: Scalars["uuid"];
+};
+
+/** input type for updating data in table "pantry_jars" */
+export type Pantry_Jars_Set_Input = {
+  id?: Maybe<Scalars["uuid"]>;
+  name?: Maybe<Scalars["name"]>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  user_id?: Maybe<Scalars["uuid"]>;
+  weight?: Maybe<Scalars["Int"]>;
+};
+
+/** order by stddev() on columns of table "pantry_jars" */
+export type Pantry_Jars_Stddev_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by stddev_pop() on columns of table "pantry_jars" */
+export type Pantry_Jars_Stddev_Pop_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by stddev_samp() on columns of table "pantry_jars" */
+export type Pantry_Jars_Stddev_Samp_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by sum() on columns of table "pantry_jars" */
+export type Pantry_Jars_Sum_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by var_pop() on columns of table "pantry_jars" */
+export type Pantry_Jars_Var_Pop_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by var_samp() on columns of table "pantry_jars" */
+export type Pantry_Jars_Var_Samp_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by variance() on columns of table "pantry_jars" */
+export type Pantry_Jars_Variance_Order_By = {
+  weight?: Maybe<Order_By>;
+};
+
+/** order by max() on columns of table "pantry" */
+export type Pantry_Max_Order_By = {
+  id?: Maybe<Order_By>;
+};
+
+/** order by min() on columns of table "pantry" */
+export type Pantry_Min_Order_By = {
+  id?: Maybe<Order_By>;
+};
+
+/** input type for inserting object relation for remote table "pantry" */
+export type Pantry_Obj_Rel_Insert_Input = {
+  data: Pantry_Insert_Input;
+  on_conflict?: Maybe<Pantry_On_Conflict>;
+};
+
+/** on conflict condition type for table "pantry" */
+export type Pantry_On_Conflict = {
+  constraint: Pantry_Constraint;
+  update_columns: Array<Pantry_Update_Column>;
+  where?: Maybe<Pantry_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "pantry" */
+export type Pantry_Order_By = {
+  id?: Maybe<Order_By>;
+  name?: Maybe<Order_By>;
+  pantry_items_aggregate?: Maybe<Pantry_Items_Aggregate_Order_By>;
+  pantry_users_aggregate?: Maybe<Pantry_User_Aggregate_Order_By>;
+};
+
+/** primary key columns input for table: "pantry" */
+export type Pantry_Pk_Columns_Input = {
+  id: Scalars["uuid"];
+};
+
+/** input type for updating data in table "pantry" */
+export type Pantry_Set_Input = {
+  id?: Maybe<Scalars["uuid"]>;
+  name?: Maybe<Scalars["name"]>;
+};
+
+/** order by aggregate values of table "pantry_user" */
+export type Pantry_User_Aggregate_Order_By = {
+  count?: Maybe<Order_By>;
+  max?: Maybe<Pantry_User_Max_Order_By>;
+  min?: Maybe<Pantry_User_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "pantry_user" */
+export type Pantry_User_Arr_Rel_Insert_Input = {
+  data: Array<Pantry_User_Insert_Input>;
+  on_conflict?: Maybe<Pantry_User_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "pantry_user". All fields are combined with a logical 'AND'. */
+export type Pantry_User_Bool_Exp = {
+  _and?: Maybe<Array<Maybe<Pantry_User_Bool_Exp>>>;
+  _not?: Maybe<Pantry_User_Bool_Exp>;
+  _or?: Maybe<Array<Maybe<Pantry_User_Bool_Exp>>>;
+  id?: Maybe<Uuid_Comparison_Exp>;
+  pantry?: Maybe<Pantry_Bool_Exp>;
+  pantry_id?: Maybe<Uuid_Comparison_Exp>;
+  user?: Maybe<Users_Bool_Exp>;
+  user_id?: Maybe<Uuid_Comparison_Exp>;
+};
+
+/** input type for inserting data into table "pantry_user" */
+export type Pantry_User_Insert_Input = {
+  id?: Maybe<Scalars["uuid"]>;
+  pantry?: Maybe<Pantry_Obj_Rel_Insert_Input>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  user?: Maybe<Users_Obj_Rel_Insert_Input>;
+  user_id?: Maybe<Scalars["uuid"]>;
+};
+
+/** order by max() on columns of table "pantry_user" */
+export type Pantry_User_Max_Order_By = {
+  id?: Maybe<Order_By>;
+  pantry_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** order by min() on columns of table "pantry_user" */
+export type Pantry_User_Min_Order_By = {
+  id?: Maybe<Order_By>;
+  pantry_id?: Maybe<Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** input type for inserting object relation for remote table "pantry_user" */
+export type Pantry_User_Obj_Rel_Insert_Input = {
+  data: Pantry_User_Insert_Input;
+  on_conflict?: Maybe<Pantry_User_On_Conflict>;
+};
+
+/** on conflict condition type for table "pantry_user" */
+export type Pantry_User_On_Conflict = {
+  constraint: Pantry_User_Constraint;
+  update_columns: Array<Pantry_User_Update_Column>;
+  where?: Maybe<Pantry_User_Bool_Exp>;
+};
+
+/** ordering options when selecting data from "pantry_user" */
+export type Pantry_User_Order_By = {
+  id?: Maybe<Order_By>;
+  pantry?: Maybe<Pantry_Order_By>;
+  pantry_id?: Maybe<Order_By>;
+  user?: Maybe<Users_Order_By>;
+  user_id?: Maybe<Order_By>;
+};
+
+/** primary key columns input for table: "pantry_user" */
+export type Pantry_User_Pk_Columns_Input = {
+  id: Scalars["uuid"];
+};
+
+/** input type for updating data in table "pantry_user" */
+export type Pantry_User_Set_Input = {
+  id?: Maybe<Scalars["uuid"]>;
+  pantry_id?: Maybe<Scalars["uuid"]>;
+  user_id?: Maybe<Scalars["uuid"]>;
+};
+
 /** order by aggregate values of table "recipe" */
 export type Recipe_Aggregate_Order_By = {
   avg?: Maybe<Recipe_Avg_Order_By>;
@@ -4114,11 +5548,13 @@ export type Users_Bool_Exp = {
   fb_id?: Maybe<String_Comparison_Exp>;
   fb_picture_url?: Maybe<String_Comparison_Exp>;
   first_name?: Maybe<Name_Comparison_Exp>;
+  food?: Maybe<Food_Bool_Exp>;
   full_name?: Maybe<String_Comparison_Exp>;
   id?: Maybe<Uuid_Comparison_Exp>;
   last_name?: Maybe<Name_Comparison_Exp>;
   meal_items?: Maybe<Meal_Item_Bool_Exp>;
   meals?: Maybe<Meal_Bool_Exp>;
+  pantry?: Maybe<Pantry_User_Bool_Exp>;
   password?: Maybe<String_Comparison_Exp>;
   recipe_items?: Maybe<Recipe_Item_Bool_Exp>;
   recipes?: Maybe<Recipe_Bool_Exp>;
@@ -4131,11 +5567,13 @@ export type Users_Insert_Input = {
   fb_id?: Maybe<Scalars["String"]>;
   fb_picture_url?: Maybe<Scalars["String"]>;
   first_name?: Maybe<Scalars["name"]>;
+  food?: Maybe<Food_Arr_Rel_Insert_Input>;
   full_name?: Maybe<Scalars["String"]>;
   id?: Maybe<Scalars["uuid"]>;
   last_name?: Maybe<Scalars["name"]>;
   meal_items?: Maybe<Meal_Item_Arr_Rel_Insert_Input>;
   meals?: Maybe<Meal_Arr_Rel_Insert_Input>;
+  pantry?: Maybe<Pantry_User_Arr_Rel_Insert_Input>;
   password?: Maybe<Scalars["String"]>;
   recipe_items?: Maybe<Recipe_Item_Arr_Rel_Insert_Input>;
   recipes?: Maybe<Recipe_Arr_Rel_Insert_Input>;
@@ -4181,11 +5619,13 @@ export type Users_Order_By = {
   fb_id?: Maybe<Order_By>;
   fb_picture_url?: Maybe<Order_By>;
   first_name?: Maybe<Order_By>;
+  food_aggregate?: Maybe<Food_Aggregate_Order_By>;
   full_name?: Maybe<Order_By>;
   id?: Maybe<Order_By>;
   last_name?: Maybe<Order_By>;
   meal_items_aggregate?: Maybe<Meal_Item_Aggregate_Order_By>;
   meals_aggregate?: Maybe<Meal_Aggregate_Order_By>;
+  pantry_aggregate?: Maybe<Pantry_User_Aggregate_Order_By>;
   password?: Maybe<Order_By>;
   recipe_items_aggregate?: Maybe<Recipe_Item_Aggregate_Order_By>;
   recipes_aggregate?: Maybe<Recipe_Aggregate_Order_By>;
@@ -4473,6 +5913,40 @@ export type RegisterFacebookUserMutation = { __typename?: "mutation_root" } & {
   >;
 };
 
+export type AddFoodTypeMutationVariables = Exact<{
+  decription?: Maybe<Scalars["String"]>;
+  img_url?: Maybe<Scalars["String"]>;
+  value: Scalars["String"];
+}>;
+
+export type AddFoodTypeMutation = { __typename?: "mutation_root" } & {
+  insert_food_type_one?: Maybe<
+    { __typename?: "food_type" } & Pick<Food_Type, "value">
+  >;
+};
+
+export type DeleteFoodTypeMutationVariables = Exact<{
+  value: Scalars["String"];
+}>;
+
+export type DeleteFoodTypeMutation = { __typename?: "mutation_root" } & {
+  delete_food_type_by_pk?: Maybe<
+    { __typename?: "food_type" } & Pick<Food_Type, "value">
+  >;
+};
+
+export type UpdateFoodTypeMutationVariables = Exact<{
+  decription?: Maybe<Scalars["String"]>;
+  img_url?: Maybe<Scalars["String"]>;
+  value: Scalars["String"];
+}>;
+
+export type UpdateFoodTypeMutation = { __typename?: "mutation_root" } & {
+  update_food_type_by_pk?: Maybe<
+    { __typename?: "food_type" } & Pick<Food_Type, "value">
+  >;
+};
+
 export type MealsByDateSubscriptionVariables = Exact<{
   date?: Maybe<Scalars["date"]>;
   u_id?: Maybe<Scalars["uuid"]>;
@@ -4629,7 +6103,10 @@ export type FoodTypesQueryVariables = Exact<{ [key: string]: never }>;
 
 export type FoodTypesQuery = { __typename?: "query_root" } & {
   food_type: Array<
-    { __typename?: "food_type" } & Pick<Food_Type, "value" | "decription">
+    { __typename?: "food_type" } & Pick<
+      Food_Type,
+      "value" | "decription" | "img_url"
+    >
   >;
 };
 
@@ -5401,6 +6878,99 @@ export type RegisterFacebookUserMutationOptions = ApolloReactCommon.BaseMutation
   RegisterFacebookUserMutation,
   RegisterFacebookUserMutationVariables
 >;
+export const AddFoodTypeDocument = gql`
+  mutation AddFoodType($decription: String, $img_url: String, $value: String!) {
+    insert_food_type_one(
+      object: { img_url: $img_url, decription: $decription, value: $value }
+    ) {
+      value
+    }
+  }
+`;
+export function useAddFoodTypeMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    AddFoodTypeMutation,
+    AddFoodTypeMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    AddFoodTypeMutation,
+    AddFoodTypeMutationVariables
+  >(AddFoodTypeDocument, baseOptions);
+}
+export type AddFoodTypeMutationHookResult = ReturnType<
+  typeof useAddFoodTypeMutation
+>;
+export type AddFoodTypeMutationResult = ApolloReactCommon.MutationResult<
+  AddFoodTypeMutation
+>;
+export type AddFoodTypeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  AddFoodTypeMutation,
+  AddFoodTypeMutationVariables
+>;
+export const DeleteFoodTypeDocument = gql`
+  mutation DeleteFoodType($value: String!) {
+    delete_food_type_by_pk(value: $value) {
+      value
+    }
+  }
+`;
+export function useDeleteFoodTypeMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    DeleteFoodTypeMutation,
+    DeleteFoodTypeMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    DeleteFoodTypeMutation,
+    DeleteFoodTypeMutationVariables
+  >(DeleteFoodTypeDocument, baseOptions);
+}
+export type DeleteFoodTypeMutationHookResult = ReturnType<
+  typeof useDeleteFoodTypeMutation
+>;
+export type DeleteFoodTypeMutationResult = ApolloReactCommon.MutationResult<
+  DeleteFoodTypeMutation
+>;
+export type DeleteFoodTypeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  DeleteFoodTypeMutation,
+  DeleteFoodTypeMutationVariables
+>;
+export const UpdateFoodTypeDocument = gql`
+  mutation UpdateFoodType(
+    $decription: String
+    $img_url: String
+    $value: String!
+  ) {
+    update_food_type_by_pk(
+      pk_columns: { value: $value }
+      _set: { value: $value, decription: $decription, img_url: $img_url }
+    ) {
+      value
+    }
+  }
+`;
+export function useUpdateFoodTypeMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    UpdateFoodTypeMutation,
+    UpdateFoodTypeMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    UpdateFoodTypeMutation,
+    UpdateFoodTypeMutationVariables
+  >(UpdateFoodTypeDocument, baseOptions);
+}
+export type UpdateFoodTypeMutationHookResult = ReturnType<
+  typeof useUpdateFoodTypeMutation
+>;
+export type UpdateFoodTypeMutationResult = ApolloReactCommon.MutationResult<
+  UpdateFoodTypeMutation
+>;
+export type UpdateFoodTypeMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  UpdateFoodTypeMutation,
+  UpdateFoodTypeMutationVariables
+>;
 export const MealsByDateDocument = gql`
   subscription MealsByDate($date: date = "", $u_id: uuid) {
     meal(
@@ -5642,6 +7212,7 @@ export const FoodTypesDocument = gql`
     food_type {
       value
       decription
+      img_url
     }
   }
 `;

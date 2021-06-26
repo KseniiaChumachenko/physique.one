@@ -17,9 +17,9 @@ import {
   useAddMealMutation,
   useMealItemMacrosSumByDateSubscription,
 } from "src/graphql/generated/graphql";
+import { useStore } from "src/store";
 import { AddMealDialog } from "../../../components/AddMealDialog";
 import { AggregationChips } from "../../../../components/AggredationChips";
-import { useUser } from "../../../context/userContext";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -40,7 +40,9 @@ interface Props {
 
 export const DayPanelHeader = ({ date }: Props) => {
   const classes = useStyles();
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
   const [error, setOpenErrorMessage] = React.useState<ApolloError | boolean>(
     false
   );

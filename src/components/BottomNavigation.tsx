@@ -12,6 +12,7 @@ import {
   FastfoodRounded,
   LocalGroceryStoreRounded,
   MenuBookRounded,
+  // KitchenRounded,
 } from "@material-ui/icons";
 
 const useStyles = makeStyles({
@@ -63,6 +64,11 @@ export const BottomNavigation = () => {
           label={<Trans>Food Library</Trans>}
           icon={<LocalGroceryStoreRounded />}
         />
+        {/*<BottomNavigationAction*/}
+        {/*  value={"/pantry"}*/}
+        {/*  label={<Trans>Pantry</Trans>}*/}
+        {/*  icon={<KitchenRounded />}*/}
+        {/*/>*/}
       </MaterialBottomNavigation>
     </Paper>
   );

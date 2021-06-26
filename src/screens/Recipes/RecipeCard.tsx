@@ -11,9 +11,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Recipe_Item } from "../../graphql/generated/graphql";
+import { useStore } from "../../store";
 import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
 import { RecipeTableEditableRow } from "./RecipeTableEditableRow";
-import { usePermissions } from "../../hooks/usePermissions";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -41,7 +41,14 @@ export const RecipeCard = ({
   recipe_items_aggregate,
 }: Props) => {
   const classes = useStyles();
-  const { isPermitted } = usePermissions(u_id);
+  const {
+    userStore: {
+      user: { id: userId },
+    },
+  } = useStore();
+
+  const isPermitted = userId === u_id;
+
   return (
     <Card className={classes.root}>
       <RecipeCardHeader

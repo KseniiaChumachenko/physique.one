@@ -1,74 +1,29 @@
 {
   "Add new food": {
-    "origin": [
-      [
-        "src/screens/Ration/components/FoodLibrary/index.tsx",
-        58
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/FoodLibrary/index.tsx", 58]]
   },
   "Name": {
-    "origin": [
-      [
-        "src/screens/Ration/components/FoodLibrary/index.tsx",
-        62
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/FoodLibrary/index.tsx", 62]]
   },
   "Type": {
-    "origin": [
-      [
-        "src/screens/Ration/components/FoodLibrary/index.tsx",
-        63
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/FoodLibrary/index.tsx", 63]]
   },
   "Energy (kcal|kJ)": {
-    "origin": [
-      [
-        "src/screens/Ration/components/FoodLibrary/index.tsx",
-        64
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/FoodLibrary/index.tsx", 64]]
   },
   "Proteins": {
-    "origin": [
-      [
-        "src/screens/Ration/components/FoodLibrary/index.tsx",
-        65
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/FoodLibrary/index.tsx", 65]]
   },
   "Carbohydrates": {
-    "origin": [
-      [
-        "src/screens/Ration/components/FoodLibrary/index.tsx",
-        66
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/FoodLibrary/index.tsx", 66]]
   },
   "Fats": {
-    "origin": [
-      [
-        "src/screens/Ration/components/FoodLibrary/index.tsx",
-        67
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/FoodLibrary/index.tsx", 67]]
   },
   "<0>Actions</0>": {
-    "origin": [
-      [
-        "src/screens/Ration/components/FoodLibrary/index.tsx",
-        68
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/FoodLibrary/index.tsx", 68]]
   },
   "Library updated": {
-    "origin": [
-      [
-        "src/screens/Ration/components/FoodLibrary/index.tsx",
-        90
-      ]
-    ]
+    "origin": [["src/screens/Ration/components/FoodLibrary/index.tsx", 90]]
   }
 }

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { setupI18n } from "@lingui/core";
-import { csCZ, enUS, ruRU, ukUA } from "@material-ui/core/locale";
-
+import { csCZ, enUS, Localization, ruRU, ukUA } from "@material-ui/core/locale";
 import enMessages from "src/locales/en/messages";
 import ruMessages from "src/locales/ru/messages";
 import csMessages from "src/locales/cs/messages";
@@ -10,7 +9,7 @@ import ukMessages from "src/locales/uk/messages";
 export interface LanguageProps {
   label: string;
   language: string;
-  component: {};
+  component: Localization;
   catalog: any;
 }
 

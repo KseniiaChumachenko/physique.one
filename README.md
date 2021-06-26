@@ -1,12 +1,11 @@
-
 ## General information
 
 Initially started as simple food diary. Currently app allows to create a recipes, keep track of meals and add foods to food library. User authorization to be implemented soon.
 
 Tech stack:
- - Hasura Graphql API
- - React + Material UI + Apollo Client
 
+- Hasura Graphql API
+- React + Material UI + Apollo Client
 
 ## Available Scripts
 
@@ -23,7 +22,6 @@ You will also see any lint errors in the console.
 ### `yarn build`
 
 Builds the app for production to the `build` folder.<br />
-
 
 ### `yarn start`
 

@@ -18,7 +18,7 @@ import {
 import { AddRounded, DeleteRounded } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { TimePicker } from "@material-ui/pickers";
-
+import { useStore as useGlobalStore } from "src/store";
 import {
   AddMealMutationVariables,
   Food,
@@ -28,7 +28,6 @@ import {
 import { ToastMessage } from "src/components/ToastMessage";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
 import { useStore } from "./useStore";
-import { useUser } from "../../context/userContext";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -59,42 +58,6 @@ interface Props {
   meal_items?: Meal_Item_Insert_Input[];
 }
 
-export const AddMealDialog = ({
-  open,
-  setOpen,
-  date,
-  name,
-  time,
-  meal_items,
-  onConfirm,
-}: Props) => {
-  const { data, loading, error } = useFoodSelectFieldListingQuery();
-  if (error) {
-    return <ToastMessage severity={"error"} children={error?.message as any} />;
-  }
-
-  if (loading) {
-    return <LinearProgress />;
-  }
-
-  return (
-    <React.Fragment>
-      {data && (
-        <AddMealDialogDataFlow
-          open={open}
-          setOpen={setOpen}
-          date={date}
-          fetchedFoods={data.food as Food[]}
-          name={name}
-          time={time}
-          meal_items={meal_items}
-          onConfirm={onConfirm}
-        />
-      )}
-    </React.Fragment>
-  );
-};
-
 interface AddMealDialogProps extends Props {
   fetchedFoods: Food[];
 }
@@ -107,11 +70,13 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     fetchedFoods,
     name,
     time,
-    meal_items,
+    meal_items, //fetched data
     onConfirm,
   }) => {
     const classes = useStyles();
-    const { user } = useUser();
+    const {
+      userStore: { user },
+    } = useGlobalStore();
     const stateEndRef = useRef(null);
     const store = useStore(fetchedFoods, name, date, time, meal_items);
 
@@ -122,7 +87,9 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
       event.stopPropagation();
     };
 
-    const handleDeleteItem = (key: number) => () => store.remove_meal_item(key);
+    const handleDeleteItem = (id: string) => () => {
+      store.remove_meal_item(id);
+    };
 
     return (
       <Dialog
@@ -204,7 +171,7 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
                 <IconButton
                   className={classes.deleteIcon}
                   children={<DeleteRounded />}
-                  onClick={handleDeleteItem(key)}
+                  onClick={handleDeleteItem(item.id)}
                 />
               )}
             </div>
@@ -241,3 +208,39 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     );
   }
 );
+
+export const AddMealDialog = ({
+  open,
+  setOpen,
+  date,
+  name,
+  time,
+  meal_items,
+  onConfirm,
+}: Props) => {
+  const { data, loading, error } = useFoodSelectFieldListingQuery();
+  if (error) {
+    return <ToastMessage severity={"error"} children={error?.message as any} />;
+  }
+
+  if (loading) {
+    return <LinearProgress />;
+  }
+
+  return (
+    <React.Fragment>
+      {data && (
+        <AddMealDialogDataFlow
+          open={open}
+          setOpen={setOpen}
+          date={date}
+          fetchedFoods={data.food as Food[]}
+          name={name}
+          time={time}
+          meal_items={meal_items}
+          onConfirm={onConfirm}
+        />
+      )}
+    </React.Fragment>
+  );
+};

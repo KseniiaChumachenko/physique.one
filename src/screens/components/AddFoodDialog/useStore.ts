@@ -1,4 +1,4 @@
-import { useLocalStore } from "mobx-react-lite";
+import { useLocalObservable } from "mobx-react-lite";
 
 export interface State {
   name?: string;
@@ -21,39 +21,36 @@ export function useStore({
   fats,
   u_id,
 }: State) {
-  const store = useLocalStore(
-    () => ({
-      u_id: u_id,
-      name: name,
-      setName: (newName: string) => {
-        store.name = newName;
-      },
-      type: type || "Vegetables",
-      setType: (newType: string) => {
-        store.type = newType;
-      },
-      proteins: proteins,
-      setProteins: (newProteins: number) => {
-        store.proteins = newProteins;
-      },
-      energy_cal: energy_cal,
-      setEnergyCal: (newEnergy: number) => {
-        store.energy_cal = newEnergy;
-      },
-      energy_kj: energy_kj,
-      setEnergyKj: (newEnergy: number) => {
-        store.energy_kj = newEnergy;
-      },
-      carbohydrates: carbohydrates,
-      setCarbohydrates: (newCarbs: number) => {
-        store.carbohydrates = newCarbs;
-      },
-      fats: fats,
-      setFats: (newFats: number) => {
-        store.fats = newFats;
-      },
-    }),
-    { name, type, proteins, carbohydrates, fats }
-  );
+  const store = useLocalObservable(() => ({
+    u_id: u_id,
+    name: name,
+    setName: (newName: string) => {
+      store.name = newName;
+    },
+    type: type || "Vegetables",
+    setType: (newType: string) => {
+      store.type = newType;
+    },
+    proteins: proteins,
+    setProteins: (newProteins: number) => {
+      store.proteins = newProteins;
+    },
+    energy_cal: energy_cal,
+    setEnergyCal: (newEnergy: number) => {
+      store.energy_cal = newEnergy;
+    },
+    energy_kj: energy_kj,
+    setEnergyKj: (newEnergy: number) => {
+      store.energy_kj = newEnergy;
+    },
+    carbohydrates: carbohydrates,
+    setCarbohydrates: (newCarbs: number) => {
+      store.carbohydrates = newCarbs;
+    },
+    fats: fats,
+    setFats: (newFats: number) => {
+      store.fats = newFats;
+    },
+  }));
   return store;
 }

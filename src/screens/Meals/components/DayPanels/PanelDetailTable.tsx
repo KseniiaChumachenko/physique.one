@@ -90,7 +90,7 @@ export const PanelDetailTable = ({
           </TableHead>
           <TableBody>
             {withMealItems &&
-              meal_items?.map((row, key) => (
+              meal_items?.map((row) => (
                 <TableRow key={row.id}>
                   <TableCell
                     component="th"

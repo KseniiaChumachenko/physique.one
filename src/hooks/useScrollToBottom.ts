@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 //state: to track change in listing
 //stateEndRef: anchor element to scroll to
 export function useScrollToBottom(state: any, stateEndRef: any) {

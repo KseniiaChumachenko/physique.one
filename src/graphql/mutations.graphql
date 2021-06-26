@@ -281,15 +281,15 @@ mutation Register(
       last_name: $last_name
       password: $password
       user_name: $user_name
-      email:$email
+      email: $email
     }
   ) {
-    id,
-    first_name,
-    full_name,
-    last_name,
-    password,
-    user_name,
+    id
+    first_name
+    full_name
+    last_name
+    password
+    user_name
     email
   }
 }
@@ -310,5 +310,32 @@ mutation RegisterFacebookUser(
     fb_id
     fb_picture_url
     full_name
+  }
+}
+
+mutation AddFoodType($decription: String, $img_url: String, $value: String!) {
+  insert_food_type_one(
+    object: { img_url: $img_url, decription: $decription, value: $value }
+  ) {
+    value
+  }
+}
+
+mutation DeleteFoodType($value: String!) {
+  delete_food_type_by_pk(value: $value) {
+    value
+  }
+}
+
+mutation UpdateFoodType(
+  $decription: String
+  $img_url: String
+  $value: String!
+) {
+  update_food_type_by_pk(
+    pk_columns: { value: $value }
+    _set: { value: $value, decription: $decription, img_url: $img_url }
+  ) {
+    value
   }
 }

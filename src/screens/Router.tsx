@@ -1,15 +1,18 @@
 import React from "react";
+import { NIL } from "uuid";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
-import { BottomNavigation } from "../components/BottomNavigation";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar } from "src/components/AppBar";
+import { observer } from "mobx-react-lite";
+import { BottomNavigation } from "../components/BottomNavigation";
+import { useStore } from "../store";
 import { Meals } from "./Meals";
 import { FoodLibrary } from "./FoodLibrary";
 import { Recipes } from "./Recipes";
 import { Authorization } from "./Authorization";
 import { PrivacyPolicy } from "./PrivacyPolicy";
-import { useUser } from "./context/userContext";
 import { Profile } from "./Profile";
+// import { Pantry } from "./Pantry";
 
 const useStyles = makeStyles(() => ({
   childrenContainer: {
@@ -23,16 +26,18 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-export const Router = () => {
+export const Router = observer(() => {
   const classes = useStyles();
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
 
   return (
     <BrowserRouter>
       <Switch>
         <Route path={"/auth"} component={Authorization} exact />
         <Route path={"/privacyPolicy"} component={PrivacyPolicy} exact />
-        {user ? (
+        {user?.id !== NIL ? (
           <>
             <AppBar />
             <main className={classes.childrenContainer}>
@@ -43,6 +48,7 @@ export const Router = () => {
                 <Route path={"/foodLibrary"} component={FoodLibrary} exact />
                 <Route path={"/recipes"} component={Recipes} exact />
                 <Route path={"/profile"} component={Profile} exact />
+                {/*<Route path={"/pantry"} component={Pantry} exact />*/}
               </div>
             </main>
             <BottomNavigation />
@@ -53,4 +59,4 @@ export const Router = () => {
       </Switch>
     </BrowserRouter>
   );
-};
+});

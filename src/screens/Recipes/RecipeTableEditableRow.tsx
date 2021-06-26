@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import {
   createStyles,
   MenuItem,
@@ -16,9 +17,7 @@ import {
   useFoodSelectFieldListingQuery,
   useUpdateRecipeItemByPkMutation,
 } from "../../graphql/generated/graphql";
-import { makeStyles } from "@material-ui/core/styles";
-import { useUser } from "../context/userContext";
-import { usePermissions } from "../../hooks/usePermissions";
+import { useStore } from "../../store";
 
 interface Props {
   recipe_id?: string;
@@ -42,7 +41,8 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-// TODO: https://github.com/KseniiaChumachenko/physique.one/issues/8 unify food selector across app
+// TODO(#8): unify food selector across app
+// TODO: error handling
 
 export const RecipeTableEditableRow = ({
   recipe_id,
@@ -50,8 +50,13 @@ export const RecipeTableEditableRow = ({
   mode,
   u_id,
 }: Props) => {
-  const { user } = useUser();
-  const { isPermitted } = usePermissions(u_id);
+  const {
+    userStore: {
+      user: { id: userId },
+    },
+  } = useStore();
+
+  const isPermitted = userId === u_id;
   const [isInEditMode, setEditMode] = useState(false);
 
   const [updatedRowFood, setUpdatedRowFood] = useState(row?.food?.id);
@@ -61,16 +66,13 @@ export const RecipeTableEditableRow = ({
 
   const [update_recipe_item_by_pk] = useUpdateRecipeItemByPkMutation({
     onCompleted: () => setEditMode(false),
-    onError: (props) => console.log("Failed to updated:", props.message),
   });
 
   const [delete_recipe_item_by_pk] = useDeleteRecipeItemByPkMutation({
     onCompleted: () => setEditMode(false),
   });
 
-  const [incert_recipe_item_one] = useAddRecipeItemMutation({
-    onError: (error) => console.log(error),
-  });
+  const [incert_recipe_item_one] = useAddRecipeItemMutation();
 
   const classes = useStyles();
 
@@ -195,7 +197,7 @@ export const RecipeTableEditableRow = ({
                         incert_recipe_item_one({
                           variables: {
                             recipe_id,
-                            u_id: user?.id,
+                            u_id,
                             food_id: updatedRowFood,
                             weight: updatedRowWeight,
                             ...macronutrients,

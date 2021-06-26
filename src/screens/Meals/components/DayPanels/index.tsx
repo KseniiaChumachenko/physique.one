@@ -6,10 +6,10 @@ import {
   useMealsByDateSubscription,
 } from "src/graphql/generated/graphql";
 import { ToastMessage } from "src/components/ToastMessage";
+import { useStore } from "src/store";
 import { DayPanelHeader } from "./DayPanelHeader";
 import { PanelSummary } from "./PanelSummary";
 import { PanelDetailTable } from "./PanelDetailTable";
-import { useUser } from "../../../context/userContext";
 
 const useStyles = makeStyles((theme) => ({
   parentExpPanel: {
@@ -58,7 +58,9 @@ interface Props {
 
 export const DayPanels = ({ date }: Props) => {
   const classes = useStyles();
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
   const { data, error } = useMealsByDateSubscription({
     variables: { date, u_id: user?.id },
   });

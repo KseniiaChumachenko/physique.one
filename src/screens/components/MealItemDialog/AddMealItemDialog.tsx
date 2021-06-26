@@ -11,10 +11,9 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import { Trans } from "@lingui/react";
+import { useStore } from "src/store";
 import { useAddMealItemMutation } from "../../../graphql/generated/graphql";
-import { ToastMessage } from "../../../components/ToastMessage";
 import { MealAutocomplete } from "../../../components/MealAutocomplete";
-import { useUser } from "../../context/userContext";
 
 const useStyles = makeStyles(() => ({
   field: {
@@ -31,12 +30,14 @@ interface Props {
 
 export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
   const classes = useStyles();
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
 
-  const [error, setOpenErrorMessage] = React.useState();
-  const [success, setOpenSuccessMessage] = React.useState();
+  const [error, setOpenErrorMessage] = React.useState(false);
+  const [success, setOpenSuccessMessage] = React.useState(false);
 
-  const [food, setFood] = useState();
+  const [food, setFood] = useState<any>();
   const [weight, setWeight] = useState(100);
 
   const mealItemProps = {
@@ -50,8 +51,8 @@ export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
     fats: (food?.fats / (food?.weight || 100)) * weight,
   };
 
-  const [addMealItem] = useAddMealItemMutation({
-    onError: (error1) => setOpenErrorMessage(error1),
+  const [addMealItem, { error: submitError }] = useAddMealItemMutation({
+    onError: () => setOpenErrorMessage(true),
     onCompleted: () => {
       setOpenSuccessMessage(true);
       setOpen(false);
@@ -63,10 +64,6 @@ export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
       ...mealItemProps,
     },
   });
-
-  if (error) {
-    return <ToastMessage severity={"error"} children={error?.message as any} />;
-  }
 
   return (
     <React.Fragment>
@@ -113,27 +110,24 @@ export const AddMealItemDialog = ({ open, setOpen, meal_id }: Props) => {
         <Snackbar
           open={success}
           autoHideDuration={6000}
-          onClose={() => setOpenErrorMessage(false)}
+          onClose={() => setOpenSuccessMessage(false)}
         >
           <Alert
             severity={"success"}
-            onClose={() => setOpenErrorMessage(false)}
+            onClose={() => setOpenSuccessMessage(false)}
           >
             <Trans>Meals successfully updated</Trans>
           </Alert>
         </Snackbar>
       )}
-      {!!error && (
+      {error && (
         <Snackbar
-          open={!!error}
+          open={error}
           autoHideDuration={6000}
-          onClose={() => setOpenSuccessMessage(false)}
+          onClose={() => setOpenErrorMessage(false)}
         >
-          <Alert
-            severity={"error"}
-            onClose={() => setOpenSuccessMessage(false)}
-          >
-            {error?.message as any}
+          <Alert severity={"error"} onClose={() => setOpenErrorMessage(false)}>
+            <Trans>Failed to add item: {submitError?.message}</Trans>
           </Alert>
         </Snackbar>
       )}

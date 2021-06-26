@@ -1,18 +1,8 @@
 {
   "Summary": {
-    "origin": [
-      [
-        "src/components/BottomNavigation.tsx",
-        23
-      ]
-    ]
+    "origin": [["src/components/BottomNavigation.tsx", 23]]
   },
   "Ration": {
-    "origin": [
-      [
-        "src/components/BottomNavigation.tsx",
-        24
-      ]
-    ]
+    "origin": [["src/components/BottomNavigation.tsx", 24]]
   }
 }

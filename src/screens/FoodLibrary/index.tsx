@@ -22,7 +22,7 @@ import { ToastMessage } from "../../components/ToastMessage";
 import { AddFoodDialog } from "../components/AddFoodDialog";
 import { State } from "../components/AddFoodDialog/useStore";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
-import { useUser } from "../context/userContext";
+import { useStore } from "../../store";
 
 const useStyles = makeStyles((theme) => ({
   tableToolbar: {
@@ -32,17 +32,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props {}
-
-export const FoodLibrary = ({}: Props) => {
+export const FoodLibrary = () => {
   const classes = useStyles();
-  const { user } = useUser();
+  const {
+    userStore: { user },
+  } = useStore();
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState<any>(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState();
+  const [error, setError] = useState<string>("");
   const { data, refetch } = useFoodSelectFieldListingQuery({
-    onError: (error1) => setError(error1),
+    onError: (error1) => setError(error1.message),
   });
 
   const [insert_food] = useAddFoodMutation({
@@ -51,7 +51,7 @@ export const FoodLibrary = ({}: Props) => {
       setOpenAddDialog(false);
       setSuccess(true);
     },
-    onError: (error1) => setError(error1),
+    onError: (error1) => setError(error1.message),
   });
 
   const [update_food] = useUpdateFoodMutation({
@@ -60,7 +60,7 @@ export const FoodLibrary = ({}: Props) => {
       setOpenEditDialog(false);
       setSuccess(true);
     },
-    onError: (error1) => setError(error1),
+    onError: (error1) => setError(error1.message),
   });
 
   const [delete_food] = useDeleteFoodMutation({
@@ -68,7 +68,7 @@ export const FoodLibrary = ({}: Props) => {
       refetch();
       setSuccess(true);
     },
-    onError: (error1) => setError(error1),
+    onError: (error1) => setError(error1.message),
   });
 
   const handleAddFood = (props: State) => (event: any) => {
@@ -146,9 +146,9 @@ export const FoodLibrary = ({}: Props) => {
       )}
       <ToastMessage
         severity={"error"}
-        children={error?.message as any}
+        children={<>{error}</>}
         open={!!error}
-        controledClose={() => setError(false)}
+        controledClose={() => setError("")}
       />
       <ToastMessage
         severity={"success"}

@@ -10,10 +10,10 @@ import {
   Select,
   TextField,
 } from "@material-ui/core";
-import {Trans} from "@lingui/react";
-import {makeStyles} from "@material-ui/core/styles";
-import {useFoodTypesQuery} from "../../../graphql/generated/graphql";
-import {State, useStore} from "./useStore";
+import { Trans } from "@lingui/react";
+import { makeStyles } from "@material-ui/core/styles";
+import { useFoodTypesQuery } from "../../../graphql/generated/graphql";
+import { State, useStore } from "./useStore";
 
 interface Props extends State {
   open: boolean;
@@ -77,8 +77,8 @@ export const AddFoodDialog = ({
             onChange={(event) => store.setType(event.target.value as any)}
             className={classes.field}
           >
-            {data?.food_type?.map(({ value }) => (
-              <MenuItem value={value} children={value} />
+            {data?.food_type?.map(({ value }, i) => (
+              <MenuItem key={i} value={value} children={value} />
             ))}
           </Select>
         )}

@@ -1,13 +1,7 @@
 import React from "react";
-import { useUser } from "../context/userContext";
-import {
-  Avatar,
-  Card,
-  CardContent,
-  CardHeader,
-  createStyles,
-} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { Avatar, Card, CardHeader, createStyles } from "@material-ui/core";
+import { useStore } from "src/store";
 
 export const useStyles = makeStyles((theme) =>
   createStyles({
@@ -21,16 +15,19 @@ export const useStyles = makeStyles((theme) =>
 export const Profile = () => {
   const { avatar } = useStyles();
   const {
-    user: { email, user_name, first_name, last_name, fb_picture_url },
-  } = useUser();
+    userStore: { user },
+  } = useStore();
+
   return (
     <div>
       <Card>
         <CardHeader
           avatar={
-            fb_picture_url && <Avatar className={avatar} src={fb_picture_url} />
+            user?.fb_picture_url && (
+              <Avatar className={avatar} src={user?.fb_picture_url} />
+            )
           }
-          title={first_name + " " + last_name}
+          title={user?.first_name + " " + user?.last_name}
           subheader={
             "🚧 Sorry, development of the section is still in progress"
           } //TODO

@@ -1,10 +1,13 @@
-import React, {useState} from "react";
-import {Trans} from "@lingui/react";
-import {Snackbar} from "@material-ui/core";
-import {Alert} from "@material-ui/lab";
-import {Meal, useDeleteMealByIdMutation,} from "../../../../graphql/generated/graphql";
-import {EditDeleteButtonGroup} from "../../../components/EditDeletButtonGroup";
-import {AddMealItemDialog} from "../../../components/MealItemDialog/AddMealItemDialog";
+import React, { useState } from "react";
+import { Trans } from "@lingui/react";
+import { Snackbar } from "@material-ui/core";
+import { Alert } from "@material-ui/lab";
+import {
+  Meal,
+  useDeleteMealByIdMutation,
+} from "../../../../graphql/generated/graphql";
+import { EditDeleteButtonGroup } from "../../../components/EditDeletButtonGroup";
+import { AddMealItemDialog } from "../../../components/MealItemDialog/AddMealItemDialog";
 
 type MealItem = Pick<Meal, "id">;
 
