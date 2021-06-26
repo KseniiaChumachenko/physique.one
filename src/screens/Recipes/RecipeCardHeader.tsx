@@ -7,7 +7,6 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { useStore } from "src/store";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { AggregationChips } from "../../components/AggredationChips";
 import {
@@ -16,6 +15,7 @@ import {
   useDeleteRecipeByPkMutation,
   useUpdateRecipeByPkMutation,
 } from "../../graphql/generated/graphql";
+import { usePermissions } from "../../hooks/usePermissions";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -36,6 +36,7 @@ export interface RecipeCardHeaderProps {
   name?: string | null;
   description?: string | null;
   recipe_items_aggregate?: Recipe_Item_Aggregate;
+  u_id: string;
 }
 
 // TODO: error handling
@@ -44,11 +45,10 @@ export const RecipeCardHeader = ({
   name,
   recipe_items_aggregate,
   description,
+  u_id,
 }: RecipeCardHeaderProps) => {
   const classes = useStyles();
-  const {
-    userStore: { user },
-  } = useStore();
+  const { isPermitted } = usePermissions(u_id);
   const [isInEditMode, setEditMode] = useState(false);
   const [updatedName, setUpdatedName] = useState(name);
   const [updatedDesc, setUpdatedDesc] = useState(description);
@@ -62,7 +62,7 @@ export const RecipeCardHeader = ({
 
   const [insert_recipe_one] = useAddRecipeMutation({
     variables: {
-      u_id: user?.id,
+      u_id,
       name: updatedName,
       description: updatedDesc,
     },
@@ -92,23 +92,31 @@ export const RecipeCardHeader = ({
           )
         }
         action={
-          <EditDeleteButtonGroup
-            onConfirmClick={
-              isInEditMode
-                ? () => {
-                    if (id) {
-                      update_recipe_by_pk();
-                    } else {
-                      insert_recipe_one();
-                    }
-                    setEditMode(false);
-                  }
-                : undefined
-            }
-            onCancelClick={isInEditMode ? () => setEditMode(false) : undefined}
-            onEditClick={isInEditMode ? undefined : () => setEditMode(true)}
-            onDeleteClick={delete_recipe_by_pk}
-          />
+          u_id === "0" ? (
+            <EditDeleteButtonGroup onConfirmClick={insert_recipe_one} />
+          ) : (
+            isPermitted && (
+              <EditDeleteButtonGroup
+                onConfirmClick={
+                  isInEditMode
+                    ? () => {
+                        if (id) {
+                          update_recipe_by_pk();
+                        } else {
+                          insert_recipe_one();
+                        }
+                        setEditMode(false);
+                      }
+                    : undefined
+                }
+                onCancelClick={
+                  isInEditMode ? () => setEditMode(false) : undefined
+                }
+                onEditClick={isInEditMode ? undefined : () => setEditMode(true)}
+                onDeleteClick={delete_recipe_by_pk}
+              />
+            )
+          )
         }
       />
       <CardContent>

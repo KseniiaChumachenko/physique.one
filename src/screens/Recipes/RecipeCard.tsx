@@ -11,6 +11,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Recipe_Item } from "../../graphql/generated/graphql";
+import { usePermissions } from "../../hooks/usePermissions";
 import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
 import { RecipeTableEditableRow } from "./RecipeTableEditableRow";
 
@@ -34,11 +35,13 @@ interface Props extends RecipeCardHeaderProps {
 export const RecipeCard = ({
   id,
   name,
+  u_id,
   description,
   recipe_items,
   recipe_items_aggregate,
 }: Props) => {
   const classes = useStyles();
+  const { isPermitted } = usePermissions(u_id);
   return (
     <Card className={classes.root}>
       <RecipeCardHeader
@@ -46,6 +49,7 @@ export const RecipeCard = ({
         recipe_items_aggregate={recipe_items_aggregate}
         description={description}
         name={name}
+        u_id={u_id}
       />
       <CardContent>
         <Table size="small" aria-label="a dense table">
@@ -67,9 +71,26 @@ export const RecipeCard = ({
                 row={row}
                 key={key}
                 mode={"regularRow"}
+                u_id={u_id}
               />
             ))}
-            <RecipeTableEditableRow recipe_id={id} row={{}} mode={"add"} />
+            {u_id === "0" ? (
+              <RecipeTableEditableRow
+                recipe_id={id}
+                row={{}}
+                mode={"add"}
+                u_id={u_id}
+              />
+            ) : (
+              isPermitted && (
+                <RecipeTableEditableRow
+                  recipe_id={id}
+                  row={{}}
+                  mode={"add"}
+                  u_id={u_id}
+                />
+              )
+            )}
           </TableBody>
         </Table>
       </CardContent>

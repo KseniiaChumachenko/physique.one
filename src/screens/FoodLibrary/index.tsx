@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { ApolloError } from "@apollo/client";
-import { Trans } from "@lingui/react";
 import { makeStyles } from "@material-ui/core/styles";
+import { Trans } from "@lingui/react";
 import { AddRounded } from "@material-ui/icons";
 import {
   Button,
@@ -13,6 +12,7 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
+import { ApolloError } from "@apollo/client";
 import {
   useAddFoodMutation,
   useDeleteFoodMutation,
@@ -23,6 +23,7 @@ import { ToastMessage } from "../../components/ToastMessage";
 import { AddFoodDialog } from "../components/AddFoodDialog";
 import { State } from "../components/AddFoodDialog/useStore";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
+import { useUser } from "../context/userContext";
 
 const useStyles = makeStyles((theme) => ({
   tableToolbar: {
@@ -34,10 +35,11 @@ const useStyles = makeStyles((theme) => ({
 
 export const FoodLibrary = () => {
   const classes = useStyles();
+  const { user } = useUser();
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState<any>(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<ApolloError>();
+  const [error, setError] = useState<ApolloError>(false);
   const { data, refetch } = useFoodSelectFieldListingQuery({
     onError: (error1) => setError(error1),
   });
@@ -110,13 +112,15 @@ export const FoodLibrary = () => {
               <TableCell children={row.carbohydrates} />
               <TableCell children={row.fats} />
               <TableCell>
-                <EditDeleteButtonGroup
-                  key={key}
-                  onEditClick={() => setOpenEditDialog(row)}
-                  onDeleteClick={() =>
-                    delete_food({ variables: { id: row.id } })
-                  }
-                />
+                {row.u_id === user?.id && ( //TODO: https://github.com/KseniiaChumachenko/physique.one/issues/31 proper permissions
+                  <EditDeleteButtonGroup
+                    key={key}
+                    onEditClick={() => setOpenEditDialog(row)}
+                    onDeleteClick={() =>
+                      delete_food({ variables: { id: row.id } })
+                    }
+                  />
+                )}
               </TableCell>
             </TableRow>
           ))}
@@ -136,6 +140,7 @@ export const FoodLibrary = () => {
           open={openAddDialog}
           setOpen={setOpenAddDialog}
           onConfirm={handleAddFood}
+          u_id={user?.id}
         />
       )}
       <ToastMessage

@@ -9,7 +9,6 @@ import {
   TextField,
 } from "@material-ui/core";
 import { Trans } from "@lingui/react";
-import { useStore } from "src/store";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import {
   Recipe_Item,
@@ -18,11 +17,13 @@ import {
   useFoodSelectFieldListingQuery,
   useUpdateRecipeItemByPkMutation,
 } from "../../graphql/generated/graphql";
+import { usePermissions } from "../../hooks/usePermissions";
 
 interface Props {
   recipe_id?: string;
   row: Partial<Recipe_Item>;
   mode?: "add" | "regularRow";
+  u_id: string;
 }
 
 const useStyles = makeStyles((theme) =>
@@ -43,10 +44,13 @@ const useStyles = makeStyles((theme) =>
 // TODO(#8): unify food selector across app
 // TODO: error handling
 
-export const RecipeTableEditableRow = ({ recipe_id, row, mode }: Props) => {
-  const {
-    userStore: { user },
-  } = useStore();
+export const RecipeTableEditableRow = ({
+  recipe_id,
+  row,
+  mode,
+  u_id,
+}: Props) => {
+  const { isPermitted } = usePermissions(u_id);
   const [isInEditMode, setEditMode] = useState(false);
 
   const [updatedRowFood, setUpdatedRowFood] = useState(row?.food?.id);
@@ -178,50 +182,52 @@ export const RecipeTableEditableRow = ({ recipe_id, row, mode }: Props) => {
         component="th"
         scope="row"
         children={
-          <EditDeleteButtonGroup
-            onConfirmClick={
-              isInEditMode
-                ? mode === "add"
+          isPermitted && (
+            <EditDeleteButtonGroup
+              onConfirmClick={
+                isInEditMode
+                  ? mode === "add"
+                    ? () =>
+                        incert_recipe_item_one({
+                          variables: {
+                            recipe_id,
+                            u_id,
+                            food_id: updatedRowFood,
+                            weight: updatedRowWeight,
+                            ...macronutrients,
+                          },
+                        })
+                    : () =>
+                        update_recipe_item_by_pk({
+                          variables: {
+                            id: row.id,
+                            food_id: updatedRowFood,
+                            weight: updatedRowWeight,
+                            ...macronutrients,
+                          },
+                        })
+                  : undefined
+              }
+              onCancelClick={
+                isInEditMode && !(mode === "add")
+                  ? () => setEditMode(false)
+                  : undefined
+              }
+              onEditClick={
+                isInEditMode && mode === "add"
+                  ? undefined
+                  : () => setEditMode(row.id)
+              }
+              onDeleteClick={
+                !(mode === "add")
                   ? () =>
-                      incert_recipe_item_one({
-                        variables: {
-                          recipe_id,
-                          u_id: user?.id,
-                          food_id: updatedRowFood,
-                          weight: updatedRowWeight,
-                          ...macronutrients,
-                        },
+                      delete_recipe_item_by_pk({
+                        variables: { id: row.id },
                       })
-                  : () =>
-                      update_recipe_item_by_pk({
-                        variables: {
-                          id: row.id,
-                          food_id: updatedRowFood,
-                          weight: updatedRowWeight,
-                          ...macronutrients,
-                        },
-                      })
-                : undefined
-            }
-            onCancelClick={
-              isInEditMode && !(mode === "add")
-                ? () => setEditMode(false)
-                : undefined
-            }
-            onEditClick={
-              isInEditMode && mode === "add"
-                ? undefined
-                : () => setEditMode(row.id)
-            }
-            onDeleteClick={
-              !(mode === "add")
-                ? () =>
-                    delete_recipe_item_by_pk({
-                      variables: { id: row.id },
-                    })
-                : undefined
-            }
-          />
+                  : undefined
+              }
+            />
+          )
         }
       />
     </TableRow>

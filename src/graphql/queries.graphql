@@ -96,6 +96,7 @@ query FoodSelectFieldListing {
     fats
     energy_cal
     energy_kj
+    u_id
   }
   recipe {
     id
@@ -129,6 +130,7 @@ subscription RecipeListing {
     id
     name
     description
+    u_id
     recipe_items {
       id
       food {
