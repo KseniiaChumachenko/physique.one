@@ -1,4 +1,4 @@
-import { makeAutoObservable, action, runInAction } from "mobx";
+import { makeAutoObservable, action /*runInAction*/ } from "mobx";
 import { ApolloError } from "@apollo/client";
 import { i18n } from "@lingui/core";
 import { NIL } from "uuid";
@@ -8,11 +8,13 @@ import { api } from "../../../api";
 import {
   PANTRIES_LISTING_DOCUMENT,
   ADD_PANTRY_DOCUMENT,
-  ADD_PANTRY_USER_DOCUMENT,
-  REMOVE_PANTRY_USER_DOCUMENT,
   REMOVE_PANTRY_DOCUMENT,
+
+  /*  ADD_PANTRY_USER_DOCUMENT,
+  REMOVE_PANTRY_USER_DOCUMENT,
+
   UPDATE_PANTRY_NAME_DOCUMENT,
-  UPDATE_FOOD_TYPE_DOCUMENT,
+  UPDATE_FOOD_TYPE_DOCUMENT,*/
 } from "../gql";
 import { Food_Type, Pantry, Users } from "../../../graphql/generated/graphql";
 
@@ -54,6 +56,10 @@ const EMPTY_PANTRY_ITEM = (user: Users) => ({
     aggregate: { count: 0 },
   },
 });
+
+/*
+ * TODO: pantry progress stopped here, all pantry related stuff is commented out
+ * */
 
 export class Pantries {
   rootStore: RootStore;
@@ -99,7 +105,7 @@ export class Pantries {
   addPantry = action(() => {
     api
       .mutate({ mutation: ADD_PANTRY_DOCUMENT, variables: this.newItem })
-      .then(({ data, loading, error }) => {
+      .then(({ data, loading, error }: any) => {
         this.loading = loading;
         this.error = error;
         if (data) {
@@ -109,7 +115,7 @@ export class Pantries {
   });
 
   handleAddNewCategory = action(() => {
-    this.items.push(EMPTY_PANTRY_ITEM(this.user)); // TODO: ItemProps vs .data
+    this.items.push(EMPTY_PANTRY_ITEM(this.user) as any); // TODO: ItemProps vs .data
   });
 
   handleSetActiveCard(id: string) {
@@ -178,19 +184,19 @@ export class Pantries {
     ];
   }
 
-  private get actions(id: string) {
+  private get actions() {
     return [
-      {
-        children: i18n.t`Edit`,
-        onClick: () => this.handleSetActiveCard(id),
-      },
-      {
-        children: i18n.t`Delete`,
-        onClick: this.handleDeletePantry(id),
-        disabled:
-          (this.getItemById(id)?.data.pantry_items_aggregate?.aggregate
-            ?.count || 0) > 0,
-      },
+      // {
+      //   children: i18n.t`Edit`,
+      //   onClick: () => this.handleSetActiveCard(id),
+      // },
+      // {
+      //   children: i18n.t`Delete`,
+      //   onClick: this.handleDeletePantry(id),
+      //   disabled:
+      //     (this.getItemById(id)?.data.pantry_items_aggregate?.aggregate
+      //       ?.count || 0) > 0,
+      // },
     ];
   }
 }

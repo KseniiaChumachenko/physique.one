@@ -12,7 +12,7 @@ import { Recipes } from "./Recipes";
 import { Authorization } from "./Authorization";
 import { PrivacyPolicy } from "./PrivacyPolicy";
 import { Profile } from "./Profile";
-import { Pantry } from "./Pantry";
+// import { Pantry } from "./Pantry";
 
 const useStyles = makeStyles(() => ({
   childrenContainer: {
@@ -48,7 +48,7 @@ export const Router = observer(() => {
                 <Route path={"/foodLibrary"} component={FoodLibrary} exact />
                 <Route path={"/recipes"} component={Recipes} exact />
                 <Route path={"/profile"} component={Profile} exact />
-                <Route path={"/pantry"} component={Pantry} exact />
+                {/*<Route path={"/pantry"} component={Pantry} exact />*/}
               </div>
             </main>
             <BottomNavigation />
