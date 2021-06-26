@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import {
+  Button,
   Card,
   CardContent,
   createStyles,
@@ -10,6 +11,7 @@ import {
   TableRow,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { Trans } from "@lingui/react";
 import { Recipe_Item } from "../../graphql/generated/graphql";
 import { useStore } from "../../store";
 import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
@@ -47,6 +49,9 @@ export const RecipeCard = ({
     },
   } = useStore();
 
+  const [withAddRow, setWithAddRow] = useState(false);
+  const handleResetAddRow = () => setWithAddRow(false);
+
   const isPermitted = userId === u_id;
 
   return (
@@ -79,27 +84,42 @@ export const RecipeCard = ({
                 key={key}
                 mode={"regularRow"}
                 u_id={u_id}
+                onClickOutside={handleResetAddRow}
               />
             ))}
-            {u_id === "0" ? (
-              <RecipeTableEditableRow
-                recipe_id={id}
-                row={{}}
-                mode={"add"}
-                u_id={u_id}
-              />
-            ) : (
-              isPermitted && (
+            {withAddRow &&
+              (u_id === "0" ? (
                 <RecipeTableEditableRow
                   recipe_id={id}
                   row={{}}
                   mode={"add"}
                   u_id={u_id}
+                  onClickOutside={handleResetAddRow}
                 />
-              )
-            )}
+              ) : (
+                isPermitted && (
+                  <RecipeTableEditableRow
+                    recipe_id={id}
+                    row={{}}
+                    mode={"add"}
+                    u_id={u_id}
+                    onClickOutside={handleResetAddRow}
+                  />
+                )
+              ))}
           </TableBody>
         </Table>
+        {!withAddRow && (
+          <Button
+            variant={"text"}
+            onClick={() => setWithAddRow(true)}
+            size={"large"}
+            color={"primary"}
+            className={classes.addButton}
+          >
+            <Trans> + Add ingredient</Trans>
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

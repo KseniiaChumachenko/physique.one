@@ -24,6 +24,7 @@ interface Props {
   row: Partial<Recipe_Item>;
   mode?: "add" | "regularRow";
   u_id: string;
+  onClickOutside(): void;
 }
 
 const useStyles = makeStyles((theme) =>
@@ -49,6 +50,7 @@ export const RecipeTableEditableRow = ({
   row,
   mode,
   u_id,
+  onClickOutside,
 }: Props) => {
   const {
     userStore: {
@@ -69,10 +71,15 @@ export const RecipeTableEditableRow = ({
   });
 
   const [delete_recipe_item_by_pk] = useDeleteRecipeItemByPkMutation({
-    onCompleted: () => setEditMode(false),
+    onCompleted: () => {
+      setEditMode(false);
+      onClickOutside();
+    },
   });
 
-  const [incert_recipe_item_one] = useAddRecipeItemMutation();
+  const [incert_recipe_item_one] = useAddRecipeItemMutation({
+    onCompleted: onClickOutside,
+  });
 
   const classes = useStyles();
 
@@ -215,8 +222,11 @@ export const RecipeTableEditableRow = ({
                   : undefined
               }
               onCancelClick={
-                isInEditMode && !(mode === "add")
-                  ? () => setEditMode(false)
+                isInEditMode
+                  ? () => {
+                      setEditMode(false);
+                      onClickOutside();
+                    }
                   : undefined
               }
               onEditClick={
