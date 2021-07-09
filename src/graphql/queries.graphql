@@ -131,6 +131,8 @@ subscription RecipeListing {
     name
     description
     u_id
+    link
+    portions
     recipe_items {
       id
       food {

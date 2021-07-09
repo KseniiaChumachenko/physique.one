@@ -186,7 +186,7 @@ mutation DeleteMealItemByPrimaryKey($id: uuid!) {
 
 mutation AddRecipe($u_id: uuid!, $name: String, $description: String) {
   insert_recipe_one(
-    object: { u_id: $u_id, name: $name, description: $description }
+    object: { u_id: $u_id, description: $description }
   ) {
     id
   }
@@ -228,6 +228,7 @@ mutation UpdateRecipeNameByPK($id: uuid!, $name: String) {
     id
   }
 }
+
 mutation UpdateRecipeDescByPK($id: uuid!, $description: String) {
   update_recipe_by_pk(
     pk_columns: { id: $id }
@@ -236,6 +237,25 @@ mutation UpdateRecipeDescByPK($id: uuid!, $description: String) {
     id
   }
 }
+
+mutation UpdateRecipeLinkByPK($id: uuid!, $link: String) {
+  update_recipe_by_pk(
+    pk_columns: { id: $id }
+    _set: { link: $link }
+  ) {
+    id
+  }
+}
+
+mutation UpdateRecipePortioningByPK($id: uuid!, $portions: Int) {
+  update_recipe_by_pk(
+    pk_columns: { id: $id }
+    _set: { portions: $portions }
+  ) {
+    id
+  }
+}
+
 mutation UpdateRecipeItemByPK(
   $id: uuid!
   $food_id: uuid!

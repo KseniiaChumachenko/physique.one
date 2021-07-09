@@ -41,6 +41,9 @@ export const RecipeCard = ({
   description,
   recipe_items,
   recipe_items_aggregate,
+    portions,
+    link
+
 }: Props) => {
   const classes = useStyles();
   const {
@@ -62,6 +65,8 @@ export const RecipeCard = ({
         description={description}
         name={name}
         u_id={u_id}
+        portions={portions}
+        link={link}
       />
       <CardContent>
         <Table size="small" aria-label="a dense table">
