@@ -69,9 +69,8 @@ export const RecipeCard = ({
    * */
 
   const isPermitted = userId === u_id;
-  const coefficientForPortions = portions
-    ? displayPortions / portions
-    : displayPortions;
+  const coefficientForPortions =
+    portions === displayPortions ? 1 : displayPortions / (portions || 1);
 
   return (
     <Card className={classes.root}>
