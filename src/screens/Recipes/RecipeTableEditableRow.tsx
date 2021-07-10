@@ -102,7 +102,10 @@ export const RecipeTableEditableRow = ({
     }
   }, [mode]);
 
-  const foodById = data?.food.find((item) => item.id === updatedRowFood);
+  const foodById =
+    mode == "add"
+      ? data?.food[0]
+      : data?.food.find((item) => item.id === updatedRowFood);
 
   const editModeNutrients =
     foodById &&
