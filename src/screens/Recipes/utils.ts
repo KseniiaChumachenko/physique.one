@@ -9,31 +9,31 @@ export const getNutrientAccordingToWeight = (
   value: number = 0,
   weight: number = 0,
   portionCoefficient: number = 1
-) => Math.round((value / 100) * weight * portionCoefficient);
+) => ((value / 100) * weight * portionCoefficient)?.toFixed(2);
 
 export const getRowValues = (
   food: Food,
   weight: number,
   portionCoefficient: number
 ) => ({
-  weight: getNutrientAccordingToWeight(weight, weight, portionCoefficient),
+  weight: getValueByPortionCoefficient(weight, portionCoefficient),
   energy_cal: getNutrientAccordingToWeight(
-    food.energy_cal || 0,
+    food.energy_cal,
     weight,
     portionCoefficient
   ),
   energy_kj: getNutrientAccordingToWeight(
-    food.energy_kj || 0,
+    food.energy_kj,
     weight,
     portionCoefficient
   ),
   proteins: getNutrientAccordingToWeight(
-    food.proteins || 0,
+    food.proteins,
     weight,
     portionCoefficient
   ),
   carbohydrates: getNutrientAccordingToWeight(
-    food.carbohydrates || 0,
+    food.carbohydrates,
     weight,
     portionCoefficient
   ),
@@ -48,6 +48,7 @@ export const sumByPortionCoefficient = (
   key: string,
   portionCoefficient: number
 ) =>
-  Math.round(
-    getValueByPortionCoefficient(sumByKey(array, key), portionCoefficient)
-  );
+  getValueByPortionCoefficient(
+    sumByKey(array, key),
+    portionCoefficient
+  )?.toFixed(2);

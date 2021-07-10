@@ -62,7 +62,7 @@ export const RecipeTableEditableRow = ({
   } = useStore();
 
   const isPermitted = userId === u_id;
-  const [isInEditMode, setEditMode] = useState(false);
+  const [isInEditMode, setEditMode] = useState(mode === "add");
 
   const [updatedRowFood, setUpdatedRowFood] = useState(
     basePortionRow?.food?.id
@@ -102,17 +102,16 @@ export const RecipeTableEditableRow = ({
     }
   }, [mode]);
 
-  const foodById =
-    mode == "add"
-      ? data?.food[0]
-      : data?.food.find((item) => item.id === updatedRowFood);
+  const foodById = isInEditMode
+    ? data?.food[0]
+    : data?.food.find((item) => item.id === updatedRowFood);
 
   const editModeNutrients =
-    foodById &&
-    getRowValues(foodById as any, updatedRowWeight, coefficientForPortions);
+    foodById && getRowValues(foodById as any, updatedRowWeight, 1);
 
   const row = {
-    ...basePortionRow,
+    id: basePortionRow.id,
+    food: basePortionRow.food,
     ...getRowValues(foodById as any, updatedRowWeight, coefficientForPortions),
   };
 
@@ -150,7 +149,7 @@ export const RecipeTableEditableRow = ({
             children={
               <TextField
                 disabled={loading}
-                defaultValue={row?.weight || 100}
+                defaultValue={row?.weight}
                 type={"number"}
                 onChange={(event: any) =>
                   setUpdatedRowWeight(event?.target?.value)
@@ -176,41 +175,40 @@ export const RecipeTableEditableRow = ({
         scope="row"
         children={
           <React.Fragment>
-            {(isInEditMode || mode === "add"
+            {isInEditMode || mode === "add"
               ? editModeNutrients?.energy_cal
-              : row?.energy_cal
-            )?.toFixed(2)}
+              : row?.energy_cal}
             &nbsp;|&nbsp;
-            {(isInEditMode || mode === "add"
+            {isInEditMode || mode === "add"
               ? editModeNutrients?.energy_kj
-              : row?.energy_kj
-            )?.toFixed(2)}
+              : row?.energy_kj}
           </React.Fragment>
         }
       />
       <TableCell
         component="th"
         scope="row"
-        children={(isInEditMode || mode === "add"
-          ? editModeNutrients?.proteins
-          : row?.proteins
-        )?.toFixed(2)}
+        children={
+          isInEditMode || mode === "add"
+            ? editModeNutrients?.proteins
+            : row?.proteins
+        }
       />
       <TableCell
         component="th"
         scope="row"
-        children={(isInEditMode || mode === "add"
-          ? editModeNutrients?.carbohydrates
-          : row?.carbohydrates
-        )?.toFixed(2)}
+        children={
+          isInEditMode || mode === "add"
+            ? editModeNutrients?.carbohydrates
+            : row?.carbohydrates
+        }
       />
       <TableCell
         component="th"
         scope="row"
-        children={(isInEditMode || mode === "add"
-          ? editModeNutrients?.fats
-          : row?.fats
-        )?.toFixed(2)}
+        children={
+          isInEditMode || mode === "add" ? editModeNutrients?.fats : row?.fats
+        }
       />
       <TableCell
         component="th"
