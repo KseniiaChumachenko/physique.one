@@ -19,7 +19,7 @@ import { Recipe_Item } from "../../graphql/generated/graphql";
 import { useStore } from "../../store";
 import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
 import { RecipeTableEditableRow } from "./RecipeTableEditableRow";
-import { sumByPortionCoefficient } from "./utils";
+import { getValueByPortionCoefficient } from "./utils";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -134,24 +134,21 @@ export const RecipeCard = ({
                 </TableCell>
                 <TableCell>
                   <Typography variant={"button"} color={"textSecondary"}>
-                    {sumByPortionCoefficient(
-                      recipe_items,
-                      "weight",
+                    {getValueByPortionCoefficient(
+                      recipe_items_aggregate?.aggregate?.sum?.weight,
                       coefficientForPortions
                     )}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant={"button"} color={"textSecondary"}>
-                    {sumByPortionCoefficient(
-                      recipe_items,
-                      "energy_cal",
+                    {getValueByPortionCoefficient(
+                      recipe_items_aggregate?.aggregate?.sum?.energy_cal,
                       coefficientForPortions
                     )}
                     &nbsp;kCal |&nbsp;
-                    {sumByPortionCoefficient(
-                      recipe_items,
-                      "energy_kj",
+                    {getValueByPortionCoefficient(
+                      recipe_items_aggregate?.aggregate?.sum?.energy_kj,
                       coefficientForPortions
                     )}
                     &nbsp;kJ
@@ -159,27 +156,24 @@ export const RecipeCard = ({
                 </TableCell>
                 <TableCell>
                   <Typography variant={"button"} color={"textSecondary"}>
-                    {sumByPortionCoefficient(
-                      recipe_items,
-                      "proteins",
+                    {getValueByPortionCoefficient(
+                      recipe_items_aggregate?.aggregate?.sum?.proteins,
                       coefficientForPortions
                     )}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant={"button"} color={"textSecondary"}>
-                    {sumByPortionCoefficient(
-                      recipe_items,
-                      "carbohydrates",
+                    {getValueByPortionCoefficient(
+                      recipe_items_aggregate?.aggregate?.sum?.carbohydrates,
                       coefficientForPortions
                     )}
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant={"button"} color={"textSecondary"}>
-                    {sumByPortionCoefficient(
-                      recipe_items,
-                      "fats",
+                    {getValueByPortionCoefficient(
+                      recipe_items_aggregate?.aggregate?.sum?.fats,
                       coefficientForPortions
                     )}
                   </Typography>
