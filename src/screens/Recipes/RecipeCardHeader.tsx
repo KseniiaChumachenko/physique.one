@@ -329,4 +329,4 @@ export const RecipeCardHeader = ({
       </CardContent>
     </>
   );
-}
+};
