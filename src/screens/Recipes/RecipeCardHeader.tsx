@@ -12,7 +12,7 @@ import {
   Link,
 } from "@material-ui/core";
 import { EditRounded, DoneRounded, LinkRounded } from "@material-ui/icons";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { AggregationChips } from "../../components/AggredationChips";
 import {
@@ -211,7 +211,7 @@ export const RecipeCardHeader = ({
                     color={"textSecondary"}
                   >
                     <Trans>
-                      Base recipe is for <strong>{updatedPortioning}</strong>{" "}
+                      Base recipe is for <strong>{updatedPortioning}</strong>
                       portions
                     </Trans>
                   </Typography>
