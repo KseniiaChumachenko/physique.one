@@ -36,6 +36,9 @@ export const EditDeleteButtonGroup = ({
     <ButtonGroup>
       {onConfirmClick && (
         <IconButton
+          onKeyPress={(event) =>
+            event.key === "Enter" ? onConfirmClick!() : null
+          }
           children={<DoneRounded />}
           onClick={(event) => {
             onConfirmClick!();
@@ -47,6 +50,9 @@ export const EditDeleteButtonGroup = ({
       )}
       {onCancelClick && (
         <IconButton
+          onKeyPress={(event) =>
+            event.key === "Escape" ? onConfirmClick!() : null
+          }
           children={<CancelRounded />}
           onClick={(event) => {
             onCancelClick!();

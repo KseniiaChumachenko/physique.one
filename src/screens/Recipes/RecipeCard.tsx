@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import {
+  Box,
   Button,
   Card,
   CardContent,
   createStyles,
+  Slider,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
+  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Trans } from "@lingui/react";
@@ -16,6 +19,7 @@ import { Recipe_Item } from "../../graphql/generated/graphql";
 import { useStore } from "../../store";
 import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
 import { RecipeTableEditableRow } from "./RecipeTableEditableRow";
+import { sumByPortionCoefficient } from "./utils";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -34,6 +38,7 @@ interface Props extends RecipeCardHeaderProps {
   recipe_items?: Recipe_Item[] | null;
 }
 
+// TODO recipe items remapped twice because of submit of adjustable rows and portioning
 export const RecipeCard = ({
   id,
   name,
@@ -41,6 +46,8 @@ export const RecipeCard = ({
   description,
   recipe_items,
   recipe_items_aggregate,
+  portions,
+  link,
 }: Props) => {
   const classes = useStyles();
   const {
@@ -49,10 +56,22 @@ export const RecipeCard = ({
     },
   } = useStore();
 
+  const [displayPortions, setDisplayPortions] = useState(portions || 1);
+
   const [withAddRow, setWithAddRow] = useState(false);
   const handleResetAddRow = () => setWithAddRow(false);
 
+  /*
+   * x gram - portions
+   * y gram - displayPortions
+   *
+   * y = x * displayPortions / portions
+   * */
+
   const isPermitted = userId === u_id;
+  const coefficientForPortions = portions
+    ? displayPortions / portions
+    : displayPortions;
 
   return (
     <Card className={classes.root}>
@@ -62,8 +81,33 @@ export const RecipeCard = ({
         description={description}
         name={name}
         u_id={u_id}
+        portions={portions}
+        link={link}
       />
       <CardContent>
+        <Box display={"flex"} alignItems={"center"}>
+          <Typography variant={"subtitle2"}>
+            <Trans>Portions: </Trans>
+          </Typography>
+          <Box
+            display={"flex"}
+            alignItems={"center"}
+            marginBottom={2}
+            width={"60%"}
+          >
+            <Slider
+              defaultValue={displayPortions}
+              value={displayPortions}
+              step={0.5}
+              max={50}
+              valueLabelFormat={(v) => v}
+              valueLabelDisplay="on"
+              onChange={(e, v) => {
+                setDisplayPortions(v as number);
+              }}
+            />
+          </Box>
+        </Box>
         <Table size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
@@ -85,8 +129,72 @@ export const RecipeCard = ({
                 mode={"regularRow"}
                 u_id={u_id}
                 onClickOutside={handleResetAddRow}
+                coefficientForPortions={coefficientForPortions}
               />
             ))}
+            {/*Row total for portions: */}
+            {recipe_items && recipe_items?.length > 1 && (
+              <TableRow>
+                <TableCell>
+                  <Typography variant={"button"} color={"textSecondary"}>
+                    <Trans>TOTAL</Trans>
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant={"button"} color={"textSecondary"}>
+                    {sumByPortionCoefficient(
+                      recipe_items,
+                      "weight",
+                      coefficientForPortions
+                    )}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant={"button"} color={"textSecondary"}>
+                    {sumByPortionCoefficient(
+                      recipe_items,
+                      "energy_cal",
+                      coefficientForPortions
+                    )}
+                    &nbsp;kCal |&nbsp;
+                    {sumByPortionCoefficient(
+                      recipe_items,
+                      "energy_kj",
+                      coefficientForPortions
+                    )}
+                    &nbsp;kJ
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant={"button"} color={"textSecondary"}>
+                    {sumByPortionCoefficient(
+                      recipe_items,
+                      "proteins",
+                      coefficientForPortions
+                    )}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant={"button"} color={"textSecondary"}>
+                    {sumByPortionCoefficient(
+                      recipe_items,
+                      "carbohydrates",
+                      coefficientForPortions
+                    )}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <Typography variant={"button"} color={"textSecondary"}>
+                    {sumByPortionCoefficient(
+                      recipe_items,
+                      "fats",
+                      coefficientForPortions
+                    )}
+                  </Typography>
+                </TableCell>
+                <TableCell />
+              </TableRow>
+            )}
             {withAddRow && isPermitted && (
               <RecipeTableEditableRow
                 key={id}
@@ -95,6 +203,7 @@ export const RecipeCard = ({
                 mode={"add"}
                 u_id={u_id}
                 onClickOutside={handleResetAddRow}
+                coefficientForPortions={coefficientForPortions}
               />
             )}
           </TableBody>

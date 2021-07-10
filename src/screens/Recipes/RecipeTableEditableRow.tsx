@@ -18,6 +18,7 @@ import {
   useUpdateRecipeItemByPkMutation,
 } from "../../graphql/generated/graphql";
 import { useStore } from "../../store";
+import { getRowValues } from "./utils";
 
 interface Props {
   recipe_id?: string;
@@ -25,6 +26,7 @@ interface Props {
   mode?: "add" | "regularRow";
   u_id: string;
   onClickOutside(): void;
+  coefficientForPortions: number;
 }
 
 const useStyles = makeStyles((theme) =>
@@ -47,10 +49,11 @@ const useStyles = makeStyles((theme) =>
 
 export const RecipeTableEditableRow = ({
   recipe_id,
-  row,
+  row: basePortionRow,
   mode,
   u_id,
   onClickOutside,
+  coefficientForPortions,
 }: Props) => {
   const {
     userStore: {
@@ -61,8 +64,12 @@ export const RecipeTableEditableRow = ({
   const isPermitted = userId === u_id;
   const [isInEditMode, setEditMode] = useState(false);
 
-  const [updatedRowFood, setUpdatedRowFood] = useState(row?.food?.id);
-  const [updatedRowWeight, setUpdatedRowWeight] = useState(row?.weight || 100);
+  const [updatedRowFood, setUpdatedRowFood] = useState(
+    basePortionRow?.food?.id
+  );
+  const [updatedRowWeight, setUpdatedRowWeight] = useState(
+    basePortionRow?.weight || 100
+  );
 
   const { data } = useFoodSelectFieldListingQuery();
 
@@ -96,12 +103,14 @@ export const RecipeTableEditableRow = ({
   }, [mode]);
 
   const foodById = data?.food.find((item) => item.id === updatedRowFood);
-  const macronutrients = {
-    energy_cal: (foodById?.energy_cal / 100) * updatedRowWeight,
-    energy_kj: (foodById?.energy_kj / 100) * updatedRowWeight,
-    proteins: (foodById?.proteins / 100) * updatedRowWeight,
-    carbohydrates: (foodById?.carbohydrates / 100) * updatedRowWeight,
-    fats: (foodById?.fats / 100) * updatedRowWeight,
+
+  const editModeNutrients =
+    foodById &&
+    getRowValues(foodById as any, updatedRowWeight, coefficientForPortions);
+
+  const row = {
+    ...basePortionRow,
+    ...getRowValues(foodById as any, updatedRowWeight, coefficientForPortions),
   };
 
   const loading = updateLoading || addLoading;
@@ -165,12 +174,12 @@ export const RecipeTableEditableRow = ({
         children={
           <React.Fragment>
             {(isInEditMode || mode === "add"
-              ? macronutrients.energy_cal
+              ? editModeNutrients?.energy_cal
               : row?.energy_cal
             )?.toFixed(2)}
             &nbsp;|&nbsp;
             {(isInEditMode || mode === "add"
-              ? macronutrients.energy_kj
+              ? editModeNutrients?.energy_kj
               : row?.energy_kj
             )?.toFixed(2)}
           </React.Fragment>
@@ -180,7 +189,7 @@ export const RecipeTableEditableRow = ({
         component="th"
         scope="row"
         children={(isInEditMode || mode === "add"
-          ? macronutrients.proteins
+          ? editModeNutrients?.proteins
           : row?.proteins
         )?.toFixed(2)}
       />
@@ -188,7 +197,7 @@ export const RecipeTableEditableRow = ({
         component="th"
         scope="row"
         children={(isInEditMode || mode === "add"
-          ? macronutrients.carbohydrates
+          ? editModeNutrients?.carbohydrates
           : row?.carbohydrates
         )?.toFixed(2)}
       />
@@ -196,7 +205,7 @@ export const RecipeTableEditableRow = ({
         component="th"
         scope="row"
         children={(isInEditMode || mode === "add"
-          ? macronutrients.fats
+          ? editModeNutrients?.fats
           : row?.fats
         )?.toFixed(2)}
       />
@@ -216,7 +225,7 @@ export const RecipeTableEditableRow = ({
                             u_id,
                             food_id: updatedRowFood,
                             weight: updatedRowWeight,
-                            ...macronutrients,
+                            ...editModeNutrients,
                           },
                         })
                     : () =>
@@ -225,7 +234,7 @@ export const RecipeTableEditableRow = ({
                             id: row.id,
                             food_id: updatedRowFood,
                             weight: updatedRowWeight,
-                            ...macronutrients,
+                            ...editModeNutrients,
                           },
                         })
                   : undefined
