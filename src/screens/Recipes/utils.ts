@@ -1,6 +1,6 @@
-import { Food, Recipe_Item } from "../../graphql/generated/graphql";
+import { Food } from "../../graphql/generated/graphql";
 
-const getValueByPortionCoefficient = (
+export const getValueByPortionCoefficient = (
   value: number,
   portionCoefficient: number
 ) => value * portionCoefficient;
@@ -39,16 +39,3 @@ export const getRowValues = (
   ),
   fats: getNutrientAccordingToWeight(food.fats, weight, portionCoefficient),
 });
-
-export const sumByKey = (array: Recipe_Item[], key: string) =>
-  array.map((i) => i[key as any]).reduce((a: number, b: number) => a + b, 0);
-
-export const sumByPortionCoefficient = (
-  array: Recipe_Item[],
-  key: string,
-  portionCoefficient: number
-) =>
-  getValueByPortionCoefficient(
-    sumByKey(array, key),
-    portionCoefficient
-  )?.toFixed(2);
