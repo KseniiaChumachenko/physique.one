@@ -61,13 +61,6 @@ export const RecipeCard = ({
   const [withAddRow, setWithAddRow] = useState(false);
   const handleResetAddRow = () => setWithAddRow(false);
 
-  /*
-   * x gram - portions
-   * y gram - displayPortions
-   *
-   * y = x * displayPortions / portions
-   * */
-
   const isPermitted = userId === u_id;
   const coefficientForPortions =
     portions === displayPortions ? 1 : displayPortions / (portions || 1);

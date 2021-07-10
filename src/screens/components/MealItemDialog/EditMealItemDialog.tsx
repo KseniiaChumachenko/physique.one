@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { ApolloError } from "@apollo/client";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import {
@@ -17,7 +16,6 @@ import {
   Meal_Item,
   useUpdateMealItemMutation,
 } from "../../../graphql/generated/graphql";
-import { ToastMessage } from "../../../components/ToastMessage";
 import {
   FoodOptionalType,
   MealAutocomplete,
@@ -42,7 +40,7 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
     userStore: { user },
   } = useStore();
 
-  const [error, setOpenErrorMessage] = React.useState<ApolloError | null>();
+  const [error, setOpenErrorMessage] = React.useState<string | undefined>();
   const [success, setOpenSuccessMessage] = React.useState(false);
 
   const [selectedFood, setSelectedFood] = useState<FoodOptionalType>(
@@ -66,7 +64,7 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
 
   const [update_meal_item_by_pk] = useUpdateMealItemMutation({
     onError: (error1) => {
-      setOpenErrorMessage(error1);
+      setOpenErrorMessage(error1.message);
     },
     onCompleted: () => {
       setOpenSuccessMessage(true);
@@ -80,10 +78,6 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
       ...mealItemProps,
     },
   });
-
-  if (error) {
-    return <ToastMessage severity={"error"} children={error?.message as any} />;
-  }
 
   return (
     <React.Fragment>
@@ -146,7 +140,7 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
           severity={"error"}
           onClose={() => setOpenErrorMessage(undefined)}
         >
-          {error!.message as any}
+          {error}
         </Alert>
       </Snackbar>
     </React.Fragment>
