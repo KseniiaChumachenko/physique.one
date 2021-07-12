@@ -21,6 +21,7 @@ export type FoodOptionalType =
 
 interface MealAutocompleteProps
   extends Partial<AutocompleteProps<any, any, any, any>> {
+  withRecipes?: boolean;
   value: FoodOptionalType;
   setValue: Dispatch<FoodOptionalType>;
 }
@@ -28,29 +29,35 @@ interface MealAutocompleteProps
 export function MealAutocomplete({
   value,
   setValue,
+  withRecipes = true,
   ...restProps
 }: MealAutocompleteProps) {
   const { data } = useFoodSelectFieldListingQuery();
 
   const remappedOptions: MealAutocompleteListItem[] | undefined = useMemo(
     () =>
-      data && [
-        ...data.food,
-        ...data.recipe.map((r) => ({
-          id: r.id,
-          recipe_id: r.id,
-          name: r.name,
-          type: "Recipe",
-          carbohydrates:
-            r.recipe_items_aggregate.aggregate?.sum?.carbohydrates || 0,
-          proteins: r.recipe_items_aggregate.aggregate?.sum?.proteins || 0,
-          fats: r.recipe_items_aggregate.aggregate?.sum?.fats || 0,
-          energy_cal: r.recipe_items_aggregate.aggregate?.sum?.energy_cal || 0,
-          energy_kj: r.recipe_items_aggregate.aggregate?.sum?.energy_kj || 0,
-          weight: r.recipe_items_aggregate.aggregate?.sum?.weight,
-          recipe: true,
-        })),
-      ],
+      data &&
+      (withRecipes
+        ? [
+            ...data.food,
+            ...data.recipe.map((r) => ({
+              id: r.id,
+              recipe_id: r.id,
+              name: r.name,
+              type: "Recipe",
+              carbohydrates:
+                r.recipe_items_aggregate.aggregate?.sum?.carbohydrates || 0,
+              proteins: r.recipe_items_aggregate.aggregate?.sum?.proteins || 0,
+              fats: r.recipe_items_aggregate.aggregate?.sum?.fats || 0,
+              energy_cal:
+                r.recipe_items_aggregate.aggregate?.sum?.energy_cal || 0,
+              energy_kj:
+                r.recipe_items_aggregate.aggregate?.sum?.energy_kj || 0,
+              weight: r.recipe_items_aggregate.aggregate?.sum?.weight,
+              recipe: true,
+            })),
+          ]
+        : data.food),
     [data]
   );
 
@@ -77,7 +84,13 @@ export function MealAutocomplete({
           renderInput={(params) => (
             <TextField
               {...params}
-              label={<Trans>Select food or recipe</Trans>}
+              label={
+                withRecipes ? (
+                  <Trans>Select food or recipe</Trans>
+                ) : (
+                  <Trans>Select food</Trans>
+                )
+              }
               margin="dense"
             />
           )}
