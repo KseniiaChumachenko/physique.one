@@ -14,7 +14,6 @@ import {
 import { EditRounded, DoneRounded, LinkRounded } from "@material-ui/icons";
 import { Trans } from "@lingui/macro";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
-import { AggregationChips } from "../../components/AggredationChips";
 import {
   Recipe_Item_Aggregate,
   useAddRecipeMutation,
@@ -62,7 +61,6 @@ export const RecipeCardHeader = ({
   name,
   link,
   portions,
-  recipe_items_aggregate,
   description,
   u_id,
 }: RecipeCardHeaderProps) => {
@@ -81,7 +79,7 @@ export const RecipeCardHeader = ({
   const [updatedName, setUpdatedName] = useState(name || "Enter recipe name");
   const [updatedDesc, setUpdatedDesc] = useState(description);
   const [updatedLink, setUpdatedLink] = useState(link);
-  const [updatedPortioning, setUpdatedPortioning] = useState(portions);
+  const [updatedPortioning, setUpdatedPortioning] = useState(portions || 0);
 
   const [
     update_recipe_name_by_pk,
@@ -132,8 +130,6 @@ export const RecipeCardHeader = ({
     },
   });
 
-  const macronutrients = recipe_items_aggregate?.aggregate?.sum;
-
   return (
     <>
       <CardHeader
@@ -169,7 +165,7 @@ export const RecipeCardHeader = ({
         action={
           <Box display={"flex"} alignItems={"center"}>
             {isPermitted &&
-              (isEditPortions || !updatedPortioning ? (
+              (isEditPortions ? (
                 <Box display={"flex"} alignItems={"center"}>
                   <Typography id="input-slider" gutterBottom>
                     <Trans>
@@ -184,7 +180,7 @@ export const RecipeCardHeader = ({
                     onChange={(event) => {
                       setUpdatedPortioning(
                         event.target.value === ""
-                          ? null
+                          ? 0
                           : Number(event.target.value)
                       );
                     }}
@@ -210,10 +206,9 @@ export const RecipeCardHeader = ({
                     variant={"overline"}
                     color={"textSecondary"}
                   >
-                    <Trans>
-                      Base recipe is for <strong>{updatedPortioning}</strong>
-                      portions
-                    </Trans>
+                    {/*TODO: TRANS*/}
+                    Base recipe is for <strong>{updatedPortioning}</strong>
+                    portions
                   </Typography>
                   <IconButton
                     children={<EditRounded />}
@@ -235,17 +230,6 @@ export const RecipeCardHeader = ({
         }
       />
       <CardContent>
-        {macronutrients?.energy_kj ? (
-          <AggregationChips
-            energy_cal={macronutrients.energy_cal!}
-            energy_kj={macronutrients.energy_kj!}
-            proteins={macronutrients.proteins!}
-            carbohydrates={macronutrients.carbohydrates!}
-            fats={macronutrients.fats!}
-            weight={macronutrients.weight}
-          />
-        ) : null}
-
         {isEditLink && isPermitted ? (
           <Box display={"flex"} alignItems={"center"}>
             <Box marginRight={2} display={"flex"} alignItems={"center"}>

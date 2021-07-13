@@ -44,10 +44,16 @@ export class UserStore {
   constructor(rootStore: RootStore) {
     makeAutoObservable(this, {}, { autoBind: true });
     this.rootStore = rootStore;
+
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      this.setUser(JSON.parse(savedUser));
+    }
   }
 
   setUser = action((data: Users) => {
     this.user = data;
+    localStorage.setItem("user", JSON.stringify(data));
   });
 
   resetUser = action(() => {

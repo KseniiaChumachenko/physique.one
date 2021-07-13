@@ -3,7 +3,7 @@ import { Food } from "../../graphql/generated/graphql";
 export const getValueByPortionCoefficient = (
   value: number,
   portionCoefficient: number
-) => value * portionCoefficient;
+) => (value * portionCoefficient)?.toFixed(2);
 
 export const getNutrientAccordingToWeight = (
   value: number = 0,

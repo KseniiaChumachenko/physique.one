@@ -69,7 +69,6 @@ export const RecipeCard = ({
     <Card className={classes.root}>
       <RecipeCardHeader
         id={id}
-        recipe_items_aggregate={recipe_items_aggregate}
         description={description}
         name={name}
         u_id={u_id}
