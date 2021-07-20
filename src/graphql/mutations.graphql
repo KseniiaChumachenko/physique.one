@@ -184,6 +184,12 @@ mutation DeleteMealItemByPrimaryKey($id: uuid!) {
   }
 }
 
+mutation CopyDay($meal_items: [meal_item_insert_input!]!, $name: String!, $time: time!, $u_id: uuid!, $id: uuid!, $date: date!) {
+  insert_meal(objects: {meal_items: {data: $meal_items}, date: $date, time: $time, u_id: $u_id, name: $name, id: $id}) {
+    affected_rows
+  }
+}
+
 mutation AddRecipe($u_id: uuid!, $name: String, $description: String) {
   insert_recipe_one(
     object: { u_id: $u_id, description: $description }
