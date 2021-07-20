@@ -5869,6 +5869,24 @@ export type DeleteMealItemByPrimaryKeyMutation = {
   >;
 };
 
+export type CopyDayMutationVariables = Exact<{
+  meal_items: Array<Meal_Item_Insert_Input>;
+  name: Scalars["String"];
+  time: Scalars["time"];
+  u_id: Scalars["uuid"];
+  id: Scalars["uuid"];
+  date: Scalars["date"];
+}>;
+
+export type CopyDayMutation = { __typename?: "mutation_root" } & {
+  insert_meal?: Maybe<
+    { __typename?: "meal_mutation_response" } & Pick<
+      Meal_Mutation_Response,
+      "affected_rows"
+    >
+  >;
+};
+
 export type AddRecipeMutationVariables = Exact<{
   u_id: Scalars["uuid"];
   name?: Maybe<Scalars["String"]>;
@@ -6055,6 +6073,7 @@ export type MealsByDateSubscription = { __typename?: "subscription_root" } & {
           { __typename?: "meal_item" } & Pick<
             Meal_Item,
             | "id"
+            | "u_id"
             | "meal_id"
             | "food"
             | "weight"
@@ -6671,6 +6690,48 @@ export type DeleteMealItemByPrimaryKeyMutationOptions = ApolloReactCommon.BaseMu
   DeleteMealItemByPrimaryKeyMutation,
   DeleteMealItemByPrimaryKeyMutationVariables
 >;
+export const CopyDayDocument = gql`
+  mutation CopyDay(
+    $meal_items: [meal_item_insert_input!]!
+    $name: String!
+    $time: time!
+    $u_id: uuid!
+    $id: uuid!
+    $date: date!
+  ) {
+    insert_meal(
+      objects: {
+        meal_items: { data: $meal_items }
+        date: $date
+        time: $time
+        u_id: $u_id
+        name: $name
+        id: $id
+      }
+    ) {
+      affected_rows
+    }
+  }
+`;
+export function useCopyDayMutation(
+  baseOptions?: ApolloReactHooks.MutationHookOptions<
+    CopyDayMutation,
+    CopyDayMutationVariables
+  >
+) {
+  return ApolloReactHooks.useMutation<
+    CopyDayMutation,
+    CopyDayMutationVariables
+  >(CopyDayDocument, baseOptions);
+}
+export type CopyDayMutationHookResult = ReturnType<typeof useCopyDayMutation>;
+export type CopyDayMutationResult = ApolloReactCommon.MutationResult<
+  CopyDayMutation
+>;
+export type CopyDayMutationOptions = ApolloReactCommon.BaseMutationOptions<
+  CopyDayMutation,
+  CopyDayMutationVariables
+>;
 export const AddRecipeDocument = gql`
   mutation AddRecipe($u_id: uuid!, $name: String, $description: String) {
     insert_recipe_one(object: { u_id: $u_id, description: $description }) {
@@ -7157,7 +7218,7 @@ export const MealsByDateDocument = gql`
   subscription MealsByDate($date: date = "", $u_id: uuid) {
     meal(
       where: { date: { _eq: $date }, u_id: { _eq: $u_id } }
-      order_by: { name: asc_nulls_first }
+      order_by: { time: asc_nulls_last }
     ) {
       id
       date
@@ -7165,6 +7226,7 @@ export const MealsByDateDocument = gql`
       name
       meal_items {
         id
+        u_id
         meal_id
         food
         foodDesc {

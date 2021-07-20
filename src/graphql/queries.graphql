@@ -1,7 +1,7 @@
 subscription MealsByDate($date: date = "", $u_id: uuid) {
   meal(
     where: { date: { _eq: $date }, u_id: { _eq: $u_id } }
-    order_by: { name: asc_nulls_first }
+    order_by: { time: asc_nulls_last }
   ) {
     id
     date
@@ -9,6 +9,7 @@ subscription MealsByDate($date: date = "", $u_id: uuid) {
     name
     meal_items {
       id
+      u_id
       meal_id
       food
       foodDesc {

@@ -7,7 +7,11 @@ import {
   Snackbar,
   Typography,
 } from "@material-ui/core";
-import { AddRounded, ExpandMoreRounded } from "@material-ui/icons";
+import {
+  AddRounded,
+  ExpandMoreRounded,
+  FileCopyRounded,
+} from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { Trans } from "@lingui/react";
 import { ApolloError } from "@apollo/client";
@@ -20,6 +24,7 @@ import {
 import { useStore } from "src/store";
 import { AddMealDialog } from "../../../components/AddMealDialog";
 import { AggregationChips } from "../../../../components/AggredationChips";
+import { CopyDayDialog } from "../../../components/CopyDayDialog";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -48,6 +53,7 @@ export const DayPanelHeader = ({ date }: Props) => {
   );
   const [success, setOpenSuccessMessage] = React.useState(false);
   const [openAddDialog, setOpenAddMealDialog] = useState(false);
+  const [openCopyDayDialog, setOpenCopyDayDialog] = useState(false);
 
   const { data } = useMealItemMacrosSumByDateSubscription({
     variables: { date, u_id: user?.id },
@@ -59,6 +65,8 @@ export const DayPanelHeader = ({ date }: Props) => {
   });
 
   const handleOpenAddMealDialog = () => setOpenAddMealDialog(true);
+
+  const handleOpenCopyDayDialog = () => setOpenCopyDayDialog(true);
 
   const handleConfirm = (variables: AddMealMutationVariables) => (
     event: any
@@ -102,6 +110,17 @@ export const DayPanelHeader = ({ date }: Props) => {
                 }}
               />
             </Grid>
+            {macronutrients?.energy_kj && (
+              <Grid item xs={2} md={1} alignItems={"center"}>
+                <IconButton
+                  children={<FileCopyRounded />}
+                  onClick={(event) => {
+                    handleOpenCopyDayDialog();
+                    event.stopPropagation();
+                  }}
+                />
+              </Grid>
+            )}
           </Grid>
 
           <AddMealDialog
@@ -109,6 +128,12 @@ export const DayPanelHeader = ({ date }: Props) => {
             setOpen={setOpenAddMealDialog}
             date={date}
             onConfirm={handleConfirm}
+          />
+
+          <CopyDayDialog
+            date={date}
+            open={openCopyDayDialog}
+            setOpen={setOpenCopyDayDialog}
           />
         </ExpansionPanelSummary>
       )}
@@ -118,11 +143,11 @@ export const DayPanelHeader = ({ date }: Props) => {
         <Snackbar
           open={success}
           autoHideDuration={6000}
-          onClose={() => setOpenErrorMessage(false)}
+          onClose={() => setOpenSuccessMessage(false)}
         >
           <Alert
             severity={"success"}
-            onClose={() => setOpenErrorMessage(false)}
+            onClose={() => setOpenSuccessMessage(false)}
           >
             <Trans>Meals successfully updated</Trans>
           </Alert>
@@ -132,12 +157,9 @@ export const DayPanelHeader = ({ date }: Props) => {
         <Snackbar
           open={!!error}
           autoHideDuration={6000}
-          onClose={() => setOpenSuccessMessage(false)}
+          onClose={() => setOpenErrorMessage(false)}
         >
-          <Alert
-            severity={"error"}
-            onClose={() => setOpenSuccessMessage(false)}
-          >
+          <Alert severity={"error"} onClose={() => setOpenErrorMessage(false)}>
             {error instanceof ApolloError ? error.message : ("Error" as any)}
           </Alert>
         </Snackbar>
