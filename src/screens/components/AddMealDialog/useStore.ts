@@ -3,7 +3,7 @@ import { useLocalObservable } from "mobx-react-lite";
 import moment, { Moment } from "moment";
 import { v4 } from "uuid";
 import {
-  Food,
+  Meal_Item,
   Meal_Item_Insert_Input,
 } from "../../../graphql/generated/graphql";
 
@@ -14,42 +14,54 @@ interface State {
   time?: any;
   setTime(newTime: Moment): void;
 
-  foods: Food[];
+  foods: Meal_Item[];
 
   meal_items: Meal_Item_Insert_Input[];
   add_meal_item(): void;
   update_meal_item({
     indexOfItem,
-    foodId,
+    food,
     weight,
   }: {
     indexOfItem?: number;
-    foodId?: string;
+    food?: Meal_Item;
     weight?: number;
   }): void;
   remove_meal_item(id: string): void;
 }
 
-const calculateMacronutrient = (nutrientPer100G: number, weight: number) =>
-  (nutrientPer100G / 100) * weight;
+const calculateMacronutrient = (
+  nutrientPer100G: number,
+  foodWeight: number,
+  weight: number
+) => (nutrientPer100G / foodWeight) * weight;
 
-const standardMealItem = (food: Food, weight = 100) => ({
+//TODO Duplicate of logic in MealItemDialog
+const standardMealItem = (food: Meal_Item, weight = 100) => ({
+  ...food,
   id: v4(),
-  food: food.id,
+  food: food.recipe_id ? null : food?.food || food?.id,
+  recipe_id: food.recipe_id ?? null,
   weight: weight,
-  carbohydrates: calculateMacronutrient(food.carbohydrates, weight),
-  proteins: calculateMacronutrient(food.proteins, weight),
-  fats: calculateMacronutrient(food.fats, weight),
-  energy_cal: calculateMacronutrient(food.energy_cal, weight),
-  energy_kj: calculateMacronutrient(food.energy_kj, weight),
+  carbohydrates: calculateMacronutrient(
+    food.carbohydrates,
+    food.weight || 100,
+    weight
+  ),
+  proteins: calculateMacronutrient(food.proteins, food.weight || 100, weight),
+  fats: calculateMacronutrient(food.fats, food.weight || 100, weight),
+  energy_cal: calculateMacronutrient(
+    food.energy_cal,
+    food.weight || 100,
+    weight
+  ),
+  energy_kj: calculateMacronutrient(food.energy_kj, food.weight || 100, weight),
 });
 
 export function useStore(
-  fetchedFoods: Food[],
+  fetchedFoods: Meal_Item[],
   name?: string | null,
-  date?: any,
-  time?: any,
-  meal_items?: Meal_Item_Insert_Input[]
+  meal_items?: Meal_Item[]
 ) {
   const store: State = useLocalObservable(() => ({
     name: name,
@@ -57,7 +69,7 @@ export function useStore(
       store.name = newName;
     },
 
-    time: moment(time + " " + date).format() || new Date(),
+    time: moment(),
     setTime: (newTime) => {
       store.time = newTime;
     },
@@ -65,22 +77,17 @@ export function useStore(
     foods: fetchedFoods,
 
     meal_items: meal_items?.map((item) => omit(item, "__typename")) || [
-      standardMealItem(fetchedFoods[0]),
+      standardMealItem(fetchedFoods[0]) as any,
     ],
 
     add_meal_item: () => {
-      store.meal_items.push(standardMealItem(fetchedFoods[0]));
+      store.meal_items.push(standardMealItem(fetchedFoods[0]) as any);
     },
-    update_meal_item: ({
-      indexOfItem = 0,
-      foodId = fetchedFoods[0].id,
-      weight = 100,
-    }) => {
-      const foodById: Food | undefined = fetchedFoods.find(
-        (item: Food) => item.id === foodId
-      );
-
-      store.meal_items[indexOfItem] = standardMealItem(foodById!, weight);
+    update_meal_item: ({ indexOfItem = 0, food, weight }) => {
+      store.meal_items[indexOfItem] = standardMealItem(
+        food || (store.meal_items[indexOfItem] as any),
+        weight || store.meal_items[indexOfItem].weight || 100
+      ) as any;
     },
     //TODO: broken
     remove_meal_item: (id: string) => {

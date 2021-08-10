@@ -11,22 +11,22 @@ import {
   DialogTitle,
   IconButton,
   LinearProgress,
-  MenuItem,
-  Select,
   TextField,
 } from "@material-ui/core";
 import { AddRounded, DeleteRounded } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { TimePicker } from "@material-ui/pickers";
+import { Autocomplete } from "@material-ui/lab";
 import { useStore as useGlobalStore } from "src/store";
 import {
   AddMealMutationVariables,
   Food,
-  Meal_Item_Insert_Input,
+  Meal_Item,
   useFoodSelectFieldListingQuery,
 } from "src/graphql/generated/graphql";
 import { ToastMessage } from "src/components/ToastMessage";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
+import { MealAutocomplete } from "../../../components/MealAutocomplete";
 import { useStore } from "./useStore";
 
 const useStyles = makeStyles((theme) => ({
@@ -35,8 +35,11 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     marginBottom: theme.spacing(1),
   },
-  field: {
-    width: "100%",
+  emptyBlock: {
+    width: "44px",
+  },
+  autocompleteField: {
+    marginTop: -theme.spacing(0.5),
   },
   smallerField: {
     marginLeft: theme.spacing(1),
@@ -55,7 +58,7 @@ interface Props {
 
   name?: string | null;
   time?: any;
-  meal_items?: Meal_Item_Insert_Input[];
+  meal_items?: Meal_Item[];
 }
 
 interface AddMealDialogProps extends Props {
@@ -69,8 +72,7 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     date,
     fetchedFoods,
     name,
-    time,
-    meal_items, //fetched data
+    meal_items, //fetched data - TODO not needed
     onConfirm,
   }) => {
     const classes = useStyles();
@@ -78,7 +80,7 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
       userStore: { user },
     } = useGlobalStore();
     const stateEndRef = useRef(null);
-    const store = useStore(fetchedFoods, name, date, time, meal_items);
+    const store = useStore(fetchedFoods as any, name, meal_items);
 
     useScrollToBottom(store.meal_items, stateEndRef); //TODO for some reason this stoped working
 
@@ -110,11 +112,21 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
             </Trans>
           </DialogContentText>
           <div className={classes.selectorsContainer}>
-            <TextField
-              className={classes.field}
-              label={<Trans>Name</Trans>}
-              defaultValue={store.name}
-              onChange={(event) => store.setName(event.target.value)}
+            {/*TODO: Localization*/}
+            <Autocomplete
+              value={store.name || ""}
+              options={["Breakfast", "Lunch", "Dinner", "Supper", "Snack"]}
+              getOptionLabel={(option) => option}
+              onInputChange={(event, value) => {
+                event?.preventDefault();
+                store.setName(value);
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label={<Trans>Name</Trans>} />
+              )}
+              freeSolo={true}
+              fullWidth={true}
+              disableClearable={true}
             />
             <TimePicker
               ampm={false}
@@ -131,56 +143,46 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
               value={store.time}
               onChange={(time) => store.setTime(time as any)}
               label={<Trans>When</Trans>}
-              //autoOk={true}
             />
+            <IconButton className={classes.emptyBlock} disabled={true} />
           </div>
           {store.meal_items.map((item, key) => (
             <div className={classes.selectorsContainer} key={key}>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                defaultValue={store.meal_items[key].food}
-                onChange={(event) =>
+              <MealAutocomplete
+                value={store.meal_items[key] as any}
+                setValue={(food: any) =>
                   store.update_meal_item({
                     indexOfItem: key,
-                    foodId: event.target.value as string,
-                    weight: store.meal_items[key].weight,
+                    food,
                   })
                 }
-                className={classes.field}
-              >
-                {store.foods.map((item, key) => (
-                  <MenuItem value={item.id} key={key}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-              </Select>
+                fullWidth={true}
+                className={classes.autocompleteField}
+              />
               <TextField
                 label={<Trans>Weight (g)</Trans>}
                 defaultValue={item.weight}
                 onChange={(event) =>
                   store.update_meal_item({
                     indexOfItem: key,
-                    foodId: store.meal_items[key].food,
                     weight: Number(event.target.value),
                   })
                 }
                 className={classes.smallerField}
               />
-              {key > 0 && (
-                <IconButton
-                  className={classes.deleteIcon}
-                  children={<DeleteRounded />}
-                  onClick={handleDeleteItem(item.id)}
-                />
-              )}
+              <IconButton
+                className={classes.deleteIcon}
+                children={<DeleteRounded />}
+                onClick={handleDeleteItem(item.id)}
+                disabled={key === 0}
+              />
             </div>
           ))}
           <Button
             color="primary"
             startIcon={<AddRounded />}
-            className={classes.field}
             onClick={store.add_meal_item}
+            fullWidth={true}
           >
             <Trans>Add ingredient</Trans>
           </Button>
@@ -195,7 +197,12 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
               name: store.name,
               date,
               time: moment(store.time).format("HH:mm"),
-              data: store.meal_items.map((i) => ({ u_id: user?.id, ...i })),
+              data: store.meal_items.map(
+                ({ name, __typename, type, recipe, ...i }) => ({
+                  u_id: user?.id,
+                  ...i,
+                })
+              ),
               u_id: user?.id,
             })}
             color="primary"

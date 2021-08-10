@@ -62,16 +62,22 @@ export function MealAutocomplete({
   );
 
   useEffect(() => {
-    if (typeof value === "string" && remappedOptions) {
-      const foodFromOptions = remappedOptions.find((item) => item.id === value);
-      setValue(foodFromOptions);
+    if (remappedOptions?.length) {
+      if (typeof value === "string") {
+        const foodFromOptions = remappedOptions.find(
+          (item) => item.id === value
+        );
+        setValue(foodFromOptions);
+      } else {
+        setValue(remappedOptions[0]);
+      }
     }
-  }, [value, remappedOptions, setValue]);
+  }, [remappedOptions?.length]);
 
   const withValue = !(typeof value === "string") && remappedOptions;
 
   return (
-    <div>
+    <>
       {withValue && (
         <Autocomplete
           options={remappedOptions!}
@@ -97,6 +103,6 @@ export function MealAutocomplete({
           {...restProps}
         />
       )}
-    </div>
+    </>
   );
 }
