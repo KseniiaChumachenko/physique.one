@@ -1,85 +1,87 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import clsx from "clsx";
+import { observer } from "mobx-react-lite";
 import {
   AppBar as MAppBar,
   IconButton,
-  MenuItem,
   Toolbar,
   Typography,
-  Menu,
 } from "@material-ui/core";
-import { Trans } from "@lingui/react";
-import { AccountCircle } from "@material-ui/icons";
+import { MenuOutlined } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { useStore } from "src/store";
+import { useLocation } from "react-router-dom";
+import { ROUTES } from "../constants";
+import { DRAWER_WIDTH_OPEN, DRAWER_WIDTH_CLOSED } from "./DrawerNavigation";
 
-const useStyles = makeStyles({
-  userIcon: {
-    marginLeft: "auto",
+const useStyles = makeStyles((theme) => ({
+  appBar: {
+    marginLeft: DRAWER_WIDTH_CLOSED(theme),
+    width: `calc(100% - ${DRAWER_WIDTH_CLOSED(theme)}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    [theme.breakpoints.down("sm")]: {
+      marginLeft: 0,
+      width: "100%",
+    },
   },
-});
+  appBarShift: {
+    marginLeft: DRAWER_WIDTH_OPEN,
+    width: `calc(100% - ${DRAWER_WIDTH_OPEN}px)`,
+    transition: theme.transitions.create(["width", "margin"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    display: "none",
+    [theme.breakpoints.down("sm")]: {
+      display: "unset",
+      marginRight: theme.spacing(2),
+    },
+  },
+}));
 
-export const AppBar = () => {
+export const AppBar = observer(() => {
   const {
-    userStore: { user, resetUser },
+    screenStore: { navigationOpen, handleToggleNavigation },
   } = useStore();
-  const history = useHistory();
   const classes = useStyles();
+  const { pathname } = useLocation();
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
-  const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleRedirectToProfile = () => history.push("/profile");
-
-  const handleLogOut = () => {
-    resetUser();
-    handleMenuClose();
-    history.push("/auth");
-  };
-
-  const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: "top", horizontal: "right" }}
-      keepMounted
-      transformOrigin={{ vertical: "top", horizontal: "right" }}
-      open={Boolean(anchorEl)}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleRedirectToProfile}>Profile</MenuItem>
-      <MenuItem onClick={handleLogOut}>Log out</MenuItem>
-    </Menu>
+  const routeInfo = ROUTES.find((r) =>
+    r.pathname.startsWith(pathname.slice(0, 3))
   );
 
   return (
-    <>
-      <MAppBar position={"sticky"}>
-        <Toolbar>
-          <Typography variant={"h6"}>
-            <Trans>ONE | Physique</Trans>
-          </Typography>
-          {user && (
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-              className={classes.userIcon}
-            >
-              <AccountCircle />
-            </IconButton>
-          )}
-        </Toolbar>
-      </MAppBar>
-      {renderMenu}
-    </>
+    <MAppBar
+      position="fixed"
+      color={"default"}
+      className={clsx(classes.appBar, {
+        [classes.appBarShift]: navigationOpen,
+      })}
+    >
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleToggleNavigation}
+          edge="start"
+          className={classes.menuButton}
+        >
+          <MenuOutlined />
+        </IconButton>
+
+        {!!routeInfo && (
+          <Typography variant={"h6"}>{routeInfo.title}</Typography>
+        )}
+
+        {/*
+            Search and filters in future
+          */}
+      </Toolbar>
+    </MAppBar>
   );
-};
+});
