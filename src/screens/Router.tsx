@@ -3,9 +3,10 @@ import { NIL } from "uuid";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar } from "src/components/AppBar";
+import { Box, CssBaseline } from "@material-ui/core";
 import { observer } from "mobx-react-lite";
-import { BottomNavigation } from "../components/BottomNavigation";
 import { useStore } from "../store";
+import { DrawerNavigation } from "../components/DrawerNavigation";
 import { Meals } from "./Meals";
 import { FoodLibrary } from "./FoodLibrary";
 import { Recipes } from "./Recipes";
@@ -14,15 +15,15 @@ import { PrivacyPolicy } from "./PrivacyPolicy";
 import { Profile } from "./Profile";
 // import { Pantry } from "./Pantry";
 
-const useStyles = makeStyles(() => ({
-  childrenContainer: {
-    minHeight: "85.5vh",
-    overflow: "auto",
+const useStyles = makeStyles((theme) => ({
+  content: {
+    marginTop: theme.spacing(8),
+    flexGrow: 1,
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
     backgroundColor: "#f5f5f5", // TODO: add to palette
-  },
-  childrenPadding: {
-    display: "flex",
-    flexDirection: "column",
   },
 }));
 
@@ -38,10 +39,12 @@ export const Router = observer(() => {
         <Route path={"/auth"} component={Authorization} exact />
         <Route path={"/privacyPolicy"} component={PrivacyPolicy} exact />
         {user?.id !== NIL ? (
-          <>
+          <Box sx={{ display: "flex" }}>
+            <CssBaseline />
             <AppBar />
-            <main className={classes.childrenContainer}>
-              <div className={classes.childrenPadding}>
+            <DrawerNavigation />
+            <main className={classes.content}>
+              <div>
                 {/*<Route path={"/"} component={Summary} exact />*/}
                 <Route path={"/"} component={Meals} exact />
                 <Route path={"/ration/:weekNumber"} component={Meals} exact />
@@ -51,8 +54,7 @@ export const Router = observer(() => {
                 {/*<Route path={"/pantry"} component={Pantry} exact />*/}
               </div>
             </main>
-            <BottomNavigation />
-          </>
+          </Box>
         ) : (
           <Redirect to={"/auth"} />
         )}
