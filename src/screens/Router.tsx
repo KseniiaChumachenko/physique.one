@@ -3,7 +3,12 @@ import { NIL } from "uuid";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar } from "src/components/AppBar";
-import { Box, CssBaseline } from "@material-ui/core";
+import {
+  Box,
+  CssBaseline,
+  Backdrop,
+  CircularProgress,
+} from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../store";
 import { DrawerNavigation } from "../components/DrawerNavigation";
@@ -25,12 +30,17 @@ const useStyles = makeStyles((theme) => ({
     }),
     backgroundColor: "#f5f5f5", // TODO: add to palette
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer - 1,
+    color: "#fff", // TODO: add to palette
+  },
 }));
 
 export const Router = observer(() => {
   const classes = useStyles();
   const {
     userStore: { user },
+    screenStore: { loading },
   } = useStore();
 
   return (
@@ -44,6 +54,9 @@ export const Router = observer(() => {
             <AppBar />
             <DrawerNavigation />
             <main className={classes.content}>
+              <Backdrop className={classes.backdrop} open={loading}>
+                <CircularProgress color="inherit" />
+              </Backdrop>
               <div>
                 {/*<Route path={"/"} component={Summary} exact />*/}
                 <Route path={"/"} component={Meals} exact />

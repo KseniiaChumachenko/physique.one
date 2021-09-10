@@ -1,11 +1,9 @@
 import React from "react";
 import { Trans } from "@lingui/react";
-import { Button, createStyles, LinearProgress } from "@material-ui/core";
+import { Button, createStyles } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  useAddRecipeMutation,
-  useRecipeListingSubscription,
-} from "../../graphql/generated/graphql";
+import { observer } from "mobx-react-lite";
+import { useAddRecipeMutation } from "../../graphql/generated/graphql";
 import { useStore } from "../../store";
 import { RecipeCard } from "./RecipeCard";
 
@@ -20,24 +18,22 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export const Recipes = () => {
+export const Recipes = observer(() => {
   const classes = useStyles();
   const {
     userStore: {
       user: { id: u_id },
     },
+    recipeStore: { data, load },
   } = useStore();
-  const { data, loading } = useRecipeListingSubscription();
+
   const [insert_recipe_one] = useAddRecipeMutation({
     variables: {
       name: "New recipe",
       u_id,
     },
+    onCompleted: () => load(),
   });
-
-  if (loading) {
-    return <LinearProgress />;
-  }
 
   return (
     <>
@@ -49,12 +45,9 @@ export const Recipes = () => {
       >
         <Trans>+ Add new recipe</Trans>
       </Button>
-      {data?.recipe.map((recipe) => (
-        <RecipeCard
-          key={recipe.id}
-          {...recipe as any}
-        />
+      {data.map((recipe) => (
+        <RecipeCard key={recipe.id} {...(recipe as any)} />
       ))}
     </>
   );
-};
+});
