@@ -27,6 +27,7 @@ import {
 import { ToastMessage } from "src/components/ToastMessage";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
 import { MealAutocomplete } from "../../../components/MealAutocomplete";
+import { aggregate } from "../../Recipes/utils";
 import { useStore } from "./useStore";
 
 const useStyles = makeStyles((theme) => ({
@@ -78,12 +79,39 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     const classes = useStyles();
     const {
       userStore: { user },
+      recipeStore: { data: recipes },
+      foodLibraryStore: { data: foods },
     } = useGlobalStore();
     const stateEndRef = useRef(null);
     const store = useStore(fetchedFoods as any, name, meal_items);
 
     useScrollToBottom(store.meal_items, stateEndRef); //TODO for some reason this stoped working
 
+    const handleChangeFoodItem = (key: number) => (selectId: string) => {
+      let item = foods[0].id;
+      const r = recipes.find(({ id }) => id === selectId);
+      if (r) {
+        item = {
+          id: r.id,
+          recipe_id: r.id,
+          name: r.name,
+          type: "Recipe",
+          carbohydrates: aggregate(r.recipe_items, "carbohydrates"),
+          proteins: aggregate(r.recipe_items, "proteins"),
+          fats: aggregate(r.recipe_items, "fats"),
+          energy_cal: aggregate(r.recipe_items, "energy_cal"),
+          energy_kj: aggregate(r.recipe_items, "energy_kj"),
+          weight: aggregate(r.recipe_items, "weight"),
+        };
+      } else {
+        item = foods.find(({ id }) => id === selectId);
+      }
+
+      return store.update_meal_item({
+        indexOfItem: key,
+        food: item,
+      });
+    };
     const handleClose = (event: any) => {
       setOpen(false);
       event.stopPropagation();
@@ -149,13 +177,8 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
           {store.meal_items.map((item, key) => (
             <div className={classes.selectorsContainer} key={key}>
               <MealAutocomplete
-                value={store.meal_items[key] as any}
-                setValue={(food: any) =>
-                  store.update_meal_item({
-                    indexOfItem: key,
-                    food,
-                  })
-                }
+                value={store.meal_items[key].id}
+                setValue={handleChangeFoodItem(key)}
                 fullWidth={true}
                 className={classes.autocompleteField}
               />

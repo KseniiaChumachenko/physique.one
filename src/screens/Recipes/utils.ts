@@ -1,15 +1,15 @@
-import { Food } from "../../graphql/generated/graphql";
+import { Food, Recipe_Item } from "../../graphql/generated/graphql";
 
 export const getValueByPortionCoefficient = (
   value: number,
   portionCoefficient: number
-) => (value * portionCoefficient)?.toFixed(2);
+) => Math.round(value * portionCoefficient);
 
 export const getNutrientAccordingToWeight = (
   value: number = 0,
   weight: number = 0,
   portionCoefficient: number = 1
-) => ((value / 100) * weight * portionCoefficient)?.toFixed(2);
+) => Math.round((value / 100) * weight * portionCoefficient);
 
 export const getRowValues = (
   food: Food,
@@ -39,3 +39,6 @@ export const getRowValues = (
   ),
   fats: getNutrientAccordingToWeight(food.fats, weight, portionCoefficient),
 });
+
+export const aggregate = (recipeItems: Recipe_Item[], arg: string) =>
+  recipeItems.map((i) => i[arg]).reduce((acc, i) => acc + i);

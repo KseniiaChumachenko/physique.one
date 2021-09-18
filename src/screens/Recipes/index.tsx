@@ -46,7 +46,7 @@ export const Recipes = observer(() => {
         <Trans>+ Add new recipe</Trans>
       </Button>
       {data.map((recipe) => (
-        <RecipeCard key={recipe.id} {...(recipe as any)} />
+        <RecipeCard key={recipe.id} {...recipe} />
       ))}
     </>
   );

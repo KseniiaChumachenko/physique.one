@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { observer } from "mobx-react-lite";
+import { NIL } from "uuid";
 import {
   Box,
   Button,
@@ -19,7 +21,7 @@ import { Recipe_Item } from "../../graphql/generated/graphql";
 import { useStore } from "../../store";
 import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
 import { RecipeTableEditableRow } from "./RecipeTableEditableRow";
-import { getValueByPortionCoefficient } from "./utils";
+import { aggregate, getValueByPortionCoefficient } from "./utils";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -39,172 +41,162 @@ interface Props extends RecipeCardHeaderProps {
 }
 
 // TODO recipe items remapped twice because of submit of adjustable rows and portioning
-export const RecipeCard = ({
-  id,
-  name,
-  u_id,
-  description,
-  recipe_items,
-  recipe_items_aggregate,
-  portions,
-  link,
-}: Props) => {
-  const classes = useStyles();
-  const {
-    userStore: {
-      user: { id: userId },
-    },
-  } = useStore();
+export const RecipeCard = observer(
+  ({ id, name, u_id, description, recipe_items, portions, link }: Props) => {
+    const classes = useStyles();
+    const {
+      userStore: {
+        user: { id: userId },
+      },
+    } = useStore();
 
-  const [displayPortions, setDisplayPortions] = useState(portions || 1);
+    const [displayPortions, setDisplayPortions] = useState(portions || 1);
 
-  const [withAddRow, setWithAddRow] = useState(false);
-  const handleResetAddRow = () => setWithAddRow(false);
+    const [withAddRow, setWithAddRow] = useState(false);
+    const handleCancelAddRow = () => setWithAddRow(false);
 
-  const isPermitted = userId === u_id;
-  const coefficientForPortions =
-    portions === displayPortions ? 1 : displayPortions / (portions || 1);
+    const isPermitted = userId === u_id;
+    const coefficientForPortions =
+      portions === displayPortions ? 1 : displayPortions / (portions || 1);
 
-  return (
-    <Card className={classes.root}>
-      <RecipeCardHeader
-        id={id}
-        description={description}
-        name={name}
-        u_id={u_id}
-        portions={portions}
-        link={link}
-      />
-      <CardContent>
-        <Box display={"flex"} alignItems={"center"}>
-          <Typography variant={"subtitle2"}>
-            <Trans>Portions: </Trans>
-          </Typography>
-          <Box
-            display={"flex"}
-            alignItems={"center"}
-            marginBottom={2}
-            width={"60%"}
-          >
-            <Slider
-              defaultValue={displayPortions}
-              value={displayPortions}
-              step={0.5}
-              max={50}
-              valueLabelFormat={(v) => v}
-              valueLabelDisplay="on"
-              onChange={(e, v) => {
-                setDisplayPortions(v as number);
-              }}
-            />
+    return (
+      <Card className={classes.root}>
+        <RecipeCardHeader
+          id={id}
+          description={description}
+          name={name}
+          u_id={u_id}
+          portions={portions}
+          link={link}
+        />
+        <CardContent>
+          <Box display={"flex"} alignItems={"center"}>
+            <Typography variant={"subtitle2"}>
+              <Trans>Portions: </Trans>
+            </Typography>
+            <Box
+              display={"flex"}
+              alignItems={"center"}
+              marginBottom={2}
+              width={"60%"}
+            >
+              <Slider
+                defaultValue={displayPortions}
+                value={displayPortions}
+                step={0.5}
+                max={50}
+                valueLabelFormat={(v) => v}
+                valueLabelDisplay="on"
+                onChange={(e, v) => {
+                  setDisplayPortions(v as number);
+                }}
+              />
+            </Box>
           </Box>
-        </Box>
-        <Table size="small" aria-label="a dense table">
-          <TableHead>
-            <TableRow>
-              <TableCell>Ingredient</TableCell>
-              <TableCell>Weight&nbsp;(g)</TableCell>
-              <TableCell>Calories&nbsp;|&nbsp;kJ</TableCell>
-              <TableCell>Protein&nbsp;(g)</TableCell>
-              <TableCell>Carbohydrate&nbsp;(g)</TableCell>
-              <TableCell>Fat&nbsp;(g)</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {recipe_items?.map((row) => (
-              <RecipeTableEditableRow
-                recipe_id={id}
-                row={row}
-                key={row.id}
-                mode={"regularRow"}
-                u_id={u_id}
-                onClickOutside={handleResetAddRow}
-                coefficientForPortions={coefficientForPortions}
-              />
-            ))}
-            {/*Row total for portions: */}
-            {recipe_items && recipe_items?.length > 1 && (
+          <Table size="small" aria-label="a dense table">
+            <TableHead>
               <TableRow>
-                <TableCell>
-                  <Typography variant={"button"} color={"textSecondary"}>
-                    <Trans>TOTAL</Trans>
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant={"button"} color={"textSecondary"}>
-                    {getValueByPortionCoefficient(
-                      recipe_items_aggregate?.aggregate?.sum?.weight,
-                      coefficientForPortions
-                    )}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant={"button"} color={"textSecondary"}>
-                    {getValueByPortionCoefficient(
-                      recipe_items_aggregate?.aggregate?.sum?.energy_cal,
-                      coefficientForPortions
-                    )}
-                    &nbsp;kCal |&nbsp;
-                    {getValueByPortionCoefficient(
-                      recipe_items_aggregate?.aggregate?.sum?.energy_kj,
-                      coefficientForPortions
-                    )}
-                    &nbsp;kJ
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant={"button"} color={"textSecondary"}>
-                    {getValueByPortionCoefficient(
-                      recipe_items_aggregate?.aggregate?.sum?.proteins,
-                      coefficientForPortions
-                    )}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant={"button"} color={"textSecondary"}>
-                    {getValueByPortionCoefficient(
-                      recipe_items_aggregate?.aggregate?.sum?.carbohydrates,
-                      coefficientForPortions
-                    )}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <Typography variant={"button"} color={"textSecondary"}>
-                    {getValueByPortionCoefficient(
-                      recipe_items_aggregate?.aggregate?.sum?.fats,
-                      coefficientForPortions
-                    )}
-                  </Typography>
-                </TableCell>
-                <TableCell />
+                <TableCell>Ingredient</TableCell>
+                <TableCell>Weight&nbsp;(g)</TableCell>
+                <TableCell>Calories&nbsp;|&nbsp;kJ</TableCell>
+                <TableCell>Protein&nbsp;(g)</TableCell>
+                <TableCell>Carbohydrate&nbsp;(g)</TableCell>
+                <TableCell>Fat&nbsp;(g)</TableCell>
+                <TableCell>Actions</TableCell>
               </TableRow>
-            )}
-            {withAddRow && isPermitted && (
-              <RecipeTableEditableRow
-                key={id}
-                recipe_id={id}
-                row={{}}
-                mode={"add"}
-                u_id={u_id}
-                onClickOutside={handleResetAddRow}
-                coefficientForPortions={coefficientForPortions}
-              />
-            )}
-          </TableBody>
-        </Table>
-        {!withAddRow && (
-          <Button
-            variant={"text"}
-            onClick={() => setWithAddRow(true)}
-            size={"large"}
-            color={"primary"}
-            className={classes.addButton}
-          >
-            <Trans> + Add ingredient</Trans>
-          </Button>
-        )}
-      </CardContent>
-    </Card>
-  );
-};
+            </TableHead>
+            <TableBody>
+              {recipe_items?.map((row) => (
+                <RecipeTableEditableRow
+                  recipe_id={id}
+                  row={row}
+                  key={row.id}
+                  u_id={u_id}
+                  coefficientForPortions={coefficientForPortions}
+                />
+              ))}
+              {/*Row total for portions: */}
+              {recipe_items && recipe_items?.length > 1 && (
+                <TableRow>
+                  <TableCell>
+                    <Typography variant={"button"} color={"textSecondary"}>
+                      <Trans>TOTAL</Trans>
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant={"button"} color={"textSecondary"}>
+                      {getValueByPortionCoefficient(
+                        aggregate(recipe_items, "weight"),
+                        coefficientForPortions
+                      )}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant={"button"} color={"textSecondary"}>
+                      {getValueByPortionCoefficient(
+                        aggregate(recipe_items, "energy_cal"),
+                        coefficientForPortions
+                      )}
+                      &nbsp;kCal |&nbsp;
+                      {getValueByPortionCoefficient(
+                        aggregate(recipe_items, "energy_kj"),
+                        coefficientForPortions
+                      )}
+                      &nbsp;kJ
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant={"button"} color={"textSecondary"}>
+                      {getValueByPortionCoefficient(
+                        aggregate(recipe_items, "proteins"),
+                        coefficientForPortions
+                      )}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant={"button"} color={"textSecondary"}>
+                      {getValueByPortionCoefficient(
+                        aggregate(recipe_items, "carbohydrates"),
+                        coefficientForPortions
+                      )}
+                    </Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant={"button"} color={"textSecondary"}>
+                      {getValueByPortionCoefficient(
+                        aggregate(recipe_items, "fats"),
+                        coefficientForPortions
+                      )}
+                    </Typography>
+                  </TableCell>
+                  <TableCell />
+                </TableRow>
+              )}
+              {withAddRow && isPermitted && (
+                <RecipeTableEditableRow
+                  key={id}
+                  recipe_id={id}
+                  row={{ id: NIL, weight: 100 }}
+                  u_id={u_id}
+                  coefficientForPortions={coefficientForPortions}
+                  onDiscardAddRow={handleCancelAddRow}
+                />
+              )}
+            </TableBody>
+          </Table>
+          {!withAddRow && (
+            <Button
+              variant={"text"}
+              onClick={() => setWithAddRow(true)}
+              size={"large"}
+              color={"primary"}
+              className={classes.addButton}
+            >
+              <Trans> + Add ingredient</Trans>
+            </Button>
+          )}
+        </CardContent>
+      </Card>
+    );
+  }
+);

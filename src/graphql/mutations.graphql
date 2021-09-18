@@ -199,6 +199,7 @@ mutation AddRecipe($u_id: uuid!, $name: String, $description: String) {
 }
 
 mutation AddRecipeItem(
+  $id: uuid!
   $energy_cal: numeric
   $energy_kj: numeric
   $proteins: numeric
@@ -211,6 +212,7 @@ mutation AddRecipeItem(
 ) {
   insert_recipe_item_one(
     object: {
+      id: $id
       u_id: $u_id
       food_id: $food_id
       recipe_id: $recipe_id

@@ -1,6 +1,6 @@
 overwrite: true
 schema: "src/graphql/schema.graphql"
-documents: "**/*.graphql"
+documents: "**/*.{graphql, ts}"
 config:
   withMutationFn: false
   withHOC: false

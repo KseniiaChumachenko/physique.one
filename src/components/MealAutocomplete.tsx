@@ -1,11 +1,11 @@
-import React, { Dispatch, useEffect, useMemo } from "react";
+import React from "react";
+import { observer } from "mobx-react-lite";
 import { Autocomplete, AutocompleteProps } from "@material-ui/lab";
 import { TextField } from "@material-ui/core";
 import { Trans } from "@lingui/react";
-import {
-  Food_Insert_Input,
-  useFoodSelectFieldListingQuery,
-} from "../graphql/generated/graphql";
+import { Food_Insert_Input } from "../graphql/generated/graphql";
+import { useStore } from "../store";
+import { aggregate } from "../screens/Recipes/utils";
 
 export type MealAutocompleteListItem = Food_Insert_Input & {
   recipe?: boolean;
@@ -22,87 +22,68 @@ export type FoodOptionalType =
 interface MealAutocompleteProps
   extends Partial<AutocompleteProps<any, any, any, any>> {
   withRecipes?: boolean;
-  value: FoodOptionalType;
-  setValue: Dispatch<FoodOptionalType>;
+  value: string;
+  setValue: (id: string) => void;
 }
 
-export function MealAutocomplete({
-  value,
-  setValue,
-  withRecipes = true,
-  ...restProps
-}: MealAutocompleteProps) {
-  const { data } = useFoodSelectFieldListingQuery();
+export const MealAutocomplete = observer(
+  ({
+    value,
+    setValue,
+    withRecipes = true,
+    ...restProps
+  }: MealAutocompleteProps) => {
+    const {
+      recipeStore: { data: recipes },
+      foodLibraryStore: { data: foods },
+    } = useStore();
 
-  const remappedOptions: MealAutocompleteListItem[] | undefined = useMemo(
-    () =>
-      data &&
-      (withRecipes
-        ? [
-            ...data.food,
-            ...data.recipe.map((r) => ({
-              id: r.id,
-              recipe_id: r.id,
-              name: r.name,
-              type: "Recipe",
-              carbohydrates:
-                r.recipe_items_aggregate.aggregate?.sum?.carbohydrates || 0,
-              proteins: r.recipe_items_aggregate.aggregate?.sum?.proteins || 0,
-              fats: r.recipe_items_aggregate.aggregate?.sum?.fats || 0,
-              energy_cal:
-                r.recipe_items_aggregate.aggregate?.sum?.energy_cal || 0,
-              energy_kj:
-                r.recipe_items_aggregate.aggregate?.sum?.energy_kj || 0,
-              weight: r.recipe_items_aggregate.aggregate?.sum?.weight,
-              recipe: true,
-            })),
-          ]
-        : data.food),
-    [data]
-  );
+    const remappedOptions = withRecipes
+      ? [
+          ...foods,
+          ...recipes.map((r) => ({
+            id: r.id,
+            recipe_id: r.id,
+            name: r.name,
+            type: "Recipe",
+            carbohydrates: aggregate(r.recipe_items, "carbohydrates"),
+            proteins: aggregate(r.recipe_items, "proteins"),
+            fats: aggregate(r.recipe_items, "fats"),
+            energy_cal: aggregate(r.recipe_items, "energy_cal"),
+            energy_kj: aggregate(r.recipe_items, "energy_kj"),
+            weight: aggregate(r.recipe_items, "weight"),
+            recipe: true,
+          })),
+        ]
+      : foods;
 
-  useEffect(() => {
-    if (remappedOptions?.length) {
-      if (typeof value === "string") {
-        const foodFromOptions = remappedOptions.find(
-          (item) => item.id === value
-        );
-        setValue(foodFromOptions);
-      } else {
-        setValue(remappedOptions[0]);
-      }
-    }
-  }, [remappedOptions?.length]);
+    const valueFromOptions = remappedOptions.find(({ id }) => id === value);
 
-  const withValue = !(typeof value === "string") && remappedOptions;
-
-  return (
-    <>
-      {withValue && (
-        <Autocomplete
-          options={remappedOptions!}
-          getOptionLabel={(option: MealAutocompleteListItem) => option.name}
-          value={value}
-          onChange={(event: any, newValue: Food_Insert_Input | null) => {
-            setValue(newValue);
-            event.stopPropagation();
-          }}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              label={
-                withRecipes ? (
-                  <Trans>Select food or recipe</Trans>
-                ) : (
-                  <Trans>Select food</Trans>
-                )
-              }
-              margin="dense"
-            />
-          )}
-          {...restProps}
-        />
-      )}
-    </>
-  );
-}
+    return (
+      <Autocomplete
+        options={remappedOptions}
+        defaultValue={remappedOptions[0]}
+        getOptionLabel={(option: MealAutocompleteListItem) => option.name}
+        value={valueFromOptions}
+        onChange={(event: any, newValue: MealAutocompleteListItem | null) => {
+          setValue(newValue?.id);
+          event.stopPropagation();
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={
+              withRecipes ? (
+                <Trans>Select food or recipe</Trans>
+              ) : (
+                <Trans>Select food</Trans>
+              )
+            }
+            margin="dense"
+          />
+        )}
+        {...restProps}
+      />
+    );
+  }
+);

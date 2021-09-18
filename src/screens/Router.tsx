@@ -12,13 +12,30 @@ import {
 import { observer } from "mobx-react-lite";
 import { useStore } from "../store";
 import { DrawerNavigation } from "../components/DrawerNavigation";
-import { Meals } from "./Meals";
-import { FoodLibrary } from "./FoodLibrary";
-import { Recipes } from "./Recipes";
-import { Authorization } from "./Authorization";
-import { PrivacyPolicy } from "./PrivacyPolicy";
-import { Profile } from "./Profile";
-// import { Pantry } from "./Pantry";
+
+const Authorization = React.lazy(() =>
+  import("./Authorization").then((module) => ({
+    default: module.Authorization,
+  }))
+);
+const PrivacyPolicy = React.lazy(() =>
+  import("./PrivacyPolicy").then((module) => ({
+    default: module.PrivacyPolicy,
+  }))
+);
+const Meals = React.lazy(() =>
+  import("./Meals").then((module) => ({ default: module.Meals }))
+);
+const FoodLibrary = React.lazy(() =>
+  import("./FoodLibrary").then((module) => ({ default: module.FoodLibrary }))
+);
+const Recipes = React.lazy(() =>
+  import("./Recipes").then((module) => ({ default: module.Recipes }))
+);
+const Profile = React.lazy(() =>
+  import("./Profile").then((module) => ({ default: module.Profile }))
+);
+// const Pantry = React.lazy(() => import("./Pantry").then((module) => ({default: module.Pantry})));
 
 const useStyles = makeStyles((theme) => ({
   content: {

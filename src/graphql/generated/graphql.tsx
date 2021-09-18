@@ -5898,6 +5898,7 @@ export type AddRecipeMutation = { __typename?: "mutation_root" } & {
 };
 
 export type AddRecipeItemMutationVariables = Exact<{
+  id: Scalars["uuid"];
   energy_cal?: Maybe<Scalars["numeric"]>;
   energy_kj?: Maybe<Scalars["numeric"]>;
   proteins?: Maybe<Scalars["numeric"]>;
@@ -6762,6 +6763,7 @@ export type AddRecipeMutationOptions = ApolloReactCommon.BaseMutationOptions<
 >;
 export const AddRecipeItemDocument = gql`
   mutation AddRecipeItem(
+    $id: uuid!
     $energy_cal: numeric
     $energy_kj: numeric
     $proteins: numeric
@@ -6774,6 +6776,7 @@ export const AddRecipeItemDocument = gql`
   ) {
     insert_recipe_item_one(
       object: {
+        id: $id
         u_id: $u_id
         food_id: $food_id
         recipe_id: $recipe_id

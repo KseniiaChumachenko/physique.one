@@ -5,6 +5,7 @@ import { Pantries } from "src/screens/Pantry/store/Pantries";
 import { UserStore } from "./user";
 import { ScreenStore } from "./Screen";
 import { RecipesStore } from "./Recipes";
+import { FoodLibraryStore } from "./FoodLibrary";
 
 export class RootStore {
   userStore: UserStore;
@@ -12,6 +13,7 @@ export class RootStore {
   pantries: Pantries;
   screenStore: ScreenStore;
   recipeStore: RecipesStore;
+  foodLibraryStore: FoodLibraryStore;
 
   constructor() {
     this.userStore = new UserStore(this);
@@ -19,6 +21,7 @@ export class RootStore {
     this.pantries = new Pantries(this);
     this.screenStore = new ScreenStore(this);
     this.recipeStore = new RecipesStore(this);
+    this.foodLibraryStore = new FoodLibraryStore(this);
 
     // TODO: this is not elegant, bcz one should remember where loading happens
     // autorun(() => {

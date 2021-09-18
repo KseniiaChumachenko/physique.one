@@ -22,18 +22,6 @@ export const RECIPES_LISTING_DOCUMENT = gql`
         energy_kj
         weight
       }
-      recipe_items_aggregate {
-        aggregate {
-          sum {
-            carbohydrates
-            fats
-            proteins
-            energy_kj
-            energy_cal
-            weight
-          }
-        }
-      }
     }
   }
 `;

@@ -15,7 +15,6 @@ import {
 import {
   useAddFoodMutation,
   useDeleteFoodMutation,
-  useFoodSelectFieldListingQuery,
   useUpdateFoodMutation,
 } from "../../graphql/generated/graphql";
 import { ToastMessage } from "../../components/ToastMessage";
@@ -36,14 +35,12 @@ export const FoodLibrary = () => {
   const classes = useStyles();
   const {
     userStore: { user },
+    foodLibraryStore: { data, load: refetch },
   } = useStore();
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState<any>(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string>("");
-  const { data, refetch } = useFoodSelectFieldListingQuery({
-    onError: (error1) => setError(error1.message),
-  });
 
   const [insert_food] = useAddFoodMutation({
     onCompleted: () => {
@@ -104,7 +101,7 @@ export const FoodLibrary = () => {
           />
         </TableHead>
         <TableBody>
-          {data?.food.map((row, key) => (
+          {data.map((row, key) => (
             <TableRow key={key}>
               <TableCell children={row.name} />
               <TableCell children={row.type} />
