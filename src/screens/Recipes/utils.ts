@@ -9,7 +9,7 @@ export const getNutrientAccordingToWeight = (
   value: number = 0,
   weight: number = 0,
   portionCoefficient: number = 1
-) => Math.round((value / 100) * weight * portionCoefficient);
+) => Math.round(((value / 100) * weight * portionCoefficient * 100) / 100);
 
 export const getRowValues = (
   food: Food,

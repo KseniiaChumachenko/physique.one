@@ -43,7 +43,9 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
   const [error, setOpenErrorMessage] = React.useState<string | undefined>();
   const [success, setOpenSuccessMessage] = React.useState(false);
 
-  const [selectedItemId, setSelectedItemId] = useState(foodLibrary[0].id);
+  const [selectedItemId, setSelectedItemId] = useState(
+    mealItem?.food?.id ?? mealItem?.recipe_id ?? foodLibrary?.[0].id
+  );
   const [weight, setWeight] = useState(100);
 
   const mealItemProps = () => {
