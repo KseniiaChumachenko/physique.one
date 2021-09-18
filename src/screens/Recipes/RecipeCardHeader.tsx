@@ -17,7 +17,6 @@ import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import {
   Recipe_Item_Aggregate,
   useAddRecipeMutation,
-  useDeleteRecipeByPkMutation,
   useUpdateRecipeDescByPkMutation,
   useUpdateRecipeLinkByPkMutation,
   useUpdateRecipeNameByPkMutation,
@@ -69,6 +68,7 @@ export const RecipeCardHeader = ({
     userStore: {
       user: { id: userId },
     },
+    recipeStore: { deleteRecipe },
   } = useStore();
   const isPermitted = userId === u_id;
   const [isEditTitle, setIsEditTitle] = useState(false);
@@ -101,10 +101,6 @@ export const RecipeCardHeader = ({
       description: updatedDesc,
     },
     onCompleted: () => setIsEditDesc(false),
-  });
-
-  const [delete_recipe_by_pk] = useDeleteRecipeByPkMutation({
-    variables: { id },
   });
 
   const [
@@ -223,7 +219,9 @@ export const RecipeCardHeader = ({
               <EditDeleteButtonGroup onConfirmClick={insert_recipe_one} />
             ) : (
               isPermitted && (
-                <EditDeleteButtonGroup onDeleteClick={delete_recipe_by_pk} />
+                <EditDeleteButtonGroup
+                  onDeleteClick={() => deleteRecipe(id!)}
+                />
               )
             )}
           </Box>

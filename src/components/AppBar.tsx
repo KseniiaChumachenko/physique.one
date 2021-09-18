@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { observer } from "mobx-react-lite";
 import {
   AppBar as MAppBar,
+  Button,
   IconButton,
   Toolbar,
   Typography,
@@ -42,11 +43,14 @@ const useStyles = makeStyles((theme) => ({
       marginRight: theme.spacing(2),
     },
   },
+  spacer: {
+    justifyContent: "space-between",
+  },
 }));
 
 export const AppBar = observer(() => {
   const {
-    screenStore: { navigationOpen, handleToggleNavigation },
+    screenStore: { action, navigationOpen, handleToggleNavigation },
   } = useStore();
   const classes = useStyles();
   const { pathname } = useLocation();
@@ -63,24 +67,34 @@ export const AppBar = observer(() => {
         [classes.appBarShift]: navigationOpen,
       })}
     >
-      <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleToggleNavigation}
-          edge="start"
-          className={classes.menuButton}
-        >
-          <MenuOutlined />
-        </IconButton>
+      <Toolbar className={classes.spacer}>
+        <div>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleToggleNavigation}
+            edge="start"
+            className={classes.menuButton}
+          >
+            <MenuOutlined />
+          </IconButton>
 
-        {!!routeInfo && (
-          <Typography variant={"h6"}>{routeInfo.title}</Typography>
-        )}
-
+          {!!routeInfo && (
+            <Typography variant={"h6"}>{routeInfo.title}</Typography>
+          )}
+        </div>
         {/*
             Search and filters in future
           */}
+        {action && (
+          <Button
+            onClick={action.onClick}
+            variant={"contained"}
+            color={"primary"}
+          >
+            {action.label}
+          </Button>
+        )}
       </Toolbar>
     </MAppBar>
   );
