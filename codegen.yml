@@ -1,6 +1,8 @@
 overwrite: true
 schema: "src/graphql/schema.graphql"
-documents: "**/*.{graphql, ts}"
+documents:
+  - "src/**/*.graphql"
+  - "src/**/*.ts"
 config:
   withMutationFn: false
   withHOC: false
@@ -9,6 +11,10 @@ config:
   reactApolloVersion: 3
   addDocBlocks: false
   skipTypenames: true
+pluckConfig:
+  modules:
+    - name: "@apollo/client"
+    - identifier: "gql"
 generates:
   src/graphql/generated/graphql.tsx:
     plugins:

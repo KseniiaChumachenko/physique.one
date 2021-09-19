@@ -34,7 +34,7 @@ const ADD_PANTRY_DOCUMENT = gql`
 `;
 
 const ADD_PANTRY_USER_DOCUMENT = gql`
-  mutation RemovePantryUser($user_id: uuid!, $pantry_id: uuid!) {
+  mutation InsertPantryUser($user_id: uuid!, $pantry_id: uuid!) {
     insert_pantry_user_one(
       object: { user_id: $user_id, pantry_id: $pantry_id }
     ) {
@@ -52,7 +52,7 @@ const UPDATE_PANTRY_NAME_DOCUMENT = gql`
 `;
 
 const REMOVE_PANTRY_DOCUMENT = gql`
-  mutation RemovePantryUser($id: uuid!) {
+  mutation RemovePantry($id: uuid!) {
     delete_pantry_items(where: { pantry_id: { _eq: $id } }) {
       affected_rows
     }

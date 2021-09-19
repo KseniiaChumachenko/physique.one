@@ -118,50 +118,6 @@ query FoodSelectFieldListing {
   }
 }
 
-query FoodTypes {
-  food_type {
-    value
-    decription
-    img_url
-  }
-}
-
-subscription RecipeListing {
-  recipe(order_by: { increment: desc }) {
-    id
-    name
-    description
-    u_id
-    link
-    portions
-    recipe_items {
-      id
-      food {
-        id
-        name
-      }
-      proteins
-      fats
-      carbohydrates
-      energy_cal
-      energy_kj
-      weight
-    }
-    recipe_items_aggregate {
-      aggregate {
-        sum {
-          carbohydrates
-          fats
-          proteins
-          energy_kj
-          energy_cal
-          weight
-        }
-      }
-    }
-  }
-}
-
 query LogIn($email: String!, $password: String!) {
   users(where: { email: { _eq: $email }, password: { _eq: $password } }) {
     id

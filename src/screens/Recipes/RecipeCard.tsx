@@ -6,6 +6,7 @@ import {
   Button,
   Card,
   CardContent,
+  Chip,
   createStyles,
   Slider,
   Table,
@@ -71,14 +72,14 @@ export const RecipeCard = observer(
         />
         <CardContent>
           <Box display={"flex"} alignItems={"center"}>
-            <Typography variant={"subtitle2"}>
+            <Typography variant={"overline"} color={"textSecondary"}>
               <Trans>Portions: </Trans>
             </Typography>
             <Box
               display={"flex"}
               alignItems={"center"}
-              marginBottom={2}
               width={"60%"}
+              marginX={2}
             >
               <Slider
                 defaultValue={displayPortions}
@@ -86,12 +87,14 @@ export const RecipeCard = observer(
                 step={0.5}
                 max={50}
                 valueLabelFormat={(v) => v}
-                valueLabelDisplay="on"
+                valueLabelDisplay="off"
+                marks={true}
                 onChange={(e, v) => {
                   setDisplayPortions(v as number);
                 }}
               />
             </Box>
+            <Chip color={"primary"} label={displayPortions} />
           </Box>
           <Table size="small" aria-label="a dense table">
             <TableHead>

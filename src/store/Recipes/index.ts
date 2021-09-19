@@ -5,14 +5,16 @@ import {
   AddRecipeItemMutationVariables,
   Recipe,
   UpdateRecipeItemByPkMutationVariables,
+  UpdateRecipeMutationVariables,
 } from "../../graphql/generated/graphql";
 import { RootStore } from "../RootStore";
-import { RECIPES_LISTING_DOCUMENT } from "./RECIPES_LISTING_DOCUMENT";
-import { DELETE_RECIPE_ITEM_DOCUMENT } from "./RECIPE_ITEMS/DELETE_RECIPE_ITEM_DOCUMENT";
-import { UPDATE_RECIPE_ITEM_DOCUMENT } from "./RECIPE_ITEMS/UPDATE_RECIPE_ITEM_DOCUMENT";
-import { ADD_RECIPE_ITEM_DOCUMENT } from "./RECIPE_ITEMS/ADD_RECIPE_ITEM_DOCUMENT";
-import { ADD_RECIPE_DOCUMENT } from "./RECIPE/ADD_RECIPE_DOCUMENT";
-import { DELETE_RECIPE_DOCUMENT } from "./RECIPE/DELETE_RECIPE_DOCUMENT";
+import { RECIPES_LISTING_DOCUMENT } from "./gql/RECIPES_LISTING_DOCUMENT";
+import { DELETE_RECIPE_ITEM_DOCUMENT } from "./gql/RECIPE_ITEMS/DELETE_RECIPE_ITEM_DOCUMENT";
+import { UPDATE_RECIPE_ITEM_DOCUMENT } from "./gql/RECIPE_ITEMS/UPDATE_RECIPE_ITEM_DOCUMENT";
+import { ADD_RECIPE_ITEM_DOCUMENT } from "./gql/RECIPE_ITEMS/ADD_RECIPE_ITEM_DOCUMENT";
+import { ADD_RECIPE_DOCUMENT } from "./gql/RECIPE/ADD_RECIPE_DOCUMENT";
+import { DELETE_RECIPE_DOCUMENT } from "./gql/RECIPE/DELETE_RECIPE_DOCUMENT";
+import { UPDATE_RECIPE_DOCUMENT } from "./gql/RECIPE/UPDATE_RECIPE_DOCUMENT";
 
 export class RecipesStore {
   rootStore: RootStore;
@@ -65,7 +67,19 @@ export class RecipesStore {
     });
   });
 
-  /* TODO update action*/
+  updateRecipe = action(async (variables: UpdateRecipeMutationVariables) => {
+    await mutate({
+      document: UPDATE_RECIPE_DOCUMENT,
+      variables,
+      onOptimisticUpdate: () =>
+        this.setData(
+          this.data.map((r) =>
+            r.id === variables.id ? ({ ...r, ...variables } as Recipe) : r
+          )
+        ),
+      onError: () => this.load(),
+    });
+  });
 
   deleteRecipe = action(async (id: string) => {
     const item = this.getItem(id);

@@ -190,14 +190,6 @@ mutation CopyDay($meal_items: [meal_item_insert_input!]!, $name: String!, $time:
   }
 }
 
-mutation AddRecipe($u_id: uuid!, $name: String, $description: String) {
-  insert_recipe_one(
-    object: { u_id: $u_id, description: $description }
-  ) {
-    id
-  }
-}
-
 mutation AddRecipeItem(
   $id: uuid!
   $energy_cal: numeric
@@ -349,29 +341,8 @@ mutation RegisterFacebookUser(
   }
 }
 
-mutation AddFoodType($decription: String, $img_url: String, $value: String!) {
-  insert_food_type_one(
-    object: { img_url: $img_url, decription: $decription, value: $value }
-  ) {
-    value
-  }
-}
-
 mutation DeleteFoodType($value: String!) {
   delete_food_type_by_pk(value: $value) {
-    value
-  }
-}
-
-mutation UpdateFoodType(
-  $decription: String
-  $img_url: String
-  $value: String!
-) {
-  update_food_type_by_pk(
-    pk_columns: { value: $value }
-    _set: { value: $value, decription: $decription, img_url: $img_url }
-  ) {
     value
   }
 }

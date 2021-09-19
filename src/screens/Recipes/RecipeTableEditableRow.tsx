@@ -65,7 +65,9 @@ export const RecipeTableEditableRow = observer(
     const [rowFoodId, setRowFoodId] = useState(basePortionRow?.food?.id);
     const [rowFoodWeight, setRowFoodWeight] = useState(basePortionRow?.weight);
 
-    const foodById = data.find((item) => item.id === (rowFoodId ?? data[0].id));
+    const foodById = data.find(
+      (item) => item.id === (rowFoodId ?? data[0].id)
+    )!;
     const row = {
       id: basePortionRow.id,
       food_id: foodById?.id,
@@ -73,7 +75,7 @@ export const RecipeTableEditableRow = observer(
       recipe_id,
       u_id,
       ...getRowValues(
-        foodById!,
+        foodById,
         rowFoodWeight,
         isInEditMode ? 1 : coefficientForPortions
       ),
