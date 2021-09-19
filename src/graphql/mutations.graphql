@@ -58,64 +58,6 @@ mutation DeleteMealById($id: uuid!) {
   }
 }
 
-mutation AddFood(
-  $name: bpchar
-  $proteins: numeric
-  $fats: numeric
-  $energy_kj: numeric
-  $energy_cal: numeric
-  $carbohydrates: numeric
-  $type: String
-  $u_id: uuid!
-) {
-  insert_food(
-    objects: {
-      name: $name
-      type: $type
-      energy_cal: $energy_cal
-      energy_kj: $energy_kj
-      proteins: $proteins
-      carbohydrates: $carbohydrates
-      fats: $fats
-      u_id: $u_id
-    }
-  ) {
-    affected_rows
-  }
-}
-
-mutation UpdateFood(
-  $id: uuid!
-  $name: bpchar
-  $proteins: numeric
-  $fats: numeric
-  $energy_kj: numeric
-  $energy_cal: numeric
-  $carbohydrates: numeric
-  $type: String
-) {
-  update_food_by_pk(
-    pk_columns: { id: $id }
-    _set: {
-      name: $name
-      energy_cal: $energy_cal
-      energy_kj: $energy_kj
-      proteins: $proteins
-      type: $type
-      fats: $fats
-      carbohydrates: $carbohydrates
-    }
-  ) {
-    id
-  }
-}
-
-mutation DeleteFood($id: uuid!) {
-  delete_food_by_pk(id: $id) {
-    id
-  }
-}
-
 mutation AddMealItem(
   $u_id: uuid
   $proteins: numeric

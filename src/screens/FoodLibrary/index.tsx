@@ -1,9 +1,8 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useEffect, useState } from "react";
+import { observer } from "mobx-react-lite";
+import { v4 as uuid } from "uuid";
 import { Trans } from "@lingui/react";
-import { AddRounded } from "@material-ui/icons";
 import {
-  Button,
   Paper,
   Table,
   TableBody,
@@ -12,78 +11,67 @@ import {
   TableHead,
   TableRow,
 } from "@material-ui/core";
-import {
-  useAddFoodMutation,
-  useDeleteFoodMutation,
-  useUpdateFoodMutation,
-} from "../../graphql/generated/graphql";
 import { ToastMessage } from "../../components/ToastMessage";
 import { AddFoodDialog } from "../components/AddFoodDialog";
 import { State } from "../components/AddFoodDialog/useStore";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { useStore } from "../../store";
 
-const useStyles = makeStyles((theme) => ({
-  tableToolbar: {
-    display: "flex",
-    justifyContent: "flex-end",
-    padding: theme.spacing(1),
-  },
-}));
-
-export const FoodLibrary = () => {
-  const classes = useStyles();
+export const FoodLibrary = observer(() => {
   const {
     userStore: { user },
-    foodLibraryStore: { data, load: refetch },
+    foodLibraryStore: { data, add, update, remove },
+    screenStore: { setAction },
   } = useStore();
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState<any>(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<string>("");
 
-  const [insert_food] = useAddFoodMutation({
-    onCompleted: () => {
-      refetch();
-      setOpenAddDialog(false);
-      setSuccess(true);
-    },
-    onError: (error1) => setError(error1.message),
-  });
-
-  const [update_food] = useUpdateFoodMutation({
-    onCompleted: () => {
-      refetch();
-      setOpenEditDialog(false);
-      setSuccess(true);
-    },
-    onError: (error1) => setError(error1.message),
-  });
-
-  const [delete_food] = useDeleteFoodMutation({
-    onCompleted: () => {
-      refetch();
-      setSuccess(true);
-    },
-    onError: (error1) => setError(error1.message),
-  });
+  useEffect(() => {
+    setAction({
+      label: "+ Add new item",
+      onClick: () => setOpenAddDialog(true),
+    });
+    return () => {
+      setAction(null);
+    };
+  }, []);
 
   const handleAddFood = (props: State) => (event: any) => {
-    insert_food({ variables: props });
+    add(
+      { ...props, id: uuid() },
+      () => {
+        setOpenAddDialog(false);
+        setSuccess(true);
+      },
+      (error1) => setError(error1?.map((e) => e.message)[0] || "")
+    );
     event.stopPropagation();
+  };
+
+  const handleUpdateFood = (state: State) => () =>
+    update(
+      { id: openEditDialog.id, ...state },
+      () => {
+        setOpenEditDialog(false);
+        setSuccess(true);
+      },
+      (error1) => setError(error1?.map((e) => e.message)[0] || "")
+    );
+
+  const handleDeleteFood = (id: string) => () => {
+    remove(
+      id,
+      () => {
+        setSuccess(true);
+      },
+      (error1) => setError(error1?.map((e) => e.message)[0] || "")
+    );
   };
 
   return (
     <TableContainer component={Paper}>
-      <div className={classes.tableToolbar}>
-        <Button
-          variant={"text"}
-          color={"primary"}
-          onClick={() => setOpenAddDialog(true)}
-          startIcon={<AddRounded />}
-          children={<Trans>Add new food</Trans>}
-        />
-      </div>
       <Table size={"small"}>
         <TableHead>
           <TableCell children={<Trans>Name</Trans>} />
@@ -114,9 +102,7 @@ export const FoodLibrary = () => {
                   <EditDeleteButtonGroup
                     key={key}
                     onEditClick={() => setOpenEditDialog(row)}
-                    onDeleteClick={() =>
-                      delete_food({ variables: { id: row.id } })
-                    }
+                    onDeleteClick={handleDeleteFood(row.id)}
                   />
                 )}
               </TableCell>
@@ -128,8 +114,7 @@ export const FoodLibrary = () => {
         <AddFoodDialog
           open={!!openEditDialog}
           setOpen={setOpenEditDialog}
-          onConfirm={(state) => () =>
-            update_food({ variables: { id: openEditDialog.id, ...state } })}
+          onConfirm={handleUpdateFood}
           {...openEditDialog}
         />
       )}
@@ -155,4 +140,4 @@ export const FoodLibrary = () => {
       />
     </TableContainer>
   );
-};
+});

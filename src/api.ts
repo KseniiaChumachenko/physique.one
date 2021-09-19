@@ -8,6 +8,7 @@ import {
   split,
 } from "@apollo/client";
 import { getMainDefinition } from "@apollo/client/utilities";
+import { GraphQLError } from "graphql";
 
 const GQL_WS_ENDPOINT = process.env.GQL_WS_ENDPOINT || "";
 const GQL_HTTPS_ENDPOINT = process.env.GQL_HTTPS_ENDPOINT || "";
@@ -57,7 +58,7 @@ export const mutate = async <V = Record<string, unknown>>({
   variables?: V;
   onOptimisticUpdate?: () => void;
   onSuccess?: () => void;
-  onError?: () => void;
+  onError?: (errors?: readonly GraphQLError[]) => void;
 }) => {
   onOptimisticUpdate?.();
   await api
@@ -68,7 +69,7 @@ export const mutate = async <V = Record<string, unknown>>({
         return data;
       }
       if (errors) {
-        onError?.();
+        onError?.(errors);
       }
     })
     .catch((error) => error);
