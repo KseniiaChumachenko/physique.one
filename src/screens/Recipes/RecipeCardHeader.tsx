@@ -125,13 +125,12 @@ export const RecipeCardHeader = ({
                 </Box>
               ) : (
                 <Typography
-                  id="input-slider"
                   gutterBottom
                   variant={"overline"}
                   color={"textSecondary"}
                 >
                   {/*TODO: TRANS*/}
-                  Base recipe is for <strong>{updatedPortioning}</strong>
+                  Base recipe is for <strong>{updatedPortioning}</strong>{" "}
                   portions
                 </Typography>
               ))}
@@ -162,8 +161,8 @@ export const RecipeCardHeader = ({
             />
           </Box>
         ) : (
-          <Box display={"flex"} alignItems={"center"}>
-            <Box marginRight={2}>
+          <Box display={"flex"} alignItems={"center"} justifySelf={"center"}>
+            <Box display={"flex"} marginRight={2}>
               <LinkRounded />
             </Box>
             {updatedLink ? (

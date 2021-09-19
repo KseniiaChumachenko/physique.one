@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { observer } from "mobx-react-lite";
 import {
   AppBar as MAppBar,
+  Box,
   Button,
   IconButton,
   Toolbar,
@@ -68,7 +69,7 @@ export const AppBar = observer(() => {
       })}
     >
       <Toolbar className={classes.spacer}>
-        <div>
+        <Box display={"flex"} alignItems={"center"}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -82,7 +83,7 @@ export const AppBar = observer(() => {
           {!!routeInfo && (
             <Typography variant={"h6"}>{routeInfo.title}</Typography>
           )}
-        </div>
+        </Box>
         {/*
             Search and filters in future
           */}

@@ -105,7 +105,7 @@ export const RecipeCard = observer(
                 <TableCell>Protein&nbsp;(g)</TableCell>
                 <TableCell>Carbohydrate&nbsp;(g)</TableCell>
                 <TableCell>Fat&nbsp;(g)</TableCell>
-                <TableCell>Actions</TableCell>
+                {isPermitted && <TableCell>Actions</TableCell>}
               </TableRow>
             </TableHead>
             <TableBody>
