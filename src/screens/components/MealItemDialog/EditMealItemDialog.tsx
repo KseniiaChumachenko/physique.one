@@ -44,9 +44,9 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
   const [success, setOpenSuccessMessage] = React.useState(false);
 
   const [selectedItemId, setSelectedItemId] = useState(
-    mealItem?.food?.id ?? mealItem?.recipe_id ?? foodLibrary?.[0].id
+    mealItem?.food ?? mealItem?.recipe_id ?? foodLibrary?.[0].id
   );
-  const [weight, setWeight] = useState(100);
+  const [weight, setWeight] = useState(mealItem.weight);
 
   const mealItemProps = () => {
     const food = foodLibrary.find(({ id }) => id === selectedItemId);
