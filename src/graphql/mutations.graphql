@@ -58,64 +58,6 @@ mutation DeleteMealById($id: uuid!) {
   }
 }
 
-mutation AddFood(
-  $name: bpchar
-  $proteins: numeric
-  $fats: numeric
-  $energy_kj: numeric
-  $energy_cal: numeric
-  $carbohydrates: numeric
-  $type: String
-  $u_id: uuid!
-) {
-  insert_food(
-    objects: {
-      name: $name
-      type: $type
-      energy_cal: $energy_cal
-      energy_kj: $energy_kj
-      proteins: $proteins
-      carbohydrates: $carbohydrates
-      fats: $fats
-      u_id: $u_id
-    }
-  ) {
-    affected_rows
-  }
-}
-
-mutation UpdateFood(
-  $id: uuid!
-  $name: bpchar
-  $proteins: numeric
-  $fats: numeric
-  $energy_kj: numeric
-  $energy_cal: numeric
-  $carbohydrates: numeric
-  $type: String
-) {
-  update_food_by_pk(
-    pk_columns: { id: $id }
-    _set: {
-      name: $name
-      energy_cal: $energy_cal
-      energy_kj: $energy_kj
-      proteins: $proteins
-      type: $type
-      fats: $fats
-      carbohydrates: $carbohydrates
-    }
-  ) {
-    id
-  }
-}
-
-mutation DeleteFood($id: uuid!) {
-  delete_food_by_pk(id: $id) {
-    id
-  }
-}
-
 mutation AddMealItem(
   $u_id: uuid
   $proteins: numeric
@@ -190,15 +132,8 @@ mutation CopyDay($meal_items: [meal_item_insert_input!]!, $name: String!, $time:
   }
 }
 
-mutation AddRecipe($u_id: uuid!, $name: String, $description: String) {
-  insert_recipe_one(
-    object: { u_id: $u_id, description: $description }
-  ) {
-    id
-  }
-}
-
 mutation AddRecipeItem(
+  $id: uuid!
   $energy_cal: numeric
   $energy_kj: numeric
   $proteins: numeric
@@ -211,6 +146,7 @@ mutation AddRecipeItem(
 ) {
   insert_recipe_item_one(
     object: {
+      id: $id
       u_id: $u_id
       food_id: $food_id
       recipe_id: $recipe_id
@@ -347,29 +283,8 @@ mutation RegisterFacebookUser(
   }
 }
 
-mutation AddFoodType($decription: String, $img_url: String, $value: String!) {
-  insert_food_type_one(
-    object: { img_url: $img_url, decription: $decription, value: $value }
-  ) {
-    value
-  }
-}
-
 mutation DeleteFoodType($value: String!) {
   delete_food_type_by_pk(value: $value) {
-    value
-  }
-}
-
-mutation UpdateFoodType(
-  $decription: String
-  $img_url: String
-  $value: String!
-) {
-  update_food_type_by_pk(
-    pk_columns: { value: $value }
-    _set: { value: $value, decription: $decription, img_url: $img_url }
-  ) {
     value
   }
 }

@@ -3,17 +3,39 @@ import { NIL } from "uuid";
 import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar } from "src/components/AppBar";
-import { Box, CssBaseline } from "@material-ui/core";
+import {
+  Box,
+  CssBaseline,
+  Backdrop,
+  CircularProgress,
+} from "@material-ui/core";
 import { observer } from "mobx-react-lite";
 import { useStore } from "../store";
 import { DrawerNavigation } from "../components/DrawerNavigation";
-import { Meals } from "./Meals";
-import { FoodLibrary } from "./FoodLibrary";
-import { Recipes } from "./Recipes";
-import { Authorization } from "./Authorization";
-import { PrivacyPolicy } from "./PrivacyPolicy";
-import { Profile } from "./Profile";
-// import { Pantry } from "./Pantry";
+
+const Authorization = React.lazy(() =>
+  import("./Authorization").then((module) => ({
+    default: module.Authorization,
+  }))
+);
+const PrivacyPolicy = React.lazy(() =>
+  import("./PrivacyPolicy").then((module) => ({
+    default: module.PrivacyPolicy,
+  }))
+);
+const Meals = React.lazy(() =>
+  import("./Meals").then((module) => ({ default: module.Meals }))
+);
+const FoodLibrary = React.lazy(() =>
+  import("./FoodLibrary").then((module) => ({ default: module.FoodLibrary }))
+);
+const Recipes = React.lazy(() =>
+  import("./Recipes").then((module) => ({ default: module.Recipes }))
+);
+const Profile = React.lazy(() =>
+  import("./Profile").then((module) => ({ default: module.Profile }))
+);
+// const Pantry = React.lazy(() => import("./Pantry").then((module) => ({default: module.Pantry})));
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -25,12 +47,17 @@ const useStyles = makeStyles((theme) => ({
     }),
     backgroundColor: "#f5f5f5", // TODO: add to palette
   },
+  backdrop: {
+    zIndex: theme.zIndex.drawer - 1,
+    color: "#fff", // TODO: add to palette
+  },
 }));
 
 export const Router = observer(() => {
   const classes = useStyles();
   const {
     userStore: { user },
+    screenStore: { loading },
   } = useStore();
 
   return (
@@ -44,6 +71,9 @@ export const Router = observer(() => {
             <AppBar />
             <DrawerNavigation />
             <main className={classes.content}>
+              <Backdrop className={classes.backdrop} open={loading}>
+                <CircularProgress color="inherit" />
+              </Backdrop>
               <div>
                 {/*<Route path={"/"} component={Summary} exact />*/}
                 <Route path={"/"} component={Meals} exact />

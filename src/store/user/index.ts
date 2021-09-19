@@ -1,9 +1,9 @@
 import { makeAutoObservable, action } from "mobx";
 import { NIL } from "uuid";
-import { gql } from "@apollo/client";
-import { Users } from "../graphql/generated/graphql";
-import { api } from "../api";
-import { RootStore } from "./RootStore";
+import { Users } from "../../graphql/generated/graphql";
+import { api } from "../../api";
+import { RootStore } from "../RootStore";
+import { USERS_LIST_DOCUMENT } from "./USERS_LIST_DOCUMENT";
 
 export const INITIAL_STATE: Users = {
   id: NIL,
@@ -21,21 +21,6 @@ export const INITIAL_STATE: Users = {
   pantry: [],
   pantry_aggregate: { nodes: [] },
 };
-
-const USERS_LIST_DOCUMENT = gql`
-  query Users {
-    users {
-      id
-      first_name
-      last_name
-      full_name
-      user_name
-      email
-      fb_id
-      fb_picture_url
-    }
-  }
-`;
 
 export class UserStore {
   rootStore: RootStore;

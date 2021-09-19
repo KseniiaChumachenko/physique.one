@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { observer } from "mobx-react-lite";
+import { NIL, v4 as uuid } from "uuid";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   createStyles,
@@ -8,35 +10,16 @@ import {
 } from "@material-ui/core";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { MealAutocomplete } from "../../components/MealAutocomplete";
-import {
-  Recipe_Item,
-  useAddRecipeItemMutation,
-  useDeleteRecipeItemByPkMutation,
-  useFoodSelectFieldListingQuery,
-  useUpdateRecipeItemByPkMutation,
-} from "../../graphql/generated/graphql";
+import { Recipe_Item } from "../../graphql/generated/graphql";
 import { useStore } from "../../store";
 import { getRowValues } from "./utils";
-
-const EMPTY_FOOD_ITEM = {
-  id: 0,
-  name: "",
-  type: "",
-  carbohydrates: 0,
-  proteins: 0,
-  fats: 0,
-  energy_cal: 0,
-  energy_kj: 0,
-  u_id: 0,
-};
 
 interface Props {
   recipe_id?: string;
   row: Partial<Recipe_Item>;
-  mode?: "add" | "regularRow";
   u_id: string;
-  onClickOutside(): void;
   coefficientForPortions: number;
+  onDiscardAddRow?: () => void;
 }
 
 const useStyles = makeStyles((theme) =>
@@ -57,220 +40,137 @@ const useStyles = makeStyles((theme) =>
 // TODO(#8): unify food selector across app
 // TODO: error handling
 
-export const RecipeTableEditableRow = ({
-  recipe_id,
-  row: basePortionRow,
-  mode,
-  u_id,
-  onClickOutside,
-  coefficientForPortions,
-}: Props) => {
-  const classes = useStyles();
-  const {
-    userStore: {
-      user: { id: userId },
-    },
-  } = useStore();
+export const RecipeTableEditableRow = observer(
+  ({
+    recipe_id,
+    row: basePortionRow,
+    u_id,
+    coefficientForPortions,
+    onDiscardAddRow,
+  }: Props) => {
+    const classes = useStyles();
+    const {
+      userStore: {
+        user: { id: userId },
+      },
+      foodLibraryStore: { data },
+      recipeStore: { addRecipeItem, updateRecipeItem, deleteRecipeItem },
+    } = useStore();
 
-  const { data } = useFoodSelectFieldListingQuery();
+    const isPermitted = userId === u_id;
+    const isNewRecipeItem = basePortionRow?.id === NIL;
 
-  const isPermitted = userId === u_id;
-  const [isInEditMode, setEditMode] = useState(mode === "add");
+    const [isInEditMode, setEditMode] = useState(isNewRecipeItem);
 
-  const [updatedRowFood, setUpdatedRowFood] = useState(() => {
-    if (basePortionRow?.food?.id) {
-      return basePortionRow.food?.id;
-    } else {
-      return data?.food[0].id || EMPTY_FOOD_ITEM;
-    }
-  });
+    const [rowFoodId, setRowFoodId] = useState(basePortionRow?.food?.id);
+    const [rowFoodWeight, setRowFoodWeight] = useState(basePortionRow?.weight);
 
-  const [updatedRowWeight, setUpdatedRowWeight] = useState(
-    basePortionRow?.weight || 100
-  );
+    const foodById = data.find(
+      (item) => item.id === (rowFoodId ?? data[0].id)
+    )!;
+    const row = {
+      id: basePortionRow.id,
+      food_id: foodById?.id,
+      food: foodById,
+      recipe_id,
+      u_id,
+      ...getRowValues(
+        foodById,
+        rowFoodWeight,
+        isInEditMode ? 1 : coefficientForPortions
+      ),
+    };
 
-  const [
-    update_recipe_item_by_pk,
-    { loading: updateLoading },
-  ] = useUpdateRecipeItemByPkMutation({
-    onCompleted: () => setEditMode(false),
-  });
+    const handleSubmit = isInEditMode
+      ? isNewRecipeItem
+        ? () => addRecipeItem({ ...row, id: uuid() }, onDiscardAddRow)
+        : () => updateRecipeItem(row, () => setEditMode(false))
+      : undefined;
 
-  const [delete_recipe_item_by_pk] = useDeleteRecipeItemByPkMutation({
-    onCompleted: () => {
-      setEditMode(false);
-      onClickOutside();
-    },
-  });
+    const handleCancel = isInEditMode
+      ? () => {
+          setEditMode(false);
+          onDiscardAddRow?.();
+        }
+      : undefined;
 
-  const [
-    insert_recipe_item_one,
-    { loading: addLoading },
-  ] = useAddRecipeItemMutation({
-    onCompleted: onClickOutside,
-  });
+    const handleEdit = !isInEditMode ? () => setEditMode(true) : undefined;
 
-  const foodById =
-    data?.food.find((item) => item.id === updatedRowFood) || EMPTY_FOOD_ITEM;
+    const handleDelete = !isNewRecipeItem
+      ? () => deleteRecipeItem(row.id)
+      : undefined;
 
-  const editModeNutrients = getRowValues(foodById as any, updatedRowWeight, 1);
-
-  const row = {
-    id: basePortionRow.id,
-    food: foodById,
-    ...getRowValues(foodById as any, updatedRowWeight, coefficientForPortions),
-  };
-
-  const loading = updateLoading || addLoading;
-  return (
-    <>
-      {loading && <div />}
-
-      {!loading && (
-        <TableRow>
-          {isInEditMode ? (
-            <>
-              <TableCell
-                component="th"
-                scope="row"
-                className={classes.foodCell}
-                children={
-                  row.food && (
-                    <MealAutocomplete
-                      disabled={loading}
-                      value={row.food}
-                      setValue={(food: any) => setUpdatedRowFood(food.id)}
-                      withRecipes={false}
-                    />
-                  )
-                }
-              />
-              <TableCell
-                component="th"
-                scope="row"
-                children={
-                  <TextField
-                    disabled={loading}
-                    defaultValue={row?.weight}
-                    type={"number"}
-                    onChange={(event: any) =>
-                      setUpdatedRowWeight(event?.target?.value)
-                    }
-                    className={classes.weightInput}
-                  />
-                }
-              />
-            </>
-          ) : (
-            <>
-              <TableCell
-                component="th"
-                scope="row"
-                children={row?.food?.name}
-                className={classes.foodCell}
-              />
-              <TableCell component="th" scope="row" children={row?.weight} />
-            </>
-          )}
-          <TableCell
-            component="th"
-            scope="row"
-            children={
-              <React.Fragment>
-                {isInEditMode || mode === "add"
-                  ? editModeNutrients?.energy_cal
-                  : row?.energy_cal}
-                &nbsp;|&nbsp;
-                {isInEditMode || mode === "add"
-                  ? editModeNutrients?.energy_kj
-                  : row?.energy_kj}
-              </React.Fragment>
-            }
-          />
-          <TableCell
-            component="th"
-            scope="row"
-            children={
-              isInEditMode || mode === "add"
-                ? editModeNutrients?.proteins
-                : row?.proteins
-            }
-          />
-          <TableCell
-            component="th"
-            scope="row"
-            children={
-              isInEditMode || mode === "add"
-                ? editModeNutrients?.carbohydrates
-                : row?.carbohydrates
-            }
-          />
-          <TableCell
-            component="th"
-            scope="row"
-            children={
-              isInEditMode || mode === "add"
-                ? editModeNutrients?.fats
-                : row?.fats
-            }
-          />
-          <TableCell
-            component="th"
-            scope="row"
-            children={
-              isPermitted && (
-                <EditDeleteButtonGroup
-                  onConfirmClick={
-                    isInEditMode
-                      ? mode === "add"
-                        ? () =>
-                            insert_recipe_item_one({
-                              variables: {
-                                ...editModeNutrients,
-                                recipe_id,
-                                u_id,
-                                food_id: updatedRowFood,
-                                weight: updatedRowWeight,
-                              },
-                            })
-                        : () =>
-                            update_recipe_item_by_pk({
-                              variables: {
-                                ...editModeNutrients,
-                                id: row.id,
-                                food_id: updatedRowFood,
-                                weight: updatedRowWeight,
-                              },
-                            })
-                      : undefined
-                  }
-                  onCancelClick={
-                    isInEditMode
-                      ? () => {
-                          setEditMode(false);
-                          onClickOutside();
-                        }
-                      : undefined
-                  }
-                  onEditClick={
-                    !(isInEditMode || mode === "add")
-                      ? () => setEditMode(row.id)
-                      : undefined
-                  }
-                  onDeleteClick={
-                    !(mode === "add")
-                      ? () =>
-                          delete_recipe_item_by_pk({
-                            variables: { id: row.id },
-                          })
-                      : undefined
-                  }
+    return (
+      <TableRow>
+        {isInEditMode ? (
+          <>
+            <TableCell
+              component="th"
+              scope="row"
+              className={classes.foodCell}
+              children={
+                <MealAutocomplete
+                  value={row.food?.id}
+                  setValue={setRowFoodId}
+                  withRecipes={false}
                 />
-              )
-            }
-          />
-        </TableRow>
-      )}
-    </>
-  );
-};
+              }
+            />
+            <TableCell
+              component="th"
+              scope="row"
+              children={
+                <TextField
+                  value={rowFoodWeight}
+                  type={"number"}
+                  onChange={(event: any) =>
+                    setRowFoodWeight(event?.target?.value)
+                  }
+                  className={classes.weightInput}
+                />
+              }
+            />
+          </>
+        ) : (
+          <>
+            <TableCell
+              component="th"
+              scope="row"
+              children={row?.food?.name}
+              className={classes.foodCell}
+            />
+            <TableCell component="th" scope="row" children={row?.weight} />
+          </>
+        )}
+        <TableCell
+          component="th"
+          scope="row"
+          children={
+            <React.Fragment>
+              {row?.energy_cal}
+              &nbsp;|&nbsp;
+              {row?.energy_kj}
+            </React.Fragment>
+          }
+        />
+        <TableCell component="th" scope="row" children={row?.proteins} />
+        <TableCell component="th" scope="row" children={row?.carbohydrates} />
+        <TableCell component="th" scope="row" children={row?.fats} />
+        <TableCell
+          component="th"
+          scope="row"
+          children={
+            isPermitted && (
+              <EditDeleteButtonGroup
+                onConfirmClick={handleSubmit}
+                onCancelClick={handleCancel}
+                onEditClick={handleEdit}
+                onDeleteClick={handleDelete}
+              />
+            )
+          }
+        />
+      </TableRow>
+    );
+  }
+);

@@ -16,10 +16,8 @@ import {
   Meal_Item,
   useUpdateMealItemMutation,
 } from "../../../graphql/generated/graphql";
-import {
-  FoodOptionalType,
-  MealAutocomplete,
-} from "../../../components/MealAutocomplete";
+import { MealAutocomplete } from "../../../components/MealAutocomplete";
+import { aggregate } from "../../Recipes/utils";
 
 const useStyles = makeStyles(() => ({
   field: {
@@ -38,28 +36,61 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
   const classes = useStyles();
   const {
     userStore: { user },
+    foodLibraryStore: { data: foodLibrary },
+    recipeStore: { data: recipeLibrary },
   } = useStore();
 
   const [error, setOpenErrorMessage] = React.useState<string | undefined>();
   const [success, setOpenSuccessMessage] = React.useState(false);
 
-  const [selectedFood, setSelectedFood] = useState<FoodOptionalType>(
-    mealItem.recipe_id || mealItem.food
+  const [selectedItemId, setSelectedItemId] = useState(
+    mealItem?.food ?? mealItem?.recipe_id ?? foodLibrary?.[0].id
   );
   const [weight, setWeight] = useState(mealItem.weight);
 
-  const mealItemProps = !(typeof selectedFood === "string") && {
-    recipe_id: selectedFood?.recipe ? selectedFood?.recipe_id : null,
-    food: !selectedFood?.recipe ? selectedFood?.id : null,
+  const mealItemProps = () => {
+    const food = foodLibrary.find(({ id }) => id === selectedItemId);
+    if (food) {
+      const weightAdjustment = (divider: number) =>
+        (divider / (food?.weight || 100)) * weight;
+      return {
+        food: food?.id,
 
-    energy_cal:
-      (selectedFood?.energy_cal / (selectedFood?.weight || 100)) * weight,
-    energy_kj:
-      (selectedFood?.energy_kj / (selectedFood?.weight || 100)) * weight,
-    proteins: (selectedFood?.proteins / (selectedFood?.weight || 100)) * weight,
-    carbohydrates:
-      (selectedFood?.carbohydrates / (selectedFood?.weight || 100)) * weight,
-    fats: (selectedFood?.fats / (selectedFood?.weight || 100)) * weight,
+        energy_cal: weightAdjustment(food?.energy_cal),
+        energy_kj: weightAdjustment(food?.energy_kj),
+        proteins: weightAdjustment(food?.proteins),
+        carbohydrates: weightAdjustment(food?.carbohydrates),
+        fats: weightAdjustment(food?.fats),
+      };
+    } else {
+      const recipe = recipeLibrary.find(({ id }) => id === selectedItemId);
+
+      if (recipe) {
+        const recipeWeight = aggregate(recipe.recipe_items, "weight");
+        const weightAdjustment = (divider: number) =>
+          (divider / recipeWeight) * weight;
+
+        return {
+          id: recipe.id,
+          recipe_id: recipe.id,
+          name: recipe.name,
+          carbohydrates: weightAdjustment(
+            aggregate(recipe.recipe_items, "carbohydrates")
+          ),
+          proteins: weightAdjustment(
+            aggregate(recipe.recipe_items, "proteins")
+          ),
+          fats: weightAdjustment(aggregate(recipe.recipe_items, "fats")),
+          energy_cal: weightAdjustment(
+            aggregate(recipe.recipe_items, "energy_cal")
+          ),
+          energy_kj: weightAdjustment(
+            aggregate(recipe.recipe_items, "energy_kj")
+          ),
+          weight: weightAdjustment(aggregate(recipe.recipe_items, "weight")),
+        };
+      }
+    }
   };
 
   const [update_meal_item_by_pk] = useUpdateMealItemMutation({
@@ -75,7 +106,7 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
       u_id: user?.id,
       weight,
       meal_id: mealItem.meal_id,
-      ...mealItemProps,
+      ...mealItemProps(),
     },
   });
 
@@ -84,10 +115,10 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
       <Dialog open={open} onClose={() => setOpen(false)}>
         <DialogTitle>Meal item</DialogTitle>
         <DialogContent>
-          {selectedFood && (
+          {selectedItemId && (
             <MealAutocomplete
-              value={selectedFood}
-              setValue={setSelectedFood}
+              value={selectedItemId}
+              setValue={setSelectedItemId}
               className={classes.field}
             />
           )}
