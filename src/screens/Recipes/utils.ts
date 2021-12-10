@@ -40,5 +40,11 @@ export const getRowValues = (
   fats: getNutrientAccordingToWeight(food.fats, weight, portionCoefficient),
 });
 
-export const aggregate = (recipeItems: Recipe_Item[], arg: string) =>
-  recipeItems.map((i) => i[arg]).reduce((acc, i) => acc + i);
+export const aggregate = (recipeItems: Recipe_Item[], arg: string) => {
+  const map = recipeItems.map((i) => i[arg]);
+  if (map.length > 0) {
+    return map.reduce((acc, i) => acc + i);
+  }
+
+  return 0;
+};
