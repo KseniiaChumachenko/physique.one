@@ -1211,7 +1211,6 @@ type mutation_root {
 "columns and relationships of \"pantry\""
 type pantry {
     id: uuid!
-    name: name!
     "An array relationship"
     pantry_items(
         "distinct select on columns"
@@ -1290,6 +1289,7 @@ type pantry {
         "filter the rows returned"
         where: pantry_user_bool_exp
     ): pantry_user_aggregate!
+    value: name!
 }
 
 "aggregated selection of \"pantry\""
@@ -1522,8 +1522,6 @@ type pantry_mutation_response {
 "columns and relationships of \"pantry_user\""
 type pantry_user {
     id: uuid!
-    "An object relationship"
-    pantry: pantry!
     pantry_id: uuid!
     "An object relationship"
     user: users!
@@ -1909,7 +1907,7 @@ type recipe {
         "filter the rows returned"
         where: meal_item_bool_exp
     ): meal_item_aggregate!
-    name: String!
+    name: String
     portions: Int
     "An array relationship"
     recipe_items(
@@ -2521,7 +2519,7 @@ type users {
     email: String
     fb_id: String
     fb_picture_url: String
-    first_name: name
+    first_name: String
     "An array relationship"
     food(
         "distinct select on columns"
@@ -2550,7 +2548,7 @@ type users {
     ): food_aggregate!
     full_name: String
     id: uuid!
-    last_name: name
+    last_name: String
     "An array relationship"
     meal_items(
         "distinct select on columns"
@@ -2682,7 +2680,7 @@ type users {
         "filter the rows returned"
         where: recipe_bool_exp
     ): recipe_aggregate!
-    user_name: name
+    user_name: String
 }
 
 "aggregated selection of \"users\""
@@ -2703,9 +2701,12 @@ type users_max_fields {
     email: String
     fb_id: String
     fb_picture_url: String
+    first_name: String
     full_name: String
     id: uuid
+    last_name: String
     password: String
+    user_name: String
 }
 
 "aggregate min on columns"
@@ -2713,9 +2714,12 @@ type users_min_fields {
     email: String
     fb_id: String
     fb_picture_url: String
+    first_name: String
     full_name: String
     id: uuid
+    last_name: String
     password: String
+    user_name: String
 }
 
 "response of any mutation on the table \"users\""
@@ -3099,7 +3103,7 @@ enum pantry_select_column {
     "column name"
     id
     "column name"
-    name
+    value
 }
 
 "update columns of table \"pantry\""
@@ -3107,7 +3111,7 @@ enum pantry_update_column {
     "column name"
     id
     "column name"
-    name
+    value
 }
 
 "unique or primary key constraints on table \"pantry_user\""
@@ -3293,6 +3297,18 @@ enum users_update_column {
     "column name"
     user_name
 }
+
+scalar bpchar
+
+scalar date
+
+scalar name
+
+scalar numeric
+
+scalar time
+
+scalar uuid
 
 "expression to compare columns of type Int. All fields are combined with logical 'AND'."
 input Int_comparison_exp {
@@ -4418,19 +4434,19 @@ input pantry_bool_exp {
     _not: pantry_bool_exp
     _or: [pantry_bool_exp]
     id: uuid_comparison_exp
-    name: name_comparison_exp
     pantry_items: pantry_items_bool_exp
     pantry_jars: pantry_jars_bool_exp
     pantry_users: pantry_user_bool_exp
+    value: name_comparison_exp
 }
 
 "input type for inserting data into table \"pantry\""
 input pantry_insert_input {
     id: uuid
-    name: name
     pantry_items: pantry_items_arr_rel_insert_input
     pantry_jars: pantry_jars_arr_rel_insert_input
     pantry_users: pantry_user_arr_rel_insert_input
+    value: name
 }
 
 "order by aggregate values of table \"pantry_items\""
@@ -4748,10 +4764,10 @@ input pantry_on_conflict {
 "ordering options when selecting data from \"pantry\""
 input pantry_order_by {
     id: order_by
-    name: order_by
     pantry_items_aggregate: pantry_items_aggregate_order_by
     pantry_jars_aggregate: pantry_jars_aggregate_order_by
     pantry_users_aggregate: pantry_user_aggregate_order_by
+    value: order_by
 }
 
 "primary key columns input for table: \"pantry\""
@@ -4762,7 +4778,7 @@ input pantry_pk_columns_input {
 "input type for updating data in table \"pantry\""
 input pantry_set_input {
     id: uuid
-    name: name
+    value: name
 }
 
 "order by aggregate values of table \"pantry_user\""
@@ -4784,7 +4800,6 @@ input pantry_user_bool_exp {
     _not: pantry_user_bool_exp
     _or: [pantry_user_bool_exp]
     id: uuid_comparison_exp
-    pantry: pantry_bool_exp
     pantry_id: uuid_comparison_exp
     user: users_bool_exp
     user_id: uuid_comparison_exp
@@ -4793,7 +4808,6 @@ input pantry_user_bool_exp {
 "input type for inserting data into table \"pantry_user\""
 input pantry_user_insert_input {
     id: uuid
-    pantry: pantry_obj_rel_insert_input
     pantry_id: uuid
     user: users_obj_rel_insert_input
     user_id: uuid
@@ -4829,7 +4843,6 @@ input pantry_user_on_conflict {
 "ordering options when selecting data from \"pantry_user\""
 input pantry_user_order_by {
     id: order_by
-    pantry: pantry_order_by
     pantry_id: order_by
     user: users_order_by
     user_id: order_by
@@ -5277,18 +5290,18 @@ input users_bool_exp {
     email: String_comparison_exp
     fb_id: String_comparison_exp
     fb_picture_url: String_comparison_exp
-    first_name: name_comparison_exp
+    first_name: String_comparison_exp
     food: food_bool_exp
     full_name: String_comparison_exp
     id: uuid_comparison_exp
-    last_name: name_comparison_exp
+    last_name: String_comparison_exp
     meal_items: meal_item_bool_exp
     meals: meal_bool_exp
     pantry: pantry_user_bool_exp
     password: String_comparison_exp
     recipe_items: recipe_item_bool_exp
     recipes: recipe_bool_exp
-    user_name: name_comparison_exp
+    user_name: String_comparison_exp
 }
 
 "input type for inserting data into table \"users\""
@@ -5296,18 +5309,18 @@ input users_insert_input {
     email: String
     fb_id: String
     fb_picture_url: String
-    first_name: name
+    first_name: String
     food: food_arr_rel_insert_input
     full_name: String
     id: uuid
-    last_name: name
+    last_name: String
     meal_items: meal_item_arr_rel_insert_input
     meals: meal_arr_rel_insert_input
     pantry: pantry_user_arr_rel_insert_input
     password: String
     recipe_items: recipe_item_arr_rel_insert_input
     recipes: recipe_arr_rel_insert_input
-    user_name: name
+    user_name: String
 }
 
 "order by max() on columns of table \"users\""
@@ -5315,9 +5328,12 @@ input users_max_order_by {
     email: order_by
     fb_id: order_by
     fb_picture_url: order_by
+    first_name: order_by
     full_name: order_by
     id: order_by
+    last_name: order_by
     password: order_by
+    user_name: order_by
 }
 
 "order by min() on columns of table \"users\""
@@ -5325,9 +5341,12 @@ input users_min_order_by {
     email: order_by
     fb_id: order_by
     fb_picture_url: order_by
+    first_name: order_by
     full_name: order_by
     id: order_by
+    last_name: order_by
     password: order_by
+    user_name: order_by
 }
 
 "input type for inserting object relation for remote table \"users\""
@@ -5372,12 +5391,12 @@ input users_set_input {
     email: String
     fb_id: String
     fb_picture_url: String
-    first_name: name
+    first_name: String
     full_name: String
     id: uuid
-    last_name: name
+    last_name: String
     password: String
-    user_name: name
+    user_name: String
 }
 
 "expression to compare columns of type uuid. All fields are combined with logical 'AND'."
@@ -5392,16 +5411,3 @@ input uuid_comparison_exp {
     _neq: uuid
     _nin: [uuid!]
 }
-
-
-scalar bpchar
-
-scalar date
-
-scalar name
-
-scalar numeric
-
-scalar time
-
-scalar uuid

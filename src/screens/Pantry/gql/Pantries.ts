@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 const PANTRIES_LISTING_DOCUMENT = gql`
   query PantriesListing($u_id: uuid!) {
     pantry(where: { pantry_users: { user_id: { _eq: $u_id } } }) {
-      name
+      value
       id
       pantry_users {
         user {
@@ -21,11 +21,11 @@ const PANTRIES_LISTING_DOCUMENT = gql`
 
 const ADD_PANTRY_DOCUMENT = gql`
   mutation AddPantry(
-    $name: name
+    $value: name
     $pantry_users: pantry_user_arr_rel_insert_input
   ) {
-    insert_pantry_one(object: { name: $name, pantry_users: $pantry_users }) {
-      name
+    insert_pantry_one(object: { value: $value, pantry_users: $pantry_users }) {
+      value
       pantry_users {
         user_id
       }
@@ -44,9 +44,9 @@ const ADD_PANTRY_USER_DOCUMENT = gql`
 `;
 
 const UPDATE_PANTRY_NAME_DOCUMENT = gql`
-  mutation EditPantryDocument($id: uuid!, $name: name) {
-    update_pantry_by_pk(pk_columns: { id: $id }, _set: { name: $name }) {
-      name
+  mutation EditPantryDocument($id: uuid!, $value: name) {
+    update_pantry_by_pk(pk_columns: { id: $id }, _set: { value: $value }) {
+      value
     }
   }
 `;

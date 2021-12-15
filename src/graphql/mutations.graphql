@@ -237,11 +237,11 @@ mutation DeleteRecipeItemByPK($id: uuid!) {
 }
 
 mutation Register(
-  $first_name: name
+  $first_name: String
   $full_name: String
-  $last_name: name
+  $last_name: String
   $password: String
-  $user_name: name
+  $user_name: String
   $email: String
 ) {
   insert_users_one(

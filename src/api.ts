@@ -11,7 +11,7 @@ import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLError } from "graphql";
 
 const GQL_WS_ENDPOINT = process.env.GQL_WS_ENDPOINT || "";
-const GQL_HTTPS_ENDPOINT = process.env.GQL_HTTPS_ENDPOINT || "";
+export const GQL_HTTPS_ENDPOINT = process.env.GQL_HTTPS_ENDPOINT || "";
 
 const headers = {
   headers: {
