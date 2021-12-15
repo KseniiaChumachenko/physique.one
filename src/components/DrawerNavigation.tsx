@@ -98,7 +98,10 @@ export const DrawerNavigation = observer(() => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-  const handleRedirectToProfile = () => handleChangeRoute("/profile");
+  const handleRedirectToProfile = () => {
+    handleMenuClose();
+    handleChangeRoute("/profile")();
+  };
   const handleLogOut = () => {
     resetUser();
     handleMenuClose();
@@ -174,7 +177,7 @@ export const DrawerNavigation = observer(() => {
           >
             <Avatar
               src={user.fb_picture_url || ""}
-              children={user.first_name.toString().slice(0, 1)}
+              children={user.first_name?.toString().slice(0, 1)}
               className={classes.avatar}
             />
             <ListItemText primary={`${user.first_name} ${user.last_name}`} />

@@ -1,7 +1,16 @@
-import React from "react";
+import React, { Suspense, useEffect } from "react";
+import { PreloadedQuery } from "react-relay";
 import { makeStyles } from "@material-ui/core/styles";
-import { Avatar, Card, CardHeader, createStyles } from "@material-ui/core";
-import { useStore } from "src/store";
+import {
+  Avatar,
+  Card,
+  CardHeader,
+  CircularProgress,
+  createStyles,
+} from "@material-ui/core";
+import { useUserPreloadedQuery, useUserQuery } from "../../api-hooks/user";
+import { userQuery } from "../../graphql/__generated__/userQuery.graphql";
+import { useStore } from "../../store";
 
 export const useStyles = makeStyles((theme) =>
   createStyles({
@@ -12,11 +21,16 @@ export const useStyles = makeStyles((theme) =>
   })
 );
 
-export const Profile = () => {
+const Container = ({
+  queryRef,
+}: {
+  queryRef: PreloadedQuery<userQuery, Record<string, unknown>>;
+}) => {
   const { avatar } = useStyles();
-  const {
-    userStore: { user },
-  } = useStore();
+
+  const data = useUserPreloadedQuery(queryRef);
+
+  const user = data.users[0];
 
   return (
     <div>
@@ -34,5 +48,24 @@ export const Profile = () => {
         />
       </Card>
     </div>
+  );
+};
+
+export const Profile = () => {
+  const {
+    userStore: {
+      user: { id },
+    },
+  } = useStore();
+  const [queryRef, loadQuery] = useUserQuery();
+
+  useEffect(() => {
+    loadQuery({ id });
+  }, []);
+
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      {queryRef && <Container queryRef={queryRef} />}
+    </Suspense>
   );
 };
