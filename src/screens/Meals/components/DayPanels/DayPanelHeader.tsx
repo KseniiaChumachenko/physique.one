@@ -16,11 +16,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Trans } from "@lingui/react";
 import { ApolloError } from "@apollo/client";
 import { Alert } from "@material-ui/lab";
+import { useMealItemMacrosSumByDateSubscription } from "src/graphql/generated/graphql";
 import {
   AddMealMutationVariables,
   useAddMealMutation,
-  useMealItemMacrosSumByDateSubscription,
-} from "src/graphql/generated/graphql";
+} from "src/api-hooks/mealsByDate";
 import { useStore } from "src/store";
 import { AddMealDialog } from "../../../components/AddMealDialog";
 import { AggregationChips } from "../../../../components/AggredationChips";
@@ -41,16 +41,16 @@ const useStyles = makeStyles((theme) => ({
 
 interface Props {
   date: string;
+
+  refetchMeals: () => void;
 }
 
-export const DayPanelHeader = ({ date }: Props) => {
+export const DayPanelHeader = ({ date, refetchMeals }: Props) => {
   const classes = useStyles();
   const {
     userStore: { user },
   } = useStore();
-  const [error, setOpenErrorMessage] = React.useState<ApolloError | boolean>(
-    false
-  );
+  const [error, setOpenErrorMessage] = React.useState<Error | boolean>(false);
   const [success, setOpenSuccessMessage] = React.useState(false);
   const [openAddDialog, setOpenAddMealDialog] = useState(false);
   const [openCopyDayDialog, setOpenCopyDayDialog] = useState(false);
@@ -59,10 +59,7 @@ export const DayPanelHeader = ({ date }: Props) => {
     variables: { date, u_id: user?.id },
   });
 
-  const [insert_meal_one] = useAddMealMutation({
-    onCompleted: () => setOpenAddMealDialog(false),
-    onError: (error) => setOpenErrorMessage(error),
-  });
+  const [commitMeal] = useAddMealMutation();
 
   const handleOpenAddMealDialog = () => setOpenAddMealDialog(true);
 
@@ -71,7 +68,14 @@ export const DayPanelHeader = ({ date }: Props) => {
   const handleConfirm = (variables: AddMealMutationVariables) => (
     event: any
   ) => {
-    insert_meal_one({ variables });
+    commitMeal({
+      variables,
+      onCompleted: () => {
+        refetchMeals();
+        setOpenAddMealDialog(false);
+      },
+      onError: (error) => setOpenErrorMessage(error),
+    });
     event.stopPropagation();
   };
 
@@ -160,7 +164,7 @@ export const DayPanelHeader = ({ date }: Props) => {
           onClose={() => setOpenErrorMessage(false)}
         >
           <Alert severity={"error"} onClose={() => setOpenErrorMessage(false)}>
-            {error instanceof ApolloError ? error.message : ("Error" as any)}
+            {error instanceof Error ? error.message : ("Error" as any)}
           </Alert>
         </Snackbar>
       )}

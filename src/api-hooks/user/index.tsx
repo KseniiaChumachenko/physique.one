@@ -4,7 +4,7 @@ import {
   usePreloadedQuery,
   PreloadedQuery,
 } from "react-relay";
-import { userQuery } from "../../graphql/__generated__/userQuery.graphql";
+import { userQuery } from "./__generated__/userQuery.graphql";
 
 export const UserQuery = graphql`
   query userQuery($id: uuid) {

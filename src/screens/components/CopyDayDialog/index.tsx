@@ -1,32 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { v4 as uuid } from "uuid";
 import {
   DialogTitle,
   Dialog,
-  DialogContent,
+  DialogContent as MDialogContent,
   DialogContentText,
   TextField,
   Button,
   DialogActions,
   Snackbar,
+  CircularProgress,
 } from "@material-ui/core";
 import { DatePicker } from "@material-ui/pickers";
 import { Alert } from "@material-ui/lab";
 import { Trans } from "@lingui/react";
-import {
-  useCopyDayMutation,
-  useMealsByDateSubscription,
-} from "../../../graphql/generated/graphql";
+import { useCopyDayMutation } from "../../../graphql/generated/graphql";
 import { useStore } from "../../../store";
+import {
+  useMealsByDateQuery,
+  useMealsPreloadedQuery,
+  MealsByDatePreloadedHookProps,
+} from "../../../api-hooks/mealsByDate";
 
-interface Props {
-  open: boolean;
-  setOpen: any;
-
-  date: string;
+interface ContainerProps extends MealsByDatePreloadedHookProps {
+  refetch: () => void;
+  onClose: (e?: any) => void;
 }
 
-export const CopyDayDialog = ({ open, setOpen, date }: Props) => {
+const DialogContent = ({
+  queryReference,
+  refetch,
+  onClose,
+}: ContainerProps) => {
+  const data = useMealsPreloadedQuery(queryReference);
   const {
     userStore: {
       user: { id: u_id },
@@ -37,24 +43,16 @@ export const CopyDayDialog = ({ open, setOpen, date }: Props) => {
   const [error, setError] = useState("");
   const [insertDate, setInsertDate] = useState(null);
 
-  const { data, loading: getLoading } = useMealsByDateSubscription({
-    variables: { date, u_id },
-  });
-
   const [insert_day_copy, { loading: postLoading }] = useCopyDayMutation({
     onCompleted: (data) => {
+      refetch();
       setSuccess(
         `Copied  ${data.insert_meal?.affected_rows} rows successfully`
       );
-      setOpen(false);
+      onClose();
     },
     onError: (error) => setError(error.message),
   });
-
-  const handleClose = (event: any) => {
-    setOpen(false);
-    event.stopPropagation();
-  };
 
   const newMeals = data?.meal.map((m) => {
     const meal_id = uuid();
@@ -90,16 +88,8 @@ export const CopyDayDialog = ({ open, setOpen, date }: Props) => {
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">
-        <Trans>Copy meals</Trans>
-      </DialogTitle>
-      <DialogContent>
+    <>
+      <MDialogContent>
         <DialogContentText id="alert-dialog-description">
           <DatePicker
             renderInput={(props: any) => (
@@ -121,17 +111,13 @@ export const CopyDayDialog = ({ open, setOpen, date }: Props) => {
             //autoOk={true}
           />
         </DialogContentText>
-      </DialogContent>
+      </MDialogContent>
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          color="primary"
-          disabled={getLoading || postLoading}
-        >
+        <Button onClick={onClose} color="primary" disabled={postLoading}>
           <Trans>Cancel</Trans>
         </Button>
         <Button
-          disabled={getLoading || postLoading}
+          disabled={postLoading}
           onClick={handleSubmit}
           color="primary"
           autoFocus
@@ -163,6 +149,48 @@ export const CopyDayDialog = ({ open, setOpen, date }: Props) => {
           </Alert>
         </Snackbar>
       )}
+    </>
+  );
+};
+
+interface Props {
+  open: boolean;
+  setOpen: any;
+  date: string;
+}
+
+export const CopyDayDialog = ({ open, setOpen, date }: Props) => {
+  const {
+    userStore: {
+      user: { id: u_id },
+    },
+  } = useStore();
+  const { queryReference, refetch } = useMealsByDateQuery({ u_id, date });
+
+  const handleClose = (event: any) => {
+    setOpen(false);
+    event.stopPropagation();
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        <Trans>Copy meals</Trans>
+      </DialogTitle>
+      <Suspense fallback={<CircularProgress />}>
+        {queryReference && (
+          <DialogContent
+            onClose={handleClose}
+            queryReference={queryReference}
+            refetch={refetch}
+          />
+        )}
+      </Suspense>
     </Dialog>
   );
 };
