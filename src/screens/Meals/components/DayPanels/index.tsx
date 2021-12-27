@@ -1,12 +1,17 @@
-import React from "react";
-import { ExpansionPanel, ExpansionPanelDetails } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { Suspense } from "react";
 import {
-  Meal_Item,
-  useMealsByDateSubscription,
-} from "src/graphql/generated/graphql";
-import { ToastMessage } from "src/components/ToastMessage";
+  CircularProgress,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { Meal_Item } from "src/graphql/generated/graphql";
 import { useStore } from "src/store";
+import {
+  MealsByDatePreloadedHookProps,
+  useMealsByDateQuery,
+  useMealsPreloadedQuery,
+} from "src/api-hooks/mealsByDate";
 import { DayPanelHeader } from "./DayPanelHeader";
 import { PanelSummary } from "./PanelSummary";
 import { PanelDetailTable } from "./PanelDetailTable";
@@ -52,26 +57,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props {
+interface PanelsProps extends MealsByDatePreloadedHookProps {
   date: string;
+  refethMeals: () => void;
 }
 
-export const DayPanels = ({ date }: Props) => {
+const Panels = ({ date, queryReference, refethMeals }: PanelsProps) => {
   const classes = useStyles();
-  const {
-    userStore: { user },
-  } = useStore();
-  const { data, error } = useMealsByDateSubscription({
-    variables: { date, u_id: user?.id },
-  });
 
-  if (error) {
-    return <ToastMessage severity={"error"} children={error.message as any} />;
-  }
+  const data = useMealsPreloadedQuery(queryReference);
 
   return (
     <ExpansionPanel className={classes.parentExpPanel} key={date + "Header"}>
-      <DayPanelHeader date={date} />
+      <DayPanelHeader date={date} refetchMeals={refethMeals} />
       <ExpansionPanelDetails
         className={classes.parentExpPanelDetails}
         key={date + "panelDetail"}
@@ -98,5 +96,32 @@ export const DayPanels = ({ date }: Props) => {
         ))}
       </ExpansionPanelDetails>
     </ExpansionPanel>
+  );
+};
+
+interface Props {
+  date: string;
+}
+
+export const DayPanels = ({ date }: Props) => {
+  const {
+    userStore: { user },
+  } = useStore();
+
+  const { queryReference, refetch } = useMealsByDateQuery({
+    date,
+    u_id: user?.id,
+  });
+
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      {queryReference && (
+        <Panels
+          date={date}
+          queryReference={queryReference}
+          refethMeals={refetch}
+        />
+      )}
+    </Suspense>
   );
 };

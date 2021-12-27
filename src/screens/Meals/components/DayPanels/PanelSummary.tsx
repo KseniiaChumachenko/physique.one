@@ -55,13 +55,15 @@ export const PanelSummary = ({ name, id, time }: SummaryProps) => {
               />
             ) : null}
           </Grid>
-          <Grid
-            item
-            xs={5}
-            md={2}
-            alignItems={"center"}
-            children={<PanelDetailActions id={id} />}
-          />
+          {id && (
+            <Grid
+              item
+              xs={5}
+              md={2}
+              alignItems={"center"}
+              children={<PanelDetailActions id={id} />}
+            />
+          )}
           <Grid
             item
             xs={3}

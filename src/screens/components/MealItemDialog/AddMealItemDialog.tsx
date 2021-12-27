@@ -30,6 +30,8 @@ interface Props {
   meal_id?: string;
 }
 
+// TODO Refactor Add/Edit modals first
+
 export const AddMealItemDialog = observer(
   ({ open, setOpen, meal_id }: Props) => {
     const classes = useStyles();
@@ -42,7 +44,9 @@ export const AddMealItemDialog = observer(
     const [error, setOpenErrorMessage] = React.useState(false);
     const [success, setOpenSuccessMessage] = React.useState(false);
 
-    const [selectedItemId, setSelectedItemId] = useState(foodLibrary?.[0]?.id);
+    const [selectedItemId, setSelectedItemId] = useState(
+      foodLibrary?.[0]?.id || ""
+    );
     const [weight, setWeight] = useState(100);
 
     const mealItemProps = () => {

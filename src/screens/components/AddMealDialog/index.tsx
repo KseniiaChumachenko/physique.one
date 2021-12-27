@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
+import { v4 as uuid } from "uuid";
 import { Trans } from "@lingui/react";
 import {
   Button,
@@ -19,13 +20,13 @@ import { TimePicker } from "@material-ui/pickers";
 import { Autocomplete } from "@material-ui/lab";
 import { useStore as useGlobalStore } from "src/store";
 import {
-  AddMealMutationVariables,
   Food,
   Meal_Item,
   useFoodSelectFieldListingQuery,
 } from "src/graphql/generated/graphql";
 import { ToastMessage } from "src/components/ToastMessage";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
+import { AddMealMutationVariables } from "src/api-hooks/mealsByDate";
 import { MealAutocomplete } from "../../../components/MealAutocomplete";
 import { aggregate } from "../../Recipes/utils";
 import { useStore } from "./useStore";
@@ -217,6 +218,7 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
           </Button>
           <Button
             onClick={onConfirm({
+              id: uuid(),
               name: store.name,
               date,
               time: moment(store.time).format("HH:mm"),

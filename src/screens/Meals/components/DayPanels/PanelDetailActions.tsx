@@ -33,12 +33,13 @@ export const PanelDetailActions = ({ id }: Props) => {
       />
 
       {/*  Modals  */}
-      <AddMealItemDialog
-        open={openAddMealItemDialog}
-        setOpen={setAddMealItemDialog}
-        meal_id={id}
-      />
-
+      {id && (
+        <AddMealItemDialog
+          open={openAddMealItemDialog}
+          setOpen={setAddMealItemDialog}
+          meal_id={id}
+        />
+      )}
       {/*  Toasts  */}
       {success && (
         <Snackbar
