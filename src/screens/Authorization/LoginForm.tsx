@@ -77,7 +77,7 @@ export const LoginForm = () => {
 
       if (withRegularUser) {
         setUser((data?.users[0] as unknown) as Users);
-        history.push(`/ration/${moment().week()}`);
+        history.push(`/ration/${moment().week()}/${moment().year()}`);
       } else {
         setError(
           "Entered credentials are invalid. Check correctness of entered email and password."
@@ -103,7 +103,7 @@ export const LoginForm = () => {
       const withUser = users.length > 0;
       if (withUser) {
         setUser((checkFacebookUserResponse.data?.users[0] as unknown) as Users);
-        history.push(`/ration/${moment().week()}`);
+        history.push(`/ration/${moment().week()}/${moment().year()}`);
       } else {
         insert_fb_user({
           variables: {

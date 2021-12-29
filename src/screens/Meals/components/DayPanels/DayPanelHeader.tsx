@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import moment from "moment";
 import {
-  ExpansionPanelSummary,
+  AccordionSummary,
   Grid,
   IconButton,
   Snackbar,
@@ -95,7 +95,7 @@ export const DayPanelHeader = ({ date, queryReference }: Props) => {
   return (
     <React.Fragment>
       {data && (
-        <ExpansionPanelSummary
+        <AccordionSummary
           classes={{ content: classes.content, expanded: classes.expanded }}
           expandIcon={<ExpandMoreRounded />}
         >
@@ -150,7 +150,7 @@ export const DayPanelHeader = ({ date, queryReference }: Props) => {
             open={openCopyDayDialog}
             setOpen={setOpenCopyDayDialog}
           />
-        </ExpansionPanelSummary>
+        </AccordionSummary>
       )}
 
       {/*  Toasts  */}

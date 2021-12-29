@@ -10,7 +10,7 @@ import {
 export const ROUTES = [
   {
     title: <Trans>Meals</Trans>,
-    pathname: `/ration/${moment().week()}`,
+    pathname: `/ration/${moment().week()}/${moment().year()}`,
     icon: <FastfoodRounded />,
   },
   {

@@ -32,7 +32,7 @@ const DialogContent = ({
   refetch,
   onClose,
 }: ContainerProps) => {
-  const data = useMealsPreloadedQuery(queryReference);
+  const { data } = useMealsPreloadedQuery(queryReference);
   const {
     userStore: {
       user: { id: u_id },
@@ -54,7 +54,7 @@ const DialogContent = ({
     onError: (error) => setError(error.message),
   });
 
-  const newMeals = data?.meal_connection.edges.map(({ node: m }) => {
+  const newMeals = data.meal_connection.edges.map(({ node: m }) => {
     const meal_id = uuid();
 
     return {
@@ -63,7 +63,7 @@ const DialogContent = ({
       time: m.time,
       name: m.name || "",
 
-      meal_items: m.meal_items.map((i) => ({
+      meal_items: m.meal_items_connection.edges.map(({ node: i }) => ({
         id: uuid(),
         u_id,
         food: i.food,
