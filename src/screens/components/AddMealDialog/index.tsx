@@ -1,7 +1,6 @@
-import React, { useRef } from "react";
+import React, { Suspense, useRef } from "react";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
-import { v4 as uuid } from "uuid";
 import { Trans } from "@lingui/react";
 import {
   Button,
@@ -11,7 +10,6 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
-  LinearProgress,
   TextField,
 } from "@material-ui/core";
 import { AddRounded, DeleteRounded } from "@material-ui/icons";
@@ -19,15 +17,21 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TimePicker } from "@material-ui/pickers";
 import { Autocomplete } from "@material-ui/lab";
 import { useStore as useGlobalStore } from "src/store";
-import {
-  Food,
-  Meal_Item,
-  useFoodSelectFieldListingQuery,
-} from "src/graphql/generated/graphql";
-import { ToastMessage } from "src/components/ToastMessage";
+import { Meal_Item } from "src/graphql/generated/graphql";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
 import { AddMealMutationVariables } from "src/api-hooks/mealsByDate";
-import { MealAutocomplete } from "../../../components/MealAutocomplete";
+import {
+  FoodPreloadedHookProps,
+  useFood,
+  useFoodPreloadedQuery,
+} from "src/api-hooks/food";
+import {
+  RecipePreloadedHookProps,
+  useRecipePreloaded,
+  useRecipes,
+} from "src/api-hooks/recipe";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
+import { MealAutocomplete } from "src/components/MealAutocomplete";
 import { aggregate } from "../../Recipes/utils";
 import { useStore } from "./useStore";
 
@@ -63,54 +67,60 @@ interface Props {
   meal_items?: Meal_Item[];
 }
 
-interface AddMealDialogProps extends Props {
-  fetchedFoods: Food[];
-}
+type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps & Props;
+
+interface AddMealDialogProps extends ExtendProps {}
 
 const AddMealDialogDataFlow = observer<AddMealDialogProps>(
   ({
     open,
     setOpen,
     date,
-    fetchedFoods,
     name,
-    meal_items, //fetched data - TODO not needed
+    meal_items,
     onConfirm,
+    foodQueryReference,
+    recipeQueryReference,
   }) => {
     const classes = useStyles();
     const {
       userStore: { user },
-      recipeStore: { data: recipes },
-      foodLibraryStore: { data: foods },
     } = useGlobalStore();
+    const {
+      food_connection: { edges: foods },
+    } = useFoodPreloadedQuery(foodQueryReference);
+    const {
+      recipe_connection: { edges: recipes },
+    } = useRecipePreloaded(recipeQueryReference);
+
     const stateEndRef = useRef(null);
-    const store = useStore(fetchedFoods as any, name, meal_items);
+    const store = useStore(foods, name, meal_items);
 
     useScrollToBottom(store.meal_items, stateEndRef); //TODO for some reason this stoped working
 
     const handleChangeFoodItem = (key: number) => (selectId: string) => {
-      let item = foods[0].id;
-      const r = recipes.find(({ id }) => id === selectId);
+      let item;
+      const r = recipes.find(({ node: { id } }) => id === selectId)?.node;
       if (r) {
         item = {
           id: r.id,
           recipe_id: r.id,
           name: r.name,
           type: "Recipe",
-          carbohydrates: aggregate(r.recipe_items, "carbohydrates"),
-          proteins: aggregate(r.recipe_items, "proteins"),
-          fats: aggregate(r.recipe_items, "fats"),
-          energy_cal: aggregate(r.recipe_items, "energy_cal"),
-          energy_kj: aggregate(r.recipe_items, "energy_kj"),
-          weight: aggregate(r.recipe_items, "weight"),
+          carbohydrates: aggregate(r.recipe_items as any, "carbohydrates"),
+          proteins: aggregate(r.recipe_items as any, "proteins"),
+          fats: aggregate(r.recipe_items as any, "fats"),
+          energy_cal: aggregate(r.recipe_items as any, "energy_cal"),
+          energy_kj: aggregate(r.recipe_items as any, "energy_kj"),
+          weight: aggregate(r.recipe_items as any, "weight"),
         };
       } else {
-        item = foods.find(({ id }) => id === selectId);
+        item = foods.find(({ node: { id } }) => id === selectId)?.node as any;
       }
 
       return store.update_meal_item({
         indexOfItem: key,
-        food: item,
+        food: item as any,
       });
     };
     const handleClose = (event: any) => {
@@ -121,6 +131,21 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
     const handleDeleteItem = (id: string) => () => {
       store.remove_meal_item(id);
     };
+
+    const handleSubmit = onConfirm({
+      name: store.name,
+      date,
+      time: moment(store.time).format("HH:mm"),
+      data: store.meal_items.map(
+        ({ name, __typename, type, recipe, ...i }) => ({
+          ...i,
+          u_id: user?.id,
+          recipe_id: i.recipe_id ? base64ToUuid(i.recipe_id) : null,
+          food: i.food ? base64ToUuid(i.food) : null,
+        })
+      ),
+      u_id: user?.id,
+    });
 
     return (
       <Dialog
@@ -182,6 +207,8 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
                 setValue={handleChangeFoodItem(key)}
                 fullWidth={true}
                 className={classes.autocompleteField}
+                foodQueryReference={foodQueryReference}
+                recipeQueryReference={recipeQueryReference}
               />
               <TextField
                 label={<Trans>Weight (g)</Trans>}
@@ -216,23 +243,7 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
           <Button onClick={handleClose} color="primary">
             <Trans> Cancel</Trans>
           </Button>
-          <Button
-            onClick={onConfirm({
-              id: uuid(),
-              name: store.name,
-              date,
-              time: moment(store.time).format("HH:mm"),
-              data: store.meal_items.map(
-                ({ name, __typename, type, recipe, ...i }) => ({
-                  u_id: user?.id,
-                  ...i,
-                })
-              ),
-              u_id: user?.id,
-            })}
-            color="primary"
-            autoFocus
-          >
+          <Button onClick={handleSubmit} color="primary" autoFocus>
             <Trans>Submit</Trans>
           </Button>
         </DialogActions>
@@ -250,29 +261,24 @@ export const AddMealDialog = ({
   meal_items,
   onConfirm,
 }: Props) => {
-  const { data, loading, error } = useFoodSelectFieldListingQuery();
-  if (error) {
-    return <ToastMessage severity={"error"} children={error?.message as any} />;
-  }
-
-  if (loading) {
-    return <LinearProgress />;
-  }
+  const { queryReference: foodQR } = useFood({});
+  const { queryReference: recipeQR } = useRecipes({});
 
   return (
-    <React.Fragment>
-      {data && (
+    <Suspense fallback={<div />}>
+      {foodQR && recipeQR && (
         <AddMealDialogDataFlow
           open={open}
           setOpen={setOpen}
           date={date}
-          fetchedFoods={data.food as Food[]}
           name={name}
           time={time}
           meal_items={meal_items}
           onConfirm={onConfirm}
+          foodQueryReference={foodQR}
+          recipeQueryReference={recipeQR}
         />
       )}
-    </React.Fragment>
+    </Suspense>
   );
 };

@@ -4,8 +4,15 @@ import { Autocomplete, AutocompleteProps } from "@material-ui/lab";
 import { TextField } from "@material-ui/core";
 import { Trans } from "@lingui/react";
 import { Food_Insert_Input } from "../graphql/generated/graphql";
-import { useStore } from "../store";
 import { aggregate } from "../screens/Recipes/utils";
+import {
+  FoodPreloadedHookProps,
+  useFoodPreloadedQuery,
+} from "../api-hooks/food";
+import {
+  RecipePreloadedHookProps,
+  useRecipePreloaded,
+} from "../api-hooks/recipe";
 
 export type MealAutocompleteListItem = Food_Insert_Input & {
   recipe?: boolean;
@@ -19,8 +26,11 @@ export type FoodOptionalType =
   | null
   | undefined;
 
-interface MealAutocompleteProps
-  extends Partial<AutocompleteProps<any, any, any, any>> {
+type ExtendProps = RecipePreloadedHookProps &
+  FoodPreloadedHookProps &
+  Partial<AutocompleteProps<any, any, any, any>>;
+
+interface MealAutocompleteProps extends ExtendProps {
   withRecipes?: boolean;
   value: string;
   setValue: (id: string) => void;
@@ -31,31 +41,35 @@ export const MealAutocomplete = observer(
     value,
     setValue,
     withRecipes = true,
+    foodQueryReference,
+    recipeQueryReference,
     ...restProps
   }: MealAutocompleteProps) => {
     const {
-      recipeStore: { data: recipes },
-      foodLibraryStore: { data: foods },
-    } = useStore();
+      food_connection: { edges: foods },
+    } = useFoodPreloadedQuery(foodQueryReference);
+    const {
+      recipe_connection: { edges: recipes },
+    } = useRecipePreloaded(recipeQueryReference);
 
     const remappedOptions = withRecipes
       ? [
-          ...foods,
-          ...recipes.map((r) => ({
+          ...foods.map(({ node }) => ({ ...node })),
+          ...recipes.map(({ node: r }) => ({
             id: r.id,
             recipe_id: r.id,
             name: r.name,
             type: "Recipe",
-            carbohydrates: aggregate(r.recipe_items, "carbohydrates"),
-            proteins: aggregate(r.recipe_items, "proteins"),
-            fats: aggregate(r.recipe_items, "fats"),
-            energy_cal: aggregate(r.recipe_items, "energy_cal"),
-            energy_kj: aggregate(r.recipe_items, "energy_kj"),
-            weight: aggregate(r.recipe_items, "weight"),
+            carbohydrates: aggregate(r.recipe_items as any, "carbohydrates"),
+            proteins: aggregate(r.recipe_items as any, "proteins"),
+            fats: aggregate(r.recipe_items as any, "fats"),
+            energy_cal: aggregate(r.recipe_items as any, "energy_cal"),
+            energy_kj: aggregate(r.recipe_items as any, "energy_kj"),
+            weight: aggregate(r.recipe_items as any, "weight"),
             recipe: true,
           })),
         ]
-      : foods;
+      : foods.map(({ node }) => ({ ...node }));
 
     const valueFromOptions = remappedOptions.find(({ id }) => id === value);
 

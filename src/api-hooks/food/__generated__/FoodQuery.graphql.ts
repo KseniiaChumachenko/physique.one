@@ -4,45 +4,45 @@
 
 import { ConcreteRequest } from "relay-runtime";
 
-export type userQueryVariables = {
-    id?: string | null | undefined;
-};
-export type userQueryResponse = {
-    readonly users_connection: {
+export type FoodQueryVariables = {};
+export type FoodQueryResponse = {
+    readonly food_connection: {
         readonly edges: ReadonlyArray<{
             readonly node: {
                 readonly id: string;
-                readonly email: string | null;
-                readonly first_name: string | null;
-                readonly last_name: string | null;
-                readonly user_name: string | null;
-                readonly fb_id: string | null;
-                readonly fb_picture_url: string | null;
+                readonly name: unknown;
+                readonly type: string;
+                readonly carbohydrates: number;
+                readonly proteins: number;
+                readonly fats: number;
+                readonly energy_cal: number;
+                readonly energy_kj: number;
+                readonly u_id: string | null;
             };
         }>;
     };
 };
-export type userQuery = {
-    readonly response: userQueryResponse;
-    readonly variables: userQueryVariables;
+export type FoodQuery = {
+    readonly response: FoodQueryResponse;
+    readonly variables: FoodQueryVariables;
 };
 
 
 
 /*
-query userQuery(
-  $id: uuid
-) {
-  users_connection(where: {id: {_eq: $id}}) {
+query FoodQuery {
+  food_connection {
     edges {
       node {
         id
-        email
-        first_name
-        last_name
-        user_name
-        fb_id
-        fb_picture_url
+        name
+        type
+        carbohydrates
+        proteins
+        fats
+        energy_cal
+        energy_kj
+        u_id
       }
     }
   }
@@ -52,42 +52,17 @@ query userQuery(
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
-    "defaultValue": null,
-    "kind": "LocalArgument",
-    "name": "id"
-  }
-],
-v1 = [
-  {
     "alias": null,
-    "args": [
-      {
-        "fields": [
-          {
-            "fields": [
-              {
-                "kind": "Variable",
-                "name": "_eq",
-                "variableName": "id"
-              }
-            ],
-            "kind": "ObjectValue",
-            "name": "id"
-          }
-        ],
-        "kind": "ObjectValue",
-        "name": "where"
-      }
-    ],
-    "concreteType": "usersConnection",
+    "args": null,
+    "concreteType": "foodConnection",
     "kind": "LinkedField",
-    "name": "users_connection",
+    "name": "food_connection",
     "plural": false,
     "selections": [
       {
         "alias": null,
         "args": null,
-        "concreteType": "usersEdge",
+        "concreteType": "foodEdge",
         "kind": "LinkedField",
         "name": "edges",
         "plural": true,
@@ -95,7 +70,7 @@ v1 = [
           {
             "alias": null,
             "args": null,
-            "concreteType": "users",
+            "concreteType": "food",
             "kind": "LinkedField",
             "name": "node",
             "plural": false,
@@ -111,42 +86,56 @@ v1 = [
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "email",
+                "name": "name",
                 "storageKey": null
               },
               {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "first_name",
+                "name": "type",
                 "storageKey": null
               },
               {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "last_name",
+                "name": "carbohydrates",
                 "storageKey": null
               },
               {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "user_name",
+                "name": "proteins",
                 "storageKey": null
               },
               {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "fb_id",
+                "name": "fats",
                 "storageKey": null
               },
               {
                 "alias": null,
                 "args": null,
                 "kind": "ScalarField",
-                "name": "fb_picture_url",
+                "name": "energy_cal",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "energy_kj",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "u_id",
                 "storageKey": null
               }
             ],
@@ -161,30 +150,30 @@ v1 = [
 ];
 return {
   "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [],
     "kind": "Fragment",
     "metadata": null,
-    "name": "userQuery",
-    "selections": (v1/*: any*/),
+    "name": "FoodQuery",
+    "selections": (v0/*: any*/),
     "type": "query_root",
     "abstractKey": null
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": (v0/*: any*/),
+    "argumentDefinitions": [],
     "kind": "Operation",
-    "name": "userQuery",
-    "selections": (v1/*: any*/)
+    "name": "FoodQuery",
+    "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "a07e8cefa59ae1e3ee480dd375e7ab58",
+    "cacheID": "f2ac27b9363cb503de171ee9254c3f0f",
     "id": null,
     "metadata": {},
-    "name": "userQuery",
+    "name": "FoodQuery",
     "operationKind": "query",
-    "text": "query userQuery(\n  $id: uuid\n) {\n  users_connection(where: {id: {_eq: $id}}) {\n    edges {\n      node {\n        id\n        email\n        first_name\n        last_name\n        user_name\n        fb_id\n        fb_picture_url\n      }\n    }\n  }\n}\n"
+    "text": "query FoodQuery {\n  food_connection {\n    edges {\n      node {\n        id\n        name\n        type\n        carbohydrates\n        proteins\n        fats\n        energy_cal\n        energy_kj\n        u_id\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'f50d7df54d2061c60030195fec5db6d2';
+(node as any).hash = 'da68ee4ff7cffdb6342f25381f63c275';
 export default node;

@@ -22,7 +22,7 @@ export class FoodLibraryStore {
     makeAutoObservable(this, {}, { autoBind: true });
     this.rootStore = rootStore;
 
-    this.load();
+    //  this.load();
   }
 
   load() {

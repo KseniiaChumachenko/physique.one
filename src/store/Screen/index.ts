@@ -13,7 +13,7 @@ type ActionType = { label: ReactNode; onClick: () => void } | null;
  * */
 export class ScreenStore {
   rootStore: RootStore;
-  loading: boolean = true;
+  loading: boolean = false;
 
   action: ActionType = null;
 

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { useParams, useHistory } from "react-router-dom";
 import moment from "moment";
 import { Trans } from "@lingui/react";
@@ -29,17 +29,14 @@ export const Meals = () => {
   const { weekNumber } = useParams<{ weekNumber: string }>();
   const history = useHistory();
 
+  if (!weekNumber) {
+    history.push(`/ration/${moment().week()}`);
+  }
+
   const currentYear = moment().year();
 
-  const days = useMemo(
-    () =>
-      [0, 1, 2, 3, 4, 5, 6].map((d) =>
-        moment(
-          `${currentYear}-${weekNumber || moment().week()}-` + d,
-          "YYYY-w-e"
-        ).format()
-      ),
-    [currentYear, weekNumber]
+  const days = [0, 1, 2, 3, 4, 5, 6].map((d) =>
+    moment(`${currentYear}-${weekNumber}-` + d, "YYYY-w-e").format()
   );
 
   const handlePaginationClick = (
@@ -49,21 +46,19 @@ export const Meals = () => {
 
   return (
     <div className={classes.root}>
-      {weekNumber && (
-        <div className={classes.paginationContainer}>
-          <Typography variant={"subtitle1"}>
-            <Trans>Select week of the year: </Trans>
-          </Typography>
-          <Pagination
-            count={NUMBER_OF_WEEKS_IN_YEAR}
-            page={Number(weekNumber)}
-            onChange={handlePaginationClick}
-            variant="outlined"
-            color={"primary"}
-          />
-        </div>
-      )}
-      {days && <MealsListing days={days} />}
+      <div className={classes.paginationContainer}>
+        <Typography variant={"subtitle1"}>
+          <Trans>Select week of the year: </Trans>
+        </Typography>
+        <Pagination
+          count={NUMBER_OF_WEEKS_IN_YEAR}
+          page={Number(weekNumber)}
+          onChange={handlePaginationClick}
+          variant="outlined"
+          color={"primary"}
+        />
+      </div>
+      <MealsListing days={days} />
     </div>
   );
 };

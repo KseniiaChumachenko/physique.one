@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -16,6 +17,8 @@ import { useStore } from "src/store";
 import { useAddMealItemMutation } from "../../../graphql/generated/graphql";
 import { MealAutocomplete } from "../../../components/MealAutocomplete";
 import { aggregate } from "../../Recipes/utils";
+import { useFood } from "../../../api-hooks/food";
+import { useRecipes } from "../../../api-hooks/recipe";
 
 const useStyles = makeStyles(() => ({
   field: {
@@ -27,7 +30,7 @@ const useStyles = makeStyles(() => ({
 interface Props {
   open: boolean;
   setOpen(o: boolean): void;
-  meal_id?: string;
+  meal_id: unknown;
 }
 
 // TODO Refactor Add/Edit modals first
@@ -35,6 +38,8 @@ interface Props {
 export const AddMealItemDialog = observer(
   ({ open, setOpen, meal_id }: Props) => {
     const classes = useStyles();
+    const { queryReference: foodQR } = useFood({});
+    const { queryReference: recipeQR } = useRecipes({});
     const {
       userStore: { user },
       foodLibraryStore: { data: foodLibrary },
@@ -108,6 +113,10 @@ export const AddMealItemDialog = observer(
       },
     });
 
+    if (!foodQR || !recipeQR) {
+      return <CircularProgress />;
+    }
+
     return (
       <React.Fragment>
         <Dialog open={open} onClose={() => setOpen(false)}>
@@ -117,6 +126,8 @@ export const AddMealItemDialog = observer(
               value={selectedItemId}
               setValue={setSelectedItemId}
               className={classes.field}
+              foodQueryReference={foodQR}
+              recipeQueryReference={recipeQR}
             />
             <TextField
               label={<Trans>Weight (g)</Trans>}
