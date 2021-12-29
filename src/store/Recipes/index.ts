@@ -24,9 +24,9 @@ export class RecipesStore {
     makeAutoObservable(this, {}, { autoBind: true });
     this.rootStore = rootStore;
 
-    autorun(async () => {
-      await this.load();
-    });
+    // autorun(async () => {
+    //   await this.load();
+    // });
   }
 
   async load() {

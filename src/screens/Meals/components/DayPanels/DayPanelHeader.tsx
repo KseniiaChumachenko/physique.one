@@ -14,14 +14,12 @@ import {
 } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { Trans } from "@lingui/react";
-import { ApolloError } from "@apollo/client";
 import { Alert } from "@material-ui/lab";
-import { useMealItemMacrosSumByDateSubscription } from "src/graphql/generated/graphql";
 import {
   AddMealMutationVariables,
-  useAddMealMutation,
+  MealsByDatePreloadedHookProps,
+  useMealsPreloadedQuery,
 } from "src/api-hooks/mealsByDate";
-import { useStore } from "src/store";
 import { AddMealDialog } from "../../../components/AddMealDialog";
 import { AggregationChips } from "../../../../components/AggredationChips";
 import { CopyDayDialog } from "../../../components/CopyDayDialog";
@@ -39,47 +37,60 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface Props {
+interface Props extends MealsByDatePreloadedHookProps {
   date: string;
-
-  refetchMeals: () => void;
 }
 
-export const DayPanelHeader = ({ date, refetchMeals }: Props) => {
+export const DayPanelHeader = ({ date, queryReference }: Props) => {
   const classes = useStyles();
   const {
-    userStore: { user },
-  } = useStore();
+    data,
+    mutations: { add },
+  } = useMealsPreloadedQuery(queryReference);
+
   const [error, setOpenErrorMessage] = React.useState<Error | boolean>(false);
   const [success, setOpenSuccessMessage] = React.useState(false);
   const [openAddDialog, setOpenAddMealDialog] = useState(false);
   const [openCopyDayDialog, setOpenCopyDayDialog] = useState(false);
 
-  const { data } = useMealItemMacrosSumByDateSubscription({
-    variables: { date, u_id: user?.id },
-  });
-
-  const [commitMeal] = useAddMealMutation();
-
   const handleOpenAddMealDialog = () => setOpenAddMealDialog(true);
-
   const handleOpenCopyDayDialog = () => setOpenCopyDayDialog(true);
 
   const handleConfirm = (variables: AddMealMutationVariables) => (
     event: any
   ) => {
-    commitMeal({
+    add({
       variables,
       onCompleted: () => {
-        refetchMeals();
         setOpenAddMealDialog(false);
+        setOpenSuccessMessage(true);
       },
       onError: (error) => setOpenErrorMessage(error),
     });
     event.stopPropagation();
   };
 
-  const macronutrients = data?.meal_item_aggregate?.aggregate?.sum;
+  const macronutrients =
+    data.meal_connection.edges.length > 0
+      ? data?.meal_connection.edges
+          .map((e) => e?.node?.meal_items_aggregate?.aggregate?.sum)
+          ?.reduce((p, c) => {
+            return {
+              energy_cal: (p?.["energy_cal"] || 0) + (c?.["energy_cal"] || 0),
+              energy_kj: (p?.["energy_kj"] || 0) + (c?.["energy_kj"] || 0),
+              fats: (p?.["fats"] || 0) + (c?.["fats"] || 0),
+              proteins: (p?.["proteins"] || 0) + (c?.["proteins"] || 0),
+              carbohydrates:
+                (p?.["carbohydrates"] || 0) + (c?.["carbohydrates"] || 0),
+            };
+          })
+      : {
+          energy_cal: 0,
+          energy_kj: 0,
+          fats: 0,
+          proteins: 0,
+          carbohydrates: 0,
+        };
 
   return (
     <React.Fragment>
@@ -97,11 +108,11 @@ export const DayPanelHeader = ({ date, refetchMeals }: Props) => {
             <Grid item xs alignItems={"center"}>
               {macronutrients?.energy_kj ? (
                 <AggregationChips
-                  energy_cal={macronutrients.energy_cal}
-                  energy_kj={macronutrients.energy_kj}
-                  proteins={macronutrients.proteins}
-                  carbohydrates={macronutrients.carbohydrates}
-                  fats={macronutrients.fats}
+                  energy_cal={macronutrients.energy_cal || 0}
+                  energy_kj={macronutrients.energy_kj || 0}
+                  proteins={macronutrients.proteins || 0}
+                  carbohydrates={macronutrients.carbohydrates || 0}
+                  fats={macronutrients.fats || 0}
                 />
               ) : null}
             </Grid>
@@ -114,7 +125,7 @@ export const DayPanelHeader = ({ date, refetchMeals }: Props) => {
                 }}
               />
             </Grid>
-            {macronutrients?.energy_kj && (
+            {macronutrients?.energy_kj ? (
               <Grid item xs={2} md={1} alignItems={"center"}>
                 <IconButton
                   children={<FileCopyRounded />}
@@ -124,7 +135,7 @@ export const DayPanelHeader = ({ date, refetchMeals }: Props) => {
                   }}
                 />
               </Grid>
-            )}
+            ) : null}
           </Grid>
 
           <AddMealDialog

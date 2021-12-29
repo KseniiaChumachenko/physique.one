@@ -1,8 +1,8 @@
 import React, { Suspense } from "react";
 import {
-  CircularProgress,
   ExpansionPanel,
   ExpansionPanelDetails,
+  LinearProgress,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Meal_Item } from "src/graphql/generated/graphql";
@@ -59,43 +59,53 @@ const useStyles = makeStyles((theme) => ({
 
 interface PanelsProps extends MealsByDatePreloadedHookProps {
   date: string;
-  refethMeals: () => void;
 }
 
-const Panels = ({ date, queryReference, refethMeals }: PanelsProps) => {
+const Panels = ({ date, queryReference }: PanelsProps) => {
   const classes = useStyles();
 
-  const data = useMealsPreloadedQuery(queryReference);
+  const { data } = useMealsPreloadedQuery(queryReference);
 
   return (
-    <ExpansionPanel className={classes.parentExpPanel} key={date + "Header"}>
-      <DayPanelHeader date={date} refetchMeals={refethMeals} />
+    <>
+      <DayPanelHeader date={date} queryReference={queryReference} />
       <ExpansionPanelDetails
         className={classes.parentExpPanelDetails}
         key={date + "panelDetail"}
       >
-        {data?.meal.map((item, key) => (
-          <ExpansionPanel
-            key={key}
-            defaultExpanded={true}
-            classes={{
-              root: classes.childExpPanel,
-              expanded: classes.expanded,
-            }}
-          >
-            <PanelSummary
-              id={item.id}
-              name={item.name}
-              time={item.time}
-              key={key}
-            />
-            <ExpansionPanelDetails className={classes.parentExpPanelDetails}>
-              <PanelDetailTable meal_items={item?.meal_items as Meal_Item[]} />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        ))}
+        {data?.meal_connection.edges.map(
+          ({ node: item }, key) =>
+            item && (
+              <ExpansionPanel
+                key={key}
+                defaultExpanded={true}
+                classes={{
+                  root: classes.childExpPanel,
+                  expanded: classes.expanded,
+                }}
+              >
+                <PanelSummary
+                  id={item?.id}
+                  name={item?.name}
+                  time={item?.time}
+                  key={key}
+                />
+                <ExpansionPanelDetails
+                  className={classes.parentExpPanelDetails}
+                >
+                  <PanelDetailTable
+                    meal_items={
+                      item?.meal_items_connection.edges.map(({ node }) => ({
+                        ...node,
+                      })) as Meal_Item[]
+                    }
+                  />
+                </ExpansionPanelDetails>
+              </ExpansionPanel>
+            )
+        )}
       </ExpansionPanelDetails>
-    </ExpansionPanel>
+    </>
   );
 };
 
@@ -104,24 +114,23 @@ interface Props {
 }
 
 export const DayPanels = ({ date }: Props) => {
+  const classes = useStyles();
   const {
     userStore: { user },
   } = useStore();
 
-  const { queryReference, refetch } = useMealsByDateQuery({
+  const { queryReference } = useMealsByDateQuery({
     date,
     u_id: user?.id,
   });
 
   return (
-    <Suspense fallback={<CircularProgress />}>
-      {queryReference && (
-        <Panels
-          date={date}
-          queryReference={queryReference}
-          refethMeals={refetch}
-        />
-      )}
-    </Suspense>
+    <ExpansionPanel className={classes.parentExpPanel} key={date + "Header"}>
+      <Suspense fallback={<LinearProgress />}>
+        {queryReference && (
+          <Panels date={date} queryReference={queryReference} />
+        )}
+      </Suspense>
+    </ExpansionPanel>
   );
 };

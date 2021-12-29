@@ -8,14 +8,18 @@ import { userQuery } from "./__generated__/userQuery.graphql";
 
 export const UserQuery = graphql`
   query userQuery($id: uuid) {
-    users(where: { id: { _eq: $id } }) {
-      id
-      email
-      first_name
-      last_name
-      user_name
-      fb_id
-      fb_picture_url
+    users_connection(where: { id: { _eq: $id } }) {
+      edges {
+        node {
+          id
+          email
+          first_name
+          last_name
+          user_name
+          fb_id
+          fb_picture_url
+        }
+      }
     }
   }
 `;

@@ -15,7 +15,7 @@ import { EMPTY_FOOD_TYPE } from "./constants";
 export class FoodTypes {
   rootStore: RootStore;
   categories: FoodTypeCardType[] = [];
-  loading = true;
+  loading = false;
   error?: ApolloError;
 
   newCategory?: FoodTypeCardType;
@@ -24,7 +24,7 @@ export class FoodTypes {
     makeAutoObservable(this /*{ rootStore: false }*/, {}, { autoBind: true });
     this.rootStore = rootStore;
 
-    this.loadPantry();
+    // this.loadPantry();
   }
 
   get activeCard() {

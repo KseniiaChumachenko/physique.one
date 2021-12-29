@@ -77,11 +77,11 @@ export function useStore(
     foods: fetchedFoods,
 
     meal_items: meal_items?.map((item) => omit(item, "__typename")) || [
-      standardMealItem(fetchedFoods[0]) as any,
+      standardMealItem(fetchedFoods[0].node) as any,
     ],
 
     add_meal_item: () => {
-      store.meal_items.push(standardMealItem(fetchedFoods[0]) as any);
+      store.meal_items.push(standardMealItem(fetchedFoods[0].node) as any);
     },
     update_meal_item: ({ indexOfItem = 0, food, weight }) => {
       store.meal_items[indexOfItem] = standardMealItem(

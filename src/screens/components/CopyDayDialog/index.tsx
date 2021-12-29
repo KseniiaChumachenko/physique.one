@@ -54,7 +54,7 @@ const DialogContent = ({
     onError: (error) => setError(error.message),
   });
 
-  const newMeals = data?.meal.map((m) => {
+  const newMeals = data?.meal_connection.edges.map(({ node: m }) => {
     const meal_id = uuid();
 
     return {

@@ -3,33 +3,35 @@ import { Trans } from "@lingui/react";
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import {
-  Meal,
-  useDeleteMealByIdMutation,
-} from "../../../../graphql/generated/graphql";
+  DeleteMealMutationVariables,
+  useDeleteMealMutation,
+} from "src/api-hooks/mealsByDate";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { EditDeleteButtonGroup } from "../../../components/EditDeletButtonGroup";
 import { AddMealItemDialog } from "../../../components/MealItemDialog/AddMealItemDialog";
 
-type MealItem = Pick<Meal, "id">;
-
-interface Props extends MealItem {}
+interface Props extends DeleteMealMutationVariables {}
 
 export const PanelDetailActions = ({ id }: Props) => {
   const [openAddMealItemDialog, setAddMealItemDialog] = useState(false);
 
-  const [error, setOpenErrorMessage] = React.useState();
-  const [success, setOpenSuccessMessage] = React.useState();
+  const [error, setOpenErrorMessage] = React.useState<boolean | Error>();
+  const [success, setOpenSuccessMessage] = React.useState<boolean>(false);
 
-  const [delete_meal_by_pk] = useDeleteMealByIdMutation({
-    variables: { id },
-    onCompleted: () => setOpenSuccessMessage(true),
-    onError: (error) => setOpenErrorMessage(error),
-  });
+  const [deleteMeal] = useDeleteMealMutation();
+
+  const handleDeleteMeal = () =>
+    deleteMeal({
+      variables: { id: base64ToUuid(id as string) },
+      onCompleted: () => setOpenSuccessMessage(true),
+      onError: (error) => setOpenErrorMessage(error),
+    });
 
   return (
     <React.Fragment>
       <EditDeleteButtonGroup
         onAddClick={() => setAddMealItemDialog(true)}
-        onDeleteClick={() => delete_meal_by_pk()}
+        onDeleteClick={handleDeleteMeal}
       />
 
       {/*  Modals  */}
@@ -65,7 +67,9 @@ export const PanelDetailActions = ({ id }: Props) => {
             severity={"error"}
             onClose={() => setOpenSuccessMessage(false)}
           >
-            {error?.message as any}
+            {error instanceof Error
+              ? error.message
+              : ("Failed to delete item" as any)}
           </Alert>
         </Snackbar>
       )}
