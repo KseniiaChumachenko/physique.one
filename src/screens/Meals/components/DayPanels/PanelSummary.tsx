@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 import { ExpandMoreRounded } from "@material-ui/icons";
-import { ExpansionPanelSummary, Grid, Typography } from "@material-ui/core";
+import { AccordionSummary, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Meal,
@@ -35,7 +35,7 @@ export const PanelSummary = ({ name, id, time }: SummaryProps) => {
   const macronutrients = data?.meal_item_aggregate?.aggregate?.sum;
 
   return (
-    <ExpansionPanelSummary expandIcon={<ExpandMoreRounded />}>
+    <AccordionSummary expandIcon={<ExpandMoreRounded />}>
       <div className={classes.panelHeader}>
         <Grid container spacing={1} alignItems={"center"}>
           <Grid
@@ -77,6 +77,6 @@ export const PanelSummary = ({ name, id, time }: SummaryProps) => {
           />
         </Grid>
       </div>
-    </ExpansionPanelSummary>
+    </AccordionSummary>
   );
 };

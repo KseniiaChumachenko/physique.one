@@ -1,9 +1,5 @@
 import React, { Suspense } from "react";
-import {
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  LinearProgress,
-} from "@material-ui/core";
+import { Accordion, AccordionDetails, LinearProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Meal_Item } from "src/graphql/generated/graphql";
 import { useStore } from "src/store";
@@ -69,14 +65,14 @@ const Panels = ({ date, queryReference }: PanelsProps) => {
   return (
     <>
       <DayPanelHeader date={date} queryReference={queryReference} />
-      <ExpansionPanelDetails
+      <AccordionDetails
         className={classes.parentExpPanelDetails}
         key={date + "panelDetail"}
       >
         {data?.meal_connection.edges.map(
           ({ node: item }, key) =>
             item && (
-              <ExpansionPanel
+              <Accordion
                 key={key}
                 defaultExpanded={true}
                 classes={{
@@ -90,9 +86,7 @@ const Panels = ({ date, queryReference }: PanelsProps) => {
                   time={item?.time}
                   key={key}
                 />
-                <ExpansionPanelDetails
-                  className={classes.parentExpPanelDetails}
-                >
+                <AccordionDetails className={classes.parentExpPanelDetails}>
                   <PanelDetailTable
                     meal_items={
                       item?.meal_items_connection.edges.map(({ node }) => ({
@@ -100,11 +94,11 @@ const Panels = ({ date, queryReference }: PanelsProps) => {
                       })) as Meal_Item[]
                     }
                   />
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
+                </AccordionDetails>
+              </Accordion>
             )
         )}
-      </ExpansionPanelDetails>
+      </AccordionDetails>
     </>
   );
 };
@@ -125,12 +119,12 @@ export const DayPanels = ({ date }: Props) => {
   });
 
   return (
-    <ExpansionPanel className={classes.parentExpPanel} key={date + "Header"}>
+    <Accordion className={classes.parentExpPanel} key={date + "Header"}>
       <Suspense fallback={<LinearProgress />}>
         {queryReference && (
           <Panels date={date} queryReference={queryReference} />
         )}
       </Suspense>
-    </ExpansionPanel>
+    </Accordion>
   );
 };
