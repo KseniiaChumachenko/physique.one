@@ -52,7 +52,7 @@ export const RegisterForm = () => {
         },
         EMAILJS_USER_ID
       );
-      history.push(`/ration/${moment().week()}`);
+      history.push(`/ration/${moment().week()}/${moment().year()}`);
     },
     onError: (error1) => setError(error1),
   });

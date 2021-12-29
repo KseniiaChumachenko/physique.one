@@ -77,7 +77,11 @@ export const Router = observer(() => {
               <div>
                 {/*<Route path={"/"} component={Summary} exact />*/}
                 <Route path={"/"} component={Meals} exact />
-                <Route path={"/ration/:weekNumber"} component={Meals} exact />
+                <Route
+                  path={"/ration/:weekNumber/:year"}
+                  component={Meals}
+                  exact
+                />
                 <Route path={"/foodLibrary"} component={FoodLibrary} exact />
                 <Route path={"/recipes"} component={Recipes} exact />
                 <Route path={"/profile"} component={Profile} exact />
