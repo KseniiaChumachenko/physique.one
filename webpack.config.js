@@ -3,6 +3,7 @@ const Dotenv = require("dotenv-webpack");
 const path = require("path");
 const webpack = require("webpack");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const MomentLocalesPlugin = require("moment-locales-webpack-plugin");
 
 const NODE_ENV = process.env.NODE_ENV;
 
@@ -67,6 +68,7 @@ module.exports = (/* env = {} */) => {
         minChunkSize: 20000,
       }),
       new CopyWebpackPlugin([{ from: "public" }]),
+      new MomentLocalesPlugin(),
     ],
 
     devServer: {

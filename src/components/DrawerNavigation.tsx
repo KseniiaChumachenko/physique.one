@@ -60,11 +60,11 @@ const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
-  avatarItem: {
-    paddingLeft: theme.spacing(1),
-  },
+
   avatar: {
-    marginRight: theme.spacing(3),
+    marginRight: theme.spacing(4),
+    width: 25,
+    height: 25,
   },
 }));
 
@@ -142,7 +142,7 @@ export const DrawerNavigation = observer(() => {
           onClick={handleChangeRoute(ROUTES[0].pathname)}
         />
         <Typography variant={"h5"}>
-          <Trans>ONE | Physique</Trans>
+          <Trans>Physique</Trans>
         </Typography>
       </div>
       <Divider />
@@ -170,17 +170,14 @@ export const DrawerNavigation = observer(() => {
         <Divider />
 
         {user && (
-          <ListItem
-            button
-            onClick={handleProfileMenuOpen}
-            className={classes.avatarItem}
-          >
+          <ListItem button onClick={handleProfileMenuOpen}>
             <Avatar
               src={user.fb_picture_url || ""}
               children={user.first_name?.toString().slice(0, 1)}
               className={classes.avatar}
+              variant={"rounded"}
             />
-            <ListItemText primary={`${user.first_name} ${user.last_name}`} />
+            <ListItemText primary={user.first_name} />
           </ListItem>
         )}
         {renderMenu}

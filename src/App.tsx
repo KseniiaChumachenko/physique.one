@@ -1,5 +1,5 @@
 import "regenerator-runtime/runtime";
-import React, { Suspense } from "react";
+import React, { Suspense, useEffect } from "react";
 import { RelayEnvironmentProvider } from "react-relay";
 import {
   Environment,
@@ -53,6 +53,18 @@ const environment = new Environment({
 
 function App() {
   const { i18n, locale } = useLanguageSetup();
+
+  useEffect(() => {
+    document.title = "Physique";
+  }, []);
+
+  useEffect(() => {
+    moment.updateLocale(locale.language, {
+      week: {
+        dow: 1,
+      },
+    });
+  }, [locale.language]);
 
   return (
     <RelayEnvironmentProvider environment={environment}>
