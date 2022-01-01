@@ -41,12 +41,13 @@ interface Props extends MealsByDatePreloadedHookProps {
   date: string;
 }
 
-export const DayPanelHeader = ({ date, queryReference }: Props) => {
+export const DayPanelHeader = ({ date, mealsQR }: Props) => {
   const classes = useStyles();
   const {
     data,
+    refetch,
     mutations: { add },
-  } = useMealsPreloadedQuery(queryReference);
+  } = useMealsPreloadedQuery(mealsQR);
 
   const [error, setOpenErrorMessage] = React.useState<Error | boolean>(false);
   const [success, setOpenSuccessMessage] = React.useState(false);
@@ -56,7 +57,7 @@ export const DayPanelHeader = ({ date, queryReference }: Props) => {
   const handleOpenAddMealDialog = () => setOpenAddMealDialog(true);
   const handleOpenCopyDayDialog = () => setOpenCopyDayDialog(true);
 
-  const handleConfirm = (variables: AddMealMutationVariables) => (
+  const handleAddMeal = (variables: AddMealMutationVariables) => (
     event: any
   ) => {
     add({
@@ -68,6 +69,23 @@ export const DayPanelHeader = ({ date, queryReference }: Props) => {
       onError: (error) => setOpenErrorMessage(error),
     });
     event.stopPropagation();
+  };
+
+  const handleCopyMeals = async (
+    variables: AddMealMutationVariables,
+    onClose: () => void
+  ) => {
+    add({
+      variables,
+      onCompleted: () => {
+        onClose();
+        setOpenSuccessMessage(true);
+        refetch({ date: variables.data.map((a) => a.date)[0] });
+      },
+      onError: (error) => {
+        setOpenErrorMessage(error);
+      },
+    });
   };
 
   const macronutrients =
@@ -142,13 +160,15 @@ export const DayPanelHeader = ({ date, queryReference }: Props) => {
             open={openAddDialog}
             setOpen={setOpenAddMealDialog}
             date={date}
-            onConfirm={handleConfirm}
+            onConfirm={handleAddMeal}
           />
 
           <CopyDayDialog
             date={date}
+            data={data}
             open={openCopyDayDialog}
             setOpen={setOpenCopyDayDialog}
+            onSubmit={handleCopyMeals}
           />
         </AccordionSummary>
       )}

@@ -1,4 +1,4 @@
-import React, { useState, Suspense } from "react";
+import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import {
   DialogTitle,
@@ -9,30 +9,32 @@ import {
   Button,
   DialogActions,
   Snackbar,
-  CircularProgress,
 } from "@material-ui/core";
 import { DatePicker } from "@material-ui/pickers";
 import { Alert } from "@material-ui/lab";
 import { Trans } from "@lingui/react";
-import { useCopyDayMutation } from "../../../graphql/generated/graphql";
-import { useStore } from "../../../store";
+import { useStore } from "src/store";
 import {
-  useMealsByDateQuery,
-  useMealsPreloadedQuery,
-  MealsByDatePreloadedHookProps,
-} from "../../../api-hooks/mealsByDate";
+  AddMealMutationVariables,
+  MealsByDateQueryResponse,
+} from "src/api-hooks/mealsByDate";
+import moment from "moment";
 
-interface ContainerProps extends MealsByDatePreloadedHookProps {
-  refetch: () => void;
-  onClose: (e?: any) => void;
+interface Props {
+  open: boolean;
+  setOpen: any;
+  date: string;
+  data: MealsByDateQueryResponse;
+  onSubmit: (v: AddMealMutationVariables, onClose: () => void) => void;
 }
 
-const DialogContent = ({
-  queryReference,
-  refetch,
-  onClose,
-}: ContainerProps) => {
-  const { data } = useMealsPreloadedQuery(queryReference);
+export const CopyDayDialog = ({
+  open,
+  setOpen,
+  date,
+  data,
+  onSubmit,
+}: Props) => {
   const {
     userStore: {
       user: { id: u_id },
@@ -41,84 +43,91 @@ const DialogContent = ({
 
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
-  const [insertDate, setInsertDate] = useState(null);
+  const [insertDate, setInsertDate] = useState(date);
 
-  const [insert_day_copy, { loading: postLoading }] = useCopyDayMutation({
-    onCompleted: (data) => {
-      refetch();
-      setSuccess(
-        `Copied  ${data.insert_meal?.affected_rows} rows successfully`
+  const newMeals = {
+    data: data.meal_connection.edges.map(({ node: m }) => {
+      const meal_id = uuid();
+
+      return (
+        m && {
+          id: meal_id,
+          date: insertDate,
+          time: m.time,
+          name: m.name || "",
+          u_id,
+          meal_items: {
+            data: m.meal_items_connection.edges.map(
+              ({ node: i }) =>
+                i && {
+                  id: uuid(),
+                  u_id,
+                  food: i.food,
+                  weight: i.weight,
+                  carbohydrates: i.carbohydrates,
+                  proteins: i.proteins,
+                  fats: i.fats,
+                  energy_cal: i.energy_cal,
+                  energy_kj: i.energy_kj,
+                  recipe_id: i.recipe_id,
+                }
+            ),
+          },
+        }
       );
-      onClose();
-    },
-    onError: (error) => setError(error.message),
-  });
-
-  const newMeals = data.meal_connection.edges.map(({ node: m }) => {
-    const meal_id = uuid();
-
-    return {
-      id: meal_id,
-      date: insertDate,
-      time: m.time,
-      name: m.name || "",
-
-      meal_items: m.meal_items_connection.edges.map(({ node: i }) => ({
-        id: uuid(),
-        u_id,
-        food: i.food,
-        weight: i.weight,
-        carbohydrates: i.carbohydrates,
-        proteins: i.proteins,
-        fats: i.fats,
-        energy_cal: i.energy_cal,
-        energy_kj: i.energy_kj,
-        recipe_id: i.recipe_id,
-      })),
-    };
-  });
-
-  const handleSubmit = (e: any) => {
-    e.stopPropagation();
-    newMeals?.map((m) =>
-      insert_day_copy({
-        variables: { ...m, u_id },
-      })
-    );
+    }),
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = (event: any) => {
+    onSubmit(newMeals, handleClose);
+    event.stopPropagation();
+  };
+
+  const formatedFromDate = moment(date).format("dd (DD/MM/YYYY)");
+
   return (
-    <>
+    <Dialog
+      open={open}
+      onClick={(e) => e.stopPropagation()}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        <Trans>Copy meals</Trans>
+      </DialogTitle>
+
       <MDialogContent>
+        <DialogContentText>
+          <Trans>
+            From <b>{formatedFromDate}</b>
+          </Trans>
+        </DialogContentText>
         <DialogContentText id="alert-dialog-description">
           <DatePicker
-            renderInput={(props: any) => (
-              <TextField
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onClick={(e) => e.stopPropagation()}
-                placeholder={<Trans>Select date to insert to</Trans>}
-                //className={classes.smallerField}
-                {...props}
-              />
-            )}
+            renderInput={(props) => <TextField {...props} />}
             value={insertDate}
-            onChange={(date) => {
-              setInsertDate(date);
+            onChange={(date, e) => {
+              if (date) {
+                setInsertDate(moment(date, "YYYY-w-e").format());
+              }
             }}
-            label={<Trans>When</Trans>}
-            //autoOk={true}
+            label={<Trans>To</Trans>}
+            inputFormat={"DD/MM/yyyy"}
           />
         </DialogContentText>
       </MDialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary" disabled={postLoading}>
+        <Button onClick={handleClose} color="primary">
           <Trans>Cancel</Trans>
         </Button>
         <Button
-          disabled={postLoading}
           onClick={handleSubmit}
+          variant={"contained"}
           color="primary"
           autoFocus
         >
@@ -149,48 +158,6 @@ const DialogContent = ({
           </Alert>
         </Snackbar>
       )}
-    </>
-  );
-};
-
-interface Props {
-  open: boolean;
-  setOpen: any;
-  date: string;
-}
-
-export const CopyDayDialog = ({ open, setOpen, date }: Props) => {
-  const {
-    userStore: {
-      user: { id: u_id },
-    },
-  } = useStore();
-  const { queryReference, refetch } = useMealsByDateQuery({ u_id, date });
-
-  const handleClose = (event: any) => {
-    setOpen(false);
-    event.stopPropagation();
-  };
-
-  return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">
-        <Trans>Copy meals</Trans>
-      </DialogTitle>
-      <Suspense fallback={<CircularProgress />}>
-        {queryReference && (
-          <DialogContent
-            onClose={handleClose}
-            queryReference={queryReference}
-            refetch={refetch}
-          />
-        )}
-      </Suspense>
     </Dialog>
   );
 };

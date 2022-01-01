@@ -20,19 +20,6 @@ export type recipe_item_update_column = "carbohydrates" | "energy_cal" | "energy
 export type recipe_update_column = "description" | "id" | "increment" | "link" | "name" | "portions" | "u_id" | "%future added value";
 export type users_constraint = "users_email_key" | "users_fb_id_key" | "users_fb_picture_url_key" | "users_password_key" | "users_pkey" | "users_user_name_key" | "%future added value";
 export type users_update_column = "email" | "fb_id" | "fb_picture_url" | "first_name" | "full_name" | "id" | "last_name" | "password" | "user_name" | "%future added value";
-export type meal_insert_input = {
-    date?: string | null | undefined;
-    id?: string | null | undefined;
-    meal_items?: meal_item_arr_rel_insert_input | null | undefined;
-    name?: string | null | undefined;
-    time?: unknown | null | undefined;
-    u_id?: string | null | undefined;
-    user?: users_obj_rel_insert_input | null | undefined;
-};
-export type meal_item_arr_rel_insert_input = {
-    data: Array<meal_item_insert_input>;
-    on_conflict?: meal_item_on_conflict | null | undefined;
-};
 export type meal_item_insert_input = {
     carbohydrates?: number | null | undefined;
     energy_cal?: number | null | undefined;
@@ -351,6 +338,15 @@ export type food_type_on_conflict = {
     update_columns: Array<food_type_update_column>;
     where?: food_type_bool_exp | null | undefined;
 };
+export type meal_item_arr_rel_insert_input = {
+    data: Array<meal_item_insert_input>;
+    on_conflict?: meal_item_on_conflict | null | undefined;
+};
+export type meal_item_on_conflict = {
+    constraint: meal_item_constraint;
+    update_columns: Array<meal_item_update_column>;
+    where?: meal_item_bool_exp | null | undefined;
+};
 export type recipe_item_arr_rel_insert_input = {
     data: Array<recipe_item_insert_input>;
     on_conflict?: recipe_item_on_conflict | null | undefined;
@@ -411,6 +407,15 @@ export type meal_arr_rel_insert_input = {
     data: Array<meal_insert_input>;
     on_conflict?: meal_on_conflict | null | undefined;
 };
+export type meal_insert_input = {
+    date?: string | null | undefined;
+    id?: string | null | undefined;
+    meal_items?: meal_item_arr_rel_insert_input | null | undefined;
+    name?: string | null | undefined;
+    time?: unknown | null | undefined;
+    u_id?: string | null | undefined;
+    user?: users_obj_rel_insert_input | null | undefined;
+};
 export type meal_on_conflict = {
     constraint: meal_constraint;
     update_columns: Array<meal_update_column>;
@@ -454,102 +459,50 @@ export type meal_obj_rel_insert_input = {
     data: meal_insert_input;
     on_conflict?: meal_on_conflict | null | undefined;
 };
-export type meal_item_on_conflict = {
-    constraint: meal_item_constraint;
-    update_columns: Array<meal_item_update_column>;
-    where?: meal_item_bool_exp | null | undefined;
+export type AddMealItemMutationVariables = {
+    objects: Array<meal_item_insert_input>;
 };
-export type AddMealMutationVariables = {
-    data: Array<meal_insert_input>;
-};
-export type AddMealMutationResponse = {
-    readonly insert_meal: {
+export type AddMealItemMutationResponse = {
+    readonly insert_meal_item: {
         readonly returning: ReadonlyArray<{
+            readonly carbohydrates: number;
+            readonly energy_cal: number;
+            readonly energy_kj: number;
+            readonly fats: number;
+            readonly food: string | null;
             readonly id: string;
-            readonly time: unknown | null;
-            readonly date: string | null;
-            readonly name: string | null;
-            readonly meal_items_connection: {
-                readonly edges: ReadonlyArray<{
-                    readonly node: {
-                        readonly id: string;
-                        readonly u_id: string;
-                        readonly meal_id: string;
-                        readonly food: string | null;
-                        readonly foodDesc: {
-                            readonly id: string;
-                            readonly name: unknown;
-                            readonly energy_cal: number;
-                            readonly energy_kj: number;
-                            readonly carbohydrates: number;
-                            readonly fats: number;
-                            readonly proteins: number;
-                        } | null;
-                        readonly weight: number;
-                        readonly carbohydrates: number;
-                        readonly proteins: number;
-                        readonly fats: number;
-                        readonly energy_cal: number;
-                        readonly energy_kj: number;
-                        readonly recipe_id: string | null;
-                        readonly recipe: {
-                            readonly name: string | null;
-                        } | null;
-                    };
-                    readonly cursor: string;
-                }>;
-            };
+            readonly meal_id: string;
+            readonly proteins: number;
+            readonly recipe_id: string | null;
+            readonly u_id: string;
+            readonly weight: number;
         }>;
     } | null;
 };
-export type AddMealMutation = {
-    readonly response: AddMealMutationResponse;
-    readonly variables: AddMealMutationVariables;
+export type AddMealItemMutation = {
+    readonly response: AddMealItemMutationResponse;
+    readonly variables: AddMealItemMutationVariables;
 };
 
 
 
 /*
-mutation AddMealMutation(
-  $data: [meal_insert_input!]!
+mutation AddMealItemMutation(
+  $objects: [meal_item_insert_input!]!
 ) {
-  insert_meal(objects: $data) {
+  insert_meal_item(objects: $objects) {
     returning {
+      carbohydrates
+      energy_cal
+      energy_kj
+      fats
+      food
       id
-      time
-      date
-      name
-      meal_items_connection {
-        edges {
-          node {
-            id
-            u_id
-            meal_id
-            food
-            foodDesc {
-              id
-              name
-              energy_cal
-              energy_kj
-              carbohydrates
-              fats
-              proteins
-            }
-            weight
-            carbohydrates
-            proteins
-            fats
-            energy_cal
-            energy_kj
-            recipe_id
-            recipe {
-              name
-              id
-            }
-          }
-          cursor
-        }
-      }
+      meal_id
+      proteins
+      recipe_id
+      u_id
+      weight
     }
   }
 }
@@ -560,231 +513,123 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "data"
+    "name": "objects"
   }
 ],
 v1 = [
   {
-    "kind": "Variable",
-    "name": "objects",
-    "variableName": "data"
-  }
-],
-v2 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "id",
-  "storageKey": null
-},
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "time",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "date",
-  "storageKey": null
-},
-v5 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "name",
-  "storageKey": null
-},
-v6 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "u_id",
-  "storageKey": null
-},
-v7 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "meal_id",
-  "storageKey": null
-},
-v8 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "food",
-  "storageKey": null
-},
-v9 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "energy_cal",
-  "storageKey": null
-},
-v10 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "energy_kj",
-  "storageKey": null
-},
-v11 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "carbohydrates",
-  "storageKey": null
-},
-v12 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "fats",
-  "storageKey": null
-},
-v13 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "proteins",
-  "storageKey": null
-},
-v14 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "food",
-  "kind": "LinkedField",
-  "name": "foodDesc",
-  "plural": false,
-  "selections": [
-    (v2/*: any*/),
-    (v5/*: any*/),
-    (v9/*: any*/),
-    (v10/*: any*/),
-    (v11/*: any*/),
-    (v12/*: any*/),
-    (v13/*: any*/)
-  ],
-  "storageKey": null
-},
-v15 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "weight",
-  "storageKey": null
-},
-v16 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "recipe_id",
-  "storageKey": null
-},
-v17 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "cursor",
-  "storageKey": null
-};
-return {
-  "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "AddMealMutation",
+    "alias": null,
+    "args": [
+      {
+        "kind": "Variable",
+        "name": "objects",
+        "variableName": "objects"
+      }
+    ],
+    "concreteType": "meal_item_mutation_response",
+    "kind": "LinkedField",
+    "name": "insert_meal_item",
+    "plural": false,
     "selections": [
       {
         "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": "meal_mutation_response",
+        "args": null,
+        "concreteType": "meal_item",
         "kind": "LinkedField",
-        "name": "insert_meal",
-        "plural": false,
+        "name": "returning",
+        "plural": true,
         "selections": [
           {
             "alias": null,
             "args": null,
-            "concreteType": "meal",
-            "kind": "LinkedField",
-            "name": "returning",
-            "plural": true,
-            "selections": [
-              (v2/*: any*/),
-              (v3/*: any*/),
-              (v4/*: any*/),
-              (v5/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "meal_itemConnection",
-                "kind": "LinkedField",
-                "name": "meal_items_connection",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "meal_itemEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "meal_item",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          (v2/*: any*/),
-                          (v6/*: any*/),
-                          (v7/*: any*/),
-                          (v8/*: any*/),
-                          (v14/*: any*/),
-                          (v15/*: any*/),
-                          (v11/*: any*/),
-                          (v13/*: any*/),
-                          (v12/*: any*/),
-                          (v9/*: any*/),
-                          (v10/*: any*/),
-                          (v16/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "recipe",
-                            "kind": "LinkedField",
-                            "name": "recipe",
-                            "plural": false,
-                            "selections": [
-                              (v5/*: any*/)
-                            ],
-                            "storageKey": null
-                          }
-                        ],
-                        "storageKey": null
-                      },
-                      (v17/*: any*/)
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
-            ],
+            "kind": "ScalarField",
+            "name": "carbohydrates",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "energy_cal",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "energy_kj",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "fats",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "food",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "meal_id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "proteins",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "recipe_id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "u_id",
+            "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "weight",
             "storageKey": null
           }
         ],
         "storageKey": null
       }
     ],
+    "storageKey": null
+  }
+];
+return {
+  "fragment": {
+    "argumentDefinitions": (v0/*: any*/),
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "AddMealItemMutation",
+    "selections": (v1/*: any*/),
     "type": "mutation_root",
     "abstractKey": null
   },
@@ -792,104 +637,18 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "AddMealMutation",
-    "selections": [
-      {
-        "alias": null,
-        "args": (v1/*: any*/),
-        "concreteType": "meal_mutation_response",
-        "kind": "LinkedField",
-        "name": "insert_meal",
-        "plural": false,
-        "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "meal",
-            "kind": "LinkedField",
-            "name": "returning",
-            "plural": true,
-            "selections": [
-              (v2/*: any*/),
-              (v3/*: any*/),
-              (v4/*: any*/),
-              (v5/*: any*/),
-              {
-                "alias": null,
-                "args": null,
-                "concreteType": "meal_itemConnection",
-                "kind": "LinkedField",
-                "name": "meal_items_connection",
-                "plural": false,
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "concreteType": "meal_itemEdge",
-                    "kind": "LinkedField",
-                    "name": "edges",
-                    "plural": true,
-                    "selections": [
-                      {
-                        "alias": null,
-                        "args": null,
-                        "concreteType": "meal_item",
-                        "kind": "LinkedField",
-                        "name": "node",
-                        "plural": false,
-                        "selections": [
-                          (v2/*: any*/),
-                          (v6/*: any*/),
-                          (v7/*: any*/),
-                          (v8/*: any*/),
-                          (v14/*: any*/),
-                          (v15/*: any*/),
-                          (v11/*: any*/),
-                          (v13/*: any*/),
-                          (v12/*: any*/),
-                          (v9/*: any*/),
-                          (v10/*: any*/),
-                          (v16/*: any*/),
-                          {
-                            "alias": null,
-                            "args": null,
-                            "concreteType": "recipe",
-                            "kind": "LinkedField",
-                            "name": "recipe",
-                            "plural": false,
-                            "selections": [
-                              (v5/*: any*/),
-                              (v2/*: any*/)
-                            ],
-                            "storageKey": null
-                          }
-                        ],
-                        "storageKey": null
-                      },
-                      (v17/*: any*/)
-                    ],
-                    "storageKey": null
-                  }
-                ],
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          }
-        ],
-        "storageKey": null
-      }
-    ]
+    "name": "AddMealItemMutation",
+    "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "cdfdcf13e6e4543ceedb4c038f5ab3e4",
+    "cacheID": "99c68f80c7597bb2284f91809af96dac",
     "id": null,
     "metadata": {},
-    "name": "AddMealMutation",
+    "name": "AddMealItemMutation",
     "operationKind": "mutation",
-    "text": "mutation AddMealMutation(\n  $data: [meal_insert_input!]!\n) {\n  insert_meal(objects: $data) {\n    returning {\n      id\n      time\n      date\n      name\n      meal_items_connection {\n        edges {\n          node {\n            id\n            u_id\n            meal_id\n            food\n            foodDesc {\n              id\n              name\n              energy_cal\n              energy_kj\n              carbohydrates\n              fats\n              proteins\n            }\n            weight\n            carbohydrates\n            proteins\n            fats\n            energy_cal\n            energy_kj\n            recipe_id\n            recipe {\n              name\n              id\n            }\n          }\n          cursor\n        }\n      }\n    }\n  }\n}\n"
+    "text": "mutation AddMealItemMutation(\n  $objects: [meal_item_insert_input!]!\n) {\n  insert_meal_item(objects: $objects) {\n    returning {\n      carbohydrates\n      energy_cal\n      energy_kj\n      fats\n      food\n      id\n      meal_id\n      proteins\n      recipe_id\n      u_id\n      weight\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'dd66f98cdf4cd5822ff0ca2d692ec8d1';
+(node as any).hash = '119323cac42a786de052f2557d69af76';
 export default node;

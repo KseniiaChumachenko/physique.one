@@ -14,6 +14,7 @@ export const FoodQuery = graphql`
           energy_cal
           energy_kj
           u_id
+          weight
         }
       }
     }

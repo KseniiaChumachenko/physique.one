@@ -9,16 +9,18 @@ import {
   TableRow,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { ApolloError } from "@apollo/client";
 import { Alert } from "@material-ui/lab";
 import { Trans } from "@lingui/react";
-import {
-  Food,
-  Meal_Item,
-  useDeleteMealItemByPrimaryKeyMutation,
-} from "src/graphql/generated/graphql";
+import { Food, Meal_Item } from "src/graphql/generated/graphql";
 import { EditDeleteButtonGroup } from "../../../components/EditDeletButtonGroup";
 import { EditMealItemDialog } from "../../../components/MealItemDialog/EditMealItemDialog";
+import {
+  DeleteMealItemMutationVariables,
+  useDeleteMealItemMutation,
+} from "../../../../api-hooks/mealItem";
+import { base64ToUuid } from "../../../../utils/base64-to-uuid";
+import { FoodPreloadedHookProps } from "../../../../api-hooks/food";
+import { RecipePreloadedHookProps } from "../../../../api-hooks/recipe";
 
 const useStyles = makeStyles(() => ({
   table: {
@@ -50,22 +52,35 @@ type MealItemNode = { __typename?: "meal_item" } & Pick<
     >;
   };
 
+type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps;
+interface P extends ExtendProps {
+  meal_items?: Meal_Item[];
+  refetch: () => void;
+}
+
 export const PanelDetailTable = ({
   meal_items,
-}: {
-  meal_items?: Meal_Item[];
-}) => {
+  refetch,
+  foodQR,
+  recipeQR,
+}: P) => {
   const classes = useStyles();
   const [openEditMealItemDialog, setEditMealItemDialog] = useState<
     MealItemNode | Meal_Item | boolean
   >(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<ApolloError>();
+  const [error, setError] = useState<Error>();
 
-  const [delete_by_pk] = useDeleteMealItemByPrimaryKeyMutation({
-    onCompleted: () => setSuccess(true),
-    onError: (error1) => setError(error1),
-  });
+  const [destroy] = useDeleteMealItemMutation();
+  const handleDelete = (v: DeleteMealItemMutationVariables) =>
+    destroy({
+      variables: v,
+      onCompleted: () => {
+        refetch();
+        setSuccess(true);
+      },
+      onError: (error1) => setError(error1),
+    });
 
   const withMealItems = meal_items && meal_items.length > 0;
 
@@ -133,7 +148,7 @@ export const PanelDetailTable = ({
                       <EditDeleteButtonGroup
                         onEditClick={() => setEditMealItemDialog(row)}
                         onDeleteClick={() =>
-                          delete_by_pk({ variables: { id: row.id } })
+                          handleDelete({ id: base64ToUuid(row.id) })
                         }
                       />
                     }
@@ -175,6 +190,9 @@ export const PanelDetailTable = ({
       {/* Edit MealItem dialog */}
       {(openEditMealItemDialog as Meal_Item)?.id && (
         <EditMealItemDialog
+          refetch={refetch}
+          foodQR={foodQR}
+          recipeQR={recipeQR}
           open={!!openEditMealItemDialog}
           setOpen={setEditMealItemDialog}
           mealItem={openEditMealItemDialog as Meal_Item}
