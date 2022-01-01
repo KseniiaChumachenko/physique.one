@@ -21,11 +21,17 @@ export const useRecipes = (v: RecipeQueryVariables) => {
 };
 
 export interface RecipePreloadedHookProps {
-  recipeQueryReference: PreloadedQuery<RecipeQuery, Record<string, unknown>>;
+  recipeQR: PreloadedQuery<RecipeQuery, Record<string, unknown>>;
 }
 
 export const useRecipePreloaded = (
   queryReference: PreloadedQuery<RecipeQuery, Record<string, unknown>>
 ) => {
-  return usePreloadedQuery<RecipeQuery>(RecipeQueryDocument, queryReference);
+  const data = usePreloadedQuery<RecipeQuery>(
+    RecipeQueryDocument,
+    queryReference
+  );
+  return {
+    data,
+  };
 };

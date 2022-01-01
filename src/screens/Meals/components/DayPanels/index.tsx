@@ -8,6 +8,8 @@ import {
   useMealsByDateQuery,
   useMealsPreloadedQuery,
 } from "src/api-hooks/mealsByDate";
+import { FoodPreloadedHookProps, useFood } from "src/api-hooks/food";
+import { RecipePreloadedHookProps, useRecipes } from "src/api-hooks/recipe";
 import { DayPanelHeader } from "./DayPanelHeader";
 import { PanelSummary } from "./PanelSummary";
 import { PanelDetailTable } from "./PanelDetailTable";
@@ -53,18 +55,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-interface PanelsProps extends MealsByDatePreloadedHookProps {
+type ExtendProps = FoodPreloadedHookProps &
+  RecipePreloadedHookProps &
+  MealsByDatePreloadedHookProps;
+
+interface PanelsProps extends ExtendProps {
   date: string;
 }
 
-const Panels = ({ date, queryReference }: PanelsProps) => {
+const Panels = ({ date, mealsQR, recipeQR, foodQR }: PanelsProps) => {
   const classes = useStyles();
 
-  const { data } = useMealsPreloadedQuery(queryReference);
+  const {
+    data,
+    refetch,
+    mutations: { destroy },
+  } = useMealsPreloadedQuery(mealsQR);
 
   return (
-    <>
-      <DayPanelHeader date={date} queryReference={queryReference} />
+    <Accordion className={classes.parentExpPanel} key={date + "Header"}>
+      <DayPanelHeader date={date} mealsQR={mealsQR} />
       <AccordionDetails
         className={classes.parentExpPanelDetails}
         key={date + "panelDetail"}
@@ -81,13 +91,21 @@ const Panels = ({ date, queryReference }: PanelsProps) => {
                 }}
               >
                 <PanelSummary
+                  refetch={refetch}
+                  foodQR={foodQR}
+                  recipeQR={recipeQR}
+                  destroy={destroy}
                   id={item?.id}
                   name={item?.name}
                   time={item?.time}
+                  meal_items_aggregate={item?.meal_items_aggregate}
                   key={key}
                 />
                 <AccordionDetails className={classes.parentExpPanelDetails}>
                   <PanelDetailTable
+                    recipeQR={recipeQR}
+                    foodQR={foodQR}
+                    refetch={refetch}
                     meal_items={
                       item?.meal_items_connection.edges.map(({ node }) => ({
                         ...node,
@@ -99,7 +117,7 @@ const Panels = ({ date, queryReference }: PanelsProps) => {
             )
         )}
       </AccordionDetails>
-    </>
+    </Accordion>
   );
 };
 
@@ -108,23 +126,27 @@ interface Props {
 }
 
 export const DayPanels = ({ date }: Props) => {
-  const classes = useStyles();
   const {
     userStore: { user },
   } = useStore();
-
-  const { queryReference } = useMealsByDateQuery({
+  const { queryReference: foodQR } = useFood({});
+  const { queryReference: recipeQR } = useRecipes({});
+  const { queryReference: mealsQR } = useMealsByDateQuery({
     date,
     u_id: user?.id,
   });
+  const references = mealsQR && foodQR && recipeQR;
 
   return (
-    <Accordion className={classes.parentExpPanel} key={date + "Header"}>
-      <Suspense fallback={<LinearProgress />}>
-        {queryReference && (
-          <Panels date={date} queryReference={queryReference} />
-        )}
-      </Suspense>
-    </Accordion>
+    <Suspense fallback={<LinearProgress />}>
+      {references && (
+        <Panels
+          date={date}
+          mealsQR={mealsQR}
+          foodQR={foodQR}
+          recipeQR={recipeQR}
+        />
+      )}
+    </Suspense>
   );
 };

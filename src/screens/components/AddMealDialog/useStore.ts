@@ -1,11 +1,9 @@
-import omit from "lodash.omit";
 import { useLocalObservable } from "mobx-react-lite";
 import moment, { Moment } from "moment";
 import { v4 } from "uuid";
-import {
-  Meal_Item,
-  Meal_Item_Insert_Input,
-} from "../../../graphql/generated/graphql";
+import { meal_item_insert_input } from "src/api-hooks/mealsByDate";
+import { FoodQueryResponse } from "src/api-hooks/food";
+import { Meal_Item } from "../../../graphql/generated/graphql";
 
 interface State {
   name?: string | null;
@@ -14,9 +12,9 @@ interface State {
   time?: any;
   setTime(newTime: Moment): void;
 
-  foods: Meal_Item[];
+  foods: FoodQueryResponse;
 
-  meal_items: Meal_Item_Insert_Input[];
+  meal_items: meal_item_insert_input[];
   add_meal_item(): void;
   update_meal_item({
     indexOfItem,
@@ -31,14 +29,13 @@ interface State {
 }
 
 const calculateMacronutrient = (
-  nutrientPer100G: number,
+  nutrientPer100G: number | null | undefined,
   foodWeight: number,
   weight: number
-) => (nutrientPer100G / foodWeight) * weight;
+) => ((nutrientPer100G || 0) / foodWeight) * weight;
 
 //TODO Duplicate of logic in MealItemDialog
-const standardMealItem = (food: Meal_Item, weight = 100) => ({
-  ...food,
+const standardMealItem = (food: meal_item_insert_input, weight = 100) => ({
   id: v4(),
   food: food.recipe_id ? null : food?.food || food?.id,
   recipe_id: food.recipe_id ?? null,
@@ -59,7 +56,7 @@ const standardMealItem = (food: Meal_Item, weight = 100) => ({
 });
 
 export function useStore(
-  fetchedFoods: Meal_Item[],
+  fetchedFoods: FoodQueryResponse,
   name?: string | null,
   meal_items?: Meal_Item[]
 ) {
@@ -76,12 +73,14 @@ export function useStore(
 
     foods: fetchedFoods,
 
-    meal_items: meal_items?.map((item) => omit(item, "__typename")) || [
-      standardMealItem(fetchedFoods[0].node) as any,
+    meal_items: meal_items || [
+      standardMealItem(fetchedFoods.food_connection.edges[0]?.node),
     ],
 
     add_meal_item: () => {
-      store.meal_items.push(standardMealItem(fetchedFoods[0].node) as any);
+      store.meal_items.push(
+        standardMealItem(fetchedFoods.food_connection.edges[0]?.node)
+      );
     },
     update_meal_item: ({ indexOfItem = 0, food, weight }) => {
       store.meal_items[indexOfItem] = standardMealItem(

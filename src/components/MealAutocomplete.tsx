@@ -41,16 +41,20 @@ export const MealAutocomplete = observer(
     value,
     setValue,
     withRecipes = true,
-    foodQueryReference,
-    recipeQueryReference,
+    foodQR,
+    recipeQR,
     ...restProps
   }: MealAutocompleteProps) => {
     const {
-      food_connection: { edges: foods },
-    } = useFoodPreloadedQuery(foodQueryReference);
+      data: {
+        food_connection: { edges: foods },
+      },
+    } = useFoodPreloadedQuery(foodQR);
     const {
-      recipe_connection: { edges: recipes },
-    } = useRecipePreloaded(recipeQueryReference);
+      data: {
+        recipe_connection: { edges: recipes },
+      },
+    } = useRecipePreloaded(recipeQR);
 
     const remappedOptions = withRecipes
       ? [

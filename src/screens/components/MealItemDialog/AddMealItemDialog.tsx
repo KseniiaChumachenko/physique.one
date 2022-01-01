@@ -14,11 +14,18 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import { Trans } from "@lingui/react";
 import { useStore } from "src/store";
-import { useAddMealItemMutation } from "../../../graphql/generated/graphql";
+import {
+  FoodPreloadedHookProps,
+  useFoodPreloadedQuery,
+} from "src/api-hooks/food";
+import {
+  RecipePreloadedHookProps,
+  useRecipePreloaded,
+} from "src/api-hooks/recipe";
+import { useAddMealItemMutation } from "src/api-hooks/mealItem";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { MealAutocomplete } from "../../../components/MealAutocomplete";
 import { aggregate } from "../../Recipes/utils";
-import { useFood } from "../../../api-hooks/food";
-import { useRecipes } from "../../../api-hooks/recipe";
 
 const useStyles = makeStyles(() => ({
   field: {
@@ -27,40 +34,44 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface Props {
+type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps;
+
+interface Props extends ExtendProps {
   open: boolean;
   setOpen(o: boolean): void;
-  meal_id: unknown;
+  meal_id: string;
+  refetch: () => void;
 }
 
 // TODO Refactor Add/Edit modals first
 
 export const AddMealItemDialog = observer(
-  ({ open, setOpen, meal_id }: Props) => {
+  ({ open, setOpen, meal_id, foodQR, recipeQR, refetch }: Props) => {
     const classes = useStyles();
-    const { queryReference: foodQR } = useFood({});
-    const { queryReference: recipeQR } = useRecipes({});
+    const { data: foodLibrary } = useFoodPreloadedQuery(foodQR);
+    const { data: recipeLibrary } = useRecipePreloaded(recipeQR);
+    const [addMealItem] = useAddMealItemMutation();
     const {
       userStore: { user },
-      foodLibraryStore: { data: foodLibrary },
-      recipeStore: { data: recipeLibrary },
     } = useStore();
 
-    const [error, setOpenErrorMessage] = React.useState(false);
+    const [error, setOpenErrorMessage] = React.useState<Error>();
     const [success, setOpenSuccessMessage] = React.useState(false);
 
     const [selectedItemId, setSelectedItemId] = useState(
-      foodLibrary?.[0]?.id || ""
+      foodLibrary.food_connection.edges[0].node.id || ""
     );
     const [weight, setWeight] = useState(100);
 
     const mealItemProps = () => {
-      const food = foodLibrary.find(({ id }) => id === selectedItemId);
+      const food = foodLibrary.food_connection.edges.find(
+        ({ node: { id } }) => id === selectedItemId
+      )?.node;
       if (food) {
         const weightAdjustment = (divider: number) =>
           (divider / (food?.weight || 100)) * weight;
         return {
-          food: food?.id,
+          food: base64ToUuid(food?.id),
 
           energy_cal: weightAdjustment(food?.energy_cal),
           energy_kj: weightAdjustment(food?.energy_kj),
@@ -69,49 +80,60 @@ export const AddMealItemDialog = observer(
           fats: weightAdjustment(food?.fats),
         };
       } else {
-        const recipe = recipeLibrary.find(({ id }) => id === selectedItemId);
+        const recipe = recipeLibrary.recipe_connection.edges.find(
+          ({ node: { id } }) => id === selectedItemId
+        )?.node;
 
         if (recipe) {
-          const recipeWeight = aggregate(recipe.recipe_items, "weight");
+          const recipeWeight = aggregate(recipe.recipe_items as any, "weight");
           const weightAdjustment = (divider: number) =>
             (divider / recipeWeight) * weight;
 
           return {
-            id: recipe.id,
-            recipe_id: recipe.id,
-            name: recipe.name,
+            id: base64ToUuid(recipe.id),
+            recipe_id: base64ToUuid(recipe.id),
             carbohydrates: weightAdjustment(
-              aggregate(recipe.recipe_items, "carbohydrates")
+              aggregate(recipe.recipe_items as any, "carbohydrates")
             ),
             proteins: weightAdjustment(
-              aggregate(recipe.recipe_items, "proteins")
+              aggregate(recipe.recipe_items as any, "proteins")
             ),
-            fats: weightAdjustment(aggregate(recipe.recipe_items, "fats")),
+            fats: weightAdjustment(
+              aggregate(recipe.recipe_items as any, "fats")
+            ),
             energy_cal: weightAdjustment(
-              aggregate(recipe.recipe_items, "energy_cal")
+              aggregate(recipe.recipe_items as any, "energy_cal")
             ),
             energy_kj: weightAdjustment(
-              aggregate(recipe.recipe_items, "energy_kj")
+              aggregate(recipe.recipe_items as any, "energy_kj")
             ),
-            weight: weightAdjustment(aggregate(recipe.recipe_items, "weight")),
+            weight: weightAdjustment(
+              aggregate(recipe.recipe_items as any, "weight")
+            ),
           };
         }
       }
     };
 
-    const [addMealItem, { error: submitError }] = useAddMealItemMutation({
-      onError: () => setOpenErrorMessage(true),
-      onCompleted: () => {
-        setOpenSuccessMessage(true);
-        setOpen(false);
-      },
-      variables: {
-        u_id: user?.id,
-        weight,
-        meal_id,
-        ...mealItemProps(),
-      },
-    });
+    const handleAddMealItem = () =>
+      addMealItem({
+        onError: (e) => setOpenErrorMessage(e),
+        onCompleted: () => {
+          refetch();
+          setOpenSuccessMessage(true);
+          setOpen(false);
+        },
+        variables: {
+          objects: [
+            {
+              u_id: user?.id,
+              weight,
+              meal_id: base64ToUuid(meal_id),
+              ...mealItemProps(),
+            },
+          ],
+        },
+      });
 
     if (!foodQR || !recipeQR) {
       return <CircularProgress />;
@@ -126,8 +148,8 @@ export const AddMealItemDialog = observer(
               value={selectedItemId}
               setValue={setSelectedItemId}
               className={classes.field}
-              foodQueryReference={foodQR}
-              recipeQueryReference={recipeQR}
+              foodQR={foodQR}
+              recipeQR={recipeQR}
             />
             <TextField
               label={<Trans>Weight (g)</Trans>}
@@ -152,10 +174,7 @@ export const AddMealItemDialog = observer(
             <Button
               variant={"text"}
               children={<Trans>Submit</Trans>}
-              onClick={(event) => {
-                addMealItem();
-                event.stopPropagation();
-              }}
+              onClick={handleAddMealItem}
             />
           </DialogActions>
         </Dialog>
@@ -176,15 +195,15 @@ export const AddMealItemDialog = observer(
         )}
         {error && (
           <Snackbar
-            open={error}
+            open={!!error}
             autoHideDuration={6000}
-            onClose={() => setOpenErrorMessage(false)}
+            onClose={() => setOpenErrorMessage(undefined)}
           >
             <Alert
               severity={"error"}
-              onClose={() => setOpenErrorMessage(false)}
+              onClose={() => setOpenErrorMessage(undefined)}
             >
-              <Trans>Failed to add item: {submitError?.message}</Trans>
+              <Trans>Failed to add item: {error?.message}</Trans>
             </Alert>
           </Snackbar>
         )}

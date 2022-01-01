@@ -18,6 +18,7 @@ export type FoodQueryResponse = {
                 readonly energy_cal: number;
                 readonly energy_kj: number;
                 readonly u_id: string | null;
+                readonly weight: number | null;
             };
         }>;
     };
@@ -43,6 +44,7 @@ query FoodQuery {
         energy_cal
         energy_kj
         u_id
+        weight
       }
     }
   }
@@ -137,6 +139,13 @@ var v0 = [
                 "kind": "ScalarField",
                 "name": "u_id",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "weight",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -166,14 +175,14 @@ return {
     "selections": (v0/*: any*/)
   },
   "params": {
-    "cacheID": "f2ac27b9363cb503de171ee9254c3f0f",
+    "cacheID": "3ac9744cd447bf00761c0a40e863cf26",
     "id": null,
     "metadata": {},
     "name": "FoodQuery",
     "operationKind": "query",
-    "text": "query FoodQuery {\n  food_connection {\n    edges {\n      node {\n        id\n        name\n        type\n        carbohydrates\n        proteins\n        fats\n        energy_cal\n        energy_kj\n        u_id\n      }\n    }\n  }\n}\n"
+    "text": "query FoodQuery {\n  food_connection {\n    edges {\n      node {\n        id\n        name\n        type\n        carbohydrates\n        proteins\n        fats\n        energy_cal\n        energy_kj\n        u_id\n        weight\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'da68ee4ff7cffdb6342f25381f63c275';
+(node as any).hash = '50cc10fa83896b74664c4f9b54e56f61';
 export default node;

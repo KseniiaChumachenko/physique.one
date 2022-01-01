@@ -17,7 +17,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { TimePicker } from "@material-ui/pickers";
 import { Autocomplete } from "@material-ui/lab";
 import { useStore as useGlobalStore } from "src/store";
-import { Meal_Item } from "src/graphql/generated/graphql";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
 import { AddMealMutationVariables } from "src/api-hooks/mealsByDate";
 import {
@@ -64,7 +63,6 @@ interface Props {
 
   name?: string | null;
   time?: any;
-  meal_items?: Meal_Item[];
 }
 
 type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps & Props;
@@ -72,29 +70,20 @@ type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps & Props;
 interface AddMealDialogProps extends ExtendProps {}
 
 const AddMealDialogDataFlow = observer<AddMealDialogProps>(
-  ({
-    open,
-    setOpen,
-    date,
-    name,
-    meal_items,
-    onConfirm,
-    foodQueryReference,
-    recipeQueryReference,
-  }) => {
+  ({ open, setOpen, date, name, onConfirm, foodQR, recipeQR }) => {
     const classes = useStyles();
     const {
       userStore: { user },
     } = useGlobalStore();
+    const { data: foods } = useFoodPreloadedQuery(foodQR);
     const {
-      food_connection: { edges: foods },
-    } = useFoodPreloadedQuery(foodQueryReference);
-    const {
-      recipe_connection: { edges: recipes },
-    } = useRecipePreloaded(recipeQueryReference);
+      data: {
+        recipe_connection: { edges: recipes },
+      },
+    } = useRecipePreloaded(recipeQR);
 
     const stateEndRef = useRef(null);
-    const store = useStore(foods, name, meal_items);
+    const store = useStore(foods, name);
 
     useScrollToBottom(store.meal_items, stateEndRef); //TODO for some reason this stoped working
 
@@ -115,7 +104,9 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
           weight: aggregate(r.recipe_items as any, "weight"),
         };
       } else {
-        item = foods.find(({ node: { id } }) => id === selectId)?.node as any;
+        item = foods.food_connection.edges.find(
+          ({ node: { id } }) => id === selectId
+        )?.node;
       }
 
       return store.update_meal_item({
@@ -128,23 +119,29 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
       event.stopPropagation();
     };
 
-    const handleDeleteItem = (id: string) => () => {
-      store.remove_meal_item(id);
+    const handleDeleteItem = (id?: string | null) => () => {
+      if (id) {
+        store.remove_meal_item(id);
+      }
     };
 
     const handleSubmit = onConfirm({
-      name: store.name,
-      date,
-      time: moment(store.time).format("HH:mm"),
-      data: store.meal_items.map(
-        ({ name, __typename, type, recipe, ...i }) => ({
-          ...i,
+      data: [
+        {
+          name: store.name,
+          date,
+          time: moment(store.time).format("HH:mm"),
+          meal_items: {
+            data: store.meal_items.map((i) => ({
+              ...i,
+              u_id: user?.id,
+              recipe_id: i.recipe_id ? base64ToUuid(i.recipe_id) : null,
+              food: i.food ? base64ToUuid(i.food) : null,
+            })),
+          },
           u_id: user?.id,
-          recipe_id: i.recipe_id ? base64ToUuid(i.recipe_id) : null,
-          food: i.food ? base64ToUuid(i.food) : null,
-        })
-      ),
-      u_id: user?.id,
+        },
+      ],
     });
 
     return (
@@ -203,12 +200,12 @@ const AddMealDialogDataFlow = observer<AddMealDialogProps>(
           {store.meal_items.map((item, key) => (
             <div className={classes.selectorsContainer} key={key}>
               <MealAutocomplete
-                value={store.meal_items[key].id}
+                value={store.meal_items[key].id ?? ""}
                 setValue={handleChangeFoodItem(key)}
                 fullWidth={true}
                 className={classes.autocompleteField}
-                foodQueryReference={foodQueryReference}
-                recipeQueryReference={recipeQueryReference}
+                foodQR={foodQR}
+                recipeQR={recipeQR}
               />
               <TextField
                 label={<Trans>Weight (g)</Trans>}
@@ -258,7 +255,6 @@ export const AddMealDialog = ({
   date,
   name,
   time,
-  meal_items,
   onConfirm,
 }: Props) => {
   const { queryReference: foodQR } = useFood({});
@@ -273,10 +269,9 @@ export const AddMealDialog = ({
           date={date}
           name={name}
           time={time}
-          meal_items={meal_items}
           onConfirm={onConfirm}
-          foodQueryReference={foodQR}
-          recipeQueryReference={recipeQR}
+          foodQR={foodQR}
+          recipeQR={recipeQR}
         />
       )}
     </Suspense>

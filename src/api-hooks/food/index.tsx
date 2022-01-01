@@ -6,6 +6,8 @@ import {
 } from "./__generated__/FoodQuery.graphql";
 import { FoodQuery as FoodQueryDocument } from "./FoodQuery";
 
+export * from "./__generated__/FoodQuery.graphql";
+
 export const useFood = (v: FoodQueryVariables) => {
   const [queryReference, loadQuery] = useQueryLoader<FoodQuery>(
     FoodQueryDocument
@@ -21,11 +23,12 @@ export const useFood = (v: FoodQueryVariables) => {
 };
 
 export interface FoodPreloadedHookProps {
-  foodQueryReference: PreloadedQuery<FoodQuery, Record<string, unknown>>;
+  foodQR: PreloadedQuery<FoodQuery, Record<string, unknown>>;
 }
 
 export const useFoodPreloadedQuery = (
   queryReference: PreloadedQuery<FoodQuery, Record<string, unknown>>
 ) => {
-  return usePreloadedQuery<FoodQuery>(FoodQueryDocument, queryReference);
+  const data = usePreloadedQuery<FoodQuery>(FoodQueryDocument, queryReference);
+  return { data };
 };

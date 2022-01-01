@@ -11,11 +11,18 @@ import {
   TextField,
 } from "@material-ui/core";
 import { Trans } from "@lingui/react";
-import { useStore } from "src/store";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
 import {
-  Meal_Item,
-  useUpdateMealItemMutation,
-} from "../../../graphql/generated/graphql";
+  FoodPreloadedHookProps,
+  useFoodPreloadedQuery,
+} from "src/api-hooks/food";
+import {
+  RecipePreloadedHookProps,
+  useRecipePreloaded,
+} from "src/api-hooks/recipe";
+import { useUpdateMealItemMutation } from "src/api-hooks/mealItem";
+import { useStore } from "src/store";
+import { Meal_Item } from "../../../graphql/generated/graphql";
 import { MealAutocomplete } from "../../../components/MealAutocomplete";
 import { aggregate } from "../../Recipes/utils";
 
@@ -26,35 +33,52 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface Props {
+type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps;
+
+interface Props extends ExtendProps {
   open: boolean;
   setOpen(o: boolean): void;
   mealItem: Meal_Item;
+  refetch: () => void;
 }
 
-export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
+export const EditMealItemDialog = ({
+  open,
+  setOpen,
+  mealItem,
+  foodQR,
+  recipeQR,
+  refetch,
+}: Props) => {
   const classes = useStyles();
+
+  const { data: foodLibrary } = useFoodPreloadedQuery(foodQR);
+  const { data: recipeLibrary } = useRecipePreloaded(recipeQR);
+  const [update] = useUpdateMealItemMutation();
+
   const {
     userStore: { user },
-    foodLibraryStore: { data: foodLibrary },
-    recipeStore: { data: recipeLibrary },
   } = useStore();
 
   const [error, setOpenErrorMessage] = React.useState<string | undefined>();
   const [success, setOpenSuccessMessage] = React.useState(false);
 
   const [selectedItemId, setSelectedItemId] = useState(
-    mealItem?.food ?? mealItem?.recipe_id ?? foodLibrary?.[0].id
+    mealItem?.food ??
+      mealItem?.recipe_id ??
+      foodLibrary.food_connection.edges[0].node.id
   );
   const [weight, setWeight] = useState(mealItem.weight);
 
   const mealItemProps = () => {
-    const food = foodLibrary.find(({ id }) => id === selectedItemId);
+    const food = foodLibrary.food_connection.edges.find(
+      ({ node: { id } }) => id === selectedItemId
+    )?.node;
     if (food) {
       const weightAdjustment = (divider: number) =>
         (divider / (food?.weight || 100)) * weight;
       return {
-        food: food?.id,
+        food: base64ToUuid(food?.id),
 
         energy_cal: weightAdjustment(food?.energy_cal),
         energy_kj: weightAdjustment(food?.energy_kj),
@@ -63,52 +87,59 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
         fats: weightAdjustment(food?.fats),
       };
     } else {
-      const recipe = recipeLibrary.find(({ id }) => id === selectedItemId);
+      const recipe = recipeLibrary.recipe_connection.edges.find(
+        ({ node: { id } }) => id === selectedItemId
+      )?.node;
 
       if (recipe) {
-        const recipeWeight = aggregate(recipe.recipe_items, "weight");
+        const recipeWeight = aggregate(recipe.recipe_items as any, "weight");
         const weightAdjustment = (divider: number) =>
           (divider / recipeWeight) * weight;
 
         return {
-          id: recipe.id,
-          recipe_id: recipe.id,
-          name: recipe.name,
+          id: base64ToUuid(recipe.id),
+          recipe_id: base64ToUuid(recipe.id),
           carbohydrates: weightAdjustment(
-            aggregate(recipe.recipe_items, "carbohydrates")
+            aggregate(recipe.recipe_items as any, "carbohydrates")
           ),
           proteins: weightAdjustment(
-            aggregate(recipe.recipe_items, "proteins")
+            aggregate(recipe.recipe_items as any, "proteins")
           ),
-          fats: weightAdjustment(aggregate(recipe.recipe_items, "fats")),
+          fats: weightAdjustment(aggregate(recipe.recipe_items as any, "fats")),
           energy_cal: weightAdjustment(
-            aggregate(recipe.recipe_items, "energy_cal")
+            aggregate(recipe.recipe_items as any, "energy_cal")
           ),
           energy_kj: weightAdjustment(
-            aggregate(recipe.recipe_items, "energy_kj")
+            aggregate(recipe.recipe_items as any, "energy_kj")
           ),
-          weight: weightAdjustment(aggregate(recipe.recipe_items, "weight")),
+          weight: weightAdjustment(
+            aggregate(recipe.recipe_items as any, "weight")
+          ),
         };
       }
     }
   };
 
-  const [update_meal_item_by_pk] = useUpdateMealItemMutation({
-    onError: (error1) => {
-      setOpenErrorMessage(error1.message);
-    },
-    onCompleted: () => {
-      setOpenSuccessMessage(true);
-      setOpen(false);
-    },
-    variables: {
-      id: mealItem.id,
-      u_id: user?.id,
-      weight,
-      meal_id: mealItem.meal_id,
-      ...mealItemProps(),
-    },
-  });
+  const handleUpdateMealItem = () =>
+    update({
+      variables: {
+        id: base64ToUuid(mealItem.id),
+        _set: {
+          u_id: user?.id,
+          weight,
+          meal_id: mealItem.meal_id,
+          ...mealItemProps(),
+        },
+      },
+      onCompleted: () => {
+        refetch();
+        setOpenSuccessMessage(true);
+        setOpen(false);
+      },
+      onError: (error1) => {
+        setOpenErrorMessage(error1.message);
+      },
+    });
 
   return (
     <React.Fragment>
@@ -117,6 +148,8 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
         <DialogContent>
           {selectedItemId && (
             <MealAutocomplete
+              foodQR={foodQR}
+              recipeQR={recipeQR}
               value={selectedItemId}
               setValue={setSelectedItemId}
               className={classes.field}
@@ -143,7 +176,7 @@ export const EditMealItemDialog = ({ open, setOpen, mealItem }: Props) => {
             variant={"text"}
             children={<Trans>Submit</Trans>}
             onClick={(event) => {
-              update_meal_item_by_pk();
+              handleUpdateMealItem();
               event.stopPropagation();
             }}
           />
