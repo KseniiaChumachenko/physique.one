@@ -21,7 +21,7 @@ const PANTRIES_LISTING_DOCUMENT = gql`
 
 const ADD_PANTRY_DOCUMENT = gql`
   mutation AddPantry(
-    $name: name
+    $name: String
     $pantry_users: pantry_user_arr_rel_insert_input
   ) {
     insert_pantry_one(object: { name: $name, pantry_users: $pantry_users }) {
@@ -44,7 +44,7 @@ const ADD_PANTRY_USER_DOCUMENT = gql`
 `;
 
 const UPDATE_PANTRY_NAME_DOCUMENT = gql`
-  mutation EditPantryDocument($id: uuid!, $name: name) {
+  mutation EditPantryDocument($id: uuid!, $name: String) {
     update_pantry_by_pk(pk_columns: { id: $id }, _set: { name: $name }) {
       name
     }

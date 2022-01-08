@@ -21,6 +21,7 @@ type food {
     D: numeric
     E: numeric
     K: numeric
+    brand: uuid
     calcium: numeric
     carbohydrates: numeric!
     carbohydrates_fiber: numeric
@@ -30,6 +31,8 @@ type food {
     energy_cal: numeric!
     energy_kj: numeric!
     fats: numeric!
+    "An object relationship"
+    food_brand: food_brand
     "An object relationship"
     food_type: food_type!
     id: uuid!
@@ -62,7 +65,7 @@ type food {
         "filter the rows returned"
         where: meal_item_bool_exp
     ): meal_item_aggregate!
-    name: bpchar!
+    name: String!
     phosphorus: numeric
     potassium: numeric
     proteins: numeric!
@@ -159,6 +162,45 @@ type food_avg_fields {
     zinc: Float
 }
 
+"columns and relationships of \"food_brand\""
+type food_brand {
+    id: uuid!
+    name: String!
+}
+
+"aggregated selection of \"food_brand\""
+type food_brand_aggregate {
+    aggregate: food_brand_aggregate_fields
+    nodes: [food_brand!]!
+}
+
+"aggregate fields of \"food_brand\""
+type food_brand_aggregate_fields {
+    count(columns: [food_brand_select_column!], distinct: Boolean): Int
+    max: food_brand_max_fields
+    min: food_brand_min_fields
+}
+
+"aggregate max on columns"
+type food_brand_max_fields {
+    id: uuid
+    name: String
+}
+
+"aggregate min on columns"
+type food_brand_min_fields {
+    id: uuid
+    name: String
+}
+
+"response of any mutation on the table \"food_brand\""
+type food_brand_mutation_response {
+    "number of affected rows by the mutation"
+    affected_rows: Int!
+    "data of the affected rows by the mutation"
+    returning: [food_brand!]!
+}
+
 "aggregate max on columns"
 type food_max_fields {
     A: numeric
@@ -174,6 +216,7 @@ type food_max_fields {
     D: numeric
     E: numeric
     K: numeric
+    brand: uuid
     calcium: numeric
     carbohydrates: numeric
     carbohydrates_fiber: numeric
@@ -187,6 +230,7 @@ type food_max_fields {
     iron: numeric
     magnesium: numeric
     manganese: numeric
+    name: String
     phosphorus: numeric
     potassium: numeric
     proteins: numeric
@@ -213,6 +257,7 @@ type food_min_fields {
     D: numeric
     E: numeric
     K: numeric
+    brand: uuid
     calcium: numeric
     carbohydrates: numeric
     carbohydrates_fiber: numeric
@@ -226,6 +271,7 @@ type food_min_fields {
     iron: numeric
     magnesium: numeric
     manganese: numeric
+    name: String
     phosphorus: numeric
     potassium: numeric
     proteins: numeric
@@ -813,6 +859,13 @@ type mutation_root {
         "filter the rows which have to be deleted"
         where: food_bool_exp!
     ): food_mutation_response
+    "delete data from the table: \"food_brand\""
+    delete_food_brand(
+        "filter the rows which have to be deleted"
+        where: food_brand_bool_exp!
+    ): food_brand_mutation_response
+    "delete single row from the table: \"food_brand\""
+    delete_food_brand_by_pk(id: uuid!): food_brand
     "delete single row from the table: \"food\""
     delete_food_by_pk(id: uuid!): food
     "delete data from the table: \"food_type\""
@@ -892,6 +945,20 @@ type mutation_root {
         "on conflict condition"
         on_conflict: food_on_conflict
     ): food_mutation_response
+    "insert data into the table: \"food_brand\""
+    insert_food_brand(
+        "the rows to be inserted"
+        objects: [food_brand_insert_input!]!,
+        "on conflict condition"
+        on_conflict: food_brand_on_conflict
+    ): food_brand_mutation_response
+    "insert a single row into the table: \"food_brand\""
+    insert_food_brand_one(
+        "the row to be inserted"
+        object: food_brand_insert_input!,
+        "on conflict condition"
+        on_conflict: food_brand_on_conflict
+    ): food_brand
     "insert a single row into the table: \"food\""
     insert_food_one(
         "the row to be inserted"
@@ -1048,6 +1115,19 @@ type mutation_root {
         "filter the rows which have to be updated"
         where: food_bool_exp!
     ): food_mutation_response
+    "update data of the table: \"food_brand\""
+    update_food_brand(
+        "sets the columns of the filtered rows to the given values"
+        _set: food_brand_set_input,
+        "filter the rows which have to be updated"
+        where: food_brand_bool_exp!
+    ): food_brand_mutation_response
+    "update single row of the table: \"food_brand\""
+    update_food_brand_by_pk(
+        "sets the columns of the filtered rows to the given values"
+        _set: food_brand_set_input,
+        pk_columns: food_brand_pk_columns_input!
+    ): food_brand
     "update single row of the table: \"food\""
     update_food_by_pk(
         "increments the integer columns with given value of the filtered values"
@@ -1211,7 +1291,7 @@ type mutation_root {
 "columns and relationships of \"pantry\""
 type pantry {
     id: uuid!
-    name: name!
+    name: String!
     "An array relationship"
     pantry_items(
         "distinct select on columns"
@@ -1504,11 +1584,13 @@ type pantry_jars_variance_fields {
 "aggregate max on columns"
 type pantry_max_fields {
     id: uuid
+    name: String
 }
 
 "aggregate min on columns"
 type pantry_min_fields {
     id: uuid
+    name: String
 }
 
 "response of any mutation on the table \"pantry\""
@@ -1522,8 +1604,6 @@ type pantry_mutation_response {
 "columns and relationships of \"pantry_user\""
 type pantry_user {
     id: uuid!
-    "An object relationship"
-    pantry: pantry!
     pantry_id: uuid!
     "An object relationship"
     user: users!
@@ -1593,6 +1673,34 @@ type query_root {
         "filter the rows returned"
         where: food_bool_exp
     ): food_aggregate!
+    "fetch data from the table: \"food_brand\""
+    food_brand(
+        "distinct select on columns"
+        distinct_on: [food_brand_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [food_brand_order_by!],
+        "filter the rows returned"
+        where: food_brand_bool_exp
+    ): [food_brand!]!
+    "fetch aggregated fields from the table: \"food_brand\""
+    food_brand_aggregate(
+        "distinct select on columns"
+        distinct_on: [food_brand_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [food_brand_order_by!],
+        "filter the rows returned"
+        where: food_brand_bool_exp
+    ): food_brand_aggregate!
+    "fetch data from the table: \"food_brand\" using primary key columns"
+    food_brand_by_pk(id: uuid!): food_brand
     "fetch data from the table: \"food\" using primary key columns"
     food_by_pk(id: uuid!): food
     "fetch data from the table: \"food_type\""
@@ -1909,7 +2017,7 @@ type recipe {
         "filter the rows returned"
         where: meal_item_bool_exp
     ): meal_item_aggregate!
-    name: String!
+    name: String
     portions: Int
     "An array relationship"
     recipe_items(
@@ -2226,6 +2334,34 @@ type subscription_root {
         "filter the rows returned"
         where: food_bool_exp
     ): food_aggregate!
+    "fetch data from the table: \"food_brand\""
+    food_brand(
+        "distinct select on columns"
+        distinct_on: [food_brand_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [food_brand_order_by!],
+        "filter the rows returned"
+        where: food_brand_bool_exp
+    ): [food_brand!]!
+    "fetch aggregated fields from the table: \"food_brand\""
+    food_brand_aggregate(
+        "distinct select on columns"
+        distinct_on: [food_brand_select_column!],
+        "limit the number of rows returned"
+        limit: Int,
+        "skip the first n rows. Use only with order_by"
+        offset: Int,
+        "sort the rows by one or more columns"
+        order_by: [food_brand_order_by!],
+        "filter the rows returned"
+        where: food_brand_bool_exp
+    ): food_brand_aggregate!
+    "fetch data from the table: \"food_brand\" using primary key columns"
+    food_brand_by_pk(id: uuid!): food_brand
     "fetch data from the table: \"food\" using primary key columns"
     food_by_pk(id: uuid!): food
     "fetch data from the table: \"food_type\""
@@ -2521,7 +2657,7 @@ type users {
     email: String
     fb_id: String
     fb_picture_url: String
-    first_name: name
+    first_name: String
     "An array relationship"
     food(
         "distinct select on columns"
@@ -2550,7 +2686,7 @@ type users {
     ): food_aggregate!
     full_name: String
     id: uuid!
-    last_name: name
+    last_name: String
     "An array relationship"
     meal_items(
         "distinct select on columns"
@@ -2682,7 +2818,7 @@ type users {
         "filter the rows returned"
         where: recipe_bool_exp
     ): recipe_aggregate!
-    user_name: name
+    user_name: String
 }
 
 "aggregated selection of \"users\""
@@ -2703,9 +2839,12 @@ type users_max_fields {
     email: String
     fb_id: String
     fb_picture_url: String
+    first_name: String
     full_name: String
     id: uuid
+    last_name: String
     password: String
+    user_name: String
 }
 
 "aggregate min on columns"
@@ -2713,9 +2852,12 @@ type users_min_fields {
     email: String
     fb_id: String
     fb_picture_url: String
+    first_name: String
     full_name: String
     id: uuid
+    last_name: String
     password: String
+    user_name: String
 }
 
 "response of any mutation on the table \"users\""
@@ -2724,6 +2866,30 @@ type users_mutation_response {
     affected_rows: Int!
     "data of the affected rows by the mutation"
     returning: [users!]!
+}
+
+"unique or primary key constraints on table \"food_brand\""
+enum food_brand_constraint {
+    "unique or primary key constraint"
+    food_brand_name_key
+    "unique or primary key constraint"
+    food_brand_pkey
+}
+
+"select columns of table \"food_brand\""
+enum food_brand_select_column {
+    "column name"
+    id
+    "column name"
+    name
+}
+
+"update columns of table \"food_brand\""
+enum food_brand_update_column {
+    "column name"
+    id
+    "column name"
+    name
 }
 
 "unique or primary key constraints on table \"food\""
@@ -2760,6 +2926,8 @@ enum food_select_column {
     E
     "column name"
     K
+    "column name"
+    brand
     "column name"
     calcium
     "column name"
@@ -2862,6 +3030,8 @@ enum food_update_column {
     E
     "column name"
     K
+    "column name"
+    brand
     "column name"
     calcium
     "column name"
@@ -3294,6 +3464,16 @@ enum users_update_column {
     user_name
 }
 
+scalar date
+
+scalar name
+
+scalar numeric
+
+scalar time
+
+scalar uuid
+
 "expression to compare columns of type Int. All fields are combined with logical 'AND'."
 input Int_comparison_exp {
     _eq: Int
@@ -3324,19 +3504,6 @@ input String_comparison_exp {
     _nlike: String
     _nsimilar: String
     _similar: String
-}
-
-"expression to compare columns of type bpchar. All fields are combined with logical 'AND'."
-input bpchar_comparison_exp {
-    _eq: bpchar
-    _gt: bpchar
-    _gte: bpchar
-    _in: [bpchar!]
-    _is_null: Boolean
-    _lt: bpchar
-    _lte: bpchar
-    _neq: bpchar
-    _nin: [bpchar!]
 }
 
 "expression to compare columns of type date. All fields are combined with logical 'AND'."
@@ -3427,6 +3594,7 @@ input food_bool_exp {
     _and: [food_bool_exp]
     _not: food_bool_exp
     _or: [food_bool_exp]
+    brand: uuid_comparison_exp
     calcium: numeric_comparison_exp
     carbohydrates: numeric_comparison_exp
     carbohydrates_fiber: numeric_comparison_exp
@@ -3436,13 +3604,14 @@ input food_bool_exp {
     energy_cal: numeric_comparison_exp
     energy_kj: numeric_comparison_exp
     fats: numeric_comparison_exp
+    food_brand: food_brand_bool_exp
     food_type: food_type_bool_exp
     id: uuid_comparison_exp
     iron: numeric_comparison_exp
     magnesium: numeric_comparison_exp
     manganese: numeric_comparison_exp
     meal_items: meal_item_bool_exp
-    name: bpchar_comparison_exp
+    name: String_comparison_exp
     phosphorus: numeric_comparison_exp
     potassium: numeric_comparison_exp
     proteins: numeric_comparison_exp
@@ -3454,6 +3623,76 @@ input food_bool_exp {
     user: users_bool_exp
     weight: Int_comparison_exp
     zinc: numeric_comparison_exp
+}
+
+"order by aggregate values of table \"food_brand\""
+input food_brand_aggregate_order_by {
+    count: order_by
+    max: food_brand_max_order_by
+    min: food_brand_min_order_by
+}
+
+"input type for inserting array relation for remote table \"food_brand\""
+input food_brand_arr_rel_insert_input {
+    data: [food_brand_insert_input!]!
+    on_conflict: food_brand_on_conflict
+}
+
+"Boolean expression to filter rows from the table \"food_brand\". All fields are combined with a logical 'AND'."
+input food_brand_bool_exp {
+    _and: [food_brand_bool_exp]
+    _not: food_brand_bool_exp
+    _or: [food_brand_bool_exp]
+    id: uuid_comparison_exp
+    name: String_comparison_exp
+}
+
+"input type for inserting data into table \"food_brand\""
+input food_brand_insert_input {
+    id: uuid
+    name: String
+}
+
+"order by max() on columns of table \"food_brand\""
+input food_brand_max_order_by {
+    id: order_by
+    name: order_by
+}
+
+"order by min() on columns of table \"food_brand\""
+input food_brand_min_order_by {
+    id: order_by
+    name: order_by
+}
+
+"input type for inserting object relation for remote table \"food_brand\""
+input food_brand_obj_rel_insert_input {
+    data: food_brand_insert_input!
+    on_conflict: food_brand_on_conflict
+}
+
+"on conflict condition type for table \"food_brand\""
+input food_brand_on_conflict {
+    constraint: food_brand_constraint!
+    update_columns: [food_brand_update_column!]!
+    where: food_brand_bool_exp
+}
+
+"ordering options when selecting data from \"food_brand\""
+input food_brand_order_by {
+    id: order_by
+    name: order_by
+}
+
+"primary key columns input for table: \"food_brand\""
+input food_brand_pk_columns_input {
+    id: uuid!
+}
+
+"input type for updating data in table \"food_brand\""
+input food_brand_set_input {
+    id: uuid
+    name: String
 }
 
 "input type for incrementing integer column in table \"food\""
@@ -3507,6 +3746,7 @@ input food_insert_input {
     D: numeric
     E: numeric
     K: numeric
+    brand: uuid
     calcium: numeric
     carbohydrates: numeric
     carbohydrates_fiber: numeric
@@ -3516,13 +3756,14 @@ input food_insert_input {
     energy_cal: numeric
     energy_kj: numeric
     fats: numeric
+    food_brand: food_brand_obj_rel_insert_input
     food_type: food_type_obj_rel_insert_input
     id: uuid
     iron: numeric
     magnesium: numeric
     manganese: numeric
     meal_items: meal_item_arr_rel_insert_input
-    name: bpchar
+    name: String
     phosphorus: numeric
     potassium: numeric
     proteins: numeric
@@ -3551,6 +3792,7 @@ input food_max_order_by {
     D: order_by
     E: order_by
     K: order_by
+    brand: order_by
     calcium: order_by
     carbohydrates: order_by
     carbohydrates_fiber: order_by
@@ -3564,6 +3806,7 @@ input food_max_order_by {
     iron: order_by
     magnesium: order_by
     manganese: order_by
+    name: order_by
     phosphorus: order_by
     potassium: order_by
     proteins: order_by
@@ -3590,6 +3833,7 @@ input food_min_order_by {
     D: order_by
     E: order_by
     K: order_by
+    brand: order_by
     calcium: order_by
     carbohydrates: order_by
     carbohydrates_fiber: order_by
@@ -3603,6 +3847,7 @@ input food_min_order_by {
     iron: order_by
     magnesium: order_by
     manganese: order_by
+    name: order_by
     phosphorus: order_by
     potassium: order_by
     proteins: order_by
@@ -3642,6 +3887,7 @@ input food_order_by {
     D: order_by
     E: order_by
     K: order_by
+    brand: order_by
     calcium: order_by
     carbohydrates: order_by
     carbohydrates_fiber: order_by
@@ -3651,6 +3897,7 @@ input food_order_by {
     energy_cal: order_by
     energy_kj: order_by
     fats: order_by
+    food_brand: food_brand_order_by
     food_type: food_type_order_by
     id: order_by
     iron: order_by
@@ -3691,6 +3938,7 @@ input food_set_input {
     D: numeric
     E: numeric
     K: numeric
+    brand: uuid
     calcium: numeric
     carbohydrates: numeric
     carbohydrates_fiber: numeric
@@ -3704,7 +3952,7 @@ input food_set_input {
     iron: numeric
     magnesium: numeric
     manganese: numeric
-    name: bpchar
+    name: String
     phosphorus: numeric
     potassium: numeric
     proteins: numeric
@@ -4418,7 +4666,7 @@ input pantry_bool_exp {
     _not: pantry_bool_exp
     _or: [pantry_bool_exp]
     id: uuid_comparison_exp
-    name: name_comparison_exp
+    name: String_comparison_exp
     pantry_items: pantry_items_bool_exp
     pantry_jars: pantry_jars_bool_exp
     pantry_users: pantry_user_bool_exp
@@ -4427,7 +4675,7 @@ input pantry_bool_exp {
 "input type for inserting data into table \"pantry\""
 input pantry_insert_input {
     id: uuid
-    name: name
+    name: String
     pantry_items: pantry_items_arr_rel_insert_input
     pantry_jars: pantry_jars_arr_rel_insert_input
     pantry_users: pantry_user_arr_rel_insert_input
@@ -4725,11 +4973,13 @@ input pantry_jars_variance_order_by {
 "order by max() on columns of table \"pantry\""
 input pantry_max_order_by {
     id: order_by
+    name: order_by
 }
 
 "order by min() on columns of table \"pantry\""
 input pantry_min_order_by {
     id: order_by
+    name: order_by
 }
 
 "input type for inserting object relation for remote table \"pantry\""
@@ -4762,7 +5012,7 @@ input pantry_pk_columns_input {
 "input type for updating data in table \"pantry\""
 input pantry_set_input {
     id: uuid
-    name: name
+    name: String
 }
 
 "order by aggregate values of table \"pantry_user\""
@@ -4784,7 +5034,6 @@ input pantry_user_bool_exp {
     _not: pantry_user_bool_exp
     _or: [pantry_user_bool_exp]
     id: uuid_comparison_exp
-    pantry: pantry_bool_exp
     pantry_id: uuid_comparison_exp
     user: users_bool_exp
     user_id: uuid_comparison_exp
@@ -4793,7 +5042,6 @@ input pantry_user_bool_exp {
 "input type for inserting data into table \"pantry_user\""
 input pantry_user_insert_input {
     id: uuid
-    pantry: pantry_obj_rel_insert_input
     pantry_id: uuid
     user: users_obj_rel_insert_input
     user_id: uuid
@@ -4829,7 +5077,6 @@ input pantry_user_on_conflict {
 "ordering options when selecting data from \"pantry_user\""
 input pantry_user_order_by {
     id: order_by
-    pantry: pantry_order_by
     pantry_id: order_by
     user: users_order_by
     user_id: order_by
@@ -5277,18 +5524,18 @@ input users_bool_exp {
     email: String_comparison_exp
     fb_id: String_comparison_exp
     fb_picture_url: String_comparison_exp
-    first_name: name_comparison_exp
+    first_name: String_comparison_exp
     food: food_bool_exp
     full_name: String_comparison_exp
     id: uuid_comparison_exp
-    last_name: name_comparison_exp
+    last_name: String_comparison_exp
     meal_items: meal_item_bool_exp
     meals: meal_bool_exp
     pantry: pantry_user_bool_exp
     password: String_comparison_exp
     recipe_items: recipe_item_bool_exp
     recipes: recipe_bool_exp
-    user_name: name_comparison_exp
+    user_name: String_comparison_exp
 }
 
 "input type for inserting data into table \"users\""
@@ -5296,18 +5543,18 @@ input users_insert_input {
     email: String
     fb_id: String
     fb_picture_url: String
-    first_name: name
+    first_name: String
     food: food_arr_rel_insert_input
     full_name: String
     id: uuid
-    last_name: name
+    last_name: String
     meal_items: meal_item_arr_rel_insert_input
     meals: meal_arr_rel_insert_input
     pantry: pantry_user_arr_rel_insert_input
     password: String
     recipe_items: recipe_item_arr_rel_insert_input
     recipes: recipe_arr_rel_insert_input
-    user_name: name
+    user_name: String
 }
 
 "order by max() on columns of table \"users\""
@@ -5315,9 +5562,12 @@ input users_max_order_by {
     email: order_by
     fb_id: order_by
     fb_picture_url: order_by
+    first_name: order_by
     full_name: order_by
     id: order_by
+    last_name: order_by
     password: order_by
+    user_name: order_by
 }
 
 "order by min() on columns of table \"users\""
@@ -5325,9 +5575,12 @@ input users_min_order_by {
     email: order_by
     fb_id: order_by
     fb_picture_url: order_by
+    first_name: order_by
     full_name: order_by
     id: order_by
+    last_name: order_by
     password: order_by
+    user_name: order_by
 }
 
 "input type for inserting object relation for remote table \"users\""
@@ -5372,12 +5625,12 @@ input users_set_input {
     email: String
     fb_id: String
     fb_picture_url: String
-    first_name: name
+    first_name: String
     full_name: String
     id: uuid
-    last_name: name
+    last_name: String
     password: String
-    user_name: name
+    user_name: String
 }
 
 "expression to compare columns of type uuid. All fields are combined with logical 'AND'."
@@ -5392,16 +5645,3 @@ input uuid_comparison_exp {
     _neq: uuid
     _nin: [uuid!]
 }
-
-
-scalar bpchar
-
-scalar date
-
-scalar name
-
-scalar numeric
-
-scalar time
-
-scalar uuid

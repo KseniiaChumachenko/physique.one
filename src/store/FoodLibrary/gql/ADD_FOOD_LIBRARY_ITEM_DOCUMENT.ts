@@ -3,7 +3,7 @@ import { gql } from "@apollo/client";
 export const ADD_FOOD_LIBRARY_ITEM_DOCUMENT = gql`
   mutation AddFoodLibraryItem(
     $id: uuid!
-    $name: bpchar
+    $name: String
     $proteins: numeric
     $fats: numeric
     $energy_kj: numeric
