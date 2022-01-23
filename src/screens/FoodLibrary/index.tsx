@@ -62,7 +62,6 @@ const FoodLibraryContent = observer(
     const { data, mutations: foodMutations } = useFoodPreloadedQuery(foodQR);
     const {
       userStore: { user },
-      //foodLibraryStore: { data, add, update, remove },
       screenStore: { setAction },
     } = useStore();
     const [openAddDialog, setOpenAddDialog] = useState(false);
