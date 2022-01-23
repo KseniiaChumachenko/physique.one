@@ -10,8 +10,11 @@ export type FoodQueryResponse = {
         readonly edges: ReadonlyArray<{
             readonly node: {
                 readonly id: string;
-                readonly name: unknown;
+                readonly name: string;
                 readonly type: string;
+                readonly food_brand: {
+                    readonly name: string;
+                } | null;
                 readonly carbohydrates: number;
                 readonly proteins: number;
                 readonly fats: number;
@@ -38,6 +41,10 @@ query FoodQuery {
         id
         name
         type
+        food_brand {
+          name
+          id
+        }
         carbohydrates
         proteins
         fats
@@ -52,99 +59,130 @@ query FoodQuery {
 */
 
 const node: ConcreteRequest = (function(){
-var v0 = [
-  {
-    "alias": null,
-    "args": null,
-    "concreteType": "foodConnection",
-    "kind": "LinkedField",
-    "name": "food_connection",
-    "plural": false,
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v1 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "type",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "carbohydrates",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "proteins",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "fats",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "energy_cal",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "energy_kj",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "u_id",
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "weight",
+  "storageKey": null
+};
+return {
+  "fragment": {
+    "argumentDefinitions": [],
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "FoodQuery",
     "selections": [
       {
         "alias": null,
         "args": null,
-        "concreteType": "foodEdge",
+        "concreteType": "foodConnection",
         "kind": "LinkedField",
-        "name": "edges",
-        "plural": true,
+        "name": "food_connection",
+        "plural": false,
         "selections": [
           {
             "alias": null,
             "args": null,
-            "concreteType": "food",
+            "concreteType": "foodEdge",
             "kind": "LinkedField",
-            "name": "node",
-            "plural": false,
+            "name": "edges",
+            "plural": true,
             "selections": [
               {
                 "alias": null,
                 "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "name",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "type",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "carbohydrates",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "proteins",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "fats",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "energy_cal",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "energy_kj",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "u_id",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "weight",
+                "concreteType": "food",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v0/*: any*/),
+                  (v1/*: any*/),
+                  (v2/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "food_brand",
+                    "kind": "LinkedField",
+                    "name": "food_brand",
+                    "plural": false,
+                    "selections": [
+                      (v1/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v3/*: any*/),
+                  (v4/*: any*/),
+                  (v5/*: any*/),
+                  (v6/*: any*/),
+                  (v7/*: any*/),
+                  (v8/*: any*/),
+                  (v9/*: any*/)
+                ],
                 "storageKey": null
               }
             ],
@@ -154,16 +192,6 @@ var v0 = [
         "storageKey": null
       }
     ],
-    "storageKey": null
-  }
-];
-return {
-  "fragment": {
-    "argumentDefinitions": [],
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "FoodQuery",
-    "selections": (v0/*: any*/),
     "type": "query_root",
     "abstractKey": null
   },
@@ -172,17 +200,74 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "FoodQuery",
-    "selections": (v0/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": null,
+        "concreteType": "foodConnection",
+        "kind": "LinkedField",
+        "name": "food_connection",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "foodEdge",
+            "kind": "LinkedField",
+            "name": "edges",
+            "plural": true,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "food",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v0/*: any*/),
+                  (v1/*: any*/),
+                  (v2/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "food_brand",
+                    "kind": "LinkedField",
+                    "name": "food_brand",
+                    "plural": false,
+                    "selections": [
+                      (v1/*: any*/),
+                      (v0/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v3/*: any*/),
+                  (v4/*: any*/),
+                  (v5/*: any*/),
+                  (v6/*: any*/),
+                  (v7/*: any*/),
+                  (v8/*: any*/),
+                  (v9/*: any*/)
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "3ac9744cd447bf00761c0a40e863cf26",
+    "cacheID": "4aae4ce7da8a78bd0c0d801abd3890dd",
     "id": null,
     "metadata": {},
     "name": "FoodQuery",
     "operationKind": "query",
-    "text": "query FoodQuery {\n  food_connection {\n    edges {\n      node {\n        id\n        name\n        type\n        carbohydrates\n        proteins\n        fats\n        energy_cal\n        energy_kj\n        u_id\n        weight\n      }\n    }\n  }\n}\n"
+    "text": "query FoodQuery {\n  food_connection {\n    edges {\n      node {\n        id\n        name\n        type\n        food_brand {\n          name\n          id\n        }\n        carbohydrates\n        proteins\n        fats\n        energy_cal\n        energy_kj\n        u_id\n        weight\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '50cc10fa83896b74664c4f9b54e56f61';
+(node as any).hash = '625533c9bbdb1ef2c3fd74f921bb3f08';
 export default node;
