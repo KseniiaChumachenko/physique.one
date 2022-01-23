@@ -37,8 +37,8 @@ interface Props extends ExtendProps {
   open: boolean;
   setOpen: any;
 
-  onAdd?: (v: AddFoodMutationVariables) => (event: any) => void;
-  onUpdate?: (v: UpdateFoodMutationVariables) => (event: any) => void;
+  onAdd?: (v: AddFoodMutationVariables) => void;
+  onUpdate?: (v: UpdateFoodMutationVariables) => void;
 
   updateProps?: FetchedFoods;
 }
