@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import { v4 as uuid } from "uuid";
 import {
   Button,
   Dialog,
@@ -11,15 +12,35 @@ import {
   TextField,
 } from "@material-ui/core";
 import { Trans } from "@lingui/react";
+import { i18n } from "@lingui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useFoodTypesQuery } from "../../../graphql/generated/graphql";
-import { State, useStore } from "./useStore";
+import {
+  AddFoodMutationVariables,
+  food_insert_input,
+  UpdateFoodMutationVariables,
+} from "../../../api-hooks/food";
+import { FetchedFoods } from "../../FoodLibrary";
+import { FoodBrandSelect } from "../../../components/FoodBrandSelect";
+import { FoodBrandPreloadedHookProps } from "../../../api-hooks/foodBrand";
+import {
+  FoodTypePreloadedHookProps,
+  useFoodTypePreloadedQuery,
+} from "../../../api-hooks/foodType";
+import { base64ToUuid } from "../../../utils/base64-to-uuid";
+import { State } from "./useStore";
 
-interface Props extends State {
+type ExtendProps = State &
+  FoodBrandPreloadedHookProps &
+  FoodTypePreloadedHookProps;
+
+interface Props extends ExtendProps {
   open: boolean;
   setOpen: any;
 
-  onConfirm(store: State): (event: any) => void;
+  onAdd?: (v: AddFoodMutationVariables) => (event: any) => void;
+  onUpdate?: (v: UpdateFoodMutationVariables) => (event: any) => void;
+
+  updateProps?: FetchedFoods;
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -30,54 +51,91 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const AddFoodDialog = ({
+  foodBrandQR,
+  foodTypeQR,
+
   open,
   setOpen,
 
-  onConfirm,
+  onAdd,
+  onUpdate,
 
-  ...storeProps
+  updateProps,
+  u_id,
 }: Props) => {
   const classes = useStyles();
+  const [variables, setVariables] = useState(updateProps);
+  const { data } = useFoodTypePreloadedQuery(foodTypeQR);
 
-  const { data } = useFoodTypesQuery();
-
-  const store = useStore({ ...storeProps });
+  // Types, user id to submit variables, brand mutation and illuminate dead store
+  const handleSetVariable = (value: any, key: string) =>
+    setVariables((state) => ({ ...state, [key]: value }));
 
   const handleClose = (event: any) => {
     setOpen(false);
     event.stopPropagation();
   };
 
+  const handleSubmit = () => {
+    const id = variables?.id ? base64ToUuid(variables.id) : uuid();
+    const type =
+      variables?.type || data?.food_type_connection.edges[0].node.value;
+    const brand_id = variables?.food_brand?.id
+      ? base64ToUuid(variables?.food_brand?.id)
+      : null;
+    let vars;
+
+    if (variables?.food_brand) {
+      const { food_brand, ...rest } = variables;
+      vars = { ...rest, brand_id, type, u_id };
+    } else {
+      vars = { ...variables, brand_id, type, u_id };
+    }
+
+    if (updateProps) {
+      onUpdate?.({ id, _set: { ...vars, id } });
+      setVariables(undefined);
+    } else {
+      onAdd?.({
+        objects: [{ ...vars } as food_insert_input],
+      });
+      setVariables(undefined);
+    }
+  };
+
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">
-        <Trans>Add food</Trans>
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>
+        {updateProps ? <Trans>Add food</Trans> : <Trans>Update food</Trans>}
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-title">
+        <DialogContentText>
           <Trans>Always add attributes per 100g</Trans>
         </DialogContentText>
         <TextField
           className={classes.field}
           label={<Trans>Name</Trans>}
-          defaultValue={store.name}
-          onChange={(event) => store.setName(event.target.value)}
+          defaultValue={updateProps?.name}
+          onChange={(event) => handleSetVariable(event.target.value, "name")}
+        />
+        <FoodBrandSelect
+          className={classes.field}
+          foodBrandQR={foodBrandQR}
+          value={variables?.food_brand}
+          setValue={(value) => handleSetVariable(value, "food_brand")}
         />
 
         {data && (
           <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            defaultValue={store.type}
-            onChange={(event) => store.setType(event.target.value as any)}
+            defaultValue={
+              variables?.type || data?.food_type_connection.edges[0].node.value
+            }
+            onChange={(event) => handleSetVariable(event.target.value, "type")}
             className={classes.field}
+            placeholder={i18n.t`Select type`}
+            label={<Trans>Select type</Trans>}
           >
-            {data?.food_type?.map(({ value }, i) => (
+            {data?.food_type_connection.edges.map(({ node: { value } }, i) => (
               <MenuItem key={i} value={value} children={value} />
             ))}
           </Select>
@@ -86,46 +144,52 @@ export const AddFoodDialog = ({
         <TextField
           className={classes.field}
           label={<Trans>Energy (cal)</Trans>}
-          defaultValue={store.energy_cal}
+          defaultValue={variables?.energy_cal}
           type={"number"}
-          onChange={(event) => store.setEnergyCal(event.target.value as any)}
+          onChange={(event) =>
+            handleSetVariable(event.target.value, "energy_cal")
+          }
         />
         <TextField
           className={classes.field}
           label={<Trans>Energy (kJ)</Trans>}
-          defaultValue={store.energy_kj}
+          defaultValue={variables?.energy_kj}
           type={"number"}
-          onChange={(event) => store.setEnergyKj(event.target.value as any)}
+          onChange={(event) =>
+            handleSetVariable(event.target.value, "energy_kj")
+          }
         />
         <TextField
           className={classes.field}
           label={<Trans>Proteins (g)</Trans>}
-          defaultValue={store.proteins}
+          defaultValue={variables?.proteins}
           type={"number"}
-          onChange={(event) => store.setProteins(event.target.value as any)}
+          onChange={(event) =>
+            handleSetVariable(event.target.value, "proteins")
+          }
         />
         <TextField
           className={classes.field}
           label={<Trans>Carbohydrates (g)</Trans>}
-          defaultValue={store.carbohydrates}
+          defaultValue={variables?.carbohydrates}
           type={"number"}
           onChange={(event) =>
-            store.setCarbohydrates(event.target.value as any)
+            handleSetVariable(event.target.value, "carbohydrates")
           }
         />
         <TextField
           className={classes.field}
           label={<Trans>Fats (g)</Trans>}
-          defaultValue={store.fats}
+          defaultValue={variables?.fats}
           type={"number"}
-          onChange={(event) => store.setFats(event.target.value as any)}
+          onChange={(event) => handleSetVariable(event.target.value, "fats")}
         />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="primary">
           <Trans>Cancel</Trans>
         </Button>
-        <Button onClick={onConfirm(store)} color="primary" autoFocus>
+        <Button onClick={handleSubmit} color="primary" autoFocus>
           <Trans>Submit</Trans>
         </Button>
       </DialogActions>

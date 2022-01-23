@@ -19,7 +19,7 @@ export type RecipeQueryResponse = {
                     readonly id: string;
                     readonly food: {
                         readonly id: string;
-                        readonly name: unknown;
+                        readonly name: string;
                     };
                     readonly proteins: number;
                     readonly fats: number;

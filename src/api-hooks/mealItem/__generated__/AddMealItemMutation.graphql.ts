@@ -4,10 +4,12 @@
 
 import { ConcreteRequest } from "relay-runtime";
 
+export type food_brand_constraint = "food_brand_name_key" | "food_brand_pkey" | "%future added value";
+export type food_brand_update_column = "id" | "name" | "%future added value";
 export type food_constraint = "food_pkey" | "%future added value";
 export type food_type_constraint = "food_type_pkey" | "%future added value";
 export type food_type_update_column = "decription" | "img_url" | "value" | "%future added value";
-export type food_update_column = "A" | "B1" | "B12" | "B2" | "B3" | "B5" | "B6" | "B7" | "B9" | "C" | "D" | "E" | "K" | "calcium" | "carbohydrates" | "carbohydrates_fiber" | "carbohydrates_starch" | "carbohydrates_sugars" | "copper" | "energy_cal" | "energy_kj" | "fats" | "id" | "iron" | "magnesium" | "manganese" | "name" | "phosphorus" | "potassium" | "proteins" | "selenium" | "sodium" | "type" | "u_id" | "weight" | "zinc" | "%future added value";
+export type food_update_column = "A" | "B1" | "B12" | "B2" | "B3" | "B5" | "B6" | "B7" | "B9" | "C" | "D" | "E" | "K" | "brand_id" | "calcium" | "carbohydrates" | "carbohydrates_fiber" | "carbohydrates_starch" | "carbohydrates_sugars" | "copper" | "energy_cal" | "energy_kj" | "fats" | "id" | "iron" | "magnesium" | "manganese" | "name" | "phosphorus" | "potassium" | "proteins" | "selenium" | "sodium" | "type" | "u_id" | "weight" | "zinc" | "%future added value";
 export type meal_constraint = "meal_pkey1" | "%future added value";
 export type meal_item_constraint = "meal_item_pkey" | "%future added value";
 export type meal_item_update_column = "carbohydrates" | "energy_cal" | "energy_kj" | "fats" | "food" | "id" | "meal_id" | "proteins" | "recipe_id" | "u_id" | "weight" | "%future added value";
@@ -55,6 +57,7 @@ export type food_insert_input = {
     D?: number | null | undefined;
     E?: number | null | undefined;
     K?: number | null | undefined;
+    brand_id?: string | null | undefined;
     calcium?: number | null | undefined;
     carbohydrates?: number | null | undefined;
     carbohydrates_fiber?: number | null | undefined;
@@ -64,13 +67,14 @@ export type food_insert_input = {
     energy_cal?: number | null | undefined;
     energy_kj?: number | null | undefined;
     fats?: number | null | undefined;
+    food_brand?: food_brand_obj_rel_insert_input | null | undefined;
     food_type?: food_type_obj_rel_insert_input | null | undefined;
     id?: string | null | undefined;
     iron?: number | null | undefined;
     magnesium?: number | null | undefined;
     manganese?: number | null | undefined;
     meal_items?: meal_item_arr_rel_insert_input | null | undefined;
-    name?: unknown | null | undefined;
+    name?: string | null | undefined;
     phosphorus?: number | null | undefined;
     potassium?: number | null | undefined;
     proteins?: number | null | undefined;
@@ -82,6 +86,54 @@ export type food_insert_input = {
     user?: users_obj_rel_insert_input | null | undefined;
     weight?: number | null | undefined;
     zinc?: number | null | undefined;
+};
+export type food_brand_obj_rel_insert_input = {
+    data: food_brand_insert_input;
+    on_conflict?: food_brand_on_conflict | null | undefined;
+};
+export type food_brand_insert_input = {
+    id?: string | null | undefined;
+    name?: string | null | undefined;
+};
+export type food_brand_on_conflict = {
+    constraint: food_brand_constraint;
+    update_columns: Array<food_brand_update_column>;
+    where?: food_brand_bool_exp | null | undefined;
+};
+export type food_brand_bool_exp = {
+    _and?: Array<food_brand_bool_exp | null> | null | undefined;
+    _not?: food_brand_bool_exp | null | undefined;
+    _or?: Array<food_brand_bool_exp | null> | null | undefined;
+    id?: uuid_comparison_exp | null | undefined;
+    name?: String_comparison_exp | null | undefined;
+};
+export type uuid_comparison_exp = {
+    _eq?: string | null | undefined;
+    _gt?: string | null | undefined;
+    _gte?: string | null | undefined;
+    _in?: Array<string> | null | undefined;
+    _is_null?: boolean | null | undefined;
+    _lt?: string | null | undefined;
+    _lte?: string | null | undefined;
+    _neq?: string | null | undefined;
+    _nin?: Array<string> | null | undefined;
+};
+export type String_comparison_exp = {
+    _eq?: string | null | undefined;
+    _gt?: string | null | undefined;
+    _gte?: string | null | undefined;
+    _ilike?: string | null | undefined;
+    _in?: Array<string> | null | undefined;
+    _is_null?: boolean | null | undefined;
+    _like?: string | null | undefined;
+    _lt?: string | null | undefined;
+    _lte?: string | null | undefined;
+    _neq?: string | null | undefined;
+    _nilike?: string | null | undefined;
+    _nin?: Array<string> | null | undefined;
+    _nlike?: string | null | undefined;
+    _nsimilar?: string | null | undefined;
+    _similar?: string | null | undefined;
 };
 export type food_type_obj_rel_insert_input = {
     data: food_type_insert_input;
@@ -119,6 +171,7 @@ export type food_bool_exp = {
     _and?: Array<food_bool_exp | null> | null | undefined;
     _not?: food_bool_exp | null | undefined;
     _or?: Array<food_bool_exp | null> | null | undefined;
+    brand_id?: uuid_comparison_exp | null | undefined;
     calcium?: numeric_comparison_exp | null | undefined;
     carbohydrates?: numeric_comparison_exp | null | undefined;
     carbohydrates_fiber?: numeric_comparison_exp | null | undefined;
@@ -128,13 +181,14 @@ export type food_bool_exp = {
     energy_cal?: numeric_comparison_exp | null | undefined;
     energy_kj?: numeric_comparison_exp | null | undefined;
     fats?: numeric_comparison_exp | null | undefined;
+    food_brand?: food_brand_bool_exp | null | undefined;
     food_type?: food_type_bool_exp | null | undefined;
     id?: uuid_comparison_exp | null | undefined;
     iron?: numeric_comparison_exp | null | undefined;
     magnesium?: numeric_comparison_exp | null | undefined;
     manganese?: numeric_comparison_exp | null | undefined;
     meal_items?: meal_item_bool_exp | null | undefined;
-    name?: bpchar_comparison_exp | null | undefined;
+    name?: String_comparison_exp | null | undefined;
     phosphorus?: numeric_comparison_exp | null | undefined;
     potassium?: numeric_comparison_exp | null | undefined;
     proteins?: numeric_comparison_exp | null | undefined;
@@ -166,34 +220,6 @@ export type food_type_bool_exp = {
     food?: food_bool_exp | null | undefined;
     img_url?: String_comparison_exp | null | undefined;
     value?: String_comparison_exp | null | undefined;
-};
-export type String_comparison_exp = {
-    _eq?: string | null | undefined;
-    _gt?: string | null | undefined;
-    _gte?: string | null | undefined;
-    _ilike?: string | null | undefined;
-    _in?: Array<string> | null | undefined;
-    _is_null?: boolean | null | undefined;
-    _like?: string | null | undefined;
-    _lt?: string | null | undefined;
-    _lte?: string | null | undefined;
-    _neq?: string | null | undefined;
-    _nilike?: string | null | undefined;
-    _nin?: Array<string> | null | undefined;
-    _nlike?: string | null | undefined;
-    _nsimilar?: string | null | undefined;
-    _similar?: string | null | undefined;
-};
-export type uuid_comparison_exp = {
-    _eq?: string | null | undefined;
-    _gt?: string | null | undefined;
-    _gte?: string | null | undefined;
-    _in?: Array<string> | null | undefined;
-    _is_null?: boolean | null | undefined;
-    _lt?: string | null | undefined;
-    _lte?: string | null | undefined;
-    _neq?: string | null | undefined;
-    _nin?: Array<string> | null | undefined;
 };
 export type meal_item_bool_exp = {
     _and?: Array<meal_item_bool_exp | null> | null | undefined;
@@ -321,17 +347,6 @@ export type Int_comparison_exp = {
     _lte?: number | null | undefined;
     _neq?: number | null | undefined;
     _nin?: Array<number> | null | undefined;
-};
-export type bpchar_comparison_exp = {
-    _eq?: unknown | null | undefined;
-    _gt?: unknown | null | undefined;
-    _gte?: unknown | null | undefined;
-    _in?: Array<unknown> | null | undefined;
-    _is_null?: boolean | null | undefined;
-    _lt?: unknown | null | undefined;
-    _lte?: unknown | null | undefined;
-    _neq?: unknown | null | undefined;
-    _nin?: Array<unknown> | null | undefined;
 };
 export type food_type_on_conflict = {
     constraint: food_type_constraint;

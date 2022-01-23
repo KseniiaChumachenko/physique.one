@@ -8,6 +8,9 @@ export const FoodQuery = graphql`
           id
           name
           type
+          food_brand {
+            name
+          }
           carbohydrates
           proteins
           fats
