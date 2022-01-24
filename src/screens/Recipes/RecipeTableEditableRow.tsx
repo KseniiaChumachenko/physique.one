@@ -8,15 +8,27 @@ import {
   TableRow,
   TextField,
 } from "@material-ui/core";
+import {
+  FoodPreloadedHookProps,
+  useFoodPreloadedQuery,
+} from "../../api-hooks/food";
+import { RecipePreloadedHookProps } from "../../api-hooks/recipe";
+import {
+  useAddRecipeItemMutation,
+  useUpdateRecipeItemMutation,
+  useDeleteRecipeItemMutation,
+} from "../../api-hooks/recipeItem";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { MealAutocomplete } from "../../components/MealAutocomplete";
-import { Recipe_Item } from "../../graphql/generated/graphql";
 import { useStore } from "../../store";
 import { getRowValues } from "./utils";
+import { RecipeItem } from "./RecipeCard";
 
-interface Props {
+type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps;
+
+interface Props extends ExtendProps {
   recipe_id?: string;
-  row: Partial<Recipe_Item>;
+  row: RecipeItem;
   u_id: string;
   coefficientForPortions: number;
   onDiscardAddRow?: () => void;
@@ -37,9 +49,6 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-// TODO(#8): unify food selector across app
-// TODO: error handling
-
 export const RecipeTableEditableRow = observer(
   ({
     recipe_id,
@@ -47,14 +56,22 @@ export const RecipeTableEditableRow = observer(
     u_id,
     coefficientForPortions,
     onDiscardAddRow,
+    foodQR,
+    recipeQR,
   }: Props) => {
     const classes = useStyles();
+    const { data } = useFoodPreloadedQuery(foodQR);
+    const [add] = useAddRecipeItemMutation();
+    const [update] = useUpdateRecipeItemMutation();
+    const [destroy] = useDeleteRecipeItemMutation();
+
     const {
       userStore: {
         user: { id: userId },
       },
-      foodLibraryStore: { data },
-      recipeStore: { addRecipeItem, updateRecipeItem, deleteRecipeItem },
+
+      //TODO: Stopped here, need to check on how mutations above work
+      // recipeStore: { addRecipeItem, updateRecipeItem, deleteRecipeItem },
     } = useStore();
 
     const isPermitted = userId === u_id;
@@ -65,17 +82,18 @@ export const RecipeTableEditableRow = observer(
     const [rowFoodId, setRowFoodId] = useState(basePortionRow?.food?.id);
     const [rowFoodWeight, setRowFoodWeight] = useState(basePortionRow?.weight);
 
-    const foodById = data.find(
-      (item) => item.id === (rowFoodId ?? data[0].id)
+    const foodById = data.food_connection.edges.find(
+      ({ node }) =>
+        node.id === (rowFoodId ?? data.food_connection.edges[0].node.id)
     )!;
     const row = {
       id: basePortionRow.id,
-      food_id: foodById?.id,
+      food_id: foodById?.node.id,
       food: foodById,
       recipe_id,
       u_id,
       ...getRowValues(
-        foodById,
+        foodById.node,
         rowFoodWeight,
         isInEditMode ? 1 : coefficientForPortions
       ),
@@ -83,8 +101,13 @@ export const RecipeTableEditableRow = observer(
 
     const handleSubmit = isInEditMode
       ? isNewRecipeItem
-        ? () => addRecipeItem({ ...row, id: uuid() }, onDiscardAddRow)
-        : () => updateRecipeItem(row, () => setEditMode(false))
+        ? () =>
+            add({
+              variables: { ...row, id: uuid() },
+              onCompleted: onDiscardAddRow,
+            })
+        : () =>
+            update({ variables: row, onCompleted: () => setEditMode(false) })
       : undefined;
 
     const handleCancel = isInEditMode
@@ -96,9 +119,7 @@ export const RecipeTableEditableRow = observer(
 
     const handleEdit = !isInEditMode ? () => setEditMode(true) : undefined;
 
-    const handleDelete = !isNewRecipeItem
-      ? () => deleteRecipeItem(row.id)
-      : undefined;
+    const handleDelete = !isNewRecipeItem ? () => destroy(row.id) : undefined;
 
     return (
       <TableRow>
@@ -110,7 +131,9 @@ export const RecipeTableEditableRow = observer(
               className={classes.foodCell}
               children={
                 <MealAutocomplete
-                  value={row.food?.id}
+                  recipeQR={recipeQR}
+                  foodQR={foodQR}
+                  value={row.food?.node.id}
                   setValue={setRowFoodId}
                   withRecipes={false}
                 />
@@ -136,7 +159,7 @@ export const RecipeTableEditableRow = observer(
             <TableCell
               component="th"
               scope="row"
-              children={row?.food?.name}
+              children={row?.food?.node.name}
               className={classes.foodCell}
             />
             <TableCell component="th" scope="row" children={row?.weight} />

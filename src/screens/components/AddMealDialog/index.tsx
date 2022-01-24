@@ -27,7 +27,7 @@ import {
 import {
   RecipePreloadedHookProps,
   useRecipePreloaded,
-  useRecipes,
+  useRecipe,
 } from "src/api-hooks/recipe";
 import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { MealAutocomplete } from "src/components/MealAutocomplete";
@@ -258,7 +258,7 @@ export const AddMealDialog = ({
   onConfirm,
 }: Props) => {
   const { queryReference: foodQR } = useFood({});
-  const { queryReference: recipeQR } = useRecipes({});
+  const { queryReference: recipeQR } = useRecipe({});
 
   return (
     <Suspense fallback={<div />}>

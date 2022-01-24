@@ -111,13 +111,7 @@ export const useFoodPreloadedQuery = (
   const update = (config: UseMutationConfig<UpdateFoodMutation>) =>
     updateMutation(config);
   const destroy = (config: UseMutationConfig<DeleteFoodMutation>) =>
-    deleteMutation({
-      ...config,
-      onCompleted: (r, p) => {
-        refetch();
-        config.onCompleted?.(r, p);
-      },
-    });
+    deleteMutation(config);
 
   return { data, refetch, mutations: { add, update, destroy } };
 };

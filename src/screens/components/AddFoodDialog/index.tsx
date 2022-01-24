@@ -101,6 +101,8 @@ export const AddFoodDialog = ({
       });
       setVariables(undefined);
     }
+
+    handleClose({});
   };
 
   return (
