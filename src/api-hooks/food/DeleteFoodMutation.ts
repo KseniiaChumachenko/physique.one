@@ -12,7 +12,7 @@ export const DeleteFoodMutation = graphql`
         id
         name
       }
-      id
+      id @deleteRecord
       name
       proteins
       type

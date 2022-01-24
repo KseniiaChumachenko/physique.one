@@ -41,44 +41,46 @@ var v0 = [
 ],
 v1 = [
   {
-    "alias": null,
-    "args": [
-      {
-        "kind": "Variable",
-        "name": "id",
-        "variableName": "id"
-      }
-    ],
-    "concreteType": "food_brand",
-    "kind": "LinkedField",
-    "name": "delete_food_brand_by_pk",
-    "plural": false,
-    "selections": [
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "id",
-        "storageKey": null
-      },
-      {
-        "alias": null,
-        "args": null,
-        "kind": "ScalarField",
-        "name": "name",
-        "storageKey": null
-      }
-    ],
-    "storageKey": null
+    "kind": "Variable",
+    "name": "id",
+    "variableName": "id"
   }
-];
+],
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+};
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
     "name": "DeleteFoodBrandMutation",
-    "selections": (v1/*: any*/),
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "food_brand",
+        "kind": "LinkedField",
+        "name": "delete_food_brand_by_pk",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          (v3/*: any*/)
+        ],
+        "storageKey": null
+      }
+    ],
     "type": "mutation_root",
     "abstractKey": null
   },
@@ -87,7 +89,30 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "DeleteFoodBrandMutation",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "food_brand",
+        "kind": "LinkedField",
+        "name": "delete_food_brand_by_pk",
+        "plural": false,
+        "selections": [
+          (v2/*: any*/),
+          {
+            "alias": null,
+            "args": null,
+            "filters": null,
+            "handle": "deleteRecord",
+            "key": "",
+            "kind": "ScalarHandle",
+            "name": "id"
+          },
+          (v3/*: any*/)
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
     "cacheID": "9cd464dbb6493e6deb338eeb16ae1294",
@@ -99,5 +124,5 @@ return {
   }
 };
 })();
-(node as any).hash = 'af434cf3882b57a26b00e05bb0ccd3e2';
+(node as any).hash = '3e22c7c20486080cb67227f3b945421f';
 export default node;

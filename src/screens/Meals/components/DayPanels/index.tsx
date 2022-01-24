@@ -9,7 +9,7 @@ import {
   useMealsPreloadedQuery,
 } from "src/api-hooks/mealsByDate";
 import { FoodPreloadedHookProps, useFood } from "src/api-hooks/food";
-import { RecipePreloadedHookProps, useRecipes } from "src/api-hooks/recipe";
+import { RecipePreloadedHookProps, useRecipe } from "src/api-hooks/recipe";
 import { DayPanelHeader } from "./DayPanelHeader";
 import { PanelSummary } from "./PanelSummary";
 import { PanelDetailTable } from "./PanelDetailTable";
@@ -130,7 +130,7 @@ export const DayPanels = ({ date }: Props) => {
     userStore: { user },
   } = useStore();
   const { queryReference: foodQR } = useFood({});
-  const { queryReference: recipeQR } = useRecipes({});
+  const { queryReference: recipeQR } = useRecipe({});
   const { queryReference: mealsQR } = useMealsByDateQuery({
     date,
     u_id: user?.id,

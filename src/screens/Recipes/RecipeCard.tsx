@@ -18,8 +18,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Trans } from "@lingui/react";
-import { Recipe_Item } from "../../graphql/generated/graphql";
 import { useStore } from "../../store";
+import { FoodPreloadedHookProps } from "../../api-hooks/food";
+import { RecipePreloadedHookProps } from "../../api-hooks/recipe";
 import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
 import { RecipeTableEditableRow } from "./RecipeTableEditableRow";
 import { aggregate, getValueByPortionCoefficient } from "./utils";
@@ -37,13 +38,40 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-interface Props extends RecipeCardHeaderProps {
-  recipe_items?: Recipe_Item[] | null;
+export interface RecipeItem {
+  readonly id: string;
+  readonly food: {
+    readonly id: string;
+    readonly name: string;
+  };
+  readonly proteins: number;
+  readonly fats: number;
+  readonly carbohydrates: number;
+  readonly energy_cal: number;
+  readonly energy_kj: number;
+  readonly weight: number;
+}
+type ExtendProps = RecipeCardHeaderProps &
+  FoodPreloadedHookProps &
+  RecipePreloadedHookProps;
+
+interface Props extends ExtendProps {
+  recipe_items?: readonly RecipeItem[];
 }
 
 // TODO recipe items remapped twice because of submit of adjustable rows and portioning
 export const RecipeCard = observer(
-  ({ id, name, u_id, description, recipe_items, portions, link }: Props) => {
+  ({
+    foodQR,
+    recipeQR,
+    id,
+    name,
+    u_id,
+    description,
+    recipe_items,
+    portions,
+    link,
+  }: Props) => {
     const classes = useStyles();
     const {
       userStore: {
@@ -111,6 +139,8 @@ export const RecipeCard = observer(
             <TableBody>
               {recipe_items?.map((row) => (
                 <RecipeTableEditableRow
+                  foodQR={foodQR}
+                  recipeQR={recipeQR}
                   recipe_id={id}
                   row={row}
                   key={row.id}
@@ -177,6 +207,8 @@ export const RecipeCard = observer(
               )}
               {withAddRow && isPermitted && (
                 <RecipeTableEditableRow
+                  foodQR={foodQR}
+                  recipeQR={recipeQR}
                   key={id}
                   recipe_id={id}
                   row={{ id: NIL, weight: 100 }}

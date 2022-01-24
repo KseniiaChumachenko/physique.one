@@ -84,10 +84,7 @@ const FoodLibraryContent = observer(
     const handleAddFood = (variables: AddFoodBrandMutationVariables) => {
       foodMutations.add({
         variables,
-        onCompleted: () => {
-          setOpenAddDialog(false);
-          setSuccess(true);
-        },
+        onCompleted: () => setSuccess(true),
         onError: (error1) => setError(error1),
       });
     };
@@ -129,28 +126,33 @@ const FoodLibraryContent = observer(
             />
           </TableHead>
           <TableBody>
-            {data.food_connection.edges.map(({ node: row }, key) => (
-              <TableRow key={key}>
-                <TableCell children={row.name} />
-                <TableCell children={row.food_brand?.name} />
-                <TableCell children={row.type} />
-                <TableCell children={`${row.energy_cal} | ${row.energy_kj}`} />
-                <TableCell children={row.proteins} />
-                <TableCell children={row.carbohydrates} />
-                <TableCell children={row.fats} />
-                <TableCell>
-                  {row.u_id === user?.id && ( //TODO: https://github.com/KseniiaChumachenko/physique.one/issues/31 proper permissions
-                    <EditDeleteButtonGroup
-                      key={key}
-                      onEditClick={() => setEditDialogProps(row)}
-                      onDeleteClick={handleDeleteFood({
-                        id: base64ToUuid(row?.id),
-                      })}
+            {data.food_connection.edges.map(
+              ({ node: row }, key) =>
+                row && (
+                  <TableRow key={key}>
+                    <TableCell children={row.name} />
+                    <TableCell children={row.food_brand?.name} />
+                    <TableCell children={row.type} />
+                    <TableCell
+                      children={`${row.energy_cal} | ${row.energy_kj}`}
                     />
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
+                    <TableCell children={row.proteins} />
+                    <TableCell children={row.carbohydrates} />
+                    <TableCell children={row.fats} />
+                    <TableCell>
+                      {row.u_id === user?.id && ( //TODO: https://github.com/KseniiaChumachenko/physique.one/issues/31 proper permissions
+                        <EditDeleteButtonGroup
+                          key={key}
+                          onEditClick={() => setEditDialogProps(row)}
+                          onDeleteClick={handleDeleteFood({
+                            id: base64ToUuid(row?.id),
+                          })}
+                        />
+                      )}
+                    </TableCell>
+                  </TableRow>
+                )
+            )}
           </TableBody>
         </Table>
         {!!editDialogProps && (
@@ -191,7 +193,7 @@ const FoodLibraryContent = observer(
   }
 );
 
-export const FoodLibrary = observer(() => {
+export const FoodLibrary = () => {
   const { queryReference: foodQR } = useFood({});
   const { queryReference: foodBrandQR } = useFoodBrand({});
   const { queryReference: foodTypeQR } = useFoodType({});
@@ -209,4 +211,4 @@ export const FoodLibrary = observer(() => {
       )}
     </Suspense>
   );
-});
+};

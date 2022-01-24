@@ -8,7 +8,7 @@ export const DeleteMealItemMutation = graphql`
       energy_kj
       fats
       food
-      id
+      id @deleteRecord
       meal_id
       proteins
       recipe_id
