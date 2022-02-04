@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import { Trans } from "@lingui/react";
 import { base64ToUuid } from "src/utils/base64-to-uuid";
+import { Meal_Item } from "src/types";
 import {
   FoodPreloadedHookProps,
   useFoodPreloadedQuery,
@@ -22,8 +23,7 @@ import {
 } from "src/api-hooks/recipe";
 import { useUpdateMealItemMutation } from "src/api-hooks/mealItem";
 import { useStore } from "src/store";
-import { Meal_Item } from "../../../graphql/generated/graphql";
-import { MealAutocomplete } from "../../../components/MealAutocomplete";
+import { MealAutocomplete } from "src/components/MealAutocomplete";
 import { aggregate } from "../../Recipes/utils";
 
 const useStyles = makeStyles(() => ({

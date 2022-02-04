@@ -11,46 +11,22 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import { Trans } from "@lingui/react";
-import { Food, Meal_Item } from "src/graphql/generated/graphql";
-import { EditDeleteButtonGroup } from "../../../components/EditDeletButtonGroup";
-import { EditMealItemDialog } from "../../../components/MealItemDialog/EditMealItemDialog";
+import { Meal_Item } from "src/types";
 import {
   DeleteMealItemMutationVariables,
   useDeleteMealItemMutation,
-} from "../../../../api-hooks/mealItem";
-import { base64ToUuid } from "../../../../utils/base64-to-uuid";
-import { FoodPreloadedHookProps } from "../../../../api-hooks/food";
-import { RecipePreloadedHookProps } from "../../../../api-hooks/recipe";
+} from "src/api-hooks/mealItem";
+import { FoodPreloadedHookProps } from "src/api-hooks/food";
+import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
+import { EditDeleteButtonGroup } from "../../../components/EditDeletButtonGroup";
+import { EditMealItemDialog } from "../../../components/MealItemDialog/EditMealItemDialog";
 
 const useStyles = makeStyles(() => ({
   table: {
     minWidth: 650,
   },
 }));
-
-type MealItemNode = { __typename?: "meal_item" } & Pick<
-  Meal_Item,
-  | "id"
-  | "meal_id"
-  | "food"
-  | "weight"
-  | "carbohydrates"
-  | "proteins"
-  | "fats"
-  | "energy_cal"
-  | "energy_kj"
-> & {
-    foodDesc: { __typename?: "food" } & Pick<
-      Food,
-      | "id"
-      | "name"
-      | "energy_cal"
-      | "energy_kj"
-      | "carbohydrates"
-      | "fats"
-      | "proteins"
-    >;
-  };
 
 type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps;
 interface P extends ExtendProps {
@@ -66,7 +42,7 @@ export const PanelDetailTable = ({
 }: P) => {
   const classes = useStyles();
   const [openEditMealItemDialog, setEditMealItemDialog] = useState<
-    MealItemNode | Meal_Item | boolean
+    Meal_Item | boolean
   >(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState<Error>();
