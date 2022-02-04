@@ -57,7 +57,7 @@ export const getRowValues = (
 });
 
 export const aggregate = (recipeItems: readonly RecipeItem[], arg: string) => {
-  const map = recipeItems.map((i) => i[arg]);
+  const map = recipeItems.filter((i) => i).map((i) => i[arg]);
   if (map.length > 0) {
     return map.reduce((acc, i) => acc + i);
   }

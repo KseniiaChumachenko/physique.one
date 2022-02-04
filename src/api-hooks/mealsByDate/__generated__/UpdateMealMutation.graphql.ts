@@ -8,7 +8,7 @@ export type meal_set_input = {
     date?: string | null | undefined;
     id?: string | null | undefined;
     name?: string | null | undefined;
-    time?: unknown | null | undefined;
+    time?: string | null | undefined;
     u_id?: string | null | undefined;
 };
 export type UpdateMealMutationVariables = {
@@ -19,7 +19,7 @@ export type UpdateMealMutationResponse = {
     readonly update_meal_by_pk: {
         readonly date: string | null;
         readonly name: string | null;
-        readonly time: unknown | null;
+        readonly time: string | null;
     } | null;
 };
 export type UpdateMealMutation = {

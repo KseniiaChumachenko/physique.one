@@ -11,16 +11,20 @@ import {
 import {
   FoodPreloadedHookProps,
   useFoodPreloadedQuery,
-} from "../../api-hooks/food";
-import { RecipePreloadedHookProps } from "../../api-hooks/recipe";
+} from "src/api-hooks/food";
+import {
+  RecipePreloadedHookProps,
+  useRecipePreloaded,
+} from "src/api-hooks/recipe";
 import {
   useAddRecipeItemMutation,
   useUpdateRecipeItemMutation,
   useDeleteRecipeItemMutation,
-} from "../../api-hooks/recipeItem";
+} from "src/api-hooks/recipeItem";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { MealAutocomplete } from "../../components/MealAutocomplete";
 import { useStore } from "../../store";
+import { base64ToUuid } from "../../utils/base64-to-uuid";
 import { getRowValues } from "./utils";
 import { RecipeItem } from "./RecipeCard";
 
@@ -61,6 +65,7 @@ export const RecipeTableEditableRow = observer(
   }: Props) => {
     const classes = useStyles();
     const { data } = useFoodPreloadedQuery(foodQR);
+    const { refetch } = useRecipePreloaded(recipeQR);
     const [add] = useAddRecipeItemMutation();
     const [update] = useUpdateRecipeItemMutation();
     const [destroy] = useDeleteRecipeItemMutation();
@@ -69,9 +74,6 @@ export const RecipeTableEditableRow = observer(
       userStore: {
         user: { id: userId },
       },
-
-      //TODO: Stopped here, need to check on how mutations above work
-      // recipeStore: { addRecipeItem, updateRecipeItem, deleteRecipeItem },
     } = useStore();
 
     const isPermitted = userId === u_id;
@@ -86,28 +88,73 @@ export const RecipeTableEditableRow = observer(
       ({ node }) =>
         node.id === (rowFoodId ?? data.food_connection.edges[0].node.id)
     )!;
+
+    const {
+      carbohydrates,
+      energy_cal,
+      energy_kj,
+      fats,
+      proteins,
+      weight,
+    } = getRowValues(
+      foodById.node,
+      rowFoodWeight,
+      isInEditMode ? 1 : coefficientForPortions
+    );
+
     const row = {
-      id: basePortionRow.id,
-      food_id: foodById?.node.id,
+      id: base64ToUuid(basePortionRow.id),
+      food_id: base64ToUuid(foodById?.node.id),
       food: foodById,
-      recipe_id,
+      recipe_id: recipe_id ? base64ToUuid(recipe_id) : undefined,
       u_id,
-      ...getRowValues(
-        foodById.node,
-        rowFoodWeight,
-        isInEditMode ? 1 : coefficientForPortions
-      ),
+      carbohydrates,
+      energy_cal,
+      energy_kj,
+      fats,
+      proteins,
+      weight,
     };
+
+    const newRecipeId = uuid();
 
     const handleSubmit = isInEditMode
       ? isNewRecipeItem
         ? () =>
             add({
-              variables: { ...row, id: uuid() },
-              onCompleted: onDiscardAddRow,
+              variables: {
+                objects: [
+                  {
+                    carbohydrates,
+                    energy_cal,
+                    energy_kj,
+                    fats,
+                    food_id: row.food_id,
+                    proteins,
+                    recipe_id: row.recipe_id,
+                    u_id,
+                    weight,
+                    id: newRecipeId,
+                  },
+                ],
+                id: newRecipeId,
+              },
+              onCompleted: () => {
+                refetch();
+                onDiscardAddRow?.();
+              },
             })
         : () =>
-            update({ variables: row, onCompleted: () => setEditMode(false) })
+            update({
+              variables: {
+                id: row.id!,
+                set: { food_id: row.food_id, weight: row.weight },
+              },
+              onCompleted: () => {
+                refetch();
+                setEditMode(false);
+              },
+            })
       : undefined;
 
     const handleCancel = isInEditMode
@@ -119,7 +166,9 @@ export const RecipeTableEditableRow = observer(
 
     const handleEdit = !isInEditMode ? () => setEditMode(true) : undefined;
 
-    const handleDelete = !isNewRecipeItem ? () => destroy(row.id) : undefined;
+    const handleDelete = !isNewRecipeItem
+      ? () => destroy({ variables: { id: base64ToUuid(row.id) } })
+      : undefined;
 
     return (
       <TableRow>

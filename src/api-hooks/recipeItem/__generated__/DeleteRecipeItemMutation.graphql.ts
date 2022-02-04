@@ -5,7 +5,7 @@
 import { ConcreteRequest } from "relay-runtime";
 
 export type DeleteRecipeItemMutationVariables = {
-    recipe_id: string;
+    id: string;
 };
 export type DeleteRecipeItemMutationResponse = {
     readonly delete_recipe_item: {
@@ -23,9 +23,9 @@ export type DeleteRecipeItemMutation = {
 
 /*
 mutation DeleteRecipeItemMutation(
-  $recipe_id: uuid!
+  $id: uuid!
 ) {
-  delete_recipe_item(where: {recipe_id: {_eq: $recipe_id}}) {
+  delete_recipe_item(where: {id: {_eq: $id}}) {
     returning {
       id
     }
@@ -38,7 +38,7 @@ var v0 = [
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "recipe_id"
+    "name": "id"
   }
 ],
 v1 = [
@@ -49,11 +49,11 @@ v1 = [
           {
             "kind": "Variable",
             "name": "_eq",
-            "variableName": "recipe_id"
+            "variableName": "id"
           }
         ],
         "kind": "ObjectValue",
-        "name": "recipe_id"
+        "name": "id"
       }
     ],
     "kind": "ObjectValue",
@@ -142,14 +142,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "bb08ae7eb596b671c1e9141d3d922bfa",
+    "cacheID": "b7001858ff406c21a793f6c9c38b0c1f",
     "id": null,
     "metadata": {},
     "name": "DeleteRecipeItemMutation",
     "operationKind": "mutation",
-    "text": "mutation DeleteRecipeItemMutation(\n  $recipe_id: uuid!\n) {\n  delete_recipe_item(where: {recipe_id: {_eq: $recipe_id}}) {\n    returning {\n      id\n    }\n  }\n}\n"
+    "text": "mutation DeleteRecipeItemMutation(\n  $id: uuid!\n) {\n  delete_recipe_item(where: {id: {_eq: $id}}) {\n    returning {\n      id\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '3e586cf96c02c598ae6fba3b9868011d';
+(node as any).hash = '554f2bd9367868eaf61af7cc02d929dc';
 export default node;

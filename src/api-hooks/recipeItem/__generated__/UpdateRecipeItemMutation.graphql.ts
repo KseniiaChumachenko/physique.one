@@ -4,9 +4,21 @@
 
 import { ConcreteRequest } from "relay-runtime";
 
-export type UpdateRecipeItemMutationVariables = {
+export type recipe_item_set_input = {
+    carbohydrates?: number | null | undefined;
+    energy_cal?: number | null | undefined;
+    energy_kj?: number | null | undefined;
+    fats?: number | null | undefined;
+    food_id?: string | null | undefined;
     id?: string | null | undefined;
-    recipe_id: string;
+    proteins?: number | null | undefined;
+    recipe_id?: string | null | undefined;
+    u_id?: string | null | undefined;
+    weight?: number | null | undefined;
+};
+export type UpdateRecipeItemMutationVariables = {
+    id: string;
+    set?: recipe_item_set_input | null | undefined;
 };
 export type UpdateRecipeItemMutationResponse = {
     readonly update_recipe_item_by_pk: {
@@ -18,22 +30,6 @@ export type UpdateRecipeItemMutationResponse = {
             readonly name: string | null;
             readonly portions: number | null;
             readonly u_id: string;
-            readonly recipe_items_connection: {
-                readonly edges: ReadonlyArray<{
-                    readonly node: {
-                        readonly carbohydrates: number;
-                        readonly energy_cal: number;
-                        readonly energy_kj: number;
-                        readonly fats: number;
-                        readonly food_id: string;
-                        readonly id: string;
-                        readonly proteins: number;
-                        readonly recipe_id: string;
-                        readonly u_id: string;
-                        readonly weight: number;
-                    };
-                }>;
-            };
         };
     } | null;
 };
@@ -46,10 +42,10 @@ export type UpdateRecipeItemMutation = {
 
 /*
 mutation UpdateRecipeItemMutation(
-  $id: uuid = ""
-  $recipe_id: uuid!
+  $id: uuid!
+  $set: recipe_item_set_input
 ) {
-  update_recipe_item_by_pk(pk_columns: {id: $id}) {
+  update_recipe_item_by_pk(pk_columns: {id: $id}, _set: $set) {
     recipe {
       description
       id
@@ -58,22 +54,6 @@ mutation UpdateRecipeItemMutation(
       name
       portions
       u_id
-      recipe_items_connection(where: {recipe_id: {_eq: $recipe_id}}) {
-        edges {
-          node {
-            carbohydrates
-            energy_cal
-            energy_kj
-            fats
-            food_id
-            id
-            proteins
-            recipe_id
-            u_id
-            weight
-          }
-        }
-      }
     }
     id
   }
@@ -83,17 +63,22 @@ mutation UpdateRecipeItemMutation(
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
-    "defaultValue": "",
+    "defaultValue": null,
     "kind": "LocalArgument",
     "name": "id"
   },
   {
     "defaultValue": null,
     "kind": "LocalArgument",
-    "name": "recipe_id"
+    "name": "set"
   }
 ],
 v1 = [
+  {
+    "kind": "Variable",
+    "name": "_set",
+    "variableName": "set"
+  },
   {
     "fields": [
       {
@@ -114,13 +99,6 @@ v2 = {
   "storageKey": null
 },
 v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "u_id",
-  "storageKey": null
-},
-v4 = {
   "alias": null,
   "args": null,
   "concreteType": "recipe",
@@ -164,114 +142,11 @@ v4 = {
       "name": "portions",
       "storageKey": null
     },
-    (v3/*: any*/),
     {
       "alias": null,
-      "args": [
-        {
-          "fields": [
-            {
-              "fields": [
-                {
-                  "kind": "Variable",
-                  "name": "_eq",
-                  "variableName": "recipe_id"
-                }
-              ],
-              "kind": "ObjectValue",
-              "name": "recipe_id"
-            }
-          ],
-          "kind": "ObjectValue",
-          "name": "where"
-        }
-      ],
-      "concreteType": "recipe_itemConnection",
-      "kind": "LinkedField",
-      "name": "recipe_items_connection",
-      "plural": false,
-      "selections": [
-        {
-          "alias": null,
-          "args": null,
-          "concreteType": "recipe_itemEdge",
-          "kind": "LinkedField",
-          "name": "edges",
-          "plural": true,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "concreteType": "recipe_item",
-              "kind": "LinkedField",
-              "name": "node",
-              "plural": false,
-              "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "carbohydrates",
-                  "storageKey": null
-                },
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "energy_cal",
-                  "storageKey": null
-                },
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "energy_kj",
-                  "storageKey": null
-                },
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "fats",
-                  "storageKey": null
-                },
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "food_id",
-                  "storageKey": null
-                },
-                (v2/*: any*/),
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "proteins",
-                  "storageKey": null
-                },
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "recipe_id",
-                  "storageKey": null
-                },
-                (v3/*: any*/),
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "weight",
-                  "storageKey": null
-                }
-              ],
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
-        }
-      ],
+      "args": null,
+      "kind": "ScalarField",
+      "name": "u_id",
       "storageKey": null
     }
   ],
@@ -292,7 +167,7 @@ return {
         "name": "update_recipe_item_by_pk",
         "plural": false,
         "selections": [
-          (v4/*: any*/)
+          (v3/*: any*/)
         ],
         "storageKey": null
       }
@@ -314,7 +189,7 @@ return {
         "name": "update_recipe_item_by_pk",
         "plural": false,
         "selections": [
-          (v4/*: any*/),
+          (v3/*: any*/),
           (v2/*: any*/)
         ],
         "storageKey": null
@@ -322,14 +197,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6ffe51b74955d54eb55e46d9d9a7e43c",
+    "cacheID": "c1f26c7d001d905858e57421bcef4e3f",
     "id": null,
     "metadata": {},
     "name": "UpdateRecipeItemMutation",
     "operationKind": "mutation",
-    "text": "mutation UpdateRecipeItemMutation(\n  $id: uuid = \"\"\n  $recipe_id: uuid!\n) {\n  update_recipe_item_by_pk(pk_columns: {id: $id}) {\n    recipe {\n      description\n      id\n      increment\n      link\n      name\n      portions\n      u_id\n      recipe_items_connection(where: {recipe_id: {_eq: $recipe_id}}) {\n        edges {\n          node {\n            carbohydrates\n            energy_cal\n            energy_kj\n            fats\n            food_id\n            id\n            proteins\n            recipe_id\n            u_id\n            weight\n          }\n        }\n      }\n    }\n    id\n  }\n}\n"
+    "text": "mutation UpdateRecipeItemMutation(\n  $id: uuid!\n  $set: recipe_item_set_input\n) {\n  update_recipe_item_by_pk(pk_columns: {id: $id}, _set: $set) {\n    recipe {\n      description\n      id\n      increment\n      link\n      name\n      portions\n      u_id\n    }\n    id\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '336a524809b35e0cda6cc380b42198f0';
+(node as any).hash = 'e7abf367b1f37797cb526583024cc8a0';
 export default node;
