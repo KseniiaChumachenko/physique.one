@@ -3,28 +3,22 @@ import { observer } from "mobx-react-lite";
 import { Autocomplete, AutocompleteProps } from "@material-ui/lab";
 import { TextField } from "@material-ui/core";
 import { Trans } from "@lingui/react";
-import { Food_Insert_Input } from "../graphql/generated/graphql";
-import { aggregate } from "../screens/Recipes/utils";
 import {
+  food_insert_input,
   FoodPreloadedHookProps,
   useFoodPreloadedQuery,
-} from "../api-hooks/food";
+} from "src/api-hooks/food";
 import {
   RecipePreloadedHookProps,
   useRecipePreloaded,
-} from "../api-hooks/recipe";
+} from "src/api-hooks/recipe";
+import { aggregate } from "../screens/Recipes/utils";
 
-export type MealAutocompleteListItem = Food_Insert_Input & {
+export type MealAutocompleteListItem = food_insert_input & {
   recipe?: boolean;
   food?: string;
   recipe_id?: string;
 };
-
-export type FoodOptionalType =
-  | MealAutocompleteListItem
-  | string
-  | null
-  | undefined;
 
 type ExtendProps = RecipePreloadedHookProps &
   FoodPreloadedHookProps &
@@ -81,10 +75,12 @@ export const MealAutocomplete = observer(
       <Autocomplete
         options={remappedOptions}
         defaultValue={remappedOptions[0]}
-        getOptionLabel={(option: MealAutocompleteListItem) => option.name}
+        getOptionLabel={(option: MealAutocompleteListItem) =>
+          option?.name || ""
+        }
         value={valueFromOptions}
         onChange={(event: any, newValue: MealAutocompleteListItem | null) => {
-          setValue(newValue?.id);
+          setValue(newValue?.id || "");
           event.stopPropagation();
         }}
         renderInput={(params) => (

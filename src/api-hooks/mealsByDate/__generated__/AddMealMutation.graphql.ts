@@ -27,7 +27,7 @@ export type meal_insert_input = {
     id?: string | null | undefined;
     meal_items?: meal_item_arr_rel_insert_input | null | undefined;
     name?: string | null | undefined;
-    time?: unknown | null | undefined;
+    time?: string | null | undefined;
     u_id?: string | null | undefined;
     user?: users_obj_rel_insert_input | null | undefined;
 };
@@ -278,15 +278,15 @@ export type date_comparison_exp = {
     _nin?: Array<string> | null | undefined;
 };
 export type time_comparison_exp = {
-    _eq?: unknown | null | undefined;
-    _gt?: unknown | null | undefined;
-    _gte?: unknown | null | undefined;
-    _in?: Array<unknown> | null | undefined;
+    _eq?: string | null | undefined;
+    _gt?: string | null | undefined;
+    _gte?: string | null | undefined;
+    _in?: Array<string> | null | undefined;
     _is_null?: boolean | null | undefined;
-    _lt?: unknown | null | undefined;
-    _lte?: unknown | null | undefined;
-    _neq?: unknown | null | undefined;
-    _nin?: Array<unknown> | null | undefined;
+    _lt?: string | null | undefined;
+    _lte?: string | null | undefined;
+    _neq?: string | null | undefined;
+    _nin?: Array<string> | null | undefined;
 };
 export type users_bool_exp = {
     _and?: Array<users_bool_exp | null> | null | undefined;
@@ -481,7 +481,7 @@ export type AddMealMutationResponse = {
     readonly insert_meal: {
         readonly returning: ReadonlyArray<{
             readonly id: string;
-            readonly time: unknown | null;
+            readonly time: string | null;
             readonly date: string | null;
             readonly name: string | null;
             readonly meal_items_connection: {

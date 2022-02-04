@@ -1,7 +1,6 @@
 import React, { Suspense } from "react";
 import { Accordion, AccordionDetails, LinearProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Meal_Item } from "src/graphql/generated/graphql";
 import { useStore } from "src/store";
 import {
   MealsByDatePreloadedHookProps,
@@ -106,11 +105,9 @@ const Panels = ({ date, mealsQR, recipeQR, foodQR }: PanelsProps) => {
                     recipeQR={recipeQR}
                     foodQR={foodQR}
                     refetch={refetch}
-                    meal_items={
-                      item?.meal_items_connection.edges.map(({ node }) => ({
-                        ...node,
-                      })) as Meal_Item[]
-                    }
+                    meal_items={item?.meal_items_connection.edges.map(
+                      ({ node }) => node
+                    )}
                   />
                 </AccordionDetails>
               </Accordion>

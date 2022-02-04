@@ -1,9 +1,9 @@
 import { useLocalObservable } from "mobx-react-lite";
 import moment, { Moment } from "moment";
 import { v4 } from "uuid";
+import { Meal_Item } from "src/types";
 import { meal_item_insert_input } from "src/api-hooks/mealsByDate";
 import { FoodQueryResponse } from "src/api-hooks/food";
-import { Meal_Item } from "../../../graphql/generated/graphql";
 
 interface State {
   name?: string | null;

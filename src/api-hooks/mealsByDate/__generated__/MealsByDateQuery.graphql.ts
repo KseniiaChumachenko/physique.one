@@ -14,7 +14,7 @@ export type MealsByDateQueryResponse = {
             readonly node: {
                 readonly id: string;
                 readonly date: string | null;
-                readonly time: unknown | null;
+                readonly time: string | null;
                 readonly name: string | null;
                 readonly meal_items_connection: {
                     readonly edges: ReadonlyArray<{

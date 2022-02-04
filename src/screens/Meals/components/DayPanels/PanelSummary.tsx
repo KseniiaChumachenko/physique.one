@@ -4,7 +4,6 @@ import { Disposable, UseMutationConfig } from "react-relay";
 import { ExpandMoreRounded } from "@material-ui/icons";
 import { AccordionSummary, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Meal } from "src/graphql/generated/graphql";
 import { DeleteMealMutation } from "src/api-hooks/mealsByDate";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
 import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
@@ -20,23 +19,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type SummaryProps = Pick<Meal, "name" | "time"> & //TODO: types
-  Pick<Meal, "id"> & {
-    meal_items_aggregate: {
-      readonly aggregate: {
-        readonly sum: {
-          readonly carbohydrates: number | null;
-          readonly energy_cal: number | null;
-          readonly energy_kj: number | null;
-          readonly fats: number | null;
-          readonly proteins: number | null;
-        } | null;
+//TODO: types
+type SummaryProps = {
+  readonly id: string;
+  readonly date: string | null;
+  readonly time: string | null;
+  readonly name: string | null;
+} & {
+  meal_items_aggregate: {
+    readonly aggregate: {
+      readonly sum: {
+        readonly carbohydrates: number | null;
+        readonly energy_cal: number | null;
+        readonly energy_kj: number | null;
+        readonly fats: number | null;
+        readonly proteins: number | null;
       } | null;
-    };
-  } & {
-    refetch: () => void;
-    destroy: (c: UseMutationConfig<DeleteMealMutation>) => Disposable;
-  } & FoodPreloadedHookProps &
+    } | null;
+  };
+} & {
+  refetch: () => void;
+  destroy: (c: UseMutationConfig<DeleteMealMutation>) => Disposable;
+} & FoodPreloadedHookProps &
   RecipePreloadedHookProps;
 
 export const PanelSummary = ({
