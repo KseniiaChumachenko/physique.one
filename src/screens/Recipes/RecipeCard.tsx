@@ -97,6 +97,7 @@ export const RecipeCard = observer(
           u_id={u_id}
           portions={portions}
           link={link}
+          recipeQR={recipeQR}
         />
         <CardContent>
           <Box display={"flex"} alignItems={"center"}>
@@ -137,17 +138,20 @@ export const RecipeCard = observer(
               </TableRow>
             </TableHead>
             <TableBody>
-              {recipe_items?.map((row) => (
-                <RecipeTableEditableRow
-                  foodQR={foodQR}
-                  recipeQR={recipeQR}
-                  recipe_id={id}
-                  row={row}
-                  key={row.id}
-                  u_id={u_id}
-                  coefficientForPortions={coefficientForPortions}
-                />
-              ))}
+              {recipe_items?.map(
+                (row) =>
+                  row && (
+                    <RecipeTableEditableRow
+                      foodQR={foodQR}
+                      recipeQR={recipeQR}
+                      recipe_id={id}
+                      row={row}
+                      key={row.id}
+                      u_id={u_id}
+                      coefficientForPortions={coefficientForPortions}
+                    />
+                  )
+              )}
               {/*Row total for portions: */}
               {recipe_items && recipe_items?.length > 1 && (
                 <TableRow>

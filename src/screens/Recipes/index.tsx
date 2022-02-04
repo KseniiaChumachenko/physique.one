@@ -33,7 +33,6 @@ export const RecipesContent = observer(
               id: uuid(),
               name: "New recipe",
               u_id: id,
-              increment: 0,
               meal_items: null,
               recipe_items: null,
             },
@@ -54,14 +53,17 @@ export const RecipesContent = observer(
 
     return (
       <>
-        {data.recipe_connection.edges.map(({ node }) => (
-          <RecipeCard
-            key={node.id}
-            recipeQR={recipeQR}
-            foodQR={foodQR}
-            {...node}
-          />
-        ))}
+        {data.recipe_connection.edges.map(
+          ({ node }) =>
+            node && (
+              <RecipeCard
+                key={node.id}
+                recipeQR={recipeQR}
+                foodQR={foodQR}
+                {...node}
+              />
+            )
+        )}
       </>
     );
   }

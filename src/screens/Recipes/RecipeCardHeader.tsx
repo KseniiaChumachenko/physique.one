@@ -12,8 +12,12 @@ import {
 } from "@material-ui/core";
 import { LinkRounded } from "@material-ui/icons";
 import { Trans } from "@lingui/macro";
+import {
+  RecipePreloadedHookProps,
+  useRecipePreloaded,
+} from "src/api-hooks/recipe";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
-import { Recipe_Item_Aggregate } from "../../graphql/generated/graphql";
 import { useStore } from "../../store";
 
 const useStyles = makeStyles((theme) =>
@@ -32,13 +36,12 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-export interface RecipeCardHeaderProps {
-  id?: string;
+export interface RecipeCardHeaderProps extends RecipePreloadedHookProps {
+  id: string;
   name?: string | null;
   link?: string | null;
   portions?: number | null;
   description?: string | null;
-  recipe_items_aggregate?: Recipe_Item_Aggregate;
   u_id: string;
 }
 
@@ -50,16 +53,20 @@ export const RecipeCardHeader = ({
   portions,
   description,
   u_id,
+
+  recipeQR,
 }: RecipeCardHeaderProps) => {
   const classes = useStyles();
+  const {
+    mutations: { update, destroy },
+  } = useRecipePreloaded(recipeQR);
   const {
     userStore: {
       user: { id: userId },
     },
-    recipeStore: { deleteRecipe, updateRecipe },
   } = useStore();
   const isPermitted = userId === u_id;
-  const [isEdit, setIsEdit] = useState();
+  const [isEdit, setIsEdit] = useState<boolean | undefined>();
 
   const [updatedName, setUpdatedName] = useState(name || "Enter recipe name");
   const [updatedDesc, setUpdatedDesc] = useState(description);
@@ -67,15 +74,21 @@ export const RecipeCardHeader = ({
   const [updatedPortioning, setUpdatedPortioning] = useState(portions || 0);
 
   const handleSubmit = () => {
-    updateRecipe({
-      id,
-      name: updatedName,
-      description: updatedDesc,
-      link: updatedLink,
-      portions: updatedPortioning,
+    update({
+      variables: {
+        id: base64ToUuid(id),
+        set: {
+          name: updatedName,
+          description: updatedDesc,
+          link: updatedLink,
+          portions: updatedPortioning,
+        },
+      },
     });
     setIsEdit(false);
   };
+
+  const handleDelete = () => destroy({ variables: { id: base64ToUuid(id) } });
 
   return (
     <>
@@ -140,7 +153,7 @@ export const RecipeCardHeader = ({
                 onConfirmClick={isEdit ? handleSubmit : undefined}
                 onEditClick={!isEdit ? () => setIsEdit(true) : undefined}
                 onCancelClick={isEdit ? () => setIsEdit(false) : undefined}
-                onDeleteClick={() => deleteRecipe(id!)}
+                onDeleteClick={handleDelete}
               />
             )}
           </Box>

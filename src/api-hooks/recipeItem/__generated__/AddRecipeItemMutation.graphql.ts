@@ -263,15 +263,15 @@ export type date_comparison_exp = {
     _nin?: Array<string> | null | undefined;
 };
 export type time_comparison_exp = {
-    _eq?: unknown | null | undefined;
-    _gt?: unknown | null | undefined;
-    _gte?: unknown | null | undefined;
-    _in?: Array<unknown> | null | undefined;
+    _eq?: string | null | undefined;
+    _gt?: string | null | undefined;
+    _gte?: string | null | undefined;
+    _in?: Array<string> | null | undefined;
     _is_null?: boolean | null | undefined;
-    _lt?: unknown | null | undefined;
-    _lte?: unknown | null | undefined;
-    _neq?: unknown | null | undefined;
-    _nin?: Array<unknown> | null | undefined;
+    _lt?: string | null | undefined;
+    _lte?: string | null | undefined;
+    _neq?: string | null | undefined;
+    _nin?: Array<string> | null | undefined;
 };
 export type users_bool_exp = {
     _and?: Array<users_bool_exp | null> | null | undefined;
@@ -381,7 +381,7 @@ export type meal_insert_input = {
     id?: string | null | undefined;
     meal_items?: meal_item_arr_rel_insert_input | null | undefined;
     name?: string | null | undefined;
-    time?: unknown | null | undefined;
+    time?: string | null | undefined;
     u_id?: string | null | undefined;
     user?: users_obj_rel_insert_input | null | undefined;
 };
@@ -476,7 +476,7 @@ export type meal_item_on_conflict = {
 };
 export type AddRecipeItemMutationVariables = {
     id: string;
-    objects?: Array<recipe_item_insert_input> | null | undefined;
+    objects: Array<recipe_item_insert_input>;
 };
 export type AddRecipeItemMutationResponse = {
     readonly insert_recipe_item: {
@@ -529,7 +529,7 @@ export type AddRecipeItemMutation = {
 /*
 mutation AddRecipeItemMutation(
   $id: uuid!
-  $objects: [recipe_item_insert_input!] = {}
+  $objects: [recipe_item_insert_input!]!
 ) {
   insert_recipe_item(objects: $objects) {
     returning {
@@ -581,7 +581,7 @@ var v0 = [
     "name": "id"
   },
   {
-    "defaultValue": {},
+    "defaultValue": null,
     "kind": "LocalArgument",
     "name": "objects"
   }
@@ -823,14 +823,14 @@ return {
     "selections": (v11/*: any*/)
   },
   "params": {
-    "cacheID": "55a7ac8db6bf32f5b04c820f47b1b3ff",
+    "cacheID": "a7eb69fd7bc3d0e34be9ce8aff243e7a",
     "id": null,
     "metadata": {},
     "name": "AddRecipeItemMutation",
     "operationKind": "mutation",
-    "text": "mutation AddRecipeItemMutation(\n  $id: uuid!\n  $objects: [recipe_item_insert_input!] = {}\n) {\n  insert_recipe_item(objects: $objects) {\n    returning {\n      carbohydrates\n      energy_cal\n      energy_kj\n      fats\n      food_id\n      id\n      proteins\n      recipe_id\n      u_id\n      weight\n      recipe {\n        description\n        id\n        increment\n        link\n        name\n        portions\n        u_id\n        recipe_items_connection(where: {id: {_eq: $id}}) {\n          edges {\n            node {\n              carbohydrates\n              energy_cal\n              energy_kj\n              fats\n              food_id\n              id\n              proteins\n              recipe_id\n              u_id\n              weight\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "mutation AddRecipeItemMutation(\n  $id: uuid!\n  $objects: [recipe_item_insert_input!]!\n) {\n  insert_recipe_item(objects: $objects) {\n    returning {\n      carbohydrates\n      energy_cal\n      energy_kj\n      fats\n      food_id\n      id\n      proteins\n      recipe_id\n      u_id\n      weight\n      recipe {\n        description\n        id\n        increment\n        link\n        name\n        portions\n        u_id\n        recipe_items_connection(where: {id: {_eq: $id}}) {\n          edges {\n            node {\n              carbohydrates\n              energy_cal\n              energy_kj\n              fats\n              food_id\n              id\n              proteins\n              recipe_id\n              u_id\n              weight\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = '8310a0232a2a89720cb4a9c180a961ba';
+(node as any).hash = 'a951df9ba64392713c4e2af5bcde5f05';
 export default node;

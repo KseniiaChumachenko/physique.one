@@ -281,15 +281,15 @@ export type date_comparison_exp = {
     _nin?: Array<string> | null | undefined;
 };
 export type time_comparison_exp = {
-    _eq?: unknown | null | undefined;
-    _gt?: unknown | null | undefined;
-    _gte?: unknown | null | undefined;
-    _in?: Array<unknown> | null | undefined;
+    _eq?: string | null | undefined;
+    _gt?: string | null | undefined;
+    _gte?: string | null | undefined;
+    _in?: Array<string> | null | undefined;
     _is_null?: boolean | null | undefined;
-    _lt?: unknown | null | undefined;
-    _lte?: unknown | null | undefined;
-    _neq?: unknown | null | undefined;
-    _nin?: Array<unknown> | null | undefined;
+    _lt?: string | null | undefined;
+    _lte?: string | null | undefined;
+    _neq?: string | null | undefined;
+    _nin?: Array<string> | null | undefined;
 };
 export type users_bool_exp = {
     _and?: Array<users_bool_exp | null> | null | undefined;
@@ -427,7 +427,7 @@ export type meal_insert_input = {
     id?: string | null | undefined;
     meal_items?: meal_item_arr_rel_insert_input | null | undefined;
     name?: string | null | undefined;
-    time?: unknown | null | undefined;
+    time?: string | null | undefined;
     u_id?: string | null | undefined;
     user?: users_obj_rel_insert_input | null | undefined;
 };
@@ -475,7 +475,7 @@ export type meal_item_on_conflict = {
     where?: meal_item_bool_exp | null | undefined;
 };
 export type AddRecipeMutationVariables = {
-    objects?: Array<recipe_insert_input> | null | undefined;
+    objects: Array<recipe_insert_input>;
 };
 export type AddRecipeMutationResponse = {
     readonly insert_recipe: {
@@ -523,7 +523,7 @@ export type AddRecipeMutation = {
 
 /*
 mutation AddRecipeMutation(
-  $objects: [recipe_insert_input!] = {}
+  $objects: [recipe_insert_input!]!
 ) {
   insert_recipe(objects: $objects) {
     returning {
@@ -566,7 +566,7 @@ mutation AddRecipeMutation(
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
-    "defaultValue": {},
+    "defaultValue": null,
     "kind": "LocalArgument",
     "name": "objects"
   }
@@ -784,14 +784,14 @@ return {
     "selections": (v9/*: any*/)
   },
   "params": {
-    "cacheID": "f389d5dd7b96f345d2c8c742b0596e6c",
+    "cacheID": "0304c1bdf7405169e1d5639f7ab88d6b",
     "id": null,
     "metadata": {},
     "name": "AddRecipeMutation",
     "operationKind": "mutation",
-    "text": "mutation AddRecipeMutation(\n  $objects: [recipe_insert_input!] = {}\n) {\n  insert_recipe(objects: $objects) {\n    returning {\n      description\n      id\n      increment\n      link\n      name\n      portions\n      u_id\n      recipe_items {\n        carbohydrates\n        energy_cal\n        energy_kj\n        fats\n        food_id\n        id\n        proteins\n        recipe_id\n        u_id\n        weight\n      }\n      recipe_items_aggregate {\n        aggregate {\n          sum {\n            carbohydrates\n            energy_cal\n            energy_kj\n            fats\n            proteins\n            weight\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "mutation AddRecipeMutation(\n  $objects: [recipe_insert_input!]!\n) {\n  insert_recipe(objects: $objects) {\n    returning {\n      description\n      id\n      increment\n      link\n      name\n      portions\n      u_id\n      recipe_items {\n        carbohydrates\n        energy_cal\n        energy_kj\n        fats\n        food_id\n        id\n        proteins\n        recipe_id\n        u_id\n        weight\n      }\n      recipe_items_aggregate {\n        aggregate {\n          sum {\n            carbohydrates\n            energy_cal\n            energy_kj\n            fats\n            proteins\n            weight\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'a7666f003a2babcac2927e9673eaa1e6';
+(node as any).hash = '5f26c613e7688b0f8795cfe7284864db';
 export default node;
