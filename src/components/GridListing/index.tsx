@@ -2,7 +2,6 @@ import React, { ComponentProps } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Grid, LinearProgress } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { ApolloError } from "@apollo/client";
 import { Trans } from "@lingui/react";
 import { Card } from "src/components/Card";
 
@@ -24,7 +23,7 @@ interface GridListingProps {
   loading: boolean;
   activeCard: boolean;
   onAddCardClick(): void;
-  error?: ApolloError;
+  error?: Error;
 }
 
 export const GridListing = ({
