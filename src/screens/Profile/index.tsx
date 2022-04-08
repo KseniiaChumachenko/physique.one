@@ -1,5 +1,4 @@
-import React, { Suspense, useEffect } from "react";
-import { PreloadedQuery } from "react-relay";
+import React, { Suspense } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Avatar,
@@ -8,9 +7,13 @@ import {
   CircularProgress,
   createStyles,
 } from "@material-ui/core";
-import { useUserPreloadedQuery, useUserQuery } from "../../api-hooks/user";
-import { userQuery } from "../../graphql/__generated__/userQuery.graphql";
-import { useStore } from "../../store";
+import { useActiveUser } from "src/api-hooks/authorization";
+import {
+  UserPreloadedHookProps,
+  useUser,
+  useUserPreloadedQuery,
+} from "src/api-hooks/user";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
 
 export const useStyles = makeStyles((theme) =>
   createStyles({
@@ -21,16 +24,12 @@ export const useStyles = makeStyles((theme) =>
   })
 );
 
-const Container = ({
-  queryRef,
-}: {
-  queryRef: PreloadedQuery<userQuery, Record<string, unknown>>;
-}) => {
+const Container = ({ userQR }: UserPreloadedHookProps) => {
   const { avatar } = useStyles();
 
-  const data = useUserPreloadedQuery(queryRef);
+  const { data } = useUserPreloadedQuery(userQR);
 
-  const user = data.users[0];
+  const user = data.users_connection.edges[0]?.node;
 
   return (
     <div>
@@ -52,20 +51,12 @@ const Container = ({
 };
 
 export const Profile = () => {
-  const {
-    userStore: {
-      user: { id },
-    },
-  } = useStore();
-  const [queryRef, loadQuery] = useUserQuery();
-
-  useEffect(() => {
-    loadQuery({ id });
-  }, []);
+  const { user } = useActiveUser();
+  const { queryReference } = useUser({ id: base64ToUuid(user?.id || "") });
 
   return (
     <Suspense fallback={<CircularProgress />}>
-      {queryRef && <Container queryRef={queryRef} />}
+      {queryReference && <Container userQR={queryReference} />}
     </Suspense>
   );
 };

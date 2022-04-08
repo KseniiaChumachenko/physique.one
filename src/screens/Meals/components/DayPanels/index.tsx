@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { Accordion, AccordionDetails, LinearProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useStore } from "src/store";
+import { useActiveUser } from "src/api-hooks/authorization";
 import {
   MealsByDatePreloadedHookProps,
   useMealsByDateQuery,
@@ -95,6 +95,7 @@ const Panels = ({ date, mealsQR, recipeQR, foodQR }: PanelsProps) => {
                   recipeQR={recipeQR}
                   destroy={destroy}
                   id={item?.id}
+                  date={date}
                   name={item?.name}
                   time={item?.time}
                   meal_items_aggregate={item?.meal_items_aggregate}
@@ -123,9 +124,7 @@ interface Props {
 }
 
 export const DayPanels = ({ date }: Props) => {
-  const {
-    userStore: { user },
-  } = useStore();
+  const { user } = useActiveUser();
   const { queryReference: foodQR } = useFood({});
   const { queryReference: recipeQR } = useRecipe({});
   const { queryReference: mealsQR } = useMealsByDateQuery({

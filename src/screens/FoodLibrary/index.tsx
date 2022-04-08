@@ -32,6 +32,7 @@ import {
   useFoodType,
 } from "../../api-hooks/foodType";
 import { base64ToUuid } from "../../utils/base64-to-uuid";
+import { useActiveUser } from "../../api-hooks/authorization";
 
 export interface FetchedFoods {
   readonly weight: number | null;
@@ -60,8 +61,8 @@ const FoodLibraryContent = observer(
     FoodBrandPreloadedHookProps &
     FoodTypePreloadedHookProps) => {
     const { data, mutations: foodMutations } = useFoodPreloadedQuery(foodQR);
+    const { user } = useActiveUser();
     const {
-      userStore: { user },
       screenStore: { setAction },
     } = useStore();
     const [openAddDialog, setOpenAddDialog] = useState(false);
@@ -143,7 +144,7 @@ const FoodLibraryContent = observer(
                       {row.u_id === user?.id && ( //TODO: https://github.com/KseniiaChumachenko/physique.one/issues/31 proper permissions
                         <EditDeleteButtonGroup
                           key={key}
-                          onEditClick={() => setEditDialogProps(row)}
+                          onEditClick={() => setEditDialogProps(row as any)}
                           onDeleteClick={handleDeleteFood({
                             id: base64ToUuid(row?.id),
                           })}
@@ -163,7 +164,7 @@ const FoodLibraryContent = observer(
             setOpen={setEditDialogProps}
             onUpdate={handleUpdateFood}
             updateProps={editDialogProps}
-            u_id={user?.id}
+            u_id={user?.id || ""}
           />
         )}
         {openAddDialog && (
@@ -173,7 +174,7 @@ const FoodLibraryContent = observer(
             open={openAddDialog}
             setOpen={setOpenAddDialog}
             onAdd={handleAddFood}
-            u_id={user?.id}
+            u_id={user?.id || ""}
           />
         )}
         <ToastMessage

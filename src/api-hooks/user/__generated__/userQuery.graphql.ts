@@ -4,10 +4,10 @@
 
 import { ConcreteRequest } from "relay-runtime";
 
-export type userQueryVariables = {
+export type UserQueryVariables = {
     id?: string | null | undefined;
 };
-export type userQueryResponse = {
+export type UserQueryResponse = {
     readonly users_connection: {
         readonly edges: ReadonlyArray<{
             readonly node: {
@@ -22,15 +22,15 @@ export type userQueryResponse = {
         }>;
     };
 };
-export type userQuery = {
-    readonly response: userQueryResponse;
-    readonly variables: userQueryVariables;
+export type UserQuery = {
+    readonly response: UserQueryResponse;
+    readonly variables: UserQueryVariables;
 };
 
 
 
 /*
-query userQuery(
+query UserQuery(
   $id: uuid
 ) {
   users_connection(where: {id: {_eq: $id}}) {
@@ -164,7 +164,7 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "userQuery",
+    "name": "UserQuery",
     "selections": (v1/*: any*/),
     "type": "query_root",
     "abstractKey": null
@@ -173,18 +173,18 @@ return {
   "operation": {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "userQuery",
+    "name": "UserQuery",
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "a07e8cefa59ae1e3ee480dd375e7ab58",
+    "cacheID": "423550a08d7fabcc895e807c8c1d0f61",
     "id": null,
     "metadata": {},
-    "name": "userQuery",
+    "name": "UserQuery",
     "operationKind": "query",
-    "text": "query userQuery(\n  $id: uuid\n) {\n  users_connection(where: {id: {_eq: $id}}) {\n    edges {\n      node {\n        id\n        email\n        first_name\n        last_name\n        user_name\n        fb_id\n        fb_picture_url\n      }\n    }\n  }\n}\n"
+    "text": "query UserQuery(\n  $id: uuid\n) {\n  users_connection(where: {id: {_eq: $id}}) {\n    edges {\n      node {\n        id\n        email\n        first_name\n        last_name\n        user_name\n        fb_id\n        fb_picture_url\n      }\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'f50d7df54d2061c60030195fec5db6d2';
+(node as any).hash = '01ad2b3410dc16da6391bbe4dc57da79';
 export default node;

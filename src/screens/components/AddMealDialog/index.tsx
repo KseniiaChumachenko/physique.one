@@ -16,8 +16,8 @@ import { AddRounded, DeleteRounded } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { TimePicker } from "@material-ui/pickers";
 import { Autocomplete } from "@material-ui/lab";
-import { useStore as useGlobalStore } from "src/store";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
+import { useActiveUser } from "src/api-hooks/authorization";
 import { AddMealMutationVariables } from "src/api-hooks/mealsByDate";
 import {
   FoodPreloadedHookProps,
@@ -72,9 +72,7 @@ interface AddMealDialogProps extends ExtendProps {}
 const AddMealDialogDataFlow = observer<AddMealDialogProps>(
   ({ open, setOpen, date, name, onConfirm, foodQR, recipeQR }) => {
     const classes = useStyles();
-    const {
-      userStore: { user },
-    } = useGlobalStore();
+    const { user } = useActiveUser();
     const { data: foods } = useFoodPreloadedQuery(foodQR);
     const {
       data: {

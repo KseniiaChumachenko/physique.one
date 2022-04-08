@@ -12,6 +12,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { useStore } from "../store";
 import { DrawerNavigation } from "../components/DrawerNavigation";
+import { useActiveUser } from "../api-hooks/authorization";
 
 const Authorization = React.lazy(() =>
   import("./Authorization").then((module) => ({
@@ -56,9 +57,10 @@ const useStyles = makeStyles((theme) => ({
 export const Router = observer(() => {
   const classes = useStyles();
   const {
-    userStore: { user },
     screenStore: { loading },
   } = useStore();
+
+  const { user } = useActiveUser();
 
   return (
     <BrowserRouter>

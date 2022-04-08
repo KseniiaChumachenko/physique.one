@@ -32,6 +32,7 @@ export const FormCard = ({
   buttonsSection,
 }: P) => {
   const classes = useStyles();
+
   return (
     <Fade in={true} timeout={700} mountOnEnter unmountOnExit>
       <div className={classes.section}>

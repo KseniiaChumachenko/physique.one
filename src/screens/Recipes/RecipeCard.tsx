@@ -18,9 +18,9 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Trans } from "@lingui/react";
-import { useStore } from "../../store";
-import { FoodPreloadedHookProps } from "../../api-hooks/food";
-import { RecipePreloadedHookProps } from "../../api-hooks/recipe";
+import { useActiveUser } from "src/api-hooks/authorization";
+import { FoodPreloadedHookProps } from "src/api-hooks/food";
+import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
 import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
 import { RecipeTableEditableRow } from "./RecipeTableEditableRow";
 import { aggregate, getValueByPortionCoefficient } from "./utils";
@@ -73,18 +73,14 @@ export const RecipeCard = observer(
     link,
   }: Props) => {
     const classes = useStyles();
-    const {
-      userStore: {
-        user: { id: userId },
-      },
-    } = useStore();
+    const { user } = useActiveUser();
 
     const [displayPortions, setDisplayPortions] = useState(portions || 1);
 
     const [withAddRow, setWithAddRow] = useState(false);
     const handleCancelAddRow = () => setWithAddRow(false);
 
-    const isPermitted = userId === u_id;
+    const isPermitted = user?.id === u_id;
     const coefficientForPortions =
       portions === displayPortions ? 1 : displayPortions / (portions || 1);
 
@@ -215,7 +211,7 @@ export const RecipeCard = observer(
                   recipeQR={recipeQR}
                   key={id}
                   recipe_id={id}
-                  row={{ id: NIL, weight: 100 }}
+                  row={{ id: NIL, weight: 100 } as any} // TODO
                   u_id={u_id}
                   coefficientForPortions={coefficientForPortions}
                   onDiscardAddRow={handleCancelAddRow}
