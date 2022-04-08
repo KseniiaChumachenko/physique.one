@@ -13,7 +13,7 @@ import {
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
 import { Trans } from "@lingui/react";
-import { useStore } from "src/store";
+import { useActiveUser } from "src/api-hooks/authorization";
 import {
   FoodPreloadedHookProps,
   useFoodPreloadedQuery,
@@ -51,9 +51,7 @@ export const AddMealItemDialog = observer(
     const { data: foodLibrary } = useFoodPreloadedQuery(foodQR);
     const { data: recipeLibrary } = useRecipePreloaded(recipeQR);
     const [addMealItem] = useAddMealItemMutation();
-    const {
-      userStore: { user },
-    } = useStore();
+    const { user } = useActiveUser();
 
     const [error, setOpenErrorMessage] = React.useState<Error>();
     const [success, setOpenSuccessMessage] = React.useState(false);

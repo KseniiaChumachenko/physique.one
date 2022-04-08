@@ -8,6 +8,7 @@ import {
   TableRow,
   TextField,
 } from "@material-ui/core";
+import { useActiveUser } from "src/api-hooks/authorization";
 import {
   FoodPreloadedHookProps,
   useFoodPreloadedQuery,
@@ -23,7 +24,6 @@ import {
 } from "src/api-hooks/recipeItem";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { MealAutocomplete } from "../../components/MealAutocomplete";
-import { useStore } from "../../store";
 import { base64ToUuid } from "../../utils/base64-to-uuid";
 import { getRowValues } from "./utils";
 import { RecipeItem } from "./RecipeCard";
@@ -66,17 +66,12 @@ export const RecipeTableEditableRow = observer(
     const classes = useStyles();
     const { data } = useFoodPreloadedQuery(foodQR);
     const { refetch } = useRecipePreloaded(recipeQR);
+    const { user } = useActiveUser();
     const [add] = useAddRecipeItemMutation();
     const [update] = useUpdateRecipeItemMutation();
     const [destroy] = useDeleteRecipeItemMutation();
 
-    const {
-      userStore: {
-        user: { id: userId },
-      },
-    } = useStore();
-
-    const isPermitted = userId === u_id;
+    const isPermitted = user?.id === u_id;
     const isNewRecipeItem = basePortionRow?.id === NIL;
 
     const [isInEditMode, setEditMode] = useState(isNewRecipeItem);

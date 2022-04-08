@@ -1,37 +1,35 @@
+import { useEffect } from "react";
+import { useQueryLoader, usePreloadedQuery, PreloadedQuery } from "react-relay";
+import { UserQuery as UserQueryDocument } from "./UserQuery";
 import {
-  graphql,
-  useQueryLoader,
-  usePreloadedQuery,
-  PreloadedQuery,
-} from "react-relay";
-import { userQuery } from "./__generated__/userQuery.graphql";
+  UserQuery,
+  UserQueryVariables,
+} from "./__generated__/UserQuery.graphql";
 
-export const UserQuery = graphql`
-  query userQuery($id: uuid) {
-    users_connection(where: { id: { _eq: $id } }) {
-      edges {
-        node {
-          id
-          email
-          first_name
-          last_name
-          user_name
-          fb_id
-          fb_picture_url
-        }
-      }
-    }
-  }
-`;
+export * from "./__generated__/UserQuery.graphql";
 
-export const useUserQuery = () => {
-  return useQueryLoader<userQuery>(UserQuery);
+export const useUser = (v: UserQueryVariables) => {
+  const [queryReference, loadQuery] = useQueryLoader<UserQuery>(
+    UserQueryDocument
+  );
+
+  useEffect(() => {
+    loadQuery(v);
+  }, []);
+
+  const refetch = () => loadQuery(v, { fetchPolicy: "network-only" });
+
+  return { queryReference, refetch };
 };
 
-export const useUserPreloadedQuery = (
-  userQueryRef: PreloadedQuery<userQuery>
-) => {
-  return usePreloadedQuery<userQuery>(UserQuery, userQueryRef);
+export interface UserPreloadedHookProps {
+  userQR: PreloadedQuery<UserQuery, Record<string, unknown>>;
+}
+
+export const useUserPreloadedQuery = (userQR: PreloadedQuery<UserQuery>) => {
+  const data = usePreloadedQuery<UserQuery>(UserQueryDocument, userQR);
+
+  return { data };
 };
 
 //TODO: issue with build: error with subscription transport

@@ -22,6 +22,7 @@ import {
 } from "@material-ui/icons";
 import { Trans } from "@lingui/react";
 import { useHistory, useLocation } from "react-router-dom";
+import { useActiveUser } from "src/api-hooks/authorization";
 import { useStore } from "../store";
 import { ROUTES } from "../constants";
 
@@ -72,6 +73,10 @@ export const DrawerNavigation = observer(() => {
   const classes = useStyles();
   const history = useHistory();
   const { pathname } = useLocation();
+  const {
+    user,
+    mutations: { resetUser },
+  } = useActiveUser();
 
   const {
     screenStore: {
@@ -79,7 +84,6 @@ export const DrawerNavigation = observer(() => {
       handleToggleNavigation,
       handleCloseNavigation,
     },
-    userStore: { user, resetUser },
   } = useStore();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);

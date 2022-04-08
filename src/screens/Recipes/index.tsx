@@ -2,13 +2,14 @@ import React, { Suspense, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 import { v4 as uuid } from "uuid";
 import { LinearProgress } from "@material-ui/core";
-import { useStore } from "../../store";
+import { useActiveUser } from "src/api-hooks/authorization";
 import {
   RecipePreloadedHookProps,
   useRecipe,
   useRecipePreloaded,
-} from "../../api-hooks/recipe";
-import { FoodPreloadedHookProps, useFood } from "../../api-hooks/food";
+} from "src/api-hooks/recipe";
+import { FoodPreloadedHookProps, useFood } from "src/api-hooks/food";
+import { useStore } from "../../store";
 import { RecipeCard } from "./RecipeCard";
 
 export const RecipesContent = observer(
@@ -17,11 +18,9 @@ export const RecipesContent = observer(
       data,
       mutations: { add },
     } = useRecipePreloaded(recipeQR);
+    const { user } = useActiveUser();
 
     const {
-      userStore: {
-        user: { id },
-      },
       screenStore: { setAction },
     } = useStore();
 
@@ -32,7 +31,7 @@ export const RecipesContent = observer(
             {
               id: uuid(),
               name: "New recipe",
-              u_id: id,
+              u_id: user?.id,
               meal_items: null,
               recipe_items: null,
             },

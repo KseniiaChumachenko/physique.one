@@ -22,7 +22,7 @@ import {
   useRecipePreloaded,
 } from "src/api-hooks/recipe";
 import { useUpdateMealItemMutation } from "src/api-hooks/mealItem";
-import { useStore } from "src/store";
+import { useActiveUser } from "src/api-hooks/authorization";
 import { MealAutocomplete } from "src/components/MealAutocomplete";
 import { aggregate } from "../../Recipes/utils";
 
@@ -56,9 +56,7 @@ export const EditMealItemDialog = ({
   const { data: recipeLibrary } = useRecipePreloaded(recipeQR);
   const [update] = useUpdateMealItemMutation();
 
-  const {
-    userStore: { user },
-  } = useStore();
+  const { user } = useActiveUser();
 
   const [error, setOpenErrorMessage] = React.useState<string | undefined>();
   const [success, setOpenSuccessMessage] = React.useState(false);

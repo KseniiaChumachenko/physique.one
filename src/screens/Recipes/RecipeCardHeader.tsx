@@ -12,13 +12,13 @@ import {
 } from "@material-ui/core";
 import { LinkRounded } from "@material-ui/icons";
 import { Trans } from "@lingui/macro";
+import { useActiveUser } from "src/api-hooks/authorization";
 import {
   RecipePreloadedHookProps,
   useRecipePreloaded,
 } from "src/api-hooks/recipe";
 import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
-import { useStore } from "../../store";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -60,12 +60,8 @@ export const RecipeCardHeader = ({
   const {
     mutations: { update, destroy },
   } = useRecipePreloaded(recipeQR);
-  const {
-    userStore: {
-      user: { id: userId },
-    },
-  } = useStore();
-  const isPermitted = userId === u_id;
+  const { user } = useActiveUser();
+  const isPermitted = user?.id === u_id;
   const [isEdit, setIsEdit] = useState<boolean | undefined>();
 
   const [updatedName, setUpdatedName] = useState(name || "Enter recipe name");

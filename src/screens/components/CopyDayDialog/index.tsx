@@ -13,7 +13,7 @@ import {
 import { DatePicker } from "@material-ui/pickers";
 import { Alert } from "@material-ui/lab";
 import { Trans } from "@lingui/react";
-import { useStore } from "src/store";
+import { useActiveUser } from "src/api-hooks/authorization";
 import {
   AddMealMutationVariables,
   MealsByDateQueryResponse,
@@ -35,11 +35,7 @@ export const CopyDayDialog = ({
   data,
   onSubmit,
 }: Props) => {
-  const {
-    userStore: {
-      user: { id: u_id },
-    },
-  } = useStore();
+  const { user } = useActiveUser();
 
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
@@ -55,13 +51,13 @@ export const CopyDayDialog = ({
           date: insertDate,
           time: m.time,
           name: m.name || "",
-          u_id,
+          u_id: user?.id,
           meal_items: {
             data: m.meal_items_connection.edges.map(
               ({ node: i }) =>
                 i && {
                   id: uuid(),
-                  u_id,
+                  u_id: user?.id,
                   food: i.food,
                   weight: i.weight,
                   carbohydrates: i.carbohydrates,
