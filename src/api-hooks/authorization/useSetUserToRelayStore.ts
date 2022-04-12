@@ -4,14 +4,14 @@ import { commitLocalUpdate } from "relay-runtime";
 import { ActiveUser } from "./";
 
 export function useSetUserToRelayStore(
-  user: ActiveUser,
+  user: ActiveUser | null,
   userState: ActiveUser | null,
-  setUser: (user: ActiveUser) => void
+  setUser: (user: ActiveUser | null) => void
 ) {
   const environment = useRelayEnvironment();
 
   // Create a unique ID.
-  const dataID = `client:ActiveUser:${user.id}`;
+  const dataID = `client:ActiveUser:${user?.id}`;
 
   useEffect(() => {
     if (!userState) {
@@ -25,8 +25,11 @@ export function useSetUserToRelayStore(
 
           // Add the record to the user's list of notes.
           userRecord?.setLinkedRecord(newLocalRecord, "activeUser");
-
-          Object.keys(user).map((key) => userRecord?.setValue(user[key], key));
+          if (user) {
+            Object.keys(user).map((key) =>
+              userRecord?.setValue(user[key], key)
+            );
+          }
 
           setUser(userRecord);
           return userRecord;
