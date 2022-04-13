@@ -1,4 +1,4 @@
-import graphql from 'babel-plugin-relay/macro';
+import { graphql } from "react-relay";
 
 export const RecipeQuery = graphql`
   query RecipeQuery {

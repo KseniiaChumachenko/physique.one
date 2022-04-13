@@ -1,4 +1,4 @@
-import graphql from 'babel-plugin-relay/macro';
+import { graphql } from "react-relay";
 
 export const GetForgottenPasswordByEmailQuery = graphql`
   query GetForgottenPasswordByEmailQuery($where: users_bool_exp) {

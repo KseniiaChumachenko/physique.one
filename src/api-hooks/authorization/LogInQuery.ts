@@ -1,4 +1,4 @@
-import graphql from 'babel-plugin-relay/macro';
+import { graphql } from "react-relay";
 
 export const LogInQuery = graphql`
   query LogInQuery($where: users_bool_exp!) {

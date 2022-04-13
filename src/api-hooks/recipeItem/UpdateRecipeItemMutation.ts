@@ -1,4 +1,4 @@
-import graphql from 'babel-plugin-relay/macro';
+import { graphql } from "react-relay";
 
 // TODO: update hasura engine for support of fetching on mutation
 export const UpdateRecipeItemMutation = graphql`

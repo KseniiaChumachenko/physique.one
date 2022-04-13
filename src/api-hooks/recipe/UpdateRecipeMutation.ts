@@ -1,4 +1,4 @@
-import graphql from 'babel-plugin-relay/macro';
+import { graphql } from "react-relay";
 
 // TODO: update hasura then uncoment part of the query
 export const UpdateRecipeMutation = graphql`
