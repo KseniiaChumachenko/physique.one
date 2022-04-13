@@ -6,7 +6,7 @@ import {
   Store,
 } from "relay-runtime";
 
-const GQL_HTTPS_ENDPOINT = process.env.GQL_HTTPS_ENDPOINT || "";
+const GQL_HTTPS_ENDPOINT = import.meta.env.VITE_GQL_HTTPS_ENDPOINT || "";
 
 const fetchQuery: FetchFunction = (
   operation,
@@ -19,7 +19,7 @@ const fetchQuery: FetchFunction = (
     headers: {
       // Add authentication and other headers here
       "content-type": "application/json",
-      "x-hasura-admin-secret": process.env.HASURA_ADMIN_SECRET,
+      "x-hasura-admin-secret": import.meta.env.VITE_HASURA_ADMIN_SECRET,
     } as any,
     body: JSON.stringify({
       query: operation.text, // GraphQL text from input
