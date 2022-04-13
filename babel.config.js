@@ -14,7 +14,7 @@ module.exports = (api) => {
       ["@babel/typescript"],
     ],
     plugins: [
-      ["relay"],
+      "relay",
       "macros",
       "@babel/plugin-syntax-dynamic-import",
       "@babel/plugin-proposal-class-properties",
