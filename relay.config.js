@@ -1,7 +1,7 @@
 module.exports = {
   // ...
   // Configuration options accepted by the `relay-compiler` command-line tool and `babel-plugin-relay`.
-  src: "./src",
+  // src: "./src",
   schema: "./src/graphql/schema.graphql",
   exclude: ["**/node_modules/**", "**/__mocks__/**"],
   customScalars: {
