@@ -13,6 +13,7 @@ export default defineConfig({
         },
     },
     plugins: [macrosPlugin(), react({
+        jsxRuntime: 'classic',
         babel: {
             plugins: [
                 "@babel/plugin-syntax-dynamic-import",
