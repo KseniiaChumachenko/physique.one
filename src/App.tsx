@@ -1,4 +1,3 @@
-import "regenerator-runtime/runtime";
 import React, { Suspense, useEffect } from "react";
 import { RelayEnvironmentProvider } from "react-relay";
 import moment from "moment";

@@ -8,6 +8,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.55",
     "@material-ui/pickers": "^4.0.0-alpha.12",
+    "core-js": "^3.21.1",
     "emailjs-com": "^2.6.4",
     "mobx": "^6.1.7",
     "mobx-react-lite": "^3.2.0",
