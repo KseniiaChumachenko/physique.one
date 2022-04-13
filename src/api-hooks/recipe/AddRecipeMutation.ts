@@ -1,4 +1,4 @@
-import graphql from 'babel-plugin-relay/macro';
+import { graphql } from "react-relay";
 
 export const AddRecipeMutation = graphql`
   mutation AddRecipeMutation($objects: [recipe_insert_input!]!) {

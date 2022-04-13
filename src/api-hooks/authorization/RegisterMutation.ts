@@ -1,4 +1,4 @@
-import graphql from 'babel-plugin-relay/macro';
+import { graphql } from "react-relay";
 
 export const RegisterMutation = graphql`
   mutation RegisterMutation($object: users_insert_input!) {

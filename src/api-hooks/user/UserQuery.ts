@@ -1,4 +1,4 @@
-import graphql from 'babel-plugin-relay/macro';
+import { graphql } from "react-relay";
 
 export const UserQuery = graphql`
   query UserQuery($id: uuid) {
