@@ -1,41 +1,32 @@
+/**
+ * @generated SignedSource<<bb3d3b6f120d783f6aec3e4bba710ebb>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type food_brand_set_input = {
-    id?: string | null | undefined;
-    name?: string | null | undefined;
+  id?: string | null;
+  name?: string | null;
 };
-export type UpdateFoodBrandMutationVariables = {
-    _set: food_brand_set_input;
-    id: string;
+export type UpdateFoodBrandMutation$variables = {
+  _set: food_brand_set_input;
+  id: string;
 };
-export type UpdateFoodBrandMutationResponse = {
-    readonly update_food_brand_by_pk: {
-        readonly id: string;
-        readonly name: string;
-    } | null;
+export type UpdateFoodBrandMutation$data = {
+  readonly update_food_brand_by_pk: {
+    readonly id: string;
+    readonly name: string;
+  } | null;
 };
 export type UpdateFoodBrandMutation = {
-    readonly response: UpdateFoodBrandMutationResponse;
-    readonly variables: UpdateFoodBrandMutationVariables;
+  variables: UpdateFoodBrandMutation$variables;
+  response: UpdateFoodBrandMutation$data;
 };
-
-
-
-/*
-mutation UpdateFoodBrandMutation(
-  $_set: food_brand_set_input!
-  $id: uuid!
-) {
-  update_food_brand_by_pk(pk_columns: {id: $id}, _set: $_set) {
-    id
-    name
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -121,5 +112,7 @@ return {
   }
 };
 })();
-(node as any).hash = '22b904468c651187ff526ad92369044c';
+
+(node as any).hash = "22b904468c651187ff526ad92369044c";
+
 export default node;

@@ -1,139 +1,81 @@
+/**
+ * @generated SignedSource<<3954a767861304b5fb3c484ef49922fc>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type MealsByDateQueryVariables = {
-    date?: string | null | undefined;
-    u_id?: string | null | undefined;
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type MealsByDateQuery$variables = {
+  date?: string | null;
+  u_id?: string | null;
 };
-export type MealsByDateQueryResponse = {
-    readonly meal_connection: {
-        readonly edges: ReadonlyArray<{
+export type MealsByDateQuery$data = {
+  readonly meal_connection: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly id: string;
+        readonly date: string | null;
+        readonly time: string | null;
+        readonly name: string | null;
+        readonly meal_items_connection: {
+          readonly edges: ReadonlyArray<{
             readonly node: {
+              readonly id: string;
+              readonly u_id: string;
+              readonly meal_id: string;
+              readonly food: string | null;
+              readonly foodDesc: {
                 readonly id: string;
-                readonly date: string | null;
-                readonly time: string | null;
+                readonly name: string;
+                readonly energy_cal: number;
+                readonly energy_kj: number;
+                readonly carbohydrates: number;
+                readonly fats: number;
+                readonly proteins: number;
+              } | null;
+              readonly weight: number;
+              readonly carbohydrates: number;
+              readonly proteins: number;
+              readonly fats: number;
+              readonly energy_cal: number;
+              readonly energy_kj: number;
+              readonly recipe_id: string | null;
+              readonly recipe: {
                 readonly name: string | null;
-                readonly meal_items_connection: {
-                    readonly edges: ReadonlyArray<{
-                        readonly node: {
-                            readonly id: string;
-                            readonly u_id: string;
-                            readonly meal_id: string;
-                            readonly food: string | null;
-                            readonly foodDesc: {
-                                readonly id: string;
-                                readonly name: string;
-                                readonly energy_cal: number;
-                                readonly energy_kj: number;
-                                readonly carbohydrates: number;
-                                readonly fats: number;
-                                readonly proteins: number;
-                            } | null;
-                            readonly weight: number;
-                            readonly carbohydrates: number;
-                            readonly proteins: number;
-                            readonly fats: number;
-                            readonly energy_cal: number;
-                            readonly energy_kj: number;
-                            readonly recipe_id: string | null;
-                            readonly recipe: {
-                                readonly name: string | null;
-                            } | null;
-                        };
-                        readonly cursor: string;
-                    }>;
-                };
-                readonly meal_items_aggregate: {
-                    readonly aggregate: {
-                        readonly sum: {
-                            readonly carbohydrates: number | null;
-                            readonly energy_cal: number | null;
-                            readonly energy_kj: number | null;
-                            readonly fats: number | null;
-                            readonly proteins: number | null;
-                        } | null;
-                    } | null;
-                };
+              } | null;
             };
             readonly cursor: string;
-        }>;
-    };
+          }>;
+        };
+        readonly meal_items_aggregate: {
+          readonly aggregate: {
+            readonly sum: {
+              readonly carbohydrates: number | null;
+              readonly energy_cal: number | null;
+              readonly energy_kj: number | null;
+              readonly fats: number | null;
+              readonly proteins: number | null;
+            } | null;
+          } | null;
+        };
+      };
+      readonly cursor: string;
+    }>;
+  };
 };
 export type MealsByDateQuery = {
-    readonly response: MealsByDateQueryResponse;
-    readonly variables: MealsByDateQueryVariables;
+  variables: MealsByDateQuery$variables;
+  response: MealsByDateQuery$data;
 };
-
-
-
-/*
-query MealsByDateQuery(
-  $date: date = ""
-  $u_id: uuid
-) {
-  meal_connection(where: {date: {_eq: $date}, u_id: {_eq: $u_id}}, order_by: {time: asc_nulls_last}, last: 1000000000) {
-    edges {
-      node {
-        id
-        date
-        time
-        name
-        meal_items_connection(last: 1000000000) {
-          edges {
-            node {
-              id
-              u_id
-              meal_id
-              food
-              foodDesc {
-                id
-                name
-                energy_cal
-                energy_kj
-                carbohydrates
-                fats
-                proteins
-              }
-              weight
-              carbohydrates
-              proteins
-              fats
-              energy_cal
-              energy_kj
-              recipe_id
-              recipe {
-                name
-                id
-              }
-            }
-            cursor
-          }
-        }
-        meal_items_aggregate(where: {meal: {date: {_eq: $date}}, u_id: {_eq: $u_id}}) {
-          aggregate {
-            sum {
-              carbohydrates
-              energy_cal
-              energy_kj
-              fats
-              proteins
-            }
-          }
-        }
-      }
-      cursor
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
-    "defaultValue": "",
+    "defaultValue": null,
     "kind": "LocalArgument",
     "name": "date"
   },
@@ -582,14 +524,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ca5ad67ea2fa61d3efc8d4b219002dbd",
+    "cacheID": "10d2a05a0a5b9033f8de6b5193f9d0ea",
     "id": null,
     "metadata": {},
     "name": "MealsByDateQuery",
     "operationKind": "query",
-    "text": "query MealsByDateQuery(\n  $date: date = \"\"\n  $u_id: uuid\n) {\n  meal_connection(where: {date: {_eq: $date}, u_id: {_eq: $u_id}}, order_by: {time: asc_nulls_last}, last: 1000000000) {\n    edges {\n      node {\n        id\n        date\n        time\n        name\n        meal_items_connection(last: 1000000000) {\n          edges {\n            node {\n              id\n              u_id\n              meal_id\n              food\n              foodDesc {\n                id\n                name\n                energy_cal\n                energy_kj\n                carbohydrates\n                fats\n                proteins\n              }\n              weight\n              carbohydrates\n              proteins\n              fats\n              energy_cal\n              energy_kj\n              recipe_id\n              recipe {\n                name\n                id\n              }\n            }\n            cursor\n          }\n        }\n        meal_items_aggregate(where: {meal: {date: {_eq: $date}}, u_id: {_eq: $u_id}}) {\n          aggregate {\n            sum {\n              carbohydrates\n              energy_cal\n              energy_kj\n              fats\n              proteins\n            }\n          }\n        }\n      }\n      cursor\n    }\n  }\n}\n"
+    "text": "query MealsByDateQuery(\n  $date: date\n  $u_id: uuid\n) {\n  meal_connection(where: {date: {_eq: $date}, u_id: {_eq: $u_id}}, order_by: {time: asc_nulls_last}, last: 1000000000) {\n    edges {\n      node {\n        id\n        date\n        time\n        name\n        meal_items_connection(last: 1000000000) {\n          edges {\n            node {\n              id\n              u_id\n              meal_id\n              food\n              foodDesc {\n                id\n                name\n                energy_cal\n                energy_kj\n                carbohydrates\n                fats\n                proteins\n              }\n              weight\n              carbohydrates\n              proteins\n              fats\n              energy_cal\n              energy_kj\n              recipe_id\n              recipe {\n                name\n                id\n              }\n            }\n            cursor\n          }\n        }\n        meal_items_aggregate(where: {meal: {date: {_eq: $date}}, u_id: {_eq: $u_id}}) {\n          aggregate {\n            sum {\n              carbohydrates\n              energy_cal\n              energy_kj\n              fats\n              proteins\n            }\n          }\n        }\n      }\n      cursor\n    }\n  }\n}\n"
   }
 };
 })();
-(node as any).hash = 'a9267360880c60e42086de262afe5d79';
+
+(node as any).hash = "f08f3b4c8736fb29eecf88a368172c0e";
+
 export default node;

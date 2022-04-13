@@ -1,41 +1,30 @@
+/**
+ * @generated SignedSource<<9ce553682e6bbc39481dd6f36df9f6e6>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type FoodBrandQueryVariables = {};
-export type FoodBrandQueryResponse = {
-    readonly food_brand_connection: {
-        readonly edges: ReadonlyArray<{
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly name: string;
-            };
-        }>;
-    };
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type FoodBrandQuery$variables = {};
+export type FoodBrandQuery$data = {
+  readonly food_brand_connection: {
+    readonly edges: ReadonlyArray<{
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly name: string;
+      };
+    }>;
+  };
 };
 export type FoodBrandQuery = {
-    readonly response: FoodBrandQueryResponse;
-    readonly variables: FoodBrandQueryVariables;
+  variables: FoodBrandQuery$variables;
+  response: FoodBrandQuery$data;
 };
-
-
-
-/*
-query FoodBrandQuery {
-  food_brand_connection(order_by: {name: asc}) {
-    edges {
-      cursor
-      node {
-        id
-        name
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -129,5 +118,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'c497b6ea1fbf7c2ac0928818fc50bf29';
+
+(node as any).hash = "c497b6ea1fbf7c2ac0928818fc50bf29";
+
 export default node;

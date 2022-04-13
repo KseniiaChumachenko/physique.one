@@ -1,7 +1,7 @@
 import { graphql } from "react-relay";
 
 export const MealsByDateQuery = graphql`
-  query MealsByDateQuery($date: date = "", $u_id: uuid) {
+  query MealsByDateQuery($date: date, $u_id: uuid) {
     meal_connection(
       where: { date: { _eq: $date }, u_id: { _eq: $u_id } }
       order_by: { time: asc_nulls_last }

@@ -1,47 +1,36 @@
+/**
+ * @generated SignedSource<<e7cfe4b4e87de5274284b38498588f5a>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type meal_set_input = {
-    date?: string | null | undefined;
-    id?: string | null | undefined;
-    name?: string | null | undefined;
-    time?: string | null | undefined;
-    u_id?: string | null | undefined;
+  date?: string | null;
+  id?: string | null;
+  name?: string | null;
+  time?: string | null;
+  u_id?: string | null;
 };
-export type UpdateMealMutationVariables = {
-    id: string;
-    _set?: meal_set_input | null | undefined;
+export type UpdateMealMutation$variables = {
+  id: string;
+  _set?: meal_set_input | null;
 };
-export type UpdateMealMutationResponse = {
-    readonly update_meal_by_pk: {
-        readonly date: string | null;
-        readonly name: string | null;
-        readonly time: string | null;
-    } | null;
+export type UpdateMealMutation$data = {
+  readonly update_meal_by_pk: {
+    readonly date: string | null;
+    readonly name: string | null;
+    readonly time: string | null;
+  } | null;
 };
 export type UpdateMealMutation = {
-    readonly response: UpdateMealMutationResponse;
-    readonly variables: UpdateMealMutationVariables;
+  variables: UpdateMealMutation$variables;
+  response: UpdateMealMutation$data;
 };
-
-
-
-/*
-mutation UpdateMealMutation(
-  $id: uuid!
-  $_set: meal_set_input = {}
-) {
-  update_meal_by_pk(pk_columns: {id: $id}, _set: $_set) {
-    date
-    name
-    time
-    id
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -163,5 +152,7 @@ return {
   }
 };
 })();
-(node as any).hash = '164788e7abf377490385f79b92445d84';
+
+(node as any).hash = "164788e7abf377490385f79b92445d84";
+
 export default node;

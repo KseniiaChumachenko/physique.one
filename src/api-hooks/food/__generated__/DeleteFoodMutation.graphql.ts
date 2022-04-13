@@ -1,61 +1,40 @@
+/**
+ * @generated SignedSource<<7f1df5c40e04472ca00657f29602a76c>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type DeleteFoodMutationVariables = {
-    id: string;
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+export type DeleteFoodMutation$variables = {
+  id: string;
 };
-export type DeleteFoodMutationResponse = {
-    readonly delete_food_by_pk: {
-        readonly brand_id: string | null;
-        readonly carbohydrates: number;
-        readonly energy_cal: number;
-        readonly energy_kj: number;
-        readonly fats: number;
-        readonly food_brand: {
-            readonly id: string;
-            readonly name: string;
-        } | null;
-        readonly id: string;
-        readonly name: string;
-        readonly proteins: number;
-        readonly type: string;
-        readonly u_id: string | null;
-        readonly weight: number | null;
+export type DeleteFoodMutation$data = {
+  readonly delete_food_by_pk: {
+    readonly brand_id: string | null;
+    readonly carbohydrates: number;
+    readonly energy_cal: number;
+    readonly energy_kj: number;
+    readonly fats: number;
+    readonly food_brand: {
+      readonly id: string;
+      readonly name: string;
     } | null;
+    readonly id: string;
+    readonly name: string;
+    readonly proteins: number;
+    readonly type: string;
+    readonly u_id: string | null;
+    readonly weight: number | null;
+  } | null;
 };
 export type DeleteFoodMutation = {
-    readonly response: DeleteFoodMutationResponse;
-    readonly variables: DeleteFoodMutationVariables;
+  variables: DeleteFoodMutation$variables;
+  response: DeleteFoodMutation$data;
 };
-
-
-
-/*
-mutation DeleteFoodMutation(
-  $id: uuid!
-) {
-  delete_food_by_pk(id: $id) {
-    brand_id
-    carbohydrates
-    energy_cal
-    energy_kj
-    fats
-    food_brand {
-      id
-      name
-    }
-    id
-    name
-    proteins
-    type
-    u_id
-    weight
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -246,5 +225,7 @@ return {
   }
 };
 })();
-(node as any).hash = '17bd0788a9321dc9cdb60cd13648a7dd';
+
+(node as any).hash = "17bd0788a9321dc9cdb60cd13648a7dd";
+
 export default node;

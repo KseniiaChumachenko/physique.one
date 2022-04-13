@@ -10,7 +10,7 @@ import {
 } from "react-relay";
 import {
   FoodBrandQuery,
-  FoodBrandQueryVariables,
+  FoodBrandQuery$variables,
 } from "./__generated__/FoodBrandQuery.graphql";
 import { AddFoodBrandMutation } from "./__generated__/AddFoodBrandMutation.graphql";
 import { FoodBrandQuery as FoodBrandQueryDocument } from "./FoodBrandQuery";
@@ -32,7 +32,7 @@ export const useUpdateFoodBrandMutation = () =>
 export const useDeleteFoodBrandMutation = () =>
   useMutation<DeleteFoodBrandMutation>(DeleteFoodBrandMutationDocument);
 
-export const useFoodBrand = (v: FoodBrandQueryVariables) => {
+export const useFoodBrand = (v: FoodBrandQuery$variables) => {
   const environment = useRelayEnvironment();
   const [queryReference, loadQuery] = useQueryLoader<FoodBrandQuery>(
     FoodBrandQueryDocument
@@ -43,7 +43,7 @@ export const useFoodBrand = (v: FoodBrandQueryVariables) => {
   }, []);
 
   const refetch = useCallback(
-    (variables: FoodBrandQueryVariables | undefined) => {
+    (variables: FoodBrandQuery$variables | undefined) => {
       fetchQuery(environment, FoodBrandQueryDocument, {
         ...v,
         ...variables,
@@ -84,7 +84,7 @@ export const useFoodBrandPreloadedQuery = (
   );
 
   const refetch = useCallback(
-    (variables?: FoodBrandQueryVariables) => {
+    (variables?: FoodBrandQuery$variables) => {
       fetchQuery(queryReference.environment, FoodBrandQueryDocument, {
         ...queryReference.variables,
         ...variables,

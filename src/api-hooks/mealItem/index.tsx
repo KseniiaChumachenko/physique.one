@@ -10,7 +10,7 @@ import {
 } from "react-relay";
 import {
   MealItemQuery,
-  MealItemQueryVariables,
+  MealItemQuery$variables,
 } from "./__generated__/MealItemQuery.graphql";
 import { AddMealItemMutation } from "./__generated__/AddMealItemMutation.graphql";
 import { UpdateMealItemMutation } from "./__generated__/UpdateMealItemMutation.graphql";
@@ -32,7 +32,7 @@ export const useUpdateMealItemMutation = () =>
 export const useDeleteMealItemMutation = () =>
   useMutation<DeleteMealItemMutation>(DeleteMealItemMutationDocument);
 
-export const useMealItemQuery = (v: MealItemQueryVariables) => {
+export const useMealItemQuery = (v: MealItemQuery$variables) => {
   const environment = useRelayEnvironment();
   const [queryReference, loadQuery] = useQueryLoader<MealItemQuery>(
     MealItemQueryDocument
@@ -43,7 +43,7 @@ export const useMealItemQuery = (v: MealItemQueryVariables) => {
   }, [v]);
 
   const refetch = useCallback(
-    (variables: MealItemQueryVariables | undefined) => {
+    (variables: MealItemQuery$variables | undefined) => {
       fetchQuery(environment, MealItemQueryDocument, {
         ...v,
         ...variables,
@@ -80,7 +80,7 @@ export const useMealItemPreloadedQuery = (
   );
 
   const refetch = useCallback(
-    (variables?: MealItemQueryVariables | undefined) => {
+    (variables?: MealItemQuery$variables | undefined) => {
       fetchQuery(queryReference.environment, MealItemQueryDocument, {
         ...queryReference.variables,
         ...variables,

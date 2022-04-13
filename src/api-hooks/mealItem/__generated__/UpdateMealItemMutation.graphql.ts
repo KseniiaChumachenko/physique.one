@@ -1,68 +1,50 @@
+/**
+ * @generated SignedSource<<a5f2019059c68b0b98361a6e769a78d1>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type meal_item_set_input = {
-    carbohydrates?: number | null | undefined;
-    energy_cal?: number | null | undefined;
-    energy_kj?: number | null | undefined;
-    fats?: number | null | undefined;
-    food?: string | null | undefined;
-    id?: string | null | undefined;
-    meal_id?: string | null | undefined;
-    proteins?: number | null | undefined;
-    recipe_id?: string | null | undefined;
-    u_id?: string | null | undefined;
-    weight?: number | null | undefined;
+  carbohydrates?: number | null;
+  energy_cal?: number | null;
+  energy_kj?: number | null;
+  fats?: number | null;
+  food?: string | null;
+  id?: string | null;
+  meal_id?: string | null;
+  proteins?: number | null;
+  recipe_id?: string | null;
+  u_id?: string | null;
+  weight?: number | null;
 };
-export type UpdateMealItemMutationVariables = {
-    id: string;
-    _set?: meal_item_set_input | null | undefined;
+export type UpdateMealItemMutation$variables = {
+  id: string;
+  _set?: meal_item_set_input | null;
 };
-export type UpdateMealItemMutationResponse = {
-    readonly update_meal_item_by_pk: {
-        readonly carbohydrates: number;
-        readonly energy_cal: number;
-        readonly energy_kj: number;
-        readonly fats: number;
-        readonly food: string | null;
-        readonly id: string;
-        readonly meal_id: string;
-        readonly proteins: number;
-        readonly recipe_id: string | null;
-        readonly u_id: string;
-        readonly weight: number;
-    } | null;
+export type UpdateMealItemMutation$data = {
+  readonly update_meal_item_by_pk: {
+    readonly carbohydrates: number;
+    readonly energy_cal: number;
+    readonly energy_kj: number;
+    readonly fats: number;
+    readonly food: string | null;
+    readonly id: string;
+    readonly meal_id: string;
+    readonly proteins: number;
+    readonly recipe_id: string | null;
+    readonly u_id: string;
+    readonly weight: number;
+  } | null;
 };
 export type UpdateMealItemMutation = {
-    readonly response: UpdateMealItemMutationResponse;
-    readonly variables: UpdateMealItemMutationVariables;
+  variables: UpdateMealItemMutation$variables;
+  response: UpdateMealItemMutation$data;
 };
-
-
-
-/*
-mutation UpdateMealItemMutation(
-  $id: uuid!
-  $_set: meal_item_set_input = {}
-) {
-  update_meal_item_by_pk(pk_columns: {id: $id}, _set: $_set) {
-    carbohydrates
-    energy_cal
-    energy_kj
-    fats
-    food
-    id
-    meal_id
-    proteins
-    recipe_id
-    u_id
-    weight
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -215,5 +197,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'd00706c4f950c4ba8632ae66c25a3479';
+
+(node as any).hash = "d00706c4f950c4ba8632ae66c25a3479";
+
 export default node;

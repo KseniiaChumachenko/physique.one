@@ -10,7 +10,7 @@ import {
 import { useCallback, useEffect } from "react";
 import {
   FoodQuery,
-  FoodQueryVariables,
+  FoodQuery$variables,
 } from "./__generated__/FoodQuery.graphql";
 import { AddFoodMutation } from "./__generated__/AddFoodMutation.graphql";
 import { UpdateFoodMutation } from "./__generated__/UpdateFoodMutation.graphql";
@@ -32,7 +32,7 @@ export const useUpdateFoodMutation = () =>
 export const useDeleteFoodMutation = () =>
   useMutation<DeleteFoodMutation>(DeleteFoodMutationDocument);
 
-export const useFood = (v: FoodQueryVariables) => {
+export const useFood = (v: FoodQuery$variables) => {
   const environment = useRelayEnvironment();
   const [queryReference, loadQuery] = useQueryLoader<FoodQuery>(
     FoodQueryDocument
@@ -43,7 +43,7 @@ export const useFood = (v: FoodQueryVariables) => {
   }, []);
 
   const refetch = useCallback(
-    (variables: FoodQueryVariables | undefined) => {
+    (variables: FoodQuery$variables | undefined) => {
       fetchQuery(environment, FoodQueryDocument, {
         ...v,
         ...variables,
@@ -81,7 +81,7 @@ export const useFoodPreloadedQuery = (
   const data = usePreloadedQuery<FoodQuery>(FoodQueryDocument, queryReference);
 
   const refetch = useCallback(
-    (variables?: FoodQueryVariables | undefined) => {
+    (variables?: FoodQuery$variables | undefined) => {
       fetchQuery(queryReference.environment, FoodQueryDocument, {
         ...queryReference.variables,
         ...variables,

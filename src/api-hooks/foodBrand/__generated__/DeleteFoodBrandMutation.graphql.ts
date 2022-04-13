@@ -1,35 +1,27 @@
+/**
+ * @generated SignedSource<<ed91667426de4573dc73aa5c1ad1e8b4>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type DeleteFoodBrandMutationVariables = {
-    id: string;
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+export type DeleteFoodBrandMutation$variables = {
+  id: string;
 };
-export type DeleteFoodBrandMutationResponse = {
-    readonly delete_food_brand_by_pk: {
-        readonly id: string;
-        readonly name: string;
-    } | null;
+export type DeleteFoodBrandMutation$data = {
+  readonly delete_food_brand_by_pk: {
+    readonly id: string;
+    readonly name: string;
+  } | null;
 };
 export type DeleteFoodBrandMutation = {
-    readonly response: DeleteFoodBrandMutationResponse;
-    readonly variables: DeleteFoodBrandMutationVariables;
+  variables: DeleteFoodBrandMutation$variables;
+  response: DeleteFoodBrandMutation$data;
 };
-
-
-
-/*
-mutation DeleteFoodBrandMutation(
-  $id: uuid!
-) {
-  delete_food_brand_by_pk(id: $id) {
-    id
-    name
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -124,5 +116,7 @@ return {
   }
 };
 })();
-(node as any).hash = '3e22c7c20486080cb67227f3b945421f';
+
+(node as any).hash = "3e22c7c20486080cb67227f3b945421f";
+
 export default node;
