@@ -1,102 +1,80 @@
+/**
+ * @generated SignedSource<<3dc99dbd4a69ddd6f3da37966f62e988>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type food_set_input = {
-    A?: number | null | undefined;
-    B1?: number | null | undefined;
-    B12?: number | null | undefined;
-    B2?: number | null | undefined;
-    B3?: number | null | undefined;
-    B5?: number | null | undefined;
-    B6?: number | null | undefined;
-    B7?: number | null | undefined;
-    B9?: number | null | undefined;
-    C?: number | null | undefined;
-    D?: number | null | undefined;
-    E?: number | null | undefined;
-    K?: number | null | undefined;
-    brand_id?: string | null | undefined;
-    calcium?: number | null | undefined;
-    carbohydrates?: number | null | undefined;
-    carbohydrates_fiber?: number | null | undefined;
-    carbohydrates_starch?: number | null | undefined;
-    carbohydrates_sugars?: number | null | undefined;
-    copper?: number | null | undefined;
-    energy_cal?: number | null | undefined;
-    energy_kj?: number | null | undefined;
-    fats?: number | null | undefined;
-    id?: string | null | undefined;
-    iron?: number | null | undefined;
-    magnesium?: number | null | undefined;
-    manganese?: number | null | undefined;
-    name?: string | null | undefined;
-    phosphorus?: number | null | undefined;
-    potassium?: number | null | undefined;
-    proteins?: number | null | undefined;
-    selenium?: number | null | undefined;
-    sodium?: number | null | undefined;
-    type?: string | null | undefined;
-    u_id?: string | null | undefined;
-    weight?: number | null | undefined;
-    zinc?: number | null | undefined;
+  A?: number | null;
+  B1?: number | null;
+  B12?: number | null;
+  B2?: number | null;
+  B3?: number | null;
+  B5?: number | null;
+  B6?: number | null;
+  B7?: number | null;
+  B9?: number | null;
+  C?: number | null;
+  D?: number | null;
+  E?: number | null;
+  K?: number | null;
+  brand_id?: string | null;
+  calcium?: number | null;
+  carbohydrates?: number | null;
+  carbohydrates_fiber?: number | null;
+  carbohydrates_starch?: number | null;
+  carbohydrates_sugars?: number | null;
+  copper?: number | null;
+  energy_cal?: number | null;
+  energy_kj?: number | null;
+  fats?: number | null;
+  id?: string | null;
+  iron?: number | null;
+  magnesium?: number | null;
+  manganese?: number | null;
+  name?: string | null;
+  phosphorus?: number | null;
+  potassium?: number | null;
+  proteins?: number | null;
+  selenium?: number | null;
+  sodium?: number | null;
+  type?: string | null;
+  u_id?: string | null;
+  weight?: number | null;
+  zinc?: number | null;
 };
-export type UpdateFoodMutationVariables = {
-    _set: food_set_input;
-    id: string;
+export type UpdateFoodMutation$variables = {
+  _set: food_set_input;
+  id: string;
 };
-export type UpdateFoodMutationResponse = {
-    readonly update_food_by_pk: {
-        readonly brand_id: string | null;
-        readonly carbohydrates: number;
-        readonly energy_cal: number;
-        readonly energy_kj: number;
-        readonly fats: number;
-        readonly food_brand: {
-            readonly id: string;
-            readonly name: string;
-        } | null;
-        readonly id: string;
-        readonly name: string;
-        readonly proteins: number;
-        readonly type: string;
-        readonly u_id: string | null;
-        readonly weight: number | null;
+export type UpdateFoodMutation$data = {
+  readonly update_food_by_pk: {
+    readonly brand_id: string | null;
+    readonly carbohydrates: number;
+    readonly energy_cal: number;
+    readonly energy_kj: number;
+    readonly fats: number;
+    readonly food_brand: {
+      readonly id: string;
+      readonly name: string;
     } | null;
+    readonly id: string;
+    readonly name: string;
+    readonly proteins: number;
+    readonly type: string;
+    readonly u_id: string | null;
+    readonly weight: number | null;
+  } | null;
 };
 export type UpdateFoodMutation = {
-    readonly response: UpdateFoodMutationResponse;
-    readonly variables: UpdateFoodMutationVariables;
+  variables: UpdateFoodMutation$variables;
+  response: UpdateFoodMutation$data;
 };
-
-
-
-/*
-mutation UpdateFoodMutation(
-  $_set: food_set_input!
-  $id: uuid!
-) {
-  update_food_by_pk(pk_columns: {id: $id}, _set: $_set) {
-    brand_id
-    carbohydrates
-    energy_cal
-    energy_kj
-    fats
-    food_brand {
-      id
-      name
-    }
-    id
-    name
-    proteins
-    type
-    u_id
-    weight
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -260,5 +238,7 @@ return {
   }
 };
 })();
-(node as any).hash = '6204bdf37bd0efb96d3f2701912d7a60';
+
+(node as any).hash = "6204bdf37bd0efb96d3f2701912d7a60";
+
 export default node;

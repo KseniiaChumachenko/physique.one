@@ -1,45 +1,32 @@
+/**
+ * @generated SignedSource<<4d5ebb658daafc62826d6a9939354820>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type FoodTypeQueryVariables = {};
-export type FoodTypeQueryResponse = {
-    readonly food_type_connection: {
-        readonly edges: ReadonlyArray<{
-            readonly cursor: string;
-            readonly node: {
-                readonly id: string;
-                readonly decription: string;
-                readonly value: string;
-                readonly img_url: string;
-            };
-        }>;
-    };
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type FoodTypeQuery$variables = {};
+export type FoodTypeQuery$data = {
+  readonly food_type_connection: {
+    readonly edges: ReadonlyArray<{
+      readonly cursor: string;
+      readonly node: {
+        readonly id: string;
+        readonly decription: string;
+        readonly value: string;
+        readonly img_url: string;
+      };
+    }>;
+  };
 };
 export type FoodTypeQuery = {
-    readonly response: FoodTypeQueryResponse;
-    readonly variables: FoodTypeQueryVariables;
+  variables: FoodTypeQuery$variables;
+  response: FoodTypeQuery$data;
 };
-
-
-
-/*
-query FoodTypeQuery {
-  food_type_connection {
-    edges {
-      cursor
-      node {
-        id
-        decription
-        value
-        img_url
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -139,5 +126,7 @@ return {
   }
 };
 })();
-(node as any).hash = '786a5ccc9f27ef8c449dc03106e88a3e';
+
+(node as any).hash = "786a5ccc9f27ef8c449dc03106e88a3e";
+
 export default node;

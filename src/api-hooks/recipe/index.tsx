@@ -9,7 +9,7 @@ import {
 } from "react-relay";
 import {
   RecipeQuery,
-  RecipeQueryVariables,
+  RecipeQuery$variables,
 } from "./__generated__/RecipeQuery.graphql";
 import { RecipeQuery as RecipeQueryDocument } from "./RecipeQuery";
 import { AddRecipeMutation as AddRecipeMutationDocument } from "./AddRecipeMutation";
@@ -31,7 +31,7 @@ export const useUpdateRecipeMutation = () =>
 export const useDeleteRecipeMutation = () =>
   useMutation<DeleteRecipeMutation>(DeleteRecipeMutationDocument);
 
-export const useRecipe = (v: RecipeQueryVariables) => {
+export const useRecipe = (v: RecipeQuery$variables) => {
   const [queryReference, loadQuery] = useQueryLoader<RecipeQuery>(
     RecipeQueryDocument
   );
@@ -64,7 +64,7 @@ export const useRecipePreloaded = (
   );
 
   const refetch = useCallback(
-    (variables?: RecipeQueryVariables | undefined) => {
+    (variables?: RecipeQuery$variables | undefined) => {
       fetchQuery(queryReference.environment, RecipeQueryDocument, {
         ...queryReference.variables,
         ...variables,

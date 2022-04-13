@@ -2,13 +2,13 @@ import { useEffect } from "react";
 import { useQueryLoader, usePreloadedQuery, PreloadedQuery } from "react-relay";
 import type {
   UserQuery,
-  UserQueryVariables,
-} from "src/api-hooks/user/__generated__/UserQuery.graphql";
+  UserQuery$variables,
+} from "./__generated__/UserQuery.graphql";
 import { UserQuery as UserQueryDocument } from "./UserQuery";
 
-export * from "src/api-hooks/user/__generated__/UserQuery.graphql";
+export * from "./__generated__/UserQuery.graphql";
 
-export const useUser = (v: UserQueryVariables) => {
+export const useUser = (v: UserQuery$variables) => {
   const [queryReference, loadQuery] = useQueryLoader<UserQuery>(
     UserQueryDocument
   );

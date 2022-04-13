@@ -1,7 +1,7 @@
 import { graphql } from "react-relay";
 
 export const MealItemQuery = graphql`
-  query MealItemQuery($id: uuid = "", $u_id: uuid = "") {
+  query MealItemQuery($id: uuid, $u_id: uuid) {
     meal_item_connection(where: { id: { _eq: $id }, u_id: { _eq: $u_id } }) {
       edges {
         cursor

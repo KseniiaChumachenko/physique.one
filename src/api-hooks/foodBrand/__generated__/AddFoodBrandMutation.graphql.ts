@@ -1,43 +1,33 @@
+/**
+ * @generated SignedSource<<6943317b7c9e21227d610d8e99bd0cd7>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type food_brand_insert_input = {
-    id?: string | null | undefined;
-    name?: string | null | undefined;
+  id?: string | null;
+  name?: string | null;
 };
-export type AddFoodBrandMutationVariables = {
-    objects: Array<food_brand_insert_input>;
+export type AddFoodBrandMutation$variables = {
+  objects: ReadonlyArray<food_brand_insert_input>;
 };
-export type AddFoodBrandMutationResponse = {
-    readonly insert_food_brand: {
-        readonly returning: ReadonlyArray<{
-            readonly id: string;
-            readonly name: string;
-        }>;
-    } | null;
+export type AddFoodBrandMutation$data = {
+  readonly insert_food_brand: {
+    readonly returning: ReadonlyArray<{
+      readonly id: string;
+      readonly name: string;
+    }>;
+  } | null;
 };
 export type AddFoodBrandMutation = {
-    readonly response: AddFoodBrandMutationResponse;
-    readonly variables: AddFoodBrandMutationVariables;
+  variables: AddFoodBrandMutation$variables;
+  response: AddFoodBrandMutation$data;
 };
-
-
-
-/*
-mutation AddFoodBrandMutation(
-  $objects: [food_brand_insert_input!]!
-) {
-  insert_food_brand(objects: $objects) {
-    returning {
-      id
-      name
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -118,5 +108,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'ff6e86715445674a9c3ef53fdb06c827';
+
+(node as any).hash = "ff6e86715445674a9c3ef53fdb06c827";
+
 export default node;

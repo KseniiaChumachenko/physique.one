@@ -1,43 +1,31 @@
+/**
+ * @generated SignedSource<<90d3afb949eea7f6f56568e4124295e6>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type DeleteMealMutationVariables = {
-    id: string;
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+export type DeleteMealMutation$variables = {
+  id: string;
 };
-export type DeleteMealMutationResponse = {
-    readonly delete_meal_item: {
-        readonly returning: ReadonlyArray<{
-            readonly id: string;
-        }>;
-    } | null;
-    readonly delete_meal_by_pk: {
-        readonly id: string;
-    } | null;
+export type DeleteMealMutation$data = {
+  readonly delete_meal_item: {
+    readonly returning: ReadonlyArray<{
+      readonly id: string;
+    }>;
+  } | null;
+  readonly delete_meal_by_pk: {
+    readonly id: string;
+  } | null;
 };
 export type DeleteMealMutation = {
-    readonly response: DeleteMealMutationResponse;
-    readonly variables: DeleteMealMutationVariables;
+  variables: DeleteMealMutation$variables;
+  response: DeleteMealMutation$data;
 };
-
-
-
-/*
-mutation DeleteMealMutation(
-  $id: uuid!
-) {
-  delete_meal_item(where: {meal_id: {_eq: $id}}) {
-    returning {
-      id
-    }
-  }
-  delete_meal_by_pk(id: $id) {
-    id
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -186,5 +174,7 @@ return {
   }
 };
 })();
-(node as any).hash = '6975a1492446b7040fcb51146561d064';
+
+(node as any).hash = "6975a1492446b7040fcb51146561d064";
+
 export default node;

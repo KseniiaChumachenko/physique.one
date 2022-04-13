@@ -1,53 +1,36 @@
+/**
+ * @generated SignedSource<<aa9e93ebb26d9e347eafff10671f1547>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type DeleteMealItemMutationVariables = {
-    id: string;
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+export type DeleteMealItemMutation$variables = {
+  id: string;
 };
-export type DeleteMealItemMutationResponse = {
-    readonly delete_meal_item_by_pk: {
-        readonly carbohydrates: number;
-        readonly energy_cal: number;
-        readonly energy_kj: number;
-        readonly fats: number;
-        readonly food: string | null;
-        readonly id: string;
-        readonly meal_id: string;
-        readonly proteins: number;
-        readonly recipe_id: string | null;
-        readonly u_id: string;
-        readonly weight: number;
-    } | null;
+export type DeleteMealItemMutation$data = {
+  readonly delete_meal_item_by_pk: {
+    readonly carbohydrates: number;
+    readonly energy_cal: number;
+    readonly energy_kj: number;
+    readonly fats: number;
+    readonly food: string | null;
+    readonly id: string;
+    readonly meal_id: string;
+    readonly proteins: number;
+    readonly recipe_id: string | null;
+    readonly u_id: string;
+    readonly weight: number;
+  } | null;
 };
 export type DeleteMealItemMutation = {
-    readonly response: DeleteMealItemMutationResponse;
-    readonly variables: DeleteMealItemMutationVariables;
+  variables: DeleteMealItemMutation$variables;
+  response: DeleteMealItemMutation$data;
 };
-
-
-
-/*
-mutation DeleteMealItemMutation(
-  $id: uuid!
-) {
-  delete_meal_item_by_pk(id: $id) {
-    carbohydrates
-    energy_cal
-    energy_kj
-    fats
-    food
-    id
-    meal_id
-    proteins
-    recipe_id
-    u_id
-    weight
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -223,5 +206,7 @@ return {
   }
 };
 })();
-(node as any).hash = '207c00224c8b059db480078e325806e0';
+
+(node as any).hash = "207c00224c8b059db480078e325806e0";
+
 export default node;

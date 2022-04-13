@@ -8,13 +8,13 @@ import {
 } from "react-relay";
 import {
   FoodTypeQuery,
-  FoodTypeQueryVariables,
+  FoodTypeQuery$variables,
 } from "./__generated__/FoodTypeQuery.graphql";
 import { FoodTypeQuery as FoodTypeQueryDocument } from "./FoodTypeQuery";
 
 export * from "./__generated__/FoodTypeQuery.graphql";
 
-export const useFoodType = (v: FoodTypeQueryVariables) => {
+export const useFoodType = (v: FoodTypeQuery$variables) => {
   const environment = useRelayEnvironment();
   const [queryReference, loadQuery] = useQueryLoader<FoodTypeQuery>(
     FoodTypeQueryDocument
@@ -25,7 +25,7 @@ export const useFoodType = (v: FoodTypeQueryVariables) => {
   }, []);
 
   const refetch = useCallback(
-    (variables: FoodTypeQueryVariables | undefined) => {
+    (variables: FoodTypeQuery$variables | undefined) => {
       fetchQuery(environment, FoodTypeQueryDocument, {
         ...v,
         ...variables,
@@ -62,7 +62,7 @@ export const useFoodTypePreloadedQuery = (
   );
 
   const refetch = useCallback(
-    (variables?: FoodTypeQueryVariables) => {
+    (variables?: FoodTypeQuery$variables) => {
       fetchQuery(queryReference.environment, FoodTypeQueryDocument, {
         ...queryReference.variables,
         ...variables,

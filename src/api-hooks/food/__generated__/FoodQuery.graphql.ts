@@ -1,62 +1,40 @@
+/**
+ * @generated SignedSource<<d5f1990e4ee31f7e663522a4c0f71948>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type FoodQueryVariables = {};
-export type FoodQueryResponse = {
-    readonly food_connection: {
-        readonly edges: ReadonlyArray<{
-            readonly node: {
-                readonly id: string;
-                readonly name: string;
-                readonly type: string;
-                readonly food_brand: {
-                    readonly name: string;
-                } | null;
-                readonly carbohydrates: number;
-                readonly proteins: number;
-                readonly fats: number;
-                readonly energy_cal: number;
-                readonly energy_kj: number;
-                readonly u_id: string | null;
-                readonly weight: number | null;
-            };
-        }>;
-    };
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type FoodQuery$variables = {};
+export type FoodQuery$data = {
+  readonly food_connection: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly id: string;
+        readonly name: string;
+        readonly type: string;
+        readonly food_brand: {
+          readonly name: string;
+        } | null;
+        readonly carbohydrates: number;
+        readonly proteins: number;
+        readonly fats: number;
+        readonly energy_cal: number;
+        readonly energy_kj: number;
+        readonly u_id: string | null;
+        readonly weight: number | null;
+      };
+    }>;
+  };
 };
 export type FoodQuery = {
-    readonly response: FoodQueryResponse;
-    readonly variables: FoodQueryVariables;
+  variables: FoodQuery$variables;
+  response: FoodQuery$data;
 };
-
-
-
-/*
-query FoodQuery {
-  food_connection {
-    edges {
-      node {
-        id
-        name
-        type
-        food_brand {
-          name
-          id
-        }
-        carbohydrates
-        proteins
-        fats
-        energy_cal
-        energy_kj
-        u_id
-        weight
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -269,5 +247,7 @@ return {
   }
 };
 })();
-(node as any).hash = '625533c9bbdb1ef2c3fd74f921bb3f08';
+
+(node as any).hash = "625533c9bbdb1ef2c3fd74f921bb3f08";
+
 export default node;

@@ -1,53 +1,36 @@
+/**
+ * @generated SignedSource<<2596c60e6f16b74ce682f111663f1f97>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type UserQueryVariables = {
-    id?: string | null | undefined;
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type UserQuery$variables = {
+  id?: string | null;
 };
-export type UserQueryResponse = {
-    readonly users_connection: {
-        readonly edges: ReadonlyArray<{
-            readonly node: {
-                readonly id: string;
-                readonly email: string | null;
-                readonly first_name: string | null;
-                readonly last_name: string | null;
-                readonly user_name: string | null;
-                readonly fb_id: string | null;
-                readonly fb_picture_url: string | null;
-            };
-        }>;
-    };
+export type UserQuery$data = {
+  readonly users_connection: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly id: string;
+        readonly email: string | null;
+        readonly first_name: string | null;
+        readonly last_name: string | null;
+        readonly user_name: string | null;
+        readonly fb_id: string | null;
+        readonly fb_picture_url: string | null;
+      };
+    }>;
+  };
 };
 export type UserQuery = {
-    readonly response: UserQueryResponse;
-    readonly variables: UserQueryVariables;
+  variables: UserQuery$variables;
+  response: UserQuery$data;
 };
-
-
-
-/*
-query UserQuery(
-  $id: uuid
-) {
-  users_connection(where: {id: {_eq: $id}}) {
-    edges {
-      node {
-        id
-        email
-        first_name
-        last_name
-        user_name
-        fb_id
-        fb_picture_url
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -186,5 +169,7 @@ return {
   }
 };
 })();
-(node as any).hash = '01ad2b3410dc16da6391bbe4dc57da79';
+
+(node as any).hash = "01ad2b3410dc16da6391bbe4dc57da79";
+
 export default node;

@@ -10,7 +10,7 @@ import {
 } from "react-relay";
 import {
   MealsByDateQuery,
-  MealsByDateQueryVariables,
+  MealsByDateQuery$variables,
 } from "./__generated__/MealsByDateQuery.graphql";
 import { AddMealMutation } from "./__generated__/AddMealMutation.graphql";
 import { UpdateMealMutation } from "./__generated__/UpdateMealMutation.graphql";
@@ -37,7 +37,7 @@ export const useDeleteMealMutation = () => {
   return useMutation<DeleteMealMutation>(DeleteMealMutationDocument);
 };
 
-export const useMealsByDateQuery = (v: MealsByDateQueryVariables) => {
+export const useMealsByDateQuery = (v: MealsByDateQuery$variables) => {
   const environment = useRelayEnvironment();
   const [queryReference, loadQuery] = useQueryLoader<MealsByDateQuery>(
     MealsByDateQueryDocument
@@ -48,7 +48,7 @@ export const useMealsByDateQuery = (v: MealsByDateQueryVariables) => {
   }, [v.date, v.u_id]);
 
   const refetch = useCallback(
-    (variables: MealsByDateQueryVariables | undefined) => {
+    (variables: MealsByDateQuery$variables | undefined) => {
       fetchQuery(environment, MealsByDateQueryDocument, {
         ...v,
         ...variables,
@@ -90,7 +90,7 @@ export const useMealsPreloadedQuery = (
   );
 
   const refetch = useCallback(
-    (v?: MealsByDateQueryVariables) => {
+    (v?: MealsByDateQuery$variables) => {
       fetchQuery(queryReference.environment, MealsByDateQueryDocument, {
         ...queryReference.variables,
         ...v,

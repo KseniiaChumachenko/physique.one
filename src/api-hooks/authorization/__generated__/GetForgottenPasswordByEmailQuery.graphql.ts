@@ -1,271 +1,259 @@
+/**
+ * @generated SignedSource<<a4f120f2b6323283416a50b3d79ee24c>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Query } from 'relay-runtime';
 export type users_bool_exp = {
-    _and?: Array<users_bool_exp | null> | null | undefined;
-    _not?: users_bool_exp | null | undefined;
-    _or?: Array<users_bool_exp | null> | null | undefined;
-    email?: String_comparison_exp | null | undefined;
-    fb_id?: String_comparison_exp | null | undefined;
-    fb_picture_url?: String_comparison_exp | null | undefined;
-    first_name?: String_comparison_exp | null | undefined;
-    food?: food_bool_exp | null | undefined;
-    full_name?: String_comparison_exp | null | undefined;
-    id?: uuid_comparison_exp | null | undefined;
-    last_name?: String_comparison_exp | null | undefined;
-    meal_items?: meal_item_bool_exp | null | undefined;
-    meals?: meal_bool_exp | null | undefined;
-    pantry?: pantry_user_bool_exp | null | undefined;
-    password?: String_comparison_exp | null | undefined;
-    recipe_items?: recipe_item_bool_exp | null | undefined;
-    recipes?: recipe_bool_exp | null | undefined;
-    user_name?: String_comparison_exp | null | undefined;
+  _and?: ReadonlyArray<users_bool_exp | null> | null;
+  _not?: users_bool_exp | null;
+  _or?: ReadonlyArray<users_bool_exp | null> | null;
+  email?: String_comparison_exp | null;
+  fb_id?: String_comparison_exp | null;
+  fb_picture_url?: String_comparison_exp | null;
+  first_name?: String_comparison_exp | null;
+  food?: food_bool_exp | null;
+  full_name?: String_comparison_exp | null;
+  id?: uuid_comparison_exp | null;
+  last_name?: String_comparison_exp | null;
+  meal_items?: meal_item_bool_exp | null;
+  meals?: meal_bool_exp | null;
+  pantry?: pantry_user_bool_exp | null;
+  password?: String_comparison_exp | null;
+  recipe_items?: recipe_item_bool_exp | null;
+  recipes?: recipe_bool_exp | null;
+  user_name?: String_comparison_exp | null;
 };
 export type String_comparison_exp = {
-    _eq?: string | null | undefined;
-    _gt?: string | null | undefined;
-    _gte?: string | null | undefined;
-    _ilike?: string | null | undefined;
-    _in?: Array<string> | null | undefined;
-    _is_null?: boolean | null | undefined;
-    _like?: string | null | undefined;
-    _lt?: string | null | undefined;
-    _lte?: string | null | undefined;
-    _neq?: string | null | undefined;
-    _nilike?: string | null | undefined;
-    _nin?: Array<string> | null | undefined;
-    _nlike?: string | null | undefined;
-    _nsimilar?: string | null | undefined;
-    _similar?: string | null | undefined;
+  _eq?: string | null;
+  _gt?: string | null;
+  _gte?: string | null;
+  _ilike?: string | null;
+  _in?: ReadonlyArray<string> | null;
+  _is_null?: boolean | null;
+  _like?: string | null;
+  _lt?: string | null;
+  _lte?: string | null;
+  _neq?: string | null;
+  _nilike?: string | null;
+  _nin?: ReadonlyArray<string> | null;
+  _nlike?: string | null;
+  _nsimilar?: string | null;
+  _similar?: string | null;
 };
 export type food_bool_exp = {
-    A?: numeric_comparison_exp | null | undefined;
-    B1?: numeric_comparison_exp | null | undefined;
-    B12?: numeric_comparison_exp | null | undefined;
-    B2?: numeric_comparison_exp | null | undefined;
-    B3?: numeric_comparison_exp | null | undefined;
-    B5?: numeric_comparison_exp | null | undefined;
-    B6?: numeric_comparison_exp | null | undefined;
-    B7?: numeric_comparison_exp | null | undefined;
-    B9?: numeric_comparison_exp | null | undefined;
-    C?: numeric_comparison_exp | null | undefined;
-    D?: numeric_comparison_exp | null | undefined;
-    E?: numeric_comparison_exp | null | undefined;
-    K?: numeric_comparison_exp | null | undefined;
-    _and?: Array<food_bool_exp | null> | null | undefined;
-    _not?: food_bool_exp | null | undefined;
-    _or?: Array<food_bool_exp | null> | null | undefined;
-    brand_id?: uuid_comparison_exp | null | undefined;
-    calcium?: numeric_comparison_exp | null | undefined;
-    carbohydrates?: numeric_comparison_exp | null | undefined;
-    carbohydrates_fiber?: numeric_comparison_exp | null | undefined;
-    carbohydrates_starch?: numeric_comparison_exp | null | undefined;
-    carbohydrates_sugars?: numeric_comparison_exp | null | undefined;
-    copper?: numeric_comparison_exp | null | undefined;
-    energy_cal?: numeric_comparison_exp | null | undefined;
-    energy_kj?: numeric_comparison_exp | null | undefined;
-    fats?: numeric_comparison_exp | null | undefined;
-    food_brand?: food_brand_bool_exp | null | undefined;
-    food_type?: food_type_bool_exp | null | undefined;
-    id?: uuid_comparison_exp | null | undefined;
-    iron?: numeric_comparison_exp | null | undefined;
-    magnesium?: numeric_comparison_exp | null | undefined;
-    manganese?: numeric_comparison_exp | null | undefined;
-    meal_items?: meal_item_bool_exp | null | undefined;
-    name?: String_comparison_exp | null | undefined;
-    phosphorus?: numeric_comparison_exp | null | undefined;
-    potassium?: numeric_comparison_exp | null | undefined;
-    proteins?: numeric_comparison_exp | null | undefined;
-    recipe_items?: recipe_item_bool_exp | null | undefined;
-    selenium?: numeric_comparison_exp | null | undefined;
-    sodium?: numeric_comparison_exp | null | undefined;
-    type?: String_comparison_exp | null | undefined;
-    u_id?: uuid_comparison_exp | null | undefined;
-    user?: users_bool_exp | null | undefined;
-    weight?: Int_comparison_exp | null | undefined;
-    zinc?: numeric_comparison_exp | null | undefined;
+  A?: numeric_comparison_exp | null;
+  B1?: numeric_comparison_exp | null;
+  B12?: numeric_comparison_exp | null;
+  B2?: numeric_comparison_exp | null;
+  B3?: numeric_comparison_exp | null;
+  B5?: numeric_comparison_exp | null;
+  B6?: numeric_comparison_exp | null;
+  B7?: numeric_comparison_exp | null;
+  B9?: numeric_comparison_exp | null;
+  C?: numeric_comparison_exp | null;
+  D?: numeric_comparison_exp | null;
+  E?: numeric_comparison_exp | null;
+  K?: numeric_comparison_exp | null;
+  _and?: ReadonlyArray<food_bool_exp | null> | null;
+  _not?: food_bool_exp | null;
+  _or?: ReadonlyArray<food_bool_exp | null> | null;
+  brand_id?: uuid_comparison_exp | null;
+  calcium?: numeric_comparison_exp | null;
+  carbohydrates?: numeric_comparison_exp | null;
+  carbohydrates_fiber?: numeric_comparison_exp | null;
+  carbohydrates_starch?: numeric_comparison_exp | null;
+  carbohydrates_sugars?: numeric_comparison_exp | null;
+  copper?: numeric_comparison_exp | null;
+  energy_cal?: numeric_comparison_exp | null;
+  energy_kj?: numeric_comparison_exp | null;
+  fats?: numeric_comparison_exp | null;
+  food_brand?: food_brand_bool_exp | null;
+  food_type?: food_type_bool_exp | null;
+  id?: uuid_comparison_exp | null;
+  iron?: numeric_comparison_exp | null;
+  magnesium?: numeric_comparison_exp | null;
+  manganese?: numeric_comparison_exp | null;
+  meal_items?: meal_item_bool_exp | null;
+  name?: String_comparison_exp | null;
+  phosphorus?: numeric_comparison_exp | null;
+  potassium?: numeric_comparison_exp | null;
+  proteins?: numeric_comparison_exp | null;
+  recipe_items?: recipe_item_bool_exp | null;
+  selenium?: numeric_comparison_exp | null;
+  sodium?: numeric_comparison_exp | null;
+  type?: String_comparison_exp | null;
+  u_id?: uuid_comparison_exp | null;
+  user?: users_bool_exp | null;
+  weight?: Int_comparison_exp | null;
+  zinc?: numeric_comparison_exp | null;
 };
 export type numeric_comparison_exp = {
-    _eq?: number | null | undefined;
-    _gt?: number | null | undefined;
-    _gte?: number | null | undefined;
-    _in?: Array<number> | null | undefined;
-    _is_null?: boolean | null | undefined;
-    _lt?: number | null | undefined;
-    _lte?: number | null | undefined;
-    _neq?: number | null | undefined;
-    _nin?: Array<number> | null | undefined;
+  _eq?: number | null;
+  _gt?: number | null;
+  _gte?: number | null;
+  _in?: ReadonlyArray<number> | null;
+  _is_null?: boolean | null;
+  _lt?: number | null;
+  _lte?: number | null;
+  _neq?: number | null;
+  _nin?: ReadonlyArray<number> | null;
 };
 export type uuid_comparison_exp = {
-    _eq?: string | null | undefined;
-    _gt?: string | null | undefined;
-    _gte?: string | null | undefined;
-    _in?: Array<string> | null | undefined;
-    _is_null?: boolean | null | undefined;
-    _lt?: string | null | undefined;
-    _lte?: string | null | undefined;
-    _neq?: string | null | undefined;
-    _nin?: Array<string> | null | undefined;
+  _eq?: string | null;
+  _gt?: string | null;
+  _gte?: string | null;
+  _in?: ReadonlyArray<string> | null;
+  _is_null?: boolean | null;
+  _lt?: string | null;
+  _lte?: string | null;
+  _neq?: string | null;
+  _nin?: ReadonlyArray<string> | null;
 };
 export type food_brand_bool_exp = {
-    _and?: Array<food_brand_bool_exp | null> | null | undefined;
-    _not?: food_brand_bool_exp | null | undefined;
-    _or?: Array<food_brand_bool_exp | null> | null | undefined;
-    id?: uuid_comparison_exp | null | undefined;
-    name?: String_comparison_exp | null | undefined;
+  _and?: ReadonlyArray<food_brand_bool_exp | null> | null;
+  _not?: food_brand_bool_exp | null;
+  _or?: ReadonlyArray<food_brand_bool_exp | null> | null;
+  id?: uuid_comparison_exp | null;
+  name?: String_comparison_exp | null;
 };
 export type food_type_bool_exp = {
-    _and?: Array<food_type_bool_exp | null> | null | undefined;
-    _not?: food_type_bool_exp | null | undefined;
-    _or?: Array<food_type_bool_exp | null> | null | undefined;
-    decription?: String_comparison_exp | null | undefined;
-    food?: food_bool_exp | null | undefined;
-    img_url?: String_comparison_exp | null | undefined;
-    value?: String_comparison_exp | null | undefined;
+  _and?: ReadonlyArray<food_type_bool_exp | null> | null;
+  _not?: food_type_bool_exp | null;
+  _or?: ReadonlyArray<food_type_bool_exp | null> | null;
+  decription?: String_comparison_exp | null;
+  food?: food_bool_exp | null;
+  img_url?: String_comparison_exp | null;
+  value?: String_comparison_exp | null;
 };
 export type meal_item_bool_exp = {
-    _and?: Array<meal_item_bool_exp | null> | null | undefined;
-    _not?: meal_item_bool_exp | null | undefined;
-    _or?: Array<meal_item_bool_exp | null> | null | undefined;
-    carbohydrates?: numeric_comparison_exp | null | undefined;
-    energy_cal?: numeric_comparison_exp | null | undefined;
-    energy_kj?: numeric_comparison_exp | null | undefined;
-    fats?: numeric_comparison_exp | null | undefined;
-    food?: uuid_comparison_exp | null | undefined;
-    foodDesc?: food_bool_exp | null | undefined;
-    id?: uuid_comparison_exp | null | undefined;
-    meal?: meal_bool_exp | null | undefined;
-    meal_id?: uuid_comparison_exp | null | undefined;
-    proteins?: numeric_comparison_exp | null | undefined;
-    recipe?: recipe_bool_exp | null | undefined;
-    recipe_id?: uuid_comparison_exp | null | undefined;
-    u_id?: uuid_comparison_exp | null | undefined;
-    user?: users_bool_exp | null | undefined;
-    weight?: numeric_comparison_exp | null | undefined;
+  _and?: ReadonlyArray<meal_item_bool_exp | null> | null;
+  _not?: meal_item_bool_exp | null;
+  _or?: ReadonlyArray<meal_item_bool_exp | null> | null;
+  carbohydrates?: numeric_comparison_exp | null;
+  energy_cal?: numeric_comparison_exp | null;
+  energy_kj?: numeric_comparison_exp | null;
+  fats?: numeric_comparison_exp | null;
+  food?: uuid_comparison_exp | null;
+  foodDesc?: food_bool_exp | null;
+  id?: uuid_comparison_exp | null;
+  meal?: meal_bool_exp | null;
+  meal_id?: uuid_comparison_exp | null;
+  proteins?: numeric_comparison_exp | null;
+  recipe?: recipe_bool_exp | null;
+  recipe_id?: uuid_comparison_exp | null;
+  u_id?: uuid_comparison_exp | null;
+  user?: users_bool_exp | null;
+  weight?: numeric_comparison_exp | null;
 };
 export type meal_bool_exp = {
-    _and?: Array<meal_bool_exp | null> | null | undefined;
-    _not?: meal_bool_exp | null | undefined;
-    _or?: Array<meal_bool_exp | null> | null | undefined;
-    date?: date_comparison_exp | null | undefined;
-    id?: uuid_comparison_exp | null | undefined;
-    meal_items?: meal_item_bool_exp | null | undefined;
-    name?: String_comparison_exp | null | undefined;
-    time?: time_comparison_exp | null | undefined;
-    u_id?: uuid_comparison_exp | null | undefined;
-    user?: users_bool_exp | null | undefined;
+  _and?: ReadonlyArray<meal_bool_exp | null> | null;
+  _not?: meal_bool_exp | null;
+  _or?: ReadonlyArray<meal_bool_exp | null> | null;
+  date?: date_comparison_exp | null;
+  id?: uuid_comparison_exp | null;
+  meal_items?: meal_item_bool_exp | null;
+  name?: String_comparison_exp | null;
+  time?: time_comparison_exp | null;
+  u_id?: uuid_comparison_exp | null;
+  user?: users_bool_exp | null;
 };
 export type date_comparison_exp = {
-    _eq?: string | null | undefined;
-    _gt?: string | null | undefined;
-    _gte?: string | null | undefined;
-    _in?: Array<string> | null | undefined;
-    _is_null?: boolean | null | undefined;
-    _lt?: string | null | undefined;
-    _lte?: string | null | undefined;
-    _neq?: string | null | undefined;
-    _nin?: Array<string> | null | undefined;
+  _eq?: string | null;
+  _gt?: string | null;
+  _gte?: string | null;
+  _in?: ReadonlyArray<string> | null;
+  _is_null?: boolean | null;
+  _lt?: string | null;
+  _lte?: string | null;
+  _neq?: string | null;
+  _nin?: ReadonlyArray<string> | null;
 };
 export type time_comparison_exp = {
-    _eq?: string | null | undefined;
-    _gt?: string | null | undefined;
-    _gte?: string | null | undefined;
-    _in?: Array<string> | null | undefined;
-    _is_null?: boolean | null | undefined;
-    _lt?: string | null | undefined;
-    _lte?: string | null | undefined;
-    _neq?: string | null | undefined;
-    _nin?: Array<string> | null | undefined;
+  _eq?: string | null;
+  _gt?: string | null;
+  _gte?: string | null;
+  _in?: ReadonlyArray<string> | null;
+  _is_null?: boolean | null;
+  _lt?: string | null;
+  _lte?: string | null;
+  _neq?: string | null;
+  _nin?: ReadonlyArray<string> | null;
 };
 export type recipe_bool_exp = {
-    _and?: Array<recipe_bool_exp | null> | null | undefined;
-    _not?: recipe_bool_exp | null | undefined;
-    _or?: Array<recipe_bool_exp | null> | null | undefined;
-    description?: String_comparison_exp | null | undefined;
-    id?: uuid_comparison_exp | null | undefined;
-    increment?: Int_comparison_exp | null | undefined;
-    link?: String_comparison_exp | null | undefined;
-    meal_items?: meal_item_bool_exp | null | undefined;
-    name?: String_comparison_exp | null | undefined;
-    portions?: Int_comparison_exp | null | undefined;
-    recipe_items?: recipe_item_bool_exp | null | undefined;
-    u_id?: uuid_comparison_exp | null | undefined;
-    user?: users_bool_exp | null | undefined;
+  _and?: ReadonlyArray<recipe_bool_exp | null> | null;
+  _not?: recipe_bool_exp | null;
+  _or?: ReadonlyArray<recipe_bool_exp | null> | null;
+  description?: String_comparison_exp | null;
+  id?: uuid_comparison_exp | null;
+  increment?: Int_comparison_exp | null;
+  link?: String_comparison_exp | null;
+  meal_items?: meal_item_bool_exp | null;
+  name?: String_comparison_exp | null;
+  portions?: Int_comparison_exp | null;
+  recipe_items?: recipe_item_bool_exp | null;
+  u_id?: uuid_comparison_exp | null;
+  user?: users_bool_exp | null;
 };
 export type Int_comparison_exp = {
-    _eq?: number | null | undefined;
-    _gt?: number | null | undefined;
-    _gte?: number | null | undefined;
-    _in?: Array<number> | null | undefined;
-    _is_null?: boolean | null | undefined;
-    _lt?: number | null | undefined;
-    _lte?: number | null | undefined;
-    _neq?: number | null | undefined;
-    _nin?: Array<number> | null | undefined;
+  _eq?: number | null;
+  _gt?: number | null;
+  _gte?: number | null;
+  _in?: ReadonlyArray<number> | null;
+  _is_null?: boolean | null;
+  _lt?: number | null;
+  _lte?: number | null;
+  _neq?: number | null;
+  _nin?: ReadonlyArray<number> | null;
 };
 export type recipe_item_bool_exp = {
-    _and?: Array<recipe_item_bool_exp | null> | null | undefined;
-    _not?: recipe_item_bool_exp | null | undefined;
-    _or?: Array<recipe_item_bool_exp | null> | null | undefined;
-    carbohydrates?: numeric_comparison_exp | null | undefined;
-    energy_cal?: numeric_comparison_exp | null | undefined;
-    energy_kj?: numeric_comparison_exp | null | undefined;
-    fats?: numeric_comparison_exp | null | undefined;
-    food?: food_bool_exp | null | undefined;
-    food_id?: uuid_comparison_exp | null | undefined;
-    id?: uuid_comparison_exp | null | undefined;
-    proteins?: numeric_comparison_exp | null | undefined;
-    recipe?: recipe_bool_exp | null | undefined;
-    recipe_id?: uuid_comparison_exp | null | undefined;
-    u_id?: uuid_comparison_exp | null | undefined;
-    user?: users_bool_exp | null | undefined;
-    weight?: numeric_comparison_exp | null | undefined;
+  _and?: ReadonlyArray<recipe_item_bool_exp | null> | null;
+  _not?: recipe_item_bool_exp | null;
+  _or?: ReadonlyArray<recipe_item_bool_exp | null> | null;
+  carbohydrates?: numeric_comparison_exp | null;
+  energy_cal?: numeric_comparison_exp | null;
+  energy_kj?: numeric_comparison_exp | null;
+  fats?: numeric_comparison_exp | null;
+  food?: food_bool_exp | null;
+  food_id?: uuid_comparison_exp | null;
+  id?: uuid_comparison_exp | null;
+  proteins?: numeric_comparison_exp | null;
+  recipe?: recipe_bool_exp | null;
+  recipe_id?: uuid_comparison_exp | null;
+  u_id?: uuid_comparison_exp | null;
+  user?: users_bool_exp | null;
+  weight?: numeric_comparison_exp | null;
 };
 export type pantry_user_bool_exp = {
-    _and?: Array<pantry_user_bool_exp | null> | null | undefined;
-    _not?: pantry_user_bool_exp | null | undefined;
-    _or?: Array<pantry_user_bool_exp | null> | null | undefined;
-    id?: uuid_comparison_exp | null | undefined;
-    pantry_id?: uuid_comparison_exp | null | undefined;
-    user?: users_bool_exp | null | undefined;
-    user_id?: uuid_comparison_exp | null | undefined;
+  _and?: ReadonlyArray<pantry_user_bool_exp | null> | null;
+  _not?: pantry_user_bool_exp | null;
+  _or?: ReadonlyArray<pantry_user_bool_exp | null> | null;
+  id?: uuid_comparison_exp | null;
+  pantry_id?: uuid_comparison_exp | null;
+  user?: users_bool_exp | null;
+  user_id?: uuid_comparison_exp | null;
 };
-export type GetForgottenPasswordByEmailQueryVariables = {
-    where?: users_bool_exp | null | undefined;
+export type GetForgottenPasswordByEmailQuery$variables = {
+  where?: users_bool_exp | null;
 };
-export type GetForgottenPasswordByEmailQueryResponse = {
-    readonly users_connection: {
-        readonly edges: ReadonlyArray<{
-            readonly node: {
-                readonly password: string;
-            };
-        }>;
-    };
+export type GetForgottenPasswordByEmailQuery$data = {
+  readonly users_connection: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly password: string;
+      };
+    }>;
+  };
 };
 export type GetForgottenPasswordByEmailQuery = {
-    readonly response: GetForgottenPasswordByEmailQueryResponse;
-    readonly variables: GetForgottenPasswordByEmailQueryVariables;
+  variables: GetForgottenPasswordByEmailQuery$variables;
+  response: GetForgottenPasswordByEmailQuery$data;
 };
-
-
-
-/*
-query GetForgottenPasswordByEmailQuery(
-  $where: users_bool_exp
-) {
-  users_connection(where: $where) {
-    edges {
-      node {
-        password
-        id
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -393,5 +381,7 @@ return {
   }
 };
 })();
-(node as any).hash = '305ad579dab5ca50448c7fc8a27de9d3';
+
+(node as any).hash = "305ad579dab5ca50448c7fc8a27de9d3";
+
 export default node;

@@ -1,73 +1,46 @@
+/**
+ * @generated SignedSource<<3e9e9d0bffb01593bf77022b9f0cce2e>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type RecipeQueryVariables = {};
-export type RecipeQueryResponse = {
-    readonly recipe_connection: {
-        readonly edges: ReadonlyArray<{
-            readonly node: {
-                readonly id: string;
-                readonly name: string | null;
-                readonly description: string | null;
-                readonly u_id: string;
-                readonly link: string | null;
-                readonly portions: number | null;
-                readonly recipe_items: ReadonlyArray<{
-                    readonly id: string;
-                    readonly food: {
-                        readonly id: string;
-                        readonly name: string;
-                    };
-                    readonly proteins: number;
-                    readonly fats: number;
-                    readonly carbohydrates: number;
-                    readonly energy_cal: number;
-                    readonly energy_kj: number;
-                    readonly weight: number;
-                }>;
-            };
+import { ConcreteRequest, Query } from 'relay-runtime';
+export type RecipeQuery$variables = {};
+export type RecipeQuery$data = {
+  readonly recipe_connection: {
+    readonly edges: ReadonlyArray<{
+      readonly node: {
+        readonly id: string;
+        readonly name: string | null;
+        readonly description: string | null;
+        readonly u_id: string;
+        readonly link: string | null;
+        readonly portions: number | null;
+        readonly recipe_items: ReadonlyArray<{
+          readonly id: string;
+          readonly food: {
+            readonly id: string;
+            readonly name: string;
+          };
+          readonly proteins: number;
+          readonly fats: number;
+          readonly carbohydrates: number;
+          readonly energy_cal: number;
+          readonly energy_kj: number;
+          readonly weight: number;
         }>;
-    };
+      };
+    }>;
+  };
 };
 export type RecipeQuery = {
-    readonly response: RecipeQueryResponse;
-    readonly variables: RecipeQueryVariables;
+  variables: RecipeQuery$variables;
+  response: RecipeQuery$data;
 };
-
-
-
-/*
-query RecipeQuery {
-  recipe_connection(order_by: {increment: desc}) {
-    edges {
-      node {
-        id
-        name
-        description
-        u_id
-        link
-        portions
-        recipe_items {
-          id
-          food {
-            id
-            name
-          }
-          proteins
-          fats
-          carbohydrates
-          energy_cal
-          energy_kj
-          weight
-        }
-      }
-    }
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = {
@@ -251,5 +224,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'e457c8e56e7bac19dc93ceae05d00c41';
+
+(node as any).hash = "e457c8e56e7bac19dc93ceae05d00c41";
+
 export default node;

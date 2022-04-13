@@ -1,64 +1,47 @@
+/**
+ * @generated SignedSource<<0858a9afcdf35b24f94dbe326f01075d>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
+import { ConcreteRequest, Mutation } from 'relay-runtime';
 export type recipe_item_set_input = {
-    carbohydrates?: number | null | undefined;
-    energy_cal?: number | null | undefined;
-    energy_kj?: number | null | undefined;
-    fats?: number | null | undefined;
-    food_id?: string | null | undefined;
-    id?: string | null | undefined;
-    proteins?: number | null | undefined;
-    recipe_id?: string | null | undefined;
-    u_id?: string | null | undefined;
-    weight?: number | null | undefined;
+  carbohydrates?: number | null;
+  energy_cal?: number | null;
+  energy_kj?: number | null;
+  fats?: number | null;
+  food_id?: string | null;
+  id?: string | null;
+  proteins?: number | null;
+  recipe_id?: string | null;
+  u_id?: string | null;
+  weight?: number | null;
 };
-export type UpdateRecipeItemMutationVariables = {
-    id: string;
-    set?: recipe_item_set_input | null | undefined;
+export type UpdateRecipeItemMutation$variables = {
+  id: string;
+  set?: recipe_item_set_input | null;
 };
-export type UpdateRecipeItemMutationResponse = {
-    readonly update_recipe_item_by_pk: {
-        readonly recipe: {
-            readonly description: string | null;
-            readonly id: string;
-            readonly increment: number;
-            readonly link: string | null;
-            readonly name: string | null;
-            readonly portions: number | null;
-            readonly u_id: string;
-        };
-    } | null;
+export type UpdateRecipeItemMutation$data = {
+  readonly update_recipe_item_by_pk: {
+    readonly recipe: {
+      readonly description: string | null;
+      readonly id: string;
+      readonly increment: number;
+      readonly link: string | null;
+      readonly name: string | null;
+      readonly portions: number | null;
+      readonly u_id: string;
+    };
+  } | null;
 };
 export type UpdateRecipeItemMutation = {
-    readonly response: UpdateRecipeItemMutationResponse;
-    readonly variables: UpdateRecipeItemMutationVariables;
+  variables: UpdateRecipeItemMutation$variables;
+  response: UpdateRecipeItemMutation$data;
 };
-
-
-
-/*
-mutation UpdateRecipeItemMutation(
-  $id: uuid!
-  $set: recipe_item_set_input
-) {
-  update_recipe_item_by_pk(pk_columns: {id: $id}, _set: $set) {
-    recipe {
-      description
-      id
-      increment
-      link
-      name
-      portions
-      u_id
-    }
-    id
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -206,5 +189,7 @@ return {
   }
 };
 })();
-(node as any).hash = 'e7abf367b1f37797cb526583024cc8a0';
+
+(node as any).hash = "e7abf367b1f37797cb526583024cc8a0";
+
 export default node;

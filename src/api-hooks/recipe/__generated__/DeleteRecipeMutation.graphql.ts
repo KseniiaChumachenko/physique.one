@@ -1,43 +1,31 @@
+/**
+ * @generated SignedSource<<a63b973c860ae72836ae06deca62306c>>
+ * @lightSyntaxTransform
+ * @nogrep
+ */
+
 /* tslint:disable */
 /* eslint-disable */
 // @ts-nocheck
 
-import { ConcreteRequest } from "relay-runtime";
-
-export type DeleteRecipeMutationVariables = {
-    id: string;
+import { ConcreteRequest, Mutation } from 'relay-runtime';
+export type DeleteRecipeMutation$variables = {
+  id: string;
 };
-export type DeleteRecipeMutationResponse = {
-    readonly delete_recipe_item: {
-        readonly returning: ReadonlyArray<{
-            readonly id: string;
-        }>;
-    } | null;
-    readonly delete_recipe_by_pk: {
-        readonly id: string;
-    } | null;
+export type DeleteRecipeMutation$data = {
+  readonly delete_recipe_item: {
+    readonly returning: ReadonlyArray<{
+      readonly id: string;
+    }>;
+  } | null;
+  readonly delete_recipe_by_pk: {
+    readonly id: string;
+  } | null;
 };
 export type DeleteRecipeMutation = {
-    readonly response: DeleteRecipeMutationResponse;
-    readonly variables: DeleteRecipeMutationVariables;
+  variables: DeleteRecipeMutation$variables;
+  response: DeleteRecipeMutation$data;
 };
-
-
-
-/*
-mutation DeleteRecipeMutation(
-  $id: uuid!
-) {
-  delete_recipe_item(where: {recipe_id: {_eq: $id}}) {
-    returning {
-      id
-    }
-  }
-  delete_recipe_by_pk(id: $id) {
-    id
-  }
-}
-*/
 
 const node: ConcreteRequest = (function(){
 var v0 = [
@@ -186,5 +174,7 @@ return {
   }
 };
 })();
-(node as any).hash = '8b4ce269b8c8d328fb9c58c8f5e65b1a';
+
+(node as any).hash = "8b4ce269b8c8d328fb9c58c8f5e65b1a";
+
 export default node;
