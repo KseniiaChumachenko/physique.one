@@ -1,4 +1,4 @@
-import { graphql } from "react-relay";
+import graphql from 'babel-plugin-relay/macro';
 
 export const DeleteRecipeMutation = graphql`
   mutation DeleteRecipeMutation($id: uuid!) {

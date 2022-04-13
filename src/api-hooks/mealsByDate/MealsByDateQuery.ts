@@ -1,4 +1,4 @@
-import { graphql } from "react-relay";
+import graphql from 'babel-plugin-relay/macro';
 
 export const MealsByDateQuery = graphql`
   query MealsByDateQuery($date: date = "", $u_id: uuid) {
