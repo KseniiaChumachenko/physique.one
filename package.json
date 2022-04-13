@@ -31,7 +31,7 @@
     "add-locale": "lingui add-locale",
     "extract": "lingui extract",
     "compile": "lingui compile",
-    "relay": "relay-compiler --src ./src --schema ./src/graphql/schema.graphql --language typescript "
+    "relay": "relay-compiler --src ./src --schema ./src/graphql/schema.graphql"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
