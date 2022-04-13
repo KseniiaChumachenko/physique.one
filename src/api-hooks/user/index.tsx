@@ -6,7 +6,7 @@ import {
   UserQueryVariables,
 } from "./__generated__/UserQuery.graphql";
 
-export * from "./__generated__/UserQuery.graphql";
+//export * from "./__generated__/UserQuery.graphql";
 
 export const useUser = (v: UserQueryVariables) => {
   const [queryReference, loadQuery] = useQueryLoader<UserQuery>(
