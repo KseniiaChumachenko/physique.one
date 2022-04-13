@@ -31,5 +31,3 @@ export const useUserPreloadedQuery = (userQR: PreloadedQuery<UserQuery>) => {
 
   return { data };
 };
-
-//TODO: issue with build: error with subscription transport
