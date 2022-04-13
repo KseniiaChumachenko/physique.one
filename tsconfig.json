@@ -13,11 +13,16 @@
     "removeComments": false, // prevent tsc from removing webpack magic comments
     "importsNotUsedAsValues": "preserve",
 
+    "paths": {
+      "src/*": ["./src/*"]
+    },
+
     "strict": true,
     "preserveConstEnums": true,
 
     "sourceMap": true,
 
     "baseUrl": "."
-  }
+  },
+  "include": ["vite.config.ts"]
 }
