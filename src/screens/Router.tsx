@@ -67,7 +67,7 @@ export const Router = observer(() => {
       <Switch>
         <Route path={"/auth"} component={Authorization} exact />
         <Route path={"/privacyPolicy"} component={PrivacyPolicy} exact />
-        {user?.id !== NIL ? (
+        {user?.id ? (
           <Box sx={{ display: "flex" }}>
             <CssBaseline />
             <AppBar />

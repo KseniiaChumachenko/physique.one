@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { Autocomplete, AutocompleteProps } from "@material-ui/lab";
 import { TextField } from "@material-ui/core";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import {
   food_insert_input,
   FoodPreloadedHookProps,

@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { ArrowBackRounded } from "@material-ui/icons";
 import { useStyles } from "./styled";
 

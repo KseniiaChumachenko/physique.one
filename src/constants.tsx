@@ -1,4 +1,4 @@
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import React from "react";
 import moment from "moment";
 import {

@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from "react";
 import { observer } from "mobx-react-lite";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import {
   LinearProgress,
   Paper,
@@ -12,14 +12,14 @@ import {
   TableRow,
 } from "@material-ui/core";
 import {
-  DeleteFoodMutationVariables,
+  DeleteFoodMutation$variables,
   FoodPreloadedHookProps,
-  UpdateFoodMutationVariables,
+  UpdateFoodMutation$variables,
   useFood,
   useFoodPreloadedQuery,
 } from "src/api-hooks/food";
 import {
-  AddFoodBrandMutationVariables,
+  AddFoodBrandMutation$variables,
   FoodBrandPreloadedHookProps,
   useFoodBrand,
 } from "src/api-hooks/foodBrand";
@@ -82,7 +82,7 @@ const FoodLibraryContent = observer(
       };
     }, []);
 
-    const handleAddFood = (variables: AddFoodBrandMutationVariables) => {
+    const handleAddFood = (variables: AddFoodBrandMutation$variables) => {
       foodMutations.add({
         variables,
         onCompleted: () => setSuccess(true),
@@ -90,7 +90,7 @@ const FoodLibraryContent = observer(
       });
     };
 
-    const handleUpdateFood = (variables: UpdateFoodMutationVariables) =>
+    const handleUpdateFood = (variables: UpdateFoodMutation$variables) =>
       foodMutations.update({
         variables,
         onCompleted: () => {
@@ -100,7 +100,7 @@ const FoodLibraryContent = observer(
         onError: (error1) => setError(error1),
       });
 
-    const handleDeleteFood = (variables: DeleteFoodMutationVariables) => () =>
+    const handleDeleteFood = (variables: DeleteFoodMutation$variables) => () =>
       foodMutations.destroy({
         variables,
         onCompleted: () => setSuccess(true),

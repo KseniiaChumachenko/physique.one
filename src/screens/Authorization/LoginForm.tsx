@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Link, TextField, Typography } from "@material-ui/core";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { useLogin } from "src/api-hooks/authorization";
 import { useStyles } from "./styled";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";

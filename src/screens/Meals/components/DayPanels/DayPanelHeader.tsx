@@ -13,16 +13,16 @@ import {
   FileCopyRounded,
 } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { Alert } from "@material-ui/lab";
 import {
-  AddMealMutationVariables,
+  AddMealMutation$variables,
   MealsByDatePreloadedHookProps,
   useMealsPreloadedQuery,
 } from "src/api-hooks/mealsByDate";
-import { AddMealDialog } from "../../../components/AddMealDialog";
-import { AggregationChips } from "../../../../components/AggredationChips";
-import { CopyDayDialog } from "../../../components/CopyDayDialog";
+import { AggregationChips } from "src/components/AggredationChips";
+import { AddMealDialog } from "src/screens/components/AddMealDialog";
+import { CopyDayDialog } from "src/screens/components/CopyDayDialog";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -57,7 +57,7 @@ export const DayPanelHeader = ({ date, mealsQR }: Props) => {
   const handleOpenAddMealDialog = () => setOpenAddMealDialog(true);
   const handleOpenCopyDayDialog = () => setOpenCopyDayDialog(true);
 
-  const handleAddMeal = (variables: AddMealMutationVariables) => (
+  const handleAddMeal = (variables: AddMealMutation$variables) => (
     event: any
   ) => {
     add({
@@ -72,7 +72,7 @@ export const DayPanelHeader = ({ date, mealsQR }: Props) => {
   };
 
   const handleCopyMeals = async (
-    variables: AddMealMutationVariables,
+    variables: AddMealMutation$variables,
     onClose: () => void
   ) => {
     add({

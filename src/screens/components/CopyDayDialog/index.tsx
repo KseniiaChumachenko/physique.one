@@ -12,11 +12,11 @@ import {
 } from "@material-ui/core";
 import { DatePicker } from "@material-ui/pickers";
 import { Alert } from "@material-ui/lab";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { useActiveUser } from "src/api-hooks/authorization";
 import {
-  AddMealMutationVariables,
-  MealsByDateQueryResponse,
+  AddMealMutation$variables,
+  MealsByDateQuery$data,
 } from "src/api-hooks/mealsByDate";
 import moment from "moment";
 
@@ -24,8 +24,8 @@ interface Props {
   open: boolean;
   setOpen: any;
   date: string;
-  data: MealsByDateQueryResponse;
-  onSubmit: (v: AddMealMutationVariables, onClose: () => void) => void;
+  data: MealsByDateQuery$data;
+  onSubmit: (v: AddMealMutation$variables, onClose: () => void) => void;
 }
 
 export const CopyDayDialog = ({

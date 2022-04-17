@@ -2,6 +2,7 @@ import React, { Suspense, useEffect } from "react";
 import { RelayEnvironmentProvider } from "react-relay";
 import moment from "moment";
 import { I18nProvider } from "@lingui/react";
+import { i18n } from "@lingui/core"
 import { LocalizationProvider } from "@material-ui/pickers";
 import MomentAdapter from "@material-ui/pickers/adapter/moment";
 import { Backdrop, CircularProgress } from "@material-ui/core";
@@ -11,19 +12,11 @@ import { StoreProvider } from "./store";
 import { environment } from "./api";
 
 function App() {
-  const { i18n, locale } = useLanguageSetup();
+  useLanguageSetup();
 
   useEffect(() => {
     document.title = "Physique";
   }, []);
-
-  useEffect(() => {
-    moment.updateLocale(locale.language, {
-      week: {
-        dow: 1,
-      },
-    });
-  }, [locale.language]);
 
   return (
     <RelayEnvironmentProvider environment={environment}>
@@ -34,7 +27,7 @@ function App() {
           </Backdrop>
         }
       >
-        <I18nProvider i18n={i18n} language={locale.language}>
+        <I18nProvider i18n={i18n}>
           <LocalizationProvider
             dateLibInstance={moment}
             dateAdapter={MomentAdapter}

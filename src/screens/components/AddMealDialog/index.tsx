@@ -1,7 +1,7 @@
 import React, { Suspense, useRef } from "react";
 import { observer } from "mobx-react-lite";
 import moment from "moment";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import {
   Button,
   Dialog,
@@ -18,7 +18,7 @@ import { TimePicker } from "@material-ui/pickers";
 import { Autocomplete } from "@material-ui/lab";
 import { useScrollToBottom } from "src/hooks/useScrollToBottom";
 import { useActiveUser } from "src/api-hooks/authorization";
-import { AddMealMutationVariables } from "src/api-hooks/mealsByDate";
+import { AddMealMutation$variables } from "src/api-hooks/mealsByDate";
 import {
   FoodPreloadedHookProps,
   useFood,
@@ -59,7 +59,7 @@ interface Props {
   open: boolean;
   setOpen: any;
   date: string;
-  onConfirm(state: AddMealMutationVariables): (event: any) => void;
+  onConfirm(state: AddMealMutation$variables): (event: any) => void;
 
   name?: string | null;
   time?: any;

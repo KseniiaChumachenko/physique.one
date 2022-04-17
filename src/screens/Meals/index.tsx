@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import moment from "moment";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { makeStyles } from "@material-ui/core/styles";
 import { Pagination } from "@material-ui/lab";
 import {
