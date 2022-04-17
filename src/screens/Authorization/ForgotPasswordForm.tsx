@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { Button, TextField } from "@material-ui/core";
 import { useGetForgottenPassword } from "../../api-hooks/authorization";
 import { useStyles } from "./styled";

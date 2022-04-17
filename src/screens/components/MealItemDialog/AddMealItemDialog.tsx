@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { useActiveUser } from "src/api-hooks/authorization";
 import {
   FoodPreloadedHookProps,

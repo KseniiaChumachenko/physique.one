@@ -4,7 +4,7 @@ import moment from "moment";
 import { useHistory } from "react-router-dom";
 import { send } from "emailjs-com";
 import { Button, TextField } from "@material-ui/core";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import {
   ActiveUser,
   useActiveUser,

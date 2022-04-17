@@ -1,6 +1,25 @@
 {
-   "localeDir": "src/locales/",
-   "srcPathDirs": ["src/"],
-   "format": "po",
-   "compileNamespace": "es"
+    "locales": ["en", "cs", "ru", "uk"],
+    "fallbackLocales": {
+        "default": "en"
+        },
+    "catalogs": [
+        {
+          "path": "src/locales/{locale}/messages",
+          "include": [
+            "src"
+          ],
+          "exclude": [
+            "src/locales/**"
+          ]
+        }
+      ],
+    "format": "po",
+    "compileNamespace": "es",
+    "sourceLocale": "en",
+    "extractBabelOptions": {
+    "presets": [
+      "@babel/preset-typescript"
+    ]
+  }
 }

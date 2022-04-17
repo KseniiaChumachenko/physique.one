@@ -1,6 +1,6 @@
 import { Autocomplete, AutocompleteProps } from "@material-ui/lab";
 import { TextField, Typography } from "@material-ui/core";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import React, { useState } from "react";
 import { v4 as uuid } from "uuid";
 import { InputProps } from "@material-ui/core/Input/Input";

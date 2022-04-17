@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Disposable, UseMutationConfig } from "react-relay";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import {
   DeleteMealMutation,
-  DeleteMealMutationVariables,
+  DeleteMealMutation$variables,
 } from "src/api-hooks/mealsByDate";
 import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
@@ -13,7 +13,7 @@ import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { EditDeleteButtonGroup } from "../../../components/EditDeletButtonGroup";
 import { AddMealItemDialog } from "../../../components/MealItemDialog/AddMealItemDialog";
 
-type ExtendProps = DeleteMealMutationVariables &
+type ExtendProps = DeleteMealMutation$variables &
   FoodPreloadedHookProps &
   RecipePreloadedHookProps;
 

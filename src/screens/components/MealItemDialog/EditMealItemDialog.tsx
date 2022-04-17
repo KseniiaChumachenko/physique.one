@@ -10,7 +10,7 @@ import {
   Snackbar,
   TextField,
 } from "@material-ui/core";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { Meal_Item } from "src/types";
 import {

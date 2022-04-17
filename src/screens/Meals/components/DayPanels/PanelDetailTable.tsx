@@ -10,10 +10,10 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { Meal_Item } from "src/types";
 import {
-  DeleteMealItemMutationVariables,
+  DeleteMealItemMutation$variables,
   useDeleteMealItemMutation,
 } from "src/api-hooks/mealItem";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
@@ -48,7 +48,7 @@ export const PanelDetailTable = ({
   const [error, setError] = useState<Error>();
 
   const [destroy] = useDeleteMealItemMutation();
-  const handleDelete = (v: DeleteMealItemMutationVariables) =>
+  const handleDelete = (v: DeleteMealItemMutation$variables) =>
     destroy({
       variables: v,
       onCompleted: () => {

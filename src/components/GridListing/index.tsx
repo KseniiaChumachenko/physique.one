@@ -2,7 +2,7 @@ import React, { ComponentProps } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Grid, LinearProgress } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { Card } from "src/components/Card";
 
 const useStyles = makeStyles((theme) => ({

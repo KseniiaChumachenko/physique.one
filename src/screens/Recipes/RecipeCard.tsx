@@ -17,7 +17,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { useActiveUser } from "src/api-hooks/authorization";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
 import { RecipePreloadedHookProps } from "src/api-hooks/recipe";

@@ -20,7 +20,7 @@ import {
   ChevronRightRounded,
   DirectionsRunRounded,
 } from "@material-ui/icons";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { useHistory, useLocation } from "react-router-dom";
 import { useActiveUser } from "src/api-hooks/authorization";
 import { useStore } from "../store";

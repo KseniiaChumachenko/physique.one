@@ -11,22 +11,21 @@ import {
   Select,
   TextField,
 } from "@material-ui/core";
-import { Trans } from "@lingui/react";
-import { i18n } from "@lingui/core";
+import { Trans, t } from "@lingui/macro"
 import { makeStyles } from "@material-ui/core/styles";
 import {
-  AddFoodMutationVariables,
+  AddFoodMutation$variables,
   food_insert_input,
-  UpdateFoodMutationVariables,
-} from "../../../api-hooks/food";
-import { FetchedFoods } from "../../FoodLibrary";
-import { FoodBrandSelect } from "../../../components/FoodBrandSelect";
-import { FoodBrandPreloadedHookProps } from "../../../api-hooks/foodBrand";
+  UpdateFoodMutation$variables,
+} from "src/api-hooks/food";
+import { FoodBrandSelect } from "src/components/FoodBrandSelect";
+import { FoodBrandPreloadedHookProps } from "src/api-hooks/foodBrand";
 import {
   FoodTypePreloadedHookProps,
   useFoodTypePreloadedQuery,
-} from "../../../api-hooks/foodType";
-import { base64ToUuid } from "../../../utils/base64-to-uuid";
+} from "src/api-hooks/foodType";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
+import { FetchedFoods } from "../../FoodLibrary";
 import { State } from "./useStore";
 
 type ExtendProps = State &
@@ -37,8 +36,8 @@ interface Props extends ExtendProps {
   open: boolean;
   setOpen: any;
 
-  onAdd?: (v: AddFoodMutationVariables) => void;
-  onUpdate?: (v: UpdateFoodMutationVariables) => void;
+  onAdd?: (v: AddFoodMutation$variables) => void;
+  onUpdate?: (v: UpdateFoodMutation$variables) => void;
 
   updateProps?: FetchedFoods;
 }
@@ -134,7 +133,7 @@ export const AddFoodDialog = ({
             }
             onChange={(event) => handleSetVariable(event.target.value, "type")}
             className={classes.field}
-            placeholder={i18n.t`Select type`}
+            placeholder={t`Select type`}
             label={<Trans>Select type</Trans>}
           >
             {data?.food_type_connection.edges.map(({ node: { value } }, i) => (

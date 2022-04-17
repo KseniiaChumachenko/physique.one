@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { setupI18n } from "@lingui/core";
+import moment from "moment";
+import {useEffect, useState} from "react";
+import { i18n } from "@lingui/core"
 import { csCZ, enUS, Localization, ruRU, ukUA } from "@material-ui/core/locale";
-import enMessages from "src/locales/en/messages";
-import ruMessages from "src/locales/ru/messages";
-import csMessages from "src/locales/cs/messages";
-import ukMessages from "src/locales/uk/messages";
+import {messages as enMessages} from "../locales/en/messages";
+import {messages as ruMessages} from "../locales/ru/messages";
+import {messages as csMessages} from "../locales/cs/messages";
+import {messages as ukMessages} from "../locales/uk/messages";
 
 export interface LanguageProps {
   label: string;
@@ -44,18 +45,34 @@ export const languages: UseLanguageSetup = {
   },
 };
 
+// i18n.loadLocaleData({
+//   en: { plurals: en },
+//   ru: { plurals: ru },
+//   cs: { plurals: cs },
+//   uk: { plurals: uk }
+// })  TODO: "Is not a function" - WHY?
+
+i18n.load({
+  en: enMessages,
+  ru: ruMessages,
+  cs: csMessages,
+  uk: ukMessages
+})
+
 export function useLanguageSetup() {
   const [locale, setLocale] = useState(languages["en"]);
 
-  const i18n = setupI18n({
-    language: locale.language,
-    catalogs: {
-      en: languages["en"].catalog,
-      ru: languages["ru"].catalog,
-      cs: languages["cs"].catalog,
-      uk: languages["uk"].catalog,
-    },
-  });
+  useEffect(() => {
+    i18n.activate(locale.language)
+  }, [locale])
+
+  useEffect(() => {
+    moment.updateLocale(locale.language, {
+      week: {
+        dow: 1,
+      },
+    });
+  }, [locale.language]);
 
   return {
     i18n,
