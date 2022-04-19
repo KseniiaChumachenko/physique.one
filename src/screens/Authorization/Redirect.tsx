@@ -1,19 +1,19 @@
-import React from "react";
-import moment from "moment";
+import React, {useEffect} from "react";
 import { useHistory } from "react-router-dom";
 import {
-  LoginPreloadedQuery,
+  LoginPreloadedQuery, useActiveUser,
   useLoginPreloaded,
 } from "../../api-hooks/authorization";
 
 export const Redirect = ({ loginQR }: LoginPreloadedQuery) => {
-  const history = useHistory();
 
   const data = useLoginPreloaded({ loginQR });
 
-  if (data) {
-    history.push(`/ration/${moment().week()}/${moment().year()}`);
-  }
+  const { mutations: {setActiveUser}} = useActiveUser()
+
+  useEffect(() => {
+    setActiveUser(data.users_connection.edges[0].node as any) // TODO kseniia.chumachenko@gmail.com
+  }, [data])
 
   return <div />;
 };

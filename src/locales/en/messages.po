@@ -25,7 +25,7 @@ msgstr "<0>Actions</0>"
 msgid "Add external link"
 msgstr "Add external link"
 
-#: src/screens/components/AddFoodDialog/index.tsx:111
+#: src/screens/components/AddFoodDialog/index.tsx:110
 msgid "Add food"
 msgstr "Add food"
 
@@ -41,7 +41,7 @@ msgstr "Add new item"
 msgid "Add new meal"
 msgstr "Add new meal"
 
-#: src/screens/components/AddFoodDialog/index.tsx:115
+#: src/screens/components/AddFoodDialog/index.tsx:114
 msgid "Always add attributes per 100g"
 msgstr "Always add attributes per 100g"
 
@@ -50,7 +50,7 @@ msgid "Brand"
 msgstr "Brand"
 
 #: src/components/Card/EditModeCard.tsx:64
-#: src/screens/components/AddFoodDialog/index.tsx:192
+#: src/screens/components/AddFoodDialog/index.tsx:191
 #: src/screens/components/AddMealDialog/index.tsx:239
 #: src/screens/components/CopyDayDialog/index.tsx:122
 #: src/screens/components/MealItemDialog/AddMealItemDialog.tsx:166
@@ -62,7 +62,7 @@ msgstr "Cancel"
 msgid "Carbohydrates"
 msgstr "Carbohydrates"
 
-#: src/screens/components/AddFoodDialog/index.tsx:175
+#: src/screens/components/AddFoodDialog/index.tsx:174
 msgid "Carbohydrates (g)"
 msgstr "Carbohydrates (g)"
 
@@ -88,11 +88,11 @@ msgstr "Create an Account"
 msgid "E-mail"
 msgstr "E-mail"
 
-#: src/screens/components/AddFoodDialog/index.tsx:148
+#: src/screens/components/AddFoodDialog/index.tsx:147
 msgid "Energy (cal)"
 msgstr "Energy (cal)"
 
-#: src/screens/components/AddFoodDialog/index.tsx:157
+#: src/screens/components/AddFoodDialog/index.tsx:156
 msgid "Energy (kJ)"
 msgstr "Energy (kJ)"
 
@@ -116,7 +116,7 @@ msgstr "Failed to add item: {0}"
 msgid "Fats"
 msgstr "Fats"
 
-#: src/screens/components/AddFoodDialog/index.tsx:184
+#: src/screens/components/AddFoodDialog/index.tsx:183
 msgid "Fats (g)"
 msgstr "Fats (g)"
 
@@ -171,7 +171,7 @@ msgid "Meals successfully updated"
 msgstr "Meals successfully updated"
 
 #: src/screens/FoodLibrary/index.tsx:114
-#: src/screens/components/AddFoodDialog/index.tsx:119
+#: src/screens/components/AddFoodDialog/index.tsx:118
 #: src/screens/components/AddMealDialog/index.tsx:174
 msgid "Name"
 msgstr "Name"
@@ -197,7 +197,7 @@ msgstr "Portions:"
 msgid "Proteins"
 msgstr "Proteins"
 
-#: src/screens/components/AddFoodDialog/index.tsx:166
+#: src/screens/components/AddFoodDialog/index.tsx:165
 msgid "Proteins (g)"
 msgstr "Proteins (g)"
 
@@ -230,8 +230,8 @@ msgstr "Select food"
 msgid "Select food or recipe"
 msgstr "Select food or recipe"
 
+#: src/screens/components/AddFoodDialog/index.tsx:136
 #: src/screens/components/AddFoodDialog/index.tsx:137
-#: src/screens/components/AddFoodDialog/index.tsx:138
 msgid "Select type"
 msgstr "Select type"
 
@@ -239,7 +239,7 @@ msgstr "Select type"
 msgid "Select week:"
 msgstr "Select week:"
 
-#: src/screens/components/AddFoodDialog/index.tsx:195
+#: src/screens/components/AddFoodDialog/index.tsx:194
 #: src/screens/components/AddMealDialog/index.tsx:242
 #: src/screens/components/CopyDayDialog/index.tsx:130
 #: src/screens/components/MealItemDialog/AddMealItemDialog.tsx:174
@@ -271,7 +271,7 @@ msgstr "To"
 msgid "Type"
 msgstr "Type"
 
-#: src/screens/components/AddFoodDialog/index.tsx:111
+#: src/screens/components/AddFoodDialog/index.tsx:110
 msgid "Update food"
 msgstr "Update food"
 

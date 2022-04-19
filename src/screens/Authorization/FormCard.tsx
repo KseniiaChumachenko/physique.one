@@ -74,7 +74,7 @@ export const FormCard = ({
                   {secondaryText}
                 </Typography>
               )}
-
+              
               <div className={classes.credentials}>{fieldsSection}</div>
               <div className={classes.buttonBlock}>{buttonsSection}</div>
             </CardContent>

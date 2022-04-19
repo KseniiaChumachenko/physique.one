@@ -34,7 +34,7 @@ export const useActiveUser = () => {
 
   const setActiveUser = (user: ActiveUser) => {
     parsedUser = user;
-    setUser(null); // TODO: ????
+  //  setUser(null); // TODO: ????
   };
 
   const resetUser = () => {
