@@ -84,6 +84,7 @@ export const LoginForm = () => {
               className={classes.textFields}
               variant={"outlined"}
               label={<Trans>E-mail</Trans>}
+              type={'email'}
               onChange={(e) => setEmail(e.target.value)}
             />
             <TextField

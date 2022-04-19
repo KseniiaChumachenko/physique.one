@@ -17,6 +17,7 @@ const fetchQuery: FetchFunction = (
   return fetch(GQL_HTTPS_ENDPOINT, {
     method: "POST",
     headers: {
+      accept: 'application/json',
       // Add authentication and other headers here
       "content-type": "application/json",
       "x-hasura-admin-secret": import.meta.env.VITE_HASURA_ADMIN_SECRET,
