@@ -1,6 +1,5 @@
 import React from "react";
 import clsx from "clsx";
-import { observer } from "mobx-react-lite";
 import {
   AppBar as MAppBar,
   Box,
@@ -49,10 +48,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const AppBar = observer(() => {
-  const {
-    screenStore: { action, navigationOpen, handleToggleNavigation },
-  } = useStore();
+export const AppBar = () => {
+  const { action, navigationOpen, handleToggleNavigation } = useStore();
   const classes = useStyles();
   const { pathname } = useLocation();
 
@@ -99,4 +96,4 @@ export const AppBar = observer(() => {
       </Toolbar>
     </MAppBar>
   );
-});
+};

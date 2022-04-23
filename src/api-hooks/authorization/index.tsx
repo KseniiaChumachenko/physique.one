@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import {
   PreloadedQuery,
   useMutation,
@@ -6,43 +6,51 @@ import {
   usePreloadedQuery,
   useQueryLoader,
 } from "react-relay";
-import { LogInQuery } from "./__generated__/LogInQuery.graphql";
+import { v4 as uuid } from "uuid";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
+import { useLazyUser } from "src/api-hooks/user";
+import {
+  LogInQuery,
+  LogInQuery$data,
+} from "./__generated__/LogInQuery.graphql";
 import { GetForgottenPasswordByEmailQuery } from "./__generated__/GetForgottenPasswordByEmailQuery.graphql";
 import { RegisterMutation } from "./__generated__/RegisterMutation.graphql";
 import { LogInQuery as LogInQueryDocument } from "./LogInQuery";
 import { RegisterMutation as RegisterMutationDocument } from "./RegisterMutation";
 import { GetForgottenPasswordByEmailQuery as GetForgottenPasswordByEmailQueryDocument } from "./GetForgottenPasswordByEmailQuery";
-import { useSetUserToRelayStore } from "./useSetUserToRelayStore";
+import { useChangeActiveUserState } from "./useChangeActiveUserState";
 
-export interface ActiveUser {
-  id: string;
-  email: string;
-  fb_id?: string | null;
-  fb_picture_url?: string | null;
-  first_name?: string | null;
-  last_name?: string | null;
-  full_name?: string | null;
-  user_name?: string | null;
-}
+const randId = uuid();
+
+export type UserNode = LogInQuery$data["users_connection"]["edges"][0]["node"];
 
 export const useActiveUser = () => {
-  const [user, setUser] = useState<ActiveUser | null>(null);
   const savedUser = localStorage.getItem("user");
-  let parsedUser = savedUser && JSON.parse(savedUser);
+  let user: UserNode | null = savedUser && JSON.parse(savedUser);
+  const data = useLazyUser({ id: base64ToUuid(user?.id || randId) });
 
-  useSetUserToRelayStore(parsedUser, user, setUser);
+  user = data?.users_connection?.edges[0]?.node as UserNode;
+  const { commitLogout, commitLogin } = useChangeActiveUserState(user as any);
 
-  const setActiveUser = (user: ActiveUser) => {
-    parsedUser = user;
-  //  setUser(null); // TODO: ????
+  useEffect(() => {
+    if (user?.id) {
+      commitLogin();
+    }
+  }, [user]);
+
+  const setActiveUser = (newUser: UserNode) => {
+    user = newUser;
   };
 
   const resetUser = () => {
-    parsedUser = null;
-    setUser(null);
+    commitLogout();
+    user = null;
   };
 
-  return { user, mutations: { setActiveUser, resetUser } };
+  return {
+    user: user ? { ...user, id: base64ToUuid(user.id) } : null,
+    mutations: { setActiveUser, resetUser },
+  };
 };
 
 export interface LoginPreloadedQuery {
@@ -57,7 +65,17 @@ export const useLogin = () => {
   return { queryReference, loadQuery };
 };
 export const useLoginPreloaded = ({ loginQR }: LoginPreloadedQuery) => {
-  return usePreloadedQuery<LogInQuery>(LogInQueryDocument, loginQR);
+  const {
+    mutations: { setActiveUser },
+  } = useActiveUser();
+  const data = usePreloadedQuery<LogInQuery>(LogInQueryDocument, loginQR);
+  const user = data.users_connection.edges[0].node;
+  const { commitLogin } = useChangeActiveUserState(user);
+
+  commitLogin();
+  setActiveUser(user);
+
+  return data;
 };
 
 export interface GetForgottenPasswordPreloadedQuery {

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e5d84d54a7fd9294b67ae35659ffab7b>>
+ * @generated SignedSource<<c84980fd70d542bd3bbe3449a3dfea27>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -253,6 +253,7 @@ export type LogInQuery$data = {
         readonly full_name: string | null;
         readonly fb_id: string | null;
         readonly fb_picture_url: string | null;
+        readonly password: string;
       };
     }>;
   };
@@ -356,6 +357,13 @@ v1 = [
                 "kind": "ScalarField",
                 "name": "fb_picture_url",
                 "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "password",
+                "storageKey": null
               }
             ],
             "storageKey": null
@@ -385,16 +393,16 @@ return {
     "selections": (v1/*: any*/)
   },
   "params": {
-    "cacheID": "eb9a24f64ed01f3b146e54278e1e88c0",
+    "cacheID": "8c7c4039f611452fe039c1eabef641f0",
     "id": null,
     "metadata": {},
     "name": "LogInQuery",
     "operationKind": "query",
-    "text": "query LogInQuery(\n  $where: users_bool_exp!\n) {\n  users_connection(where: $where) {\n    edges {\n      node {\n        id\n        email\n        user_name\n        first_name\n        last_name\n        full_name\n        fb_id\n        fb_picture_url\n      }\n    }\n  }\n}\n"
+    "text": "query LogInQuery(\n  $where: users_bool_exp!\n) {\n  users_connection(where: $where) {\n    edges {\n      node {\n        id\n        email\n        user_name\n        first_name\n        last_name\n        full_name\n        fb_id\n        fb_picture_url\n        password\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "83f7259afad1b3b86905e73ee9bbbef2";
+(node as any).hash = "e616d762bb8daced10233145c1872a0b";
 
 export default node;
