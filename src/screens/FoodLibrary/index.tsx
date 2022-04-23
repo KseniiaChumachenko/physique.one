@@ -1,6 +1,5 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { observer } from "mobx-react-lite";
-import { Trans } from "@lingui/macro"
+import { Trans } from "@lingui/macro";
 import {
   LinearProgress,
   Paper,
@@ -52,147 +51,143 @@ export interface FetchedFoods {
   } | null;
 }
 
-const FoodLibraryContent = observer(
-  ({
-    foodQR,
-    foodBrandQR,
-    foodTypeQR,
-  }: FoodPreloadedHookProps &
-    FoodBrandPreloadedHookProps &
-    FoodTypePreloadedHookProps) => {
-    const { data, mutations: foodMutations } = useFoodPreloadedQuery(foodQR);
-    const { user } = useActiveUser();
-    const {
-      screenStore: { setAction },
-    } = useStore();
-    const [openAddDialog, setOpenAddDialog] = useState(false);
-    const [editDialogProps, setEditDialogProps] = useState<
-      FetchedFoods | undefined
-    >();
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState<Error | undefined>();
+const FoodLibraryContent = ({
+  foodQR,
+  foodBrandQR,
+  foodTypeQR,
+}: FoodPreloadedHookProps &
+  FoodBrandPreloadedHookProps &
+  FoodTypePreloadedHookProps) => {
+  const { data, mutations: foodMutations } = useFoodPreloadedQuery(foodQR);
+  const { user } = useActiveUser();
+  const { setAction } = useStore();
+  const [openAddDialog, setOpenAddDialog] = useState(false);
+  const [editDialogProps, setEditDialogProps] = useState<
+    FetchedFoods | undefined
+  >();
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState<Error | undefined>();
 
-    useEffect(() => {
-      setAction({
-        label: "+ Add new item",
-        onClick: () => setOpenAddDialog(true),
-      });
-      return () => {
-        setAction(null);
-      };
-    }, []);
-
-    const handleAddFood = (variables: AddFoodBrandMutation$variables) => {
-      foodMutations.add({
-        variables,
-        onCompleted: () => setSuccess(true),
-        onError: (error1) => setError(error1),
-      });
+  useEffect(() => {
+    setAction({
+      label: "+ Add new item",
+      onClick: () => setOpenAddDialog(true),
+    });
+    return () => {
+      setAction(null);
     };
+  }, []);
 
-    const handleUpdateFood = (variables: UpdateFoodMutation$variables) =>
-      foodMutations.update({
-        variables,
-        onCompleted: () => {
-          setEditDialogProps(undefined);
-          setSuccess(true);
-        },
-        onError: (error1) => setError(error1),
-      });
+  const handleAddFood = (variables: AddFoodBrandMutation$variables) => {
+    foodMutations.add({
+      variables,
+      onCompleted: () => setSuccess(true),
+      onError: (error1) => setError(error1),
+    });
+  };
 
-    const handleDeleteFood = (variables: DeleteFoodMutation$variables) => () =>
-      foodMutations.destroy({
-        variables,
-        onCompleted: () => setSuccess(true),
-        onError: (error1) => setError(error1),
-      });
+  const handleUpdateFood = (variables: UpdateFoodMutation$variables) =>
+    foodMutations.update({
+      variables,
+      onCompleted: () => {
+        setEditDialogProps(undefined);
+        setSuccess(true);
+      },
+      onError: (error1) => setError(error1),
+    });
 
-    return (
-      <TableContainer component={Paper}>
-        <Table size={"small"}>
-          <TableHead>
-            <TableCell children={<Trans>Name</Trans>} />
-            <TableCell children={<Trans>Brand</Trans>} />
-            <TableCell children={<Trans>Type</Trans>} />
-            <TableCell children={<Trans>Energy (kcal|kJ)</Trans>} />
-            <TableCell children={<Trans>Proteins</Trans>} />
-            <TableCell children={<Trans>Carbohydrates</Trans>} />
-            <TableCell children={<Trans>Fats</Trans>} />
-            <TableCell
-              children={
-                <Trans>
-                  <b>Actions</b>
-                </Trans>
-              }
-            />
-          </TableHead>
-          <TableBody>
-            {data.food_connection.edges.map(
-              ({ node: row }, key) =>
-                row && (
-                  <TableRow key={key}>
-                    <TableCell children={row.name} />
-                    <TableCell children={row.food_brand?.name} />
-                    <TableCell children={row.type} />
-                    <TableCell
-                      children={`${row.energy_cal} | ${row.energy_kj}`}
-                    />
-                    <TableCell children={row.proteins} />
-                    <TableCell children={row.carbohydrates} />
-                    <TableCell children={row.fats} />
-                    <TableCell>
-                      {row.u_id === user?.id && ( //TODO: https://github.com/KseniiaChumachenko/physique.one/issues/31 proper permissions
-                        <EditDeleteButtonGroup
-                          key={key}
-                          onEditClick={() => setEditDialogProps(row as any)}
-                          onDeleteClick={handleDeleteFood({
-                            id: base64ToUuid(row?.id),
-                          })}
-                        />
-                      )}
-                    </TableCell>
-                  </TableRow>
-                )
-            )}
-          </TableBody>
-        </Table>
-        {!!editDialogProps && (
-          <AddFoodDialog
-            foodTypeQR={foodTypeQR}
-            foodBrandQR={foodBrandQR}
-            open={!!editDialogProps}
-            setOpen={setEditDialogProps}
-            onUpdate={handleUpdateFood}
-            updateProps={editDialogProps}
-            u_id={user?.id || ""}
+  const handleDeleteFood = (variables: DeleteFoodMutation$variables) => () =>
+    foodMutations.destroy({
+      variables,
+      onCompleted: () => setSuccess(true),
+      onError: (error1) => setError(error1),
+    });
+
+  return (
+    <TableContainer component={Paper}>
+      <Table size={"small"}>
+        <TableHead>
+          <TableCell children={<Trans>Name</Trans>} />
+          <TableCell children={<Trans>Brand</Trans>} />
+          <TableCell children={<Trans>Type</Trans>} />
+          <TableCell children={<Trans>Energy (kcal|kJ)</Trans>} />
+          <TableCell children={<Trans>Proteins</Trans>} />
+          <TableCell children={<Trans>Carbohydrates</Trans>} />
+          <TableCell children={<Trans>Fats</Trans>} />
+          <TableCell
+            children={
+              <Trans>
+                <b>Actions</b>
+              </Trans>
+            }
           />
-        )}
-        {openAddDialog && (
-          <AddFoodDialog
-            foodTypeQR={foodTypeQR}
-            foodBrandQR={foodBrandQR}
-            open={openAddDialog}
-            setOpen={setOpenAddDialog}
-            onAdd={handleAddFood}
-            u_id={user?.id || ""}
-          />
-        )}
-        <ToastMessage
-          severity={"error"}
-          children={<>{error}</>}
-          open={!!error}
-          controledClose={() => setError(undefined)}
+        </TableHead>
+        <TableBody>
+          {data.food_connection.edges.map(
+            ({ node: row }, key) =>
+              row && (
+                <TableRow key={key}>
+                  <TableCell children={row.name} />
+                  <TableCell children={row.food_brand?.name} />
+                  <TableCell children={row.type} />
+                  <TableCell
+                    children={`${row.energy_cal} | ${row.energy_kj}`}
+                  />
+                  <TableCell children={row.proteins} />
+                  <TableCell children={row.carbohydrates} />
+                  <TableCell children={row.fats} />
+                  <TableCell>
+                    {row.u_id === user?.id && ( //TODO: https://github.com/KseniiaChumachenko/physique.one/issues/31 proper permissions
+                      <EditDeleteButtonGroup
+                        key={key}
+                        onEditClick={() => setEditDialogProps(row as any)}
+                        onDeleteClick={handleDeleteFood({
+                          id: base64ToUuid(row?.id),
+                        })}
+                      />
+                    )}
+                  </TableCell>
+                </TableRow>
+              )
+          )}
+        </TableBody>
+      </Table>
+      {!!editDialogProps && (
+        <AddFoodDialog
+          foodTypeQR={foodTypeQR}
+          foodBrandQR={foodBrandQR}
+          open={!!editDialogProps}
+          setOpen={setEditDialogProps}
+          onUpdate={handleUpdateFood}
+          updateProps={editDialogProps}
+          u_id={user?.id || ""}
         />
-        <ToastMessage
-          severity={"success"}
-          children={<Trans>Library updated</Trans>}
-          open={success}
-          controledClose={() => setSuccess(false)}
+      )}
+      {openAddDialog && (
+        <AddFoodDialog
+          foodTypeQR={foodTypeQR}
+          foodBrandQR={foodBrandQR}
+          open={openAddDialog}
+          setOpen={setOpenAddDialog}
+          onAdd={handleAddFood}
+          u_id={user?.id || ""}
         />
-      </TableContainer>
-    );
-  }
-);
+      )}
+      <ToastMessage
+        severity={"error"}
+        children={<>{error}</>}
+        open={!!error}
+        controledClose={() => setError(undefined)}
+      />
+      <ToastMessage
+        severity={"success"}
+        children={<Trans>Library updated</Trans>}
+        open={success}
+        controledClose={() => setSuccess(false)}
+      />
+    </TableContainer>
+  );
+};
 
 export const FoodLibrary = () => {
   const { queryReference: foodQR } = useFood({});

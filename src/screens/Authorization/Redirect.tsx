@@ -1,19 +1,19 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {
-  LoginPreloadedQuery, useActiveUser,
+  LoginPreloadedQuery,
   useLoginPreloaded,
-} from "../../api-hooks/authorization";
+} from "src/api-hooks/authorization";
 
 export const Redirect = ({ loginQR }: LoginPreloadedQuery) => {
-
+  const history = useHistory();
   const data = useLoginPreloaded({ loginQR });
 
-  const { mutations: {setActiveUser}} = useActiveUser()
-
   useEffect(() => {
-    setActiveUser(data.users_connection.edges[0].node as any) // TODO kseniia.chumachenko@gmail.com
-  }, [data])
+    if (data.users_connection.edges[0].node.id) {
+      history.push("/");
+    }
+  }, [data]);
 
   return <div />;
 };

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import moment from "moment";
-import { Trans } from "@lingui/macro"
+import { Trans } from "@lingui/macro";
 import { makeStyles } from "@material-ui/core/styles";
 import { Pagination } from "@material-ui/lab";
 import {
@@ -15,7 +15,6 @@ import { MealsListing } from "./components/MealsListing";
 const NUMBER_OF_WEEKS_IN_YEAR = 52;
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
   paginationContainer: {
     display: "flex",
     flexWrap: "wrap",
@@ -34,13 +33,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Meals = () => {
+  const history = useHistory();
   const classes = useStyles();
   const { weekNumber, year } = useParams<{
     weekNumber: string;
     year: string;
   }>();
   const [currentYear, setCurrentYear] = useState(year || moment().year());
-  const history = useHistory();
 
   if (!weekNumber || !year) {
     history.push(
@@ -71,7 +70,7 @@ export const Meals = () => {
   };
 
   return (
-    <div className={classes.root}>
+    <div>
       <div className={classes.paginationContainer}>
         <Typography variant={"subtitle1"}>
           <Trans>Select week: </Trans>

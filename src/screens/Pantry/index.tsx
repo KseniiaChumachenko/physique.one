@@ -1,9 +1,8 @@
 import React from "react";
-import { observer } from "mobx-react-lite";
 import { GridListing } from "../../components/GridListing";
 
 // One big TODO
-export const Pantry = observer(() => {
+export const Pantry = () => {
   // const {
   //   pantries: { items, loading },
   // } = useStore();
@@ -18,4 +17,4 @@ export const Pantry = observer(() => {
       onAddCardClick={() => {}}
     />
   );
-});
+};

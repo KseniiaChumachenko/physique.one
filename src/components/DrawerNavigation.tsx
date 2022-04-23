@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { observer } from "mobx-react-lite";
 import clsx from "clsx";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import {
@@ -20,7 +19,7 @@ import {
   ChevronRightRounded,
   DirectionsRunRounded,
 } from "@material-ui/icons";
-import { Trans } from "@lingui/macro"
+import { Trans } from "@lingui/macro";
 import { useHistory, useLocation } from "react-router-dom";
 import { useActiveUser } from "src/api-hooks/authorization";
 import { useStore } from "../store";
@@ -69,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const DrawerNavigation = observer(() => {
+export const DrawerNavigation = () => {
   const classes = useStyles();
   const history = useHistory();
   const { pathname } = useLocation();
@@ -79,11 +78,9 @@ export const DrawerNavigation = observer(() => {
   } = useActiveUser();
 
   const {
-    screenStore: {
-      navigationOpen,
-      handleToggleNavigation,
-      handleCloseNavigation,
-    },
+    navigationOpen,
+    handleToggleNavigation,
+    handleCloseNavigation,
   } = useStore();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -200,4 +197,4 @@ export const DrawerNavigation = observer(() => {
       </List>
     </Drawer>
   );
-});
+};
