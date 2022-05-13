@@ -71,7 +71,6 @@ export const AddFoodDialog = ({
 
   const handleClose = (event: any) => {
     setOpen(false);
-    event.stopPropagation();
   };
 
   const handleSubmit = () => {
