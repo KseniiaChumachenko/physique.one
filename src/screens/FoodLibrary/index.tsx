@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { Trans } from "@lingui/macro";
+import { t, Trans } from "@lingui/macro";
 import {
   LinearProgress,
   Paper,
@@ -60,7 +60,7 @@ const FoodLibraryContent = ({
   FoodTypePreloadedHookProps) => {
   const { data, mutations: foodMutations } = useFoodPreloadedQuery(foodQR);
   const { user } = useActiveUser();
-  const { setAction } = useStore();
+  const { setAction, handlePageName } = useStore();
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [editDialogProps, setEditDialogProps] = useState<
     FetchedFoods | undefined
@@ -69,6 +69,7 @@ const FoodLibraryContent = ({
   const [error, setError] = useState<Error | undefined>();
 
   useEffect(() => {
+    handlePageName(t`FoodLibrary`);
     setAction({
       label: "+ Add new item",
       onClick: () => setOpenAddDialog(true),

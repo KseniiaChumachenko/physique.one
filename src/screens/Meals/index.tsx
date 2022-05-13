@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import moment from "moment";
-import { Trans } from "@lingui/macro";
+import { t, Trans } from "@lingui/macro";
 import { makeStyles } from "@material-ui/core/styles";
 import { Pagination } from "@material-ui/lab";
 import {
@@ -11,6 +11,7 @@ import {
   FormControl,
 } from "@material-ui/core";
 import { MealsListing } from "./components/MealsListing";
+import { useStore } from "../../store";
 
 const NUMBER_OF_WEEKS_IN_YEAR = 52;
 
@@ -33,23 +34,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const Meals = () => {
-  const history = useHistory();
+  const history = useNavigate();
   const classes = useStyles();
-  const { weekNumber, year } = useParams<{
-    weekNumber: string;
-    year: string;
-  }>();
-  const [currentYear, setCurrentYear] = useState(year || moment().year());
+  const { handlePageName } = useStore();
+  const [searchParams] = useSearchParams();
+  const week = searchParams.get("week");
+  const year = searchParams.get("year");
 
-  if (!weekNumber || !year) {
-    history.push(
-      `/ration/${weekNumber || moment().week()}/${year || moment().year()}`
-    );
-  }
+  useEffect(() => {
+    if (!week || !year) {
+      history(`/auth/ration?week=${moment().week()}&year=${moment().year()}`);
+    }
+  }, [year, week]);
 
   const days = [0, 1, 2, 3, 4, 5, 6].map((d) =>
-    moment(`${currentYear}-${weekNumber}-` + d, "YYYY-w-e").format()
-  );
+    moment(`${year}-${week}-` + d, "YYYY-w-e").format()
+  ); // parse and get URLSearchParams from search
 
   const yearOptions = [
     moment().year() - 2,
@@ -62,12 +62,13 @@ export const Meals = () => {
   const handlePaginationClick = (
     event: React.ChangeEvent<unknown>,
     page: number
-  ) => history.push(`/ration/${page}/${currentYear}`);
+  ) => history(`/auth/ration?week=${page}&year=${year}`);
 
   const handleChangeYear = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setCurrentYear(event.target.value as number);
-    history.push(`/ration/${weekNumber}/${event.target.value}`);
+    history(`/auth/ration?week=${week}&year=${event.target.value}`);
   };
+
+  handlePageName(t`Meals`);
 
   return (
     <div>
@@ -77,7 +78,7 @@ export const Meals = () => {
         </Typography>
         <Pagination
           count={NUMBER_OF_WEEKS_IN_YEAR}
-          page={Number(weekNumber)}
+          page={Number(week)}
           onChange={handlePaginationClick}
           variant="outlined"
           shape={"rounded"}
@@ -85,7 +86,7 @@ export const Meals = () => {
         />
         <FormControl className={classes.yearSelector}>
           <NativeSelect
-            value={currentYear}
+            value={year}
             onChange={handleChangeYear}
             input={<InputBase />}
           >

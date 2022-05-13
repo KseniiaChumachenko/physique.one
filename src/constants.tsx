@@ -1,6 +1,5 @@
-import { Trans } from "@lingui/macro"
+import { Trans } from "@lingui/macro";
 import React from "react";
-import moment from "moment";
 import {
   FastfoodRounded,
   LocalGroceryStoreRounded,
@@ -10,17 +9,17 @@ import {
 export const ROUTES = [
   {
     title: <Trans>Meals</Trans>,
-    pathname: `/ration/${moment().week()}/${moment().year()}`,
+    pathname: `/auth/ration`,
     icon: <FastfoodRounded />,
   },
   {
     title: <Trans>Recipes</Trans>,
-    pathname: "/recipes",
+    pathname: "/auth/recipes",
     icon: <MenuBookRounded />,
   },
   {
     title: <Trans>Food Library</Trans>,
-    pathname: "/foodLibrary",
+    pathname: "/auth/foodLibrary",
     icon: <LocalGroceryStoreRounded />,
   },
 ];

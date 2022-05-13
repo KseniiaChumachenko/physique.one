@@ -20,7 +20,7 @@ import {
   DirectionsRunRounded,
 } from "@material-ui/icons";
 import { Trans } from "@lingui/macro";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useActiveUser } from "src/api-hooks/authorization";
 import { useStore } from "../store";
 import { ROUTES } from "../constants";
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
 
 export const DrawerNavigation = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const history = useNavigate();
   const { pathname } = useLocation();
   const {
     user,
@@ -87,7 +87,7 @@ export const DrawerNavigation = () => {
 
   const handleChangeRoute = useCallback(
     (newRoute: string) => () => {
-      history.push(newRoute);
+      history(newRoute);
       handleCloseNavigation();
     },
     []
@@ -101,12 +101,12 @@ export const DrawerNavigation = () => {
   };
   const handleRedirectToProfile = () => {
     handleMenuClose();
-    handleChangeRoute("/profile")();
+    handleChangeRoute("/auth/profile")();
   };
   const handleLogOut = () => {
     resetUser();
     handleMenuClose();
-    handleChangeRoute("/auth");
+    handleChangeRoute("/login");
   };
 
   const renderMenu = (
@@ -161,7 +161,7 @@ export const DrawerNavigation = () => {
             key={i}
             button
             onClick={handleChangeRoute(r.pathname)}
-            selected={pathname.startsWith(r.pathname.slice(0, 3))}
+            selected={pathname === r.pathname}
           >
             <ListItemIcon children={r.icon} />
             <ListItemText primary={r.title} />

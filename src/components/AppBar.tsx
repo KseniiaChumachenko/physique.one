@@ -11,8 +11,6 @@ import {
 import { MenuOutlined } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { useStore } from "src/store";
-import { useLocation } from "react-router-dom";
-import { ROUTES } from "../constants";
 import { DRAWER_WIDTH_OPEN, DRAWER_WIDTH_CLOSED } from "./DrawerNavigation";
 
 const useStyles = makeStyles((theme) => ({
@@ -49,13 +47,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const AppBar = () => {
-  const { action, navigationOpen, handleToggleNavigation } = useStore();
+  const {
+    action,
+    navigationOpen,
+    handleToggleNavigation,
+    pageName,
+  } = useStore();
   const classes = useStyles();
-  const { pathname } = useLocation();
-
-  const routeInfo = ROUTES.find((r) =>
-    r.pathname.startsWith(pathname.slice(0, 3))
-  );
 
   return (
     <MAppBar
@@ -76,10 +74,7 @@ export const AppBar = () => {
           >
             <MenuOutlined />
           </IconButton>
-
-          {!!routeInfo && (
-            <Typography variant={"h6"}>{routeInfo.title}</Typography>
-          )}
+          <Typography variant={"h6"}>{pageName}</Typography>
         </Box>
         {/*
             Search and filters in future
