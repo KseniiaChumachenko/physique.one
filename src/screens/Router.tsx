@@ -64,4 +64,3 @@ export const Router = () => {
     </BrowserRouter>
   );
 };
-// kseniia.chumachenko@gmail.com

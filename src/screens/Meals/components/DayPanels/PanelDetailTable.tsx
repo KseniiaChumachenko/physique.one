@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
-import { Trans } from "@lingui/macro"
+import { Trans } from "@lingui/macro";
 import { Meal_Item } from "src/types";
 import {
   DeleteMealItemMutation$variables,
@@ -82,39 +82,43 @@ export const PanelDetailTable = ({
           <TableBody>
             {withMealItems &&
               meal_items?.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row?.id}>
                   <TableCell
                     component="th"
                     scope="row"
-                    children={row.foodDesc?.name || row.recipe?.name}
+                    children={row?.foodDesc?.name || row?.recipe?.name}
                   />
                   <TableCell
                     component="th"
                     scope="row"
                     children={
                       <React.Fragment>
-                        {row.energy_cal.toFixed(2)}&nbsp;|&nbsp;
-                        {row.energy_kj.toFixed(2)}
+                        {row?.energy_cal.toFixed(2)}&nbsp;|&nbsp;
+                        {row?.energy_kj.toFixed(2)}
                       </React.Fragment>
                     }
                   />
-                  <TableCell component="th" scope="row" children={row.weight} />
                   <TableCell
                     component="th"
                     scope="row"
-                    children={row.proteins.toFixed(2)}
+                    children={row?.weight}
+                  />
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    children={row?.proteins.toFixed(2)}
                   />
 
                   <TableCell
                     component="th"
                     scope="row"
-                    children={row.carbohydrates.toFixed(2)}
+                    children={row?.carbohydrates.toFixed(2)}
                   />
 
                   <TableCell
                     component="th"
                     scope="row"
-                    children={row.fats.toFixed(2)}
+                    children={row?.fats.toFixed(2)}
                   />
 
                   <TableCell
@@ -132,7 +136,7 @@ export const PanelDetailTable = ({
 
                   {/*  Toasts  */}
                   <Snackbar
-                    key={row.id + "succes"}
+                    key={row?.id + "succes"}
                     open={success}
                     autoHideDuration={6000}
                     onClose={() => setSuccess(false)}
@@ -145,7 +149,7 @@ export const PanelDetailTable = ({
                     </Alert>
                   </Snackbar>
                   <Snackbar
-                    key={row.id + "error"}
+                    key={row?.id + "error"}
                     open={!!error}
                     autoHideDuration={6000}
                     onClose={() => setError(false as any)}
