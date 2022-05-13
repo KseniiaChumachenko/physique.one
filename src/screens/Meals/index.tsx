@@ -10,8 +10,8 @@ import {
   InputBase,
   FormControl,
 } from "@material-ui/core";
+import { useStore } from "src/store";
 import { MealsListing } from "./components/MealsListing";
-import { useStore } from "../../store";
 
 const NUMBER_OF_WEEKS_IN_YEAR = 52;
 

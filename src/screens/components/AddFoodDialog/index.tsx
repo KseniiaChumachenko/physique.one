@@ -11,7 +11,7 @@ import {
   Select,
   TextField,
 } from "@material-ui/core";
-import { Trans, t } from "@lingui/macro"
+import { Trans, t } from "@lingui/macro";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   AddFoodMutation$variables,
@@ -26,11 +26,8 @@ import {
 } from "src/api-hooks/foodType";
 import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { FetchedFoods } from "../../FoodLibrary";
-import { State } from "./useStore";
 
-type ExtendProps = State &
-  FoodBrandPreloadedHookProps &
-  FoodTypePreloadedHookProps;
+type ExtendProps = FoodBrandPreloadedHookProps & FoodTypePreloadedHookProps;
 
 interface Props extends ExtendProps {
   open: boolean;
@@ -40,6 +37,8 @@ interface Props extends ExtendProps {
   onUpdate?: (v: UpdateFoodMutation$variables) => void;
 
   updateProps?: FetchedFoods;
+
+  u_id: string;
 }
 
 const useStyles = makeStyles((theme) => ({
