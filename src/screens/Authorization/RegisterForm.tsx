@@ -1,10 +1,10 @@
 import { v4 as uuid } from "uuid";
 import React, { ChangeEvent, useState } from "react";
 import moment from "moment";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { send } from "emailjs-com";
 import { Button, TextField } from "@material-ui/core";
-import { Trans } from "@lingui/macro"
+import { Trans } from "@lingui/macro";
 import {
   ActiveUser,
   useActiveUser,
@@ -19,7 +19,7 @@ import {
 import { useStyles } from "./styled";
 
 export const RegisterForm = () => {
-  const history = useHistory();
+  const history = useNavigate();
   const classes = useStyles();
   const id = uuid();
   const {
@@ -57,7 +57,7 @@ export const RegisterForm = () => {
           },
           EMAILJS_USER_ID
         );
-        history.push(`/ration/${moment().week()}/${moment().year()}`);
+        history(`/auth/ration?week=${moment().week()}&year=${moment().year()}`);
       },
       onError: (error1) => setError(error1),
     });

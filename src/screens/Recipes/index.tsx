@@ -10,6 +10,7 @@ import {
 import { FoodPreloadedHookProps, useFood } from "src/api-hooks/food";
 import { useStore } from "../../store";
 import { RecipeCard } from "./RecipeCard";
+import { t } from "@lingui/macro";
 
 export const RecipesContent = ({
   recipeQR,
@@ -21,7 +22,7 @@ export const RecipesContent = ({
   } = useRecipePreloaded(recipeQR);
   const { user } = useActiveUser();
 
-  const { setAction } = useStore();
+  const { setAction, handlePageName } = useStore();
 
   const handleAddRecipe = () =>
     add({
@@ -39,6 +40,7 @@ export const RecipesContent = ({
     });
 
   useEffect(() => {
+    handlePageName(t`Recipes`);
     setAction({
       label: "+ Add new recipe",
       onClick: handleAddRecipe,
