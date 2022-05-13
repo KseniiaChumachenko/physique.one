@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react-lite";
 import { Autocomplete, AutocompleteProps } from "@material-ui/lab";
 import { TextField } from "@material-ui/core";
-import { Trans } from "@lingui/macro"
+import { Trans } from "@lingui/macro";
 import {
   food_insert_input,
   FoodPreloadedHookProps,
@@ -54,8 +54,8 @@ export const MealAutocomplete = observer(
       ? [
           ...foods.map(({ node }) => ({ ...node })),
           ...recipes.map(({ node: r }) => ({
-            id: r.id,
-            recipe_id: r.id,
+            id: r?.id,
+            recipe_id: r?.id,
             name: r.name,
             type: "Recipe",
             carbohydrates: aggregate(r.recipe_items as any, "carbohydrates"),
