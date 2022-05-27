@@ -3,6 +3,7 @@ module.exports = {
   language: "typescript",
   schema: "./src/graphql/schema.graphql",
   schemaExtensions: ["./src/graphql/"],
+  eagerEsModules: true,
   customScalars: {
     uuid: "string",
     int8: "string",

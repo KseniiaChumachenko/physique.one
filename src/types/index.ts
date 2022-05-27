@@ -23,3 +23,7 @@ export type Meal_Item = {
     readonly name: string | null;
   } | null;
 };
+
+export type Nullable<T> = {
+  [P in keyof T]: T[P] | null;
+};

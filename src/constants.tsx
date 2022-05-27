@@ -1,4 +1,4 @@
-import { Trans } from "@lingui/macro";
+import { t } from "@lingui/macro";
 import React from "react";
 import {
   FastfoodRounded,
@@ -8,17 +8,17 @@ import {
 
 export const ROUTES = [
   {
-    title: <Trans>Meals</Trans>,
+    title: t`Meals`,
     pathname: `/auth/ration`,
     icon: <FastfoodRounded />,
   },
   {
-    title: <Trans>Recipes</Trans>,
+    title: t`Recipes`,
     pathname: "/auth/recipes",
     icon: <MenuBookRounded />,
   },
   {
-    title: <Trans>Food Library</Trans>,
+    title: t`Food Library`,
     pathname: "/auth/foodLibrary",
     icon: <LocalGroceryStoreRounded />,
   },

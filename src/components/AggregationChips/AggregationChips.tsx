@@ -2,16 +2,17 @@ import React from "react";
 import { Avatar, Chip } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles((theme) => ({
   chip: {
     marginLeft: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   panelHeader: {
     flexGrow: 1,
   },
 }));
 
-interface Props {
+export interface Props {
   energy_cal: number;
   energy_kj: number;
   proteins: number;
@@ -45,7 +46,6 @@ export const AggregationChips = ({
         label={`${energy_cal?.toFixed(2)} kcal | ${energy_kj?.toFixed(2)} kJ`}
         variant={"outlined"}
         size={"small"}
-        color={"secondary"}
         className={classes.chip}
       />
       <Chip
@@ -55,7 +55,6 @@ export const AggregationChips = ({
         }%`}
         variant={"outlined"}
         size={"small"}
-        color={"primary"}
         className={classes.chip}
       />
       <Chip
@@ -65,7 +64,6 @@ export const AggregationChips = ({
         }%`}
         variant={"outlined"}
         size={"small"}
-        color={"primary"}
         className={classes.chip}
       />
       <Chip
@@ -73,7 +71,6 @@ export const AggregationChips = ({
         label={`${fats?.toFixed(2)} | ${macronutrientsInPersents().fats}%`}
         variant={"outlined"}
         size={"small"}
-        color={"primary"}
         className={classes.chip}
       />
       {weight && (
@@ -81,7 +78,6 @@ export const AggregationChips = ({
           label={`Total weight: ${weight} (g)`}
           variant={"outlined"}
           size={"small"}
-          color={"default"}
           className={classes.chip}
         />
       )}

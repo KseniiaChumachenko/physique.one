@@ -1,8 +1,10 @@
 import { graphql } from "react-relay";
 
-export const RecipeQuery = graphql`
-  query RecipeQuery {
-    recipe_connection(order_by: { increment: desc }) {
+export const RecipeFragment = graphql`
+  fragment RecipeFragment on query_root
+  @refetchable(queryName: "RecipeFragment") {
+    recipe_connection(first: $count, after: $cursor)
+      @connection(key: "Root__recipe_connection") {
       edges {
         node {
           id
@@ -24,18 +26,13 @@ export const RecipeQuery = graphql`
             energy_kj
             weight
           }
-          recipe_items_aggregate {
-            aggregate {
-              sum {
-                energy_cal
-                energy_kj
-                carbohydrates
-                proteins
-                fats
-              }
-            }
-          }
         }
+      }
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        endCursor
+        startCursor
       }
     }
   }

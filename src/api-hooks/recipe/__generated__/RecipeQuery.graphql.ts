@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3e9e9d0bffb01593bf77022b9f0cce2e>>
+ * @generated SignedSource<<e2ecda89e42e5880a814a42807933b37>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -33,6 +33,17 @@ export type RecipeQuery$data = {
           readonly energy_kj: number;
           readonly weight: number;
         }>;
+        readonly recipe_items_aggregate: {
+          readonly aggregate: {
+            readonly sum: {
+              readonly energy_cal: number | null;
+              readonly energy_kj: number | null;
+              readonly carbohydrates: number | null;
+              readonly proteins: number | null;
+              readonly fats: number | null;
+            } | null;
+          } | null;
+        };
       };
     }>;
   };
@@ -57,7 +68,42 @@ v1 = {
   "name": "name",
   "storageKey": null
 },
-v2 = [
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "proteins",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "fats",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "carbohydrates",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "energy_cal",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "energy_kj",
+  "storageKey": null
+},
+v7 = [
   {
     "alias": null,
     "args": [
@@ -142,46 +188,54 @@ v2 = [
                     ],
                     "storageKey": null
                   },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "proteins",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "fats",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "carbohydrates",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "energy_cal",
-                    "storageKey": null
-                  },
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "energy_kj",
-                    "storageKey": null
-                  },
+                  (v2/*: any*/),
+                  (v3/*: any*/),
+                  (v4/*: any*/),
+                  (v5/*: any*/),
+                  (v6/*: any*/),
                   {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
                     "name": "weight",
+                    "storageKey": null
+                  }
+                ],
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "recipe_item_aggregate",
+                "kind": "LinkedField",
+                "name": "recipe_items_aggregate",
+                "plural": false,
+                "selections": [
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "recipe_item_aggregate_fields",
+                    "kind": "LinkedField",
+                    "name": "aggregate",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "recipe_item_sum_fields",
+                        "kind": "LinkedField",
+                        "name": "sum",
+                        "plural": false,
+                        "selections": [
+                          (v5/*: any*/),
+                          (v6/*: any*/),
+                          (v4/*: any*/),
+                          (v2/*: any*/),
+                          (v3/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
                     "storageKey": null
                   }
                 ],
@@ -203,7 +257,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "RecipeQuery",
-    "selections": (v2/*: any*/),
+    "selections": (v7/*: any*/),
     "type": "query_root",
     "abstractKey": null
   },
@@ -212,19 +266,19 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "RecipeQuery",
-    "selections": (v2/*: any*/)
+    "selections": (v7/*: any*/)
   },
   "params": {
-    "cacheID": "bdbe5ffba87a60951d31ed4e8557b8df",
+    "cacheID": "0659c26e9c53a00cfc880f0c3b804f77",
     "id": null,
     "metadata": {},
     "name": "RecipeQuery",
     "operationKind": "query",
-    "text": "query RecipeQuery {\n  recipe_connection(order_by: {increment: desc}) {\n    edges {\n      node {\n        id\n        name\n        description\n        u_id\n        link\n        portions\n        recipe_items {\n          id\n          food {\n            id\n            name\n          }\n          proteins\n          fats\n          carbohydrates\n          energy_cal\n          energy_kj\n          weight\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query RecipeQuery {\n  recipe_connection(order_by: {increment: desc}) {\n    edges {\n      node {\n        id\n        name\n        description\n        u_id\n        link\n        portions\n        recipe_items {\n          id\n          food {\n            id\n            name\n          }\n          proteins\n          fats\n          carbohydrates\n          energy_cal\n          energy_kj\n          weight\n        }\n        recipe_items_aggregate {\n          aggregate {\n            sum {\n              energy_cal\n              energy_kj\n              carbohydrates\n              proteins\n              fats\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "e457c8e56e7bac19dc93ceae05d00c41";
+(node as any).hash = "697f045070b2ba287c95594765c8458e";
 
 export default node;
