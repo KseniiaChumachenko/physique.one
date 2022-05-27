@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useState } from "react";
-import { t, Trans } from "@lingui/macro";
+import { t } from "@lingui/macro";
 import {
   LinearProgress,
   Paper,
@@ -60,7 +60,7 @@ const FoodLibraryContent = ({
   FoodTypePreloadedHookProps) => {
   const { data, mutations: foodMutations } = useFoodPreloadedQuery(foodQR);
   const { user } = useActiveUser();
-  const { setAction, handlePageName } = useStore();
+  const { setAction } = useStore();
   const [openAddDialog, setOpenAddDialog] = useState(false);
   const [editDialogProps, setEditDialogProps] = useState<
     FetchedFoods | undefined
@@ -69,9 +69,8 @@ const FoodLibraryContent = ({
   const [error, setError] = useState<Error | undefined>();
 
   useEffect(() => {
-    handlePageName(t`FoodLibrary`);
     setAction({
-      label: "+ Add new item",
+      label: t`+ Add new item`,
       onClick: () => setOpenAddDialog(true),
     });
     return () => {
@@ -108,20 +107,14 @@ const FoodLibraryContent = ({
     <TableContainer component={Paper}>
       <Table size={"small"}>
         <TableHead>
-          <TableCell children={<Trans>Name</Trans>} />
-          <TableCell children={<Trans>Brand</Trans>} />
-          <TableCell children={<Trans>Type</Trans>} />
-          <TableCell children={<Trans>Energy (kcal|kJ)</Trans>} />
-          <TableCell children={<Trans>Proteins</Trans>} />
-          <TableCell children={<Trans>Carbohydrates</Trans>} />
-          <TableCell children={<Trans>Fats</Trans>} />
-          <TableCell
-            children={
-              <Trans>
-                <b>Actions</b>
-              </Trans>
-            }
-          />
+          <TableCell children={t`Name`} />
+          <TableCell children={t`Brand`} />
+          <TableCell children={t`Type`} />
+          <TableCell children={t`Energy (kcal|kJ)`} />
+          <TableCell children={t`Proteins`} />
+          <TableCell children={t`Carbohydrates`} />
+          <TableCell children={t`Fats`} />
+          <TableCell children={<b>{t`Actions`}</b>} />
         </TableHead>
         <TableBody>
           {data.food_connection.edges.map(
@@ -182,7 +175,7 @@ const FoodLibraryContent = ({
       />
       <ToastMessage
         severity={"success"}
-        children={<Trans>Library updated</Trans>}
+        children={<>{t`Library updated`}</>}
         open={success}
         controledClose={() => setSuccess(false)}
       />
@@ -194,6 +187,11 @@ export const FoodLibrary = () => {
   const { queryReference: foodQR } = useFood({});
   const { queryReference: foodBrandQR } = useFoodBrand({});
   const { queryReference: foodTypeQR } = useFoodType({});
+  const { handlePageName } = useStore();
+
+  useEffect(() => {
+    handlePageName(t`FoodLibrary`);
+  }, []);
 
   const references = foodQR && foodBrandQR && foodTypeQR;
 

@@ -1,16 +1,14 @@
-import React, { Suspense } from "react";
-import {
-  Backdrop,
-  Box,
-  CircularProgress,
-  CssBaseline,
-} from "@material-ui/core";
+import React from "react";
+import { Outlet } from "react-router-dom";
+import { CssBaseline } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { AppBar } from "src/components/AppBar";
 import { DrawerNavigation } from "src/components/DrawerNavigation";
-import { Outlet } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
   content: {
     marginTop: theme.spacing(8),
     flexGrow: 1,
@@ -20,30 +18,18 @@ const useStyles = makeStyles((theme) => ({
     }),
     backgroundColor: "#f5f5f5", // TODO: add to palette
   },
-  backdrop: {
-    zIndex: theme.zIndex.drawer - 1,
-    color: "#fff", // TODO: add to palette
-  },
 }));
 
 export const AppLayout = () => {
   const classes = useStyles();
   return (
-    <Box sx={{ display: "flex" }}>
+    <div className={classes.root}>
       <CssBaseline />
       <AppBar />
       <DrawerNavigation />
-      <Suspense
-        fallback={
-          <Backdrop className={classes.backdrop} open={true}>
-            <CircularProgress color="inherit" />
-          </Backdrop>
-        }
-      >
-        <main className={classes.content}>
-          <Outlet />
-        </main>
-      </Suspense>
-    </Box>
+      <main className={classes.content}>
+        <Outlet />
+      </main>
+    </div>
   );
 };

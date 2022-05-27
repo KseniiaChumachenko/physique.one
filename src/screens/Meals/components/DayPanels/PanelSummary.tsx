@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { DeleteMealMutation } from "src/api-hooks/mealsByDate";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
 import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
-import { AggregationChips } from "../../../../components/AggredationChips";
+import { AggregationChips } from "../../../../components/AggregationChips";
 import { PanelDetailActions } from "./PanelDetailActions";
 
 const useStyles = makeStyles((theme) => ({

@@ -13,14 +13,14 @@ import {
   FileCopyRounded,
 } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
-import { Trans } from "@lingui/macro"
+import { Trans } from "@lingui/macro";
 import { Alert } from "@material-ui/lab";
 import {
   AddMealMutation$variables,
   MealsByDatePreloadedHookProps,
   useMealsPreloadedQuery,
 } from "src/api-hooks/mealsByDate";
-import { AggregationChips } from "src/components/AggredationChips";
+import { AggregationChips } from "../../../../components/AggregationChips";
 import { AddMealDialog } from "src/screens/components/AddMealDialog";
 import { CopyDayDialog } from "src/screens/components/CopyDayDialog";
 

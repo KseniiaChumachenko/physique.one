@@ -11,7 +11,7 @@ import {
   Link,
 } from "@material-ui/core";
 import { LinkRounded } from "@material-ui/icons";
-import { Trans } from "@lingui/macro";
+import { t, Trans } from "@lingui/macro";
 import { useActiveUser } from "src/api-hooks/authorization";
 import {
   RecipePreloadedHookProps,
@@ -64,7 +64,7 @@ export const RecipeCardHeader = ({
   const isPermitted = user?.id === u_id;
   const [isEdit, setIsEdit] = useState<boolean | undefined>();
 
-  const [updatedName, setUpdatedName] = useState(name || "Enter recipe name");
+  const [updatedName, setUpdatedName] = useState(name);
   const [updatedDesc, setUpdatedDesc] = useState(description);
   const [updatedLink, setUpdatedLink] = useState(link);
   const [updatedPortioning, setUpdatedPortioning] = useState(portions || 0);
@@ -94,6 +94,7 @@ export const RecipeCardHeader = ({
             <Box display={"flex"} alignItems={"center"}>
               <TextField
                 defaultValue={updatedName}
+                placeholder={t`Enter recipe name`}
                 type={"text"}
                 onChange={(event: any) => setUpdatedName(event?.target?.value)}
                 className={classes.title}
