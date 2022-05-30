@@ -12,7 +12,6 @@ export const UsersQuery = graphql`
           user_name
           fb_id
           fb_picture_url
-          isActive
         }
       }
     }

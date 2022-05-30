@@ -1,8 +1,8 @@
 import React, { ComponentProps } from "react";
 import * as M from "@material-ui/core";
 import * as L from "@material-ui/lab";
-import { Trans } from "@lingui/macro"
-import { useStyles } from "./useStyles";
+import { Trans } from "@lingui/macro";
+import { useStyles } from "./styles";
 
 export interface EditModeCardProps {
   fields: {
