@@ -11,8 +11,11 @@ export const RecipeQuery = graphql`
           u_id
           link
           portions
+          isOwner
           recipe_items {
             id
+            u_id
+            isOwner
             food {
               id
               name

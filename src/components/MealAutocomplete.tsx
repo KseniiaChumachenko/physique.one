@@ -1,7 +1,7 @@
 import React from "react";
 import { Autocomplete, AutocompleteProps } from "@material-ui/lab";
-import { TextField } from "@material-ui/core";
-import { Trans } from "@lingui/macro";
+import { PropTypes, TextField } from "@material-ui/core";
+import { t } from "@lingui/macro";
 import {
   food_insert_input,
   FoodPreloadedHookProps,
@@ -24,17 +24,21 @@ type ExtendProps = RecipePreloadedHookProps &
   Partial<AutocompleteProps<any, any, any, any>>;
 
 interface MealAutocompleteProps extends ExtendProps {
+  withInputLabel?: boolean;
   withRecipes?: boolean;
   value: string;
-  setValue: (id: string) => void;
+  setValue: (id: string, type?: "recipe" | "food") => void;
+  fieldMargin: PropTypes.Margin;
 }
 
 export const MealAutocomplete = ({
   value,
   setValue,
+  withInputLabel = true,
   withRecipes = true,
   foodQR,
   recipeQR,
+  fieldMargin = "dense",
   ...restProps
 }: MealAutocompleteProps) => {
   const {
@@ -68,6 +72,8 @@ export const MealAutocomplete = ({
     : foods.map(({ node }) => ({ ...node }));
 
   const valueFromOptions = remappedOptions.find(({ id }) => id === value);
+  const label =
+    withInputLabel && (withRecipes ? t`Select food or recipe` : t`Select food`);
 
   return (
     <Autocomplete
@@ -76,21 +82,11 @@ export const MealAutocomplete = ({
       getOptionLabel={(option: MealAutocompleteListItem) => option?.name || ""}
       value={valueFromOptions}
       onChange={(event: any, newValue: MealAutocompleteListItem | null) => {
-        setValue(newValue?.id || "");
+        setValue(newValue?.id || "", newValue?.recipe_id ? "recipe" : "food");
         event.stopPropagation();
       }}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label={
-            withRecipes ? (
-              <Trans>Select food or recipe</Trans>
-            ) : (
-              <Trans>Select food</Trans>
-            )
-          }
-          margin="dense"
-        />
+        <TextField {...params} label={label} margin={fieldMargin} />
       )}
       {...restProps}
     />

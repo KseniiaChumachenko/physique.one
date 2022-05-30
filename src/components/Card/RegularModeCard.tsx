@@ -1,7 +1,7 @@
 import React, { ComponentProps } from "react";
 import * as M from "@material-ui/core";
 import { MoreVertRounded } from "@material-ui/icons";
-import { useStyles } from "./useStyles";
+import { useStyles } from "./styles";
 
 export interface CardData {
   value: string;

@@ -1,4 +1,5 @@
 import { useCallback, useEffect } from "react";
+import { commitLocalUpdate } from "relay-runtime";
 import {
   fetchQuery,
   PreloadedQuery,
@@ -6,7 +7,9 @@ import {
   UseMutationConfig,
   usePreloadedQuery,
   useQueryLoader,
+  useRelayEnvironment,
 } from "react-relay";
+import { useActiveUser } from "../authorization";
 import {
   RecipeQuery,
   RecipeQuery$variables,
@@ -52,6 +55,9 @@ export interface RecipePreloadedHookProps {
 export const useRecipePreloaded = (
   queryReference: PreloadedQuery<RecipeQuery, Record<string, unknown>>
 ) => {
+  const environment = useRelayEnvironment();
+  const { user } = useActiveUser();
+
   const [addMutation] = useAddRecipeMutation();
   const [updateMutation] = useUpdateRecipeMutation();
   const [deleteMutation] = useDeleteRecipeMutation();
@@ -62,6 +68,20 @@ export const useRecipePreloaded = (
     RecipeQueryDocument,
     queryReference
   );
+
+  useEffect(() => {
+    commitLocalUpdate(environment as any, (store) => {
+      data.recipe_connection.edges.map((i) => {
+        const recipe = store.get(i.node.id);
+        recipe?.setValue(user?.id === i?.node?.u_id, "isOwner");
+
+        i.node.recipe_items.map((i) => {
+          const recipeItem = store.get(i.id);
+          recipeItem?.setValue(user?.id === i?.u_id, "isOwner");
+        });
+      });
+    });
+  }, [data.recipe_connection.edges.length, queryReference]);
 
   const refetch = useCallback(
     (variables?: RecipeQuery$variables | undefined) => {

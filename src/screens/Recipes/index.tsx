@@ -14,15 +14,18 @@ import { FoodPreloadedHookProps, useFood } from "src/api-hooks/food";
 import { useKeyPress } from "src/hooks/useKeyPress";
 import { Key } from "src/types/key";
 import { useStore } from "src/store";
+import { useIsMobile } from "src/hooks/useIsMobile";
 import { RecipeCard2 } from "./RecipeCard2";
 import { useStyles } from "./styles";
 import { RecipeDrawer } from "./RecipeDrawer";
 
+// TODO: operations on recipe in drawer + add new recipe
 export const RecipesContent = ({
   recipeQR,
   foodQR,
 }: RecipePreloadedHookProps & FoodPreloadedHookProps) => {
   const classes = useStyles();
+  const isMobile = useIsMobile();
   const gridRef = useRef<HTMLDivElement>(null);
   const elRef = useRef<HTMLDivElement>(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -67,7 +70,7 @@ export const RecipesContent = ({
   };
 
   const handleSetActiveRecipeId = (value: string) => {
-    if (value === activeRecipeId) {
+    if (value === activeRecipeId && isDrawerOpen) {
       handleCloseDrawer();
     } else {
       setSearchParams({ activeRecipeId: value, isDrawerOpen: "true" });
@@ -130,6 +133,7 @@ export const RecipesContent = ({
         spacing={2}
         className={clsx(classes.content, {
           [classes.contentShift]: isDrawerOpen,
+          [classes.contentDesktop]: !isMobile,
         })}
       >
         {data.recipe_connection.edges.map(

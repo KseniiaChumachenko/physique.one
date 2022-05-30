@@ -1,5 +1,5 @@
 import React from "react";
-import { ButtonGroup, IconButton } from "@material-ui/core";
+import { ButtonGroup, IconButton, Tooltip } from "@material-ui/core";
 import {
   AddRounded,
   CancelRounded,
@@ -8,6 +8,7 @@ import {
   EditRounded,
 } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
+import { t } from "@lingui/macro";
 
 const useStyles = makeStyles(() => ({
   button: {
@@ -22,6 +23,7 @@ interface Props {
   onAddClick?(): void;
   onEditClick?(): void;
   onDeleteClick?(): void;
+  colored?: boolean;
 }
 
 export const EditDeleteButtonGroup = ({
@@ -30,6 +32,7 @@ export const EditDeleteButtonGroup = ({
   onAddClick,
   onEditClick,
   onDeleteClick,
+  colored = false,
 }: Props) => {
   const classes = useStyles();
   return (
@@ -39,7 +42,11 @@ export const EditDeleteButtonGroup = ({
           onKeyPress={(event) =>
             event.key === "Enter" ? onConfirmClick!() : null
           }
-          children={<DoneRounded />}
+          children={
+            <Tooltip title={t`Save`} aria-label="save">
+              <DoneRounded />
+            </Tooltip>
+          }
           onClick={(event) => {
             onConfirmClick!();
             event.stopPropagation();
@@ -48,23 +55,13 @@ export const EditDeleteButtonGroup = ({
           color={"primary"}
         />
       )}
-      {onCancelClick && (
-        <IconButton
-          onKeyPress={(event) =>
-            event.key === "Escape" ? onConfirmClick!() : null
-          }
-          children={<CancelRounded />}
-          onClick={(event) => {
-            onCancelClick!();
-            event.stopPropagation();
-          }}
-          className={classes.button}
-          color={"secondary"}
-        />
-      )}
       {onAddClick && (
         <IconButton
-          children={<AddRounded />}
+          children={
+            <Tooltip title={t`Add`} aria-label="add">
+              <AddRounded />
+            </Tooltip>
+          }
           onClick={(event) => {
             onAddClick!();
             event.stopPropagation();
@@ -74,7 +71,11 @@ export const EditDeleteButtonGroup = ({
       )}
       {onEditClick && (
         <IconButton
-          children={<EditRounded />}
+          children={
+            <Tooltip title={t`Edit`} aria-label="edit">
+              <EditRounded />
+            </Tooltip>
+          }
           onClick={(event) => {
             onEditClick!();
             event.stopPropagation();
@@ -82,13 +83,35 @@ export const EditDeleteButtonGroup = ({
           className={classes.button}
         />
       )}
+      {onCancelClick && (
+        <IconButton
+          onKeyPress={(event) =>
+            event.key === "Escape" ? onConfirmClick!() : null
+          }
+          children={
+            <Tooltip title={t`Cancel`} aria-label="cancel">
+              <CancelRounded />
+            </Tooltip>
+          }
+          onClick={(event) => {
+            onCancelClick!();
+            event.stopPropagation();
+          }}
+          className={classes.button}
+        />
+      )}
       {onDeleteClick && (
         <IconButton
-          children={<DeleteRounded />}
+          children={
+            <Tooltip title={t`Delete`} aria-label="delete">
+              <DeleteRounded />
+            </Tooltip>
+          }
           onClick={(event) => {
             onDeleteClick!();
             event.stopPropagation();
           }}
+          color={colored ? "secondary" : undefined}
           className={classes.button}
         />
       )}

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3b5b9897adf19ee620ab9aa5bb309fd9>>
+ * @generated SignedSource<<42db2f837b0079bede5a0fef17eba16d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -21,7 +21,6 @@ export type UsersQuery$data = {
         readonly user_name: string | null;
         readonly fb_id: string | null;
         readonly fb_picture_url: string | null;
-        readonly isActive: boolean | null;
       };
     }>;
   };
@@ -105,18 +104,6 @@ var v0 = [
                 "kind": "ScalarField",
                 "name": "fb_picture_url",
                 "storageKey": null
-              },
-              {
-                "kind": "ClientExtension",
-                "selections": [
-                  {
-                    "alias": null,
-                    "args": null,
-                    "kind": "ScalarField",
-                    "name": "isActive",
-                    "storageKey": null
-                  }
-                ]
               }
             ],
             "storageKey": null
@@ -156,6 +143,6 @@ return {
 };
 })();
 
-(node as any).hash = "cf752510e50d4cfabe130416b2cb31c6";
+(node as any).hash = "2c8361f9be76739f365b3032436acf6c";
 
 export default node;

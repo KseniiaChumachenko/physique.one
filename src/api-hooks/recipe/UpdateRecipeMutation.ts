@@ -11,6 +11,7 @@ export const UpdateRecipeMutation = graphql`
       name
       portions
       u_id
+      isOwner
       #      recipe_items_connection(where: { recipe_id: { _eq: $id } }) {
       #        edges {
       #          node {

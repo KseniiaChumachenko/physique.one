@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e2ecda89e42e5880a814a42807933b37>>
+ * @generated SignedSource<<65c4c31d2109755b366b62573b6f5b9b>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -20,8 +20,11 @@ export type RecipeQuery$data = {
         readonly u_id: string;
         readonly link: string | null;
         readonly portions: number | null;
+        readonly isOwner: boolean | null;
         readonly recipe_items: ReadonlyArray<{
           readonly id: string;
+          readonly u_id: string;
+          readonly isOwner: boolean | null;
           readonly food: {
             readonly id: string;
             readonly name: string;
@@ -72,38 +75,57 @@ v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "proteins",
+  "name": "u_id",
   "storageKey": null
 },
 v3 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "fats",
+  "name": "proteins",
   "storageKey": null
 },
 v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "carbohydrates",
+  "name": "fats",
   "storageKey": null
 },
 v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
-  "name": "energy_cal",
+  "name": "carbohydrates",
   "storageKey": null
 },
 v6 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
+  "name": "energy_cal",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
   "name": "energy_kj",
   "storageKey": null
 },
-v7 = [
+v8 = {
+  "kind": "ClientExtension",
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "isOwner",
+      "storageKey": null
+    }
+  ]
+},
+v9 = [
   {
     "alias": null,
     "args": [
@@ -145,13 +167,7 @@ v7 = [
                 "name": "description",
                 "storageKey": null
               },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "u_id",
-                "storageKey": null
-              },
+              (v2/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -175,6 +191,7 @@ v7 = [
                 "plural": true,
                 "selections": [
                   (v0/*: any*/),
+                  (v2/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -188,18 +205,19 @@ v7 = [
                     ],
                     "storageKey": null
                   },
-                  (v2/*: any*/),
                   (v3/*: any*/),
                   (v4/*: any*/),
                   (v5/*: any*/),
                   (v6/*: any*/),
+                  (v7/*: any*/),
                   {
                     "alias": null,
                     "args": null,
                     "kind": "ScalarField",
                     "name": "weight",
                     "storageKey": null
-                  }
+                  },
+                  (v8/*: any*/)
                 ],
                 "storageKey": null
               },
@@ -227,11 +245,11 @@ v7 = [
                         "name": "sum",
                         "plural": false,
                         "selections": [
-                          (v5/*: any*/),
                           (v6/*: any*/),
-                          (v4/*: any*/),
-                          (v2/*: any*/),
-                          (v3/*: any*/)
+                          (v7/*: any*/),
+                          (v5/*: any*/),
+                          (v3/*: any*/),
+                          (v4/*: any*/)
                         ],
                         "storageKey": null
                       }
@@ -240,7 +258,8 @@ v7 = [
                   }
                 ],
                 "storageKey": null
-              }
+              },
+              (v8/*: any*/)
             ],
             "storageKey": null
           }
@@ -257,7 +276,7 @@ return {
     "kind": "Fragment",
     "metadata": null,
     "name": "RecipeQuery",
-    "selections": (v7/*: any*/),
+    "selections": (v9/*: any*/),
     "type": "query_root",
     "abstractKey": null
   },
@@ -266,19 +285,19 @@ return {
     "argumentDefinitions": [],
     "kind": "Operation",
     "name": "RecipeQuery",
-    "selections": (v7/*: any*/)
+    "selections": (v9/*: any*/)
   },
   "params": {
-    "cacheID": "0659c26e9c53a00cfc880f0c3b804f77",
+    "cacheID": "4b8866e9334b219b1e0cde821eeb7947",
     "id": null,
     "metadata": {},
     "name": "RecipeQuery",
     "operationKind": "query",
-    "text": "query RecipeQuery {\n  recipe_connection(order_by: {increment: desc}) {\n    edges {\n      node {\n        id\n        name\n        description\n        u_id\n        link\n        portions\n        recipe_items {\n          id\n          food {\n            id\n            name\n          }\n          proteins\n          fats\n          carbohydrates\n          energy_cal\n          energy_kj\n          weight\n        }\n        recipe_items_aggregate {\n          aggregate {\n            sum {\n              energy_cal\n              energy_kj\n              carbohydrates\n              proteins\n              fats\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query RecipeQuery {\n  recipe_connection(order_by: {increment: desc}) {\n    edges {\n      node {\n        id\n        name\n        description\n        u_id\n        link\n        portions\n        recipe_items {\n          id\n          u_id\n          food {\n            id\n            name\n          }\n          proteins\n          fats\n          carbohydrates\n          energy_cal\n          energy_kj\n          weight\n        }\n        recipe_items_aggregate {\n          aggregate {\n            sum {\n              energy_cal\n              energy_kj\n              carbohydrates\n              proteins\n              fats\n            }\n          }\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "697f045070b2ba287c95594765c8458e";
+(node as any).hash = "9a44b702edddb990ea83828c98be8b1e";
 
 export default node;

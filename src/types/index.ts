@@ -23,6 +23,7 @@ export type Meal_Item = {
     readonly name: string | null;
   } | null;
 };
+// TODO: naming conventions food= food_id and foodDesc === food
 
 export type Nullable<T> = {
   [P in keyof T]: T[P] | null;
