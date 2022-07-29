@@ -37,7 +37,7 @@ export const CaloricTable = ({
   onAddItem,
   portions = 1,
   displayPortions = 1,
-  data,
+  data = [],
 }: Props) => {
   const {
     data: { food_connection },
@@ -45,7 +45,7 @@ export const CaloricTable = ({
   const coefficientForPortions =
     portions === displayPortions ? 1 : displayPortions / portions;
 
-  const dataToPortions = data.map((i) => {
+  const dataToPortions = data?.map((i) => {
     const foodById = food_connection.edges.find(
       ({ node }) => node.id === (i.food_id ?? food_connection?.edges[0].node.id)
     )!;
@@ -61,7 +61,7 @@ export const CaloricTable = ({
       <Table size="small" aria-label="a dense table">
         <Header isEditable={isEditable} />
         <TableBody>
-          {dataToPortions.map((row, i) => (
+          {dataToPortions?.map((row, i) => (
             <Row
               key={i}
               foodQR={foodQR}

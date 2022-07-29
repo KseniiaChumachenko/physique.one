@@ -19,6 +19,8 @@ import { CaloricTable } from "src/components/CaloricTable";
 import { useIsMobile } from "src/hooks/useIsMobile";
 import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
 import { useStyles } from "./styles";
+import { useRecipeHeaderLogic } from "./useRecipeHeaderLogic";
+import { useRecipeItemLogic } from "./useRecipeItemLogic";
 
 type ExtendProps = Partial<RecipeCardHeaderProps> &
   FoodPreloadedHookProps &
@@ -42,13 +44,30 @@ export const RecipeDrawer = ({
 
   const portions = data?.portions || 1;
 
-  const [displayPortions, setDisplayPortions] = useState(portions);
-  const [isEditable, setIsEditable] = useState(false);
+  const {
+    isEditable,
+    setIsEditable,
+    state,
+    handleSetState,
+    handleSubmit,
+    handleDelete,
+  } = useRecipeHeaderLogic({ data, recipeQR });
 
-  const handleSetNewValue = (key: string, value: any) => {};
+  const { onAdd, onUpdate, onRemove } = useRecipeItemLogic({
+    foodQR,
+    recipeQR,
+    recipe_id: data?.id || "",
+  });
+
+  const [displayPortions, setDisplayPortions] = useState(portions);
+
+  const handleClickAway = () => {
+    onClose();
+    setIsEditable(false);
+  };
 
   return (
-    <ClickAwayListener mouseEvent="onMouseDown" onClickAway={onClose}>
+    <ClickAwayListener mouseEvent="onMouseDown" onClickAway={handleClickAway}>
       <Drawer
         className={clsx({
           [classes.drawer]: !isMobile,
@@ -63,12 +82,13 @@ export const RecipeDrawer = ({
       >
         <RecipeCardHeader
           key={data?.id}
+          data={{ ...state, isOwner: !!data?.isOwner }}
           isEditable={isEditable}
           setIsEditable={setIsEditable}
-          setNewValue={handleSetNewValue}
+          setNewValue={handleSetState}
           onClose={onClose}
-          recipeQR={recipeQR}
-          data={data}
+          onSubmit={handleSubmit}
+          onDelete={handleDelete}
         />
         <CardContent>
           {!isEditable && (
@@ -99,9 +119,9 @@ export const RecipeDrawer = ({
             foodQR={foodQR}
             data={data?.recipe_items.map((i) => ({ ...i, food_id: i.food.id }))}
             isEditable={isEditable}
-            onAddItem={() => {}}
-            onRemoveRow={() => {}}
-            onSubmitRowChange={() => {}}
+            onAddItem={onAdd}
+            onRemoveRow={onRemove}
+            onSubmitRowChange={onUpdate}
             portions={portions}
             displayPortions={isEditable ? portions : displayPortions}
           />

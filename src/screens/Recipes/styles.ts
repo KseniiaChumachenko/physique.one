@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 
-const drawerWidth = 850;
+const drawerWidth = 900;
 
 //TODO issue with mobile styles
 
