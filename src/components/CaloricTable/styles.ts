@@ -1,12 +1,14 @@
 import { makeStyles } from "@material-ui/core/styles";
 
+const foodNameCellWidth = 200;
+
 export const useStyles = makeStyles((theme) => ({
   headerCell: {},
   foodCellReadOnly: {
-    width: 220,
+    minWidth: foodNameCellWidth,
   },
   foodCell: {
-    width: 220,
+    minWidth: foodNameCellWidth,
     padding: 0,
     verticalAlign: "bottom",
   },

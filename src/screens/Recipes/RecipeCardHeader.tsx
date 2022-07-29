@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { ChangeEvent } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   CardContent,
   CardHeader,
+  ClickAwayListener,
   createStyles,
   Link,
   TextField,
@@ -10,14 +11,8 @@ import {
 } from "@material-ui/core";
 import { LinkRounded } from "@material-ui/icons";
 import { t } from "@lingui/macro";
-import {
-  RecipePreloadedHookProps,
-  RecipeQuery$data,
-  useRecipePreloaded,
-} from "src/api-hooks/recipe";
-import { base64ToUuid } from "src/utils/base64-to-uuid";
+import { RecipeQuery$data } from "src/api-hooks/recipe";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
-import { useIsMobile } from "../../hooks/useIsMobile";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
@@ -52,71 +47,48 @@ const useStyles = makeStyles((theme) =>
 );
 type HeaderData = Pick<
   RecipeQuery$data["recipe_connection"]["edges"][0]["node"],
-  "id" | "isOwner" | "name" | "description" | "link" | "portions"
+  "name" | "description" | "link" | "portions" | "isOwner"
 >;
 
-export type RecipeCardHeaderProps = RecipePreloadedHookProps & {
-  data?: HeaderData;
+export type RecipeCardHeaderProps = {
+  data: HeaderData;
   isEditable: boolean;
   setIsEditable(p: boolean): void;
-  setNewValue(key: string, value: any): void;
+  setNewValue(
+    key: string
+  ): (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  onSubmit(): void;
+  onDelete(): void;
   onClose(): void;
 };
 
-// TODO: error handling
 export const RecipeCardHeader = ({
   data,
   isEditable,
   setIsEditable,
   setNewValue,
+  onSubmit,
+  onDelete,
   onClose,
-  recipeQR,
 }: RecipeCardHeaderProps) => {
   const classes = useStyles();
-  const {
-    mutations: { update, destroy },
-  } = useRecipePreloaded(recipeQR);
-
-  const [updatedName, setUpdatedName] = useState(data?.name);
-  const [updatedDesc, setUpdatedDesc] = useState(data?.description);
-  const [updatedLink, setUpdatedLink] = useState(data?.link);
-  const [updatedPortioning, setUpdatedPortioning] = useState(
-    data?.portions || 0
-  );
-
-  const handleSubmit = () => {
-    update({
-      variables: {
-        id: base64ToUuid(data?.id || ""),
-        set: {
-          name: updatedName,
-          description: updatedDesc,
-          link: updatedLink,
-          portions: updatedPortioning,
-        },
-      },
-    });
-    setIsEditable(false);
-  };
-
-  const handleDelete = () =>
-    destroy({ variables: { id: base64ToUuid(data?.id || "") } });
-
   return (
     <>
       <CardHeader
         title={
           isEditable ? (
-            <TextField
-              defaultValue={updatedName}
-              placeholder={t`Enter recipe name`}
-              label={t`Recipe name`}
-              type={"text"}
-              onChange={(event: any) => setUpdatedName(event?.target?.value)}
-              className={classes.title}
-            />
+            <ClickAwayListener onClickAway={onSubmit}>
+              <TextField
+                defaultValue={data.name}
+                placeholder={t`Enter recipe name`}
+                label={t`Recipe name`}
+                type={"text"}
+                onChange={setNewValue("name")}
+                className={classes.title}
+              />
+            </ClickAwayListener>
           ) : (
-            <div className={classes.title}>{updatedName}</div>
+            <div className={classes.title}>{data.name}</div>
           )
         }
         action={
@@ -127,10 +99,11 @@ export const RecipeCardHeader = ({
                 onEditClick={
                   !isEditable ? () => setIsEditable(true) : undefined
                 }
-                onCancelClick={
-                  isEditable ? () => setIsEditable(false) : onClose
+                onConfirmClick={
+                  isEditable ? () => setIsEditable(false) : undefined
                 }
-                onDeleteClick={isEditable ? handleDelete : undefined}
+                onCancelClick={isEditable ? undefined : onClose}
+                onDeleteClick={isEditable ? onDelete : undefined}
               />
             )}
           </div>
@@ -139,23 +112,25 @@ export const RecipeCardHeader = ({
       <CardContent>
         {isEditable ? (
           <div className={classes.flexBox}>
-            <TextField
-              placeholder={t`Add external link`}
-              label={t`External link`}
-              defaultValue={updatedLink}
-              type={"text"}
-              onChange={(event: any) => setUpdatedLink(event?.target?.value)}
-              className={classes.editableDescription}
-            />
+            <ClickAwayListener onClickAway={onSubmit}>
+              <TextField
+                placeholder={t`Add external link`}
+                label={t`External link`}
+                defaultValue={data.link}
+                type={"text"}
+                onChange={setNewValue("link")}
+                className={classes.editableDescription}
+              />
+            </ClickAwayListener>
           </div>
         ) : (
           <div className={classes.flexBox}>
             <div className={classes.icon}>
               <LinkRounded />
             </div>
-            {updatedLink ? (
-              <Link href={updatedLink} target="_blank" rel="noopener">
-                {updatedLink}
+            {data.link ? (
+              <Link href={data.link} target="_blank" rel="noopener">
+                {data.link}
               </Link>
             ) : (
               <Typography color={"textSecondary"}>
@@ -166,14 +141,16 @@ export const RecipeCardHeader = ({
         )}
 
         {isEditable ? (
-          <TextField
-            placeholder={t`Enter description`}
-            label={t`Description`}
-            defaultValue={updatedDesc}
-            type={"text"}
-            onChange={(event: any) => setUpdatedDesc(event?.target?.value)}
-            className={classes.editableDescription}
-          />
+          <ClickAwayListener onClickAway={onSubmit}>
+            <TextField
+              placeholder={t`Enter description`}
+              label={t`Description`}
+              defaultValue={data.description}
+              type={"text"}
+              onChange={setNewValue("description")}
+              className={classes.editableDescription}
+            />
+          </ClickAwayListener>
         ) : (
           <Typography
             variant="body2"
@@ -181,30 +158,28 @@ export const RecipeCardHeader = ({
             component="p"
             className={classes.description}
           >
-            {updatedDesc || t`No description`}
+            {data.description || t`No description`}
           </Typography>
         )}
 
         {data?.isOwner && isEditable && (
           <div className={classes.portionsContainer}>
-            <TextField
-              type={"number"}
-              label={t`How many portions are here?`}
-              error={!updatedPortioning}
-              value={updatedPortioning}
-              onChange={(event) => {
-                setUpdatedPortioning(
-                  event.target.value === "" ? 0 : Number(event.target.value)
-                );
-              }}
-              inputProps={{
-                step: 1,
-                min: 0,
-                max: 100,
-                type: "number",
-              }}
-              className={classes.portionInput}
-            />
+            <ClickAwayListener onClickAway={onSubmit}>
+              <TextField
+                type={"number"}
+                label={t`How many portions are here?`}
+                error={!data.portions}
+                value={data.portions}
+                onChange={setNewValue("portions")}
+                inputProps={{
+                  step: 1,
+                  min: 0,
+                  max: 100,
+                  type: "number",
+                }}
+                className={classes.portionInput}
+              />
+            </ClickAwayListener>
           </div>
         )}
       </CardContent>

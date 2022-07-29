@@ -55,15 +55,15 @@ export const Row = ({
   const handleSetItem = (id: string, type?: "food" | "recipe") => {
     setItem(id);
     if (type === "recipe") {
-      onSubmitRowChange({ id: values.id, recipe_id: id });
+      onSubmitRowChange({ ...values, id: values.id, recipe_id: id });
     } else {
-      onSubmitRowChange({ id: values.id, food_id: id });
+      onSubmitRowChange({ ...values, id: values.id, food_id: id });
     }
   };
 
   const handleSetWeight = (weight: number) => {
     setWeight(weight);
-    onSubmitRowChange({ id: values.id, weight });
+    onSubmitRowChange({ ...values, id: values.id, weight });
   };
 
   const handleDelete = () => {
