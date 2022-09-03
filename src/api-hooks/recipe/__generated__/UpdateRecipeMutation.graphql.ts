@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<5d6ba4b9487c0adbdf2193f87fc1580e>>
+ * @generated SignedSource<<f1e9ae8cfadfd121ebe3b4ccf6e822fc>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -31,6 +31,7 @@ export type UpdateRecipeMutation$data = {
     readonly name: string | null;
     readonly portions: number | null;
     readonly u_id: string;
+    readonly isOwner: boolean | null;
     readonly recipe_items_aggregate: {
       readonly aggregate: {
         readonly sum: {
@@ -212,6 +213,18 @@ v1 = [
           }
         ],
         "storageKey": null
+      },
+      {
+        "kind": "ClientExtension",
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "kind": "ScalarField",
+            "name": "isOwner",
+            "storageKey": null
+          }
+        ]
       }
     ],
     "storageKey": null
@@ -245,6 +258,6 @@ return {
 };
 })();
 
-(node as any).hash = "5336a38df25a7660d0e99bd779332787";
+(node as any).hash = "6ddb93239b00718a79029fd70c7e983e";
 
 export default node;
