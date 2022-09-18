@@ -88,7 +88,10 @@ export const RecipeDrawer = ({
           setNewValue={handleSetState}
           onClose={onClose}
           onSubmit={handleSubmit}
-          onDelete={handleDelete}
+          onDelete={() => {
+            handleDelete();
+            onClose();
+          }}
         />
         <CardContent>
           {!isEditable && (

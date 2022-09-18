@@ -159,7 +159,7 @@ export const RecipesContent = ({
         onClose={handleCloseDrawer}
         data={
           data.recipe_connection.edges.find(
-            ({ node: { id } }) => id === activeRecipeId
+            (i) => i?.node?.id === activeRecipeId
           )?.node
         }
         recipeQR={recipeQR}
