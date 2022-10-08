@@ -7,16 +7,19 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { ApolloError } from "@apollo/client";
 import { Alert } from "@material-ui/lab";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro";
+import { Meal_Item } from "src/types";
 import {
-  Food,
-  Meal_Item,
-  useDeleteMealItemByPrimaryKeyMutation,
-} from "src/graphql/generated/graphql";
+  DeleteMealItemMutation$variables,
+  useDeleteMealItemMutation,
+} from "src/api-hooks/mealItem";
+import { FoodPreloadedHookProps } from "src/api-hooks/food";
+import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { EditDeleteButtonGroup } from "../../../components/EditDeletButtonGroup";
 import { EditMealItemDialog } from "../../../components/MealItemDialog/EditMealItemDialog";
 
@@ -26,46 +29,35 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-type MealItemNode = { __typename?: "meal_item" } & Pick<
-  Meal_Item,
-  | "id"
-  | "meal_id"
-  | "food"
-  | "weight"
-  | "carbohydrates"
-  | "proteins"
-  | "fats"
-  | "energy_cal"
-  | "energy_kj"
-> & {
-    foodDesc: { __typename?: "food" } & Pick<
-      Food,
-      | "id"
-      | "name"
-      | "energy_cal"
-      | "energy_kj"
-      | "carbohydrates"
-      | "fats"
-      | "proteins"
-    >;
-  };
+type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps;
+interface P extends ExtendProps {
+  meal_items?: Meal_Item[];
+  refetch: () => void;
+}
 
 export const PanelDetailTable = ({
   meal_items,
-}: {
-  meal_items?: Meal_Item[];
-}) => {
+  refetch,
+  foodQR,
+  recipeQR,
+}: P) => {
   const classes = useStyles();
   const [openEditMealItemDialog, setEditMealItemDialog] = useState<
-    MealItemNode | Meal_Item | boolean
+    Meal_Item | boolean
   >(false);
   const [success, setSuccess] = useState(false);
-  const [error, setError] = useState<ApolloError>();
+  const [error, setError] = useState<Error>();
 
-  const [delete_by_pk] = useDeleteMealItemByPrimaryKeyMutation({
-    onCompleted: () => setSuccess(true),
-    onError: (error1) => setError(error1),
-  });
+  const [destroy] = useDeleteMealItemMutation();
+  const handleDelete = (v: DeleteMealItemMutation$variables) =>
+    destroy({
+      variables: v,
+      onCompleted: () => {
+        refetch();
+        setSuccess(true);
+      },
+      onError: (error1) => setError(error1),
+    });
 
   const withMealItems = meal_items && meal_items.length > 0;
 
@@ -91,39 +83,57 @@ export const PanelDetailTable = ({
           <TableBody>
             {withMealItems &&
               meal_items?.map((row) => (
-                <TableRow key={row.id}>
+                <TableRow key={row?.id}>
                   <TableCell
                     component="th"
                     scope="row"
-                    children={row.foodDesc?.name || row.recipe?.name}
+                    children={
+                      <>
+                        {row?.recipe?.name || (
+                          <>
+                            {row?.foodDesc?.name}{" "}
+                            <Typography
+                              variant={"caption"}
+                              color={"textSecondary"}
+                            >
+                              {row?.foodDesc?.food_brand?.name}
+                            </Typography>
+                          </>
+                        )}
+                      </>
+                    }
                   />
                   <TableCell
                     component="th"
                     scope="row"
                     children={
                       <React.Fragment>
-                        {row.energy_cal.toFixed(2)}&nbsp;|&nbsp;
-                        {row.energy_kj.toFixed(2)}
+                        {row?.energy_cal.toFixed(2)}&nbsp;|&nbsp;
+                        {row?.energy_kj.toFixed(2)}
                       </React.Fragment>
                     }
                   />
-                  <TableCell component="th" scope="row" children={row.weight} />
                   <TableCell
                     component="th"
                     scope="row"
-                    children={row.proteins.toFixed(2)}
+                    children={row?.weight}
+                  />
+                  <TableCell
+                    component="th"
+                    scope="row"
+                    children={row?.proteins.toFixed(2)}
                   />
 
                   <TableCell
                     component="th"
                     scope="row"
-                    children={row.carbohydrates.toFixed(2)}
+                    children={row?.carbohydrates.toFixed(2)}
                   />
 
                   <TableCell
                     component="th"
                     scope="row"
-                    children={row.fats.toFixed(2)}
+                    children={row?.fats.toFixed(2)}
                   />
 
                   <TableCell
@@ -133,7 +143,7 @@ export const PanelDetailTable = ({
                       <EditDeleteButtonGroup
                         onEditClick={() => setEditMealItemDialog(row)}
                         onDeleteClick={() =>
-                          delete_by_pk({ variables: { id: row.id } })
+                          handleDelete({ id: base64ToUuid(row.id) })
                         }
                       />
                     }
@@ -141,7 +151,7 @@ export const PanelDetailTable = ({
 
                   {/*  Toasts  */}
                   <Snackbar
-                    key={row.id + "succes"}
+                    key={row?.id + "succes"}
                     open={success}
                     autoHideDuration={6000}
                     onClose={() => setSuccess(false)}
@@ -154,7 +164,7 @@ export const PanelDetailTable = ({
                     </Alert>
                   </Snackbar>
                   <Snackbar
-                    key={row.id + "error"}
+                    key={row?.id + "error"}
                     open={!!error}
                     autoHideDuration={6000}
                     onClose={() => setError(false as any)}
@@ -175,6 +185,9 @@ export const PanelDetailTable = ({
       {/* Edit MealItem dialog */}
       {(openEditMealItemDialog as Meal_Item)?.id && (
         <EditMealItemDialog
+          refetch={refetch}
+          foodQR={foodQR}
+          recipeQR={recipeQR}
           open={!!openEditMealItemDialog}
           setOpen={setEditMealItemDialog}
           mealItem={openEditMealItemDialog as Meal_Item}

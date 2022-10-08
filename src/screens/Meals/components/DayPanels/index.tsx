@@ -1,12 +1,14 @@
-import React from "react";
-import { ExpansionPanel, ExpansionPanelDetails } from "@material-ui/core";
+import React, { Suspense } from "react";
+import { Accordion, AccordionDetails, LinearProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { useActiveUser } from "src/api-hooks/authorization";
 import {
-  Meal_Item,
-  useMealsByDateSubscription,
-} from "src/graphql/generated/graphql";
-import { ToastMessage } from "src/components/ToastMessage";
-import { useStore } from "src/store";
+  MealsByDatePreloadedHookProps,
+  useMealsByDateQuery,
+  useMealsPreloadedQuery,
+} from "src/api-hooks/mealsByDate";
+import { FoodPreloadedHookProps, useFood } from "src/api-hooks/food";
+import { RecipePreloadedHookProps, useRecipe } from "src/api-hooks/recipe";
 import { DayPanelHeader } from "./DayPanelHeader";
 import { PanelSummary } from "./PanelSummary";
 import { PanelDetailTable } from "./PanelDetailTable";
@@ -52,51 +54,95 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+type ExtendProps = FoodPreloadedHookProps &
+  RecipePreloadedHookProps &
+  MealsByDatePreloadedHookProps;
+
+interface PanelsProps extends ExtendProps {
+  date: string;
+}
+
+const Panels = ({ date, mealsQR, recipeQR, foodQR }: PanelsProps) => {
+  const classes = useStyles();
+
+  const {
+    data,
+    refetch,
+    mutations: { destroy },
+  } = useMealsPreloadedQuery(mealsQR);
+
+  return (
+    <Accordion className={classes.parentExpPanel} key={date + "Header"}>
+      <DayPanelHeader date={date} mealsQR={mealsQR} />
+      <AccordionDetails
+        className={classes.parentExpPanelDetails}
+        key={date + "panelDetail"}
+      >
+        {data?.meal_connection.edges.map(
+          ({ node: item }, key) =>
+            item && (
+              <Accordion
+                key={key}
+                defaultExpanded={true}
+                classes={{
+                  root: classes.childExpPanel,
+                  expanded: classes.expanded,
+                }}
+              >
+                <PanelSummary
+                  refetch={refetch}
+                  foodQR={foodQR}
+                  recipeQR={recipeQR}
+                  destroy={destroy}
+                  id={item?.id}
+                  date={date}
+                  name={item?.name}
+                  time={item?.time}
+                  meal_items_aggregate={item?.meal_items_aggregate}
+                  key={key}
+                />
+                <AccordionDetails className={classes.parentExpPanelDetails}>
+                  <PanelDetailTable
+                    recipeQR={recipeQR}
+                    foodQR={foodQR}
+                    refetch={refetch}
+                    meal_items={item?.meal_items_connection.edges.map(
+                      ({ node }) => node
+                    )}
+                  />
+                </AccordionDetails>
+              </Accordion>
+            )
+        )}
+      </AccordionDetails>
+    </Accordion>
+  );
+};
+
 interface Props {
   date: string;
 }
 
 export const DayPanels = ({ date }: Props) => {
-  const classes = useStyles();
-  const {
-    userStore: { user },
-  } = useStore();
-  const { data, error } = useMealsByDateSubscription({
-    variables: { date, u_id: user?.id },
+  const { user } = useActiveUser();
+  const { queryReference: foodQR } = useFood({});
+  const { queryReference: recipeQR } = useRecipe({});
+  const { queryReference: mealsQR } = useMealsByDateQuery({
+    date,
+    u_id: user?.id,
   });
-
-  if (error) {
-    return <ToastMessage severity={"error"} children={error.message as any} />;
-  }
+  const references = mealsQR && foodQR && recipeQR;
 
   return (
-    <ExpansionPanel className={classes.parentExpPanel} key={date + "Header"}>
-      <DayPanelHeader date={date} />
-      <ExpansionPanelDetails
-        className={classes.parentExpPanelDetails}
-        key={date + "panelDetail"}
-      >
-        {data?.meal.map((item, key) => (
-          <ExpansionPanel
-            key={key}
-            defaultExpanded={true}
-            classes={{
-              root: classes.childExpPanel,
-              expanded: classes.expanded,
-            }}
-          >
-            <PanelSummary
-              id={item.id}
-              name={item.name}
-              time={item.time}
-              key={key}
-            />
-            <ExpansionPanelDetails className={classes.parentExpPanelDetails}>
-              <PanelDetailTable meal_items={item?.meal_items as Meal_Item[]} />
-            </ExpansionPanelDetails>
-          </ExpansionPanel>
-        ))}
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+    <Suspense fallback={<LinearProgress />}>
+      {references && (
+        <Panels
+          date={date}
+          mealsQR={mealsQR}
+          foodQR={foodQR}
+          recipeQR={recipeQR}
+        />
+      )}
+    </Suspense>
   );
 };

@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { Alert, AlertTitle } from "@material-ui/lab";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
 import { ArrowBackRounded } from "@material-ui/icons";
 import { useStyles } from "./styled";
 
@@ -32,6 +32,7 @@ export const FormCard = ({
   buttonsSection,
 }: P) => {
   const classes = useStyles();
+
   return (
     <Fade in={true} timeout={700} mountOnEnter unmountOnExit>
       <div className={classes.section}>
@@ -73,7 +74,7 @@ export const FormCard = ({
                   {secondaryText}
                 </Typography>
               )}
-
+              
               <div className={classes.credentials}>{fieldsSection}</div>
               <div className={classes.buttonBlock}>{buttonsSection}</div>
             </CardContent>

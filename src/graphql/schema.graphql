@@ -6,8 +6,21 @@ schema {
     subscription: subscription_root
 }
 
+"An object with globally unique ID"
+interface Node {
+    "A globally unique identifier"
+    id: ID!
+}
+
+type PageInfo {
+    endCursor: String!
+    hasNextPage: Boolean!
+    hasPreviousPage: Boolean!
+    startCursor: String!
+}
+
 "columns and relationships of \"food\""
-type food {
+type food implements Node {
     A: numeric
     B1: numeric
     B12: numeric
@@ -21,7 +34,7 @@ type food {
     D: numeric
     E: numeric
     K: numeric
-    brand: uuid
+    brand_id: uuid
     calcium: numeric
     carbohydrates: numeric!
     carbohydrates_fiber: numeric
@@ -35,7 +48,7 @@ type food {
     food_brand: food_brand
     "An object relationship"
     food_type: food_type!
-    id: uuid!
+    id: ID!
     iron: numeric
     magnesium: numeric
     manganese: numeric
@@ -65,6 +78,19 @@ type food {
         "filter the rows returned"
         where: meal_item_bool_exp
     ): meal_item_aggregate!
+    "An array relationship connection"
+    meal_items_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [meal_item_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [meal_item_order_by!],
+        "filter the rows returned"
+        where: meal_item_bool_exp
+    ): meal_itemConnection!
     name: String!
     phosphorus: numeric
     potassium: numeric
@@ -95,6 +121,19 @@ type food {
         "filter the rows returned"
         where: recipe_item_bool_exp
     ): recipe_item_aggregate!
+    "An array relationship connection"
+    recipe_items_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [recipe_item_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [recipe_item_order_by!],
+        "filter the rows returned"
+        where: recipe_item_bool_exp
+    ): recipe_itemConnection!
     selenium: numeric
     sodium: numeric
     type: String!
@@ -103,6 +142,17 @@ type food {
     user: users
     weight: Int
     zinc: numeric
+}
+
+"A Relay Connection object on \"food\""
+type foodConnection {
+    edges: [foodEdge!]!
+    pageInfo: PageInfo!
+}
+
+type foodEdge {
+    cursor: String!
+    node: food!
 }
 
 "aggregated selection of \"food\""
@@ -163,9 +213,20 @@ type food_avg_fields {
 }
 
 "columns and relationships of \"food_brand\""
-type food_brand {
-    id: uuid!
+type food_brand implements Node {
+    id: ID!
     name: String!
+}
+
+"A Relay Connection object on \"food_brand\""
+type food_brandConnection {
+    edges: [food_brandEdge!]!
+    pageInfo: PageInfo!
+}
+
+type food_brandEdge {
+    cursor: String!
+    node: food_brand!
 }
 
 "aggregated selection of \"food_brand\""
@@ -216,7 +277,7 @@ type food_max_fields {
     D: numeric
     E: numeric
     K: numeric
-    brand: uuid
+    brand_id: uuid
     calcium: numeric
     carbohydrates: numeric
     carbohydrates_fiber: numeric
@@ -257,7 +318,7 @@ type food_min_fields {
     D: numeric
     E: numeric
     K: numeric
-    brand: uuid
+    brand_id: uuid
     calcium: numeric
     carbohydrates: numeric
     carbohydrates_fiber: numeric
@@ -436,7 +497,7 @@ type food_sum_fields {
 }
 
 "columns and relationships of \"food_type\""
-type food_type {
+type food_type implements Node {
     decription: String!
     "An array relationship"
     food(
@@ -464,8 +525,33 @@ type food_type {
         "filter the rows returned"
         where: food_bool_exp
     ): food_aggregate!
+    "An array relationship connection"
+    food_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [food_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [food_order_by!],
+        "filter the rows returned"
+        where: food_bool_exp
+    ): foodConnection!
+    id: ID!
     img_url: String!
     value: String!
+}
+
+"A Relay Connection object on \"food_type\""
+type food_typeConnection {
+    edges: [food_typeEdge!]!
+    pageInfo: PageInfo!
+}
+
+type food_typeEdge {
+    cursor: String!
+    node: food_type!
 }
 
 "aggregated selection of \"food_type\""
@@ -612,9 +698,9 @@ type food_variance_fields {
 }
 
 "columns and relationships of \"meal\""
-type meal {
+type meal implements Node {
     date: date
-    id: uuid!
+    id: ID!
     "An array relationship"
     meal_items(
         "distinct select on columns"
@@ -641,11 +727,35 @@ type meal {
         "filter the rows returned"
         where: meal_item_bool_exp
     ): meal_item_aggregate!
+    "An array relationship connection"
+    meal_items_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [meal_item_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [meal_item_order_by!],
+        "filter the rows returned"
+        where: meal_item_bool_exp
+    ): meal_itemConnection!
     name: String
     time: time
     u_id: uuid
     "An object relationship"
     user: users
+}
+
+"A Relay Connection object on \"meal\""
+type mealConnection {
+    edges: [mealEdge!]!
+    pageInfo: PageInfo!
+}
+
+type mealEdge {
+    cursor: String!
+    node: meal!
 }
 
 "aggregated selection of \"meal\""
@@ -662,7 +772,7 @@ type meal_aggregate_fields {
 }
 
 "columns and relationships of \"meal_item\""
-type meal_item {
+type meal_item implements Node {
     "Calculation of a macronutrient according to weight"
     carbohydrates: numeric!
     "Calculation of an energy according to weight"
@@ -674,7 +784,7 @@ type meal_item {
     food: uuid
     "An object relationship"
     foodDesc: food
-    id: uuid!
+    id: ID!
     "An object relationship"
     meal: meal!
     meal_id: uuid!
@@ -687,6 +797,17 @@ type meal_item {
     "An object relationship"
     user: users!
     weight: numeric!
+}
+
+"A Relay Connection object on \"meal_item\""
+type meal_itemConnection {
+    edges: [meal_itemEdge!]!
+    pageInfo: PageInfo!
+}
+
+type meal_itemEdge {
+    cursor: String!
+    node: meal_item!
 }
 
 "aggregated selection of \"meal_item\""
@@ -1289,8 +1410,8 @@ type mutation_root {
 }
 
 "columns and relationships of \"pantry\""
-type pantry {
-    id: uuid!
+type pantry implements Node {
+    id: ID!
     name: String!
     "An array relationship"
     pantry_items(
@@ -1318,6 +1439,19 @@ type pantry {
         "filter the rows returned"
         where: pantry_items_bool_exp
     ): pantry_items_aggregate!
+    "An array relationship connection"
+    pantry_items_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [pantry_items_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [pantry_items_order_by!],
+        "filter the rows returned"
+        where: pantry_items_bool_exp
+    ): pantry_itemsConnection!
     "An array relationship"
     pantry_jars(
         "distinct select on columns"
@@ -1344,6 +1478,19 @@ type pantry {
         "filter the rows returned"
         where: pantry_jars_bool_exp
     ): pantry_jars_aggregate!
+    "An array relationship connection"
+    pantry_jars_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [pantry_jars_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [pantry_jars_order_by!],
+        "filter the rows returned"
+        where: pantry_jars_bool_exp
+    ): pantry_jarsConnection!
     "An array relationship"
     pantry_users(
         "distinct select on columns"
@@ -1370,6 +1517,30 @@ type pantry {
         "filter the rows returned"
         where: pantry_user_bool_exp
     ): pantry_user_aggregate!
+    "An array relationship connection"
+    pantry_users_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [pantry_user_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [pantry_user_order_by!],
+        "filter the rows returned"
+        where: pantry_user_bool_exp
+    ): pantry_userConnection!
+}
+
+"A Relay Connection object on \"pantry\""
+type pantryConnection {
+    edges: [pantryEdge!]!
+    pageInfo: PageInfo!
+}
+
+type pantryEdge {
+    cursor: String!
+    node: pantry!
 }
 
 "aggregated selection of \"pantry\""
@@ -1386,16 +1557,27 @@ type pantry_aggregate_fields {
 }
 
 "columns and relationships of \"pantry_items\""
-type pantry_items {
+type pantry_items implements Node {
     "An object relationship"
     food: food!
-    id: uuid!
+    id: ID!
     item: uuid!
     jar: uuid
     "An object relationship"
     pantry: pantry!
     pantry_id: uuid!
     weight: Int!
+}
+
+"A Relay Connection object on \"pantry_items\""
+type pantry_itemsConnection {
+    edges: [pantry_itemsEdge!]!
+    pageInfo: PageInfo!
+}
+
+type pantry_itemsEdge {
+    cursor: String!
+    node: pantry_items!
 }
 
 "aggregated selection of \"pantry_items\""
@@ -1486,14 +1668,25 @@ type pantry_items_variance_fields {
 }
 
 "columns and relationships of \"pantry_jars\""
-type pantry_jars {
-    id: uuid!
+type pantry_jars implements Node {
+    id: ID!
     name: name!
     pantry_id: uuid!
     "An object relationship"
     user: users!
     user_id: uuid!
     weight: Int!
+}
+
+"A Relay Connection object on \"pantry_jars\""
+type pantry_jarsConnection {
+    edges: [pantry_jarsEdge!]!
+    pageInfo: PageInfo!
+}
+
+type pantry_jarsEdge {
+    cursor: String!
+    node: pantry_jars!
 }
 
 "aggregated selection of \"pantry_jars\""
@@ -1602,12 +1795,23 @@ type pantry_mutation_response {
 }
 
 "columns and relationships of \"pantry_user\""
-type pantry_user {
-    id: uuid!
+type pantry_user implements Node {
+    id: ID!
     pantry_id: uuid!
     "An object relationship"
     user: users!
     user_id: uuid!
+}
+
+"A Relay Connection object on \"pantry_user\""
+type pantry_userConnection {
+    edges: [pantry_userEdge!]!
+    pageInfo: PageInfo!
+}
+
+type pantry_userEdge {
+    cursor: String!
+    node: pantry_user!
 }
 
 "aggregated selection of \"pantry_user\""
@@ -1647,348 +1851,172 @@ type pantry_user_mutation_response {
 
 "query root"
 type query_root {
-    "fetch data from the table: \"food\""
-    food(
-        "distinct select on columns"
-        distinct_on: [food_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [food_order_by!],
-        "filter the rows returned"
-        where: food_bool_exp
-    ): [food!]!
-    "fetch aggregated fields from the table: \"food\""
-    food_aggregate(
-        "distinct select on columns"
-        distinct_on: [food_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [food_order_by!],
-        "filter the rows returned"
-        where: food_bool_exp
-    ): food_aggregate!
     "fetch data from the table: \"food_brand\""
-    food_brand(
+    food_brand_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [food_brand_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [food_brand_order_by!],
         "filter the rows returned"
         where: food_brand_bool_exp
-    ): [food_brand!]!
-    "fetch aggregated fields from the table: \"food_brand\""
-    food_brand_aggregate(
+    ): food_brandConnection!
+    "fetch data from the table: \"food\""
+    food_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
-        distinct_on: [food_brand_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        distinct_on: [food_select_column!],
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
-        order_by: [food_brand_order_by!],
+        order_by: [food_order_by!],
         "filter the rows returned"
-        where: food_brand_bool_exp
-    ): food_brand_aggregate!
-    "fetch data from the table: \"food_brand\" using primary key columns"
-    food_brand_by_pk(id: uuid!): food_brand
-    "fetch data from the table: \"food\" using primary key columns"
-    food_by_pk(id: uuid!): food
+        where: food_bool_exp
+    ): foodConnection!
     "fetch data from the table: \"food_type\""
-    food_type(
+    food_type_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [food_type_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [food_type_order_by!],
         "filter the rows returned"
         where: food_type_bool_exp
-    ): [food_type!]!
-    "fetch aggregated fields from the table: \"food_type\""
-    food_type_aggregate(
-        "distinct select on columns"
-        distinct_on: [food_type_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [food_type_order_by!],
-        "filter the rows returned"
-        where: food_type_bool_exp
-    ): food_type_aggregate!
-    "fetch data from the table: \"food_type\" using primary key columns"
-    food_type_by_pk(value: String!): food_type
+    ): food_typeConnection!
     "fetch data from the table: \"meal\""
-    meal(
+    meal_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [meal_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [meal_order_by!],
         "filter the rows returned"
         where: meal_bool_exp
-    ): [meal!]!
-    "fetch aggregated fields from the table: \"meal\""
-    meal_aggregate(
-        "distinct select on columns"
-        distinct_on: [meal_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [meal_order_by!],
-        "filter the rows returned"
-        where: meal_bool_exp
-    ): meal_aggregate!
-    "fetch data from the table: \"meal\" using primary key columns"
-    meal_by_pk(id: uuid!): meal
+    ): mealConnection!
     "fetch data from the table: \"meal_item\""
-    meal_item(
+    meal_item_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [meal_item_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [meal_item_order_by!],
         "filter the rows returned"
         where: meal_item_bool_exp
-    ): [meal_item!]!
-    "fetch aggregated fields from the table: \"meal_item\""
-    meal_item_aggregate(
-        "distinct select on columns"
-        distinct_on: [meal_item_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [meal_item_order_by!],
-        "filter the rows returned"
-        where: meal_item_bool_exp
-    ): meal_item_aggregate!
-    "fetch data from the table: \"meal_item\" using primary key columns"
-    meal_item_by_pk(id: uuid!): meal_item
+    ): meal_itemConnection!
+    node(
+        "A globally unique id"
+        id: ID!
+    ): Node
     "fetch data from the table: \"pantry\""
-    pantry(
+    pantry_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [pantry_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [pantry_order_by!],
         "filter the rows returned"
         where: pantry_bool_exp
-    ): [pantry!]!
-    "fetch aggregated fields from the table: \"pantry\""
-    pantry_aggregate(
-        "distinct select on columns"
-        distinct_on: [pantry_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [pantry_order_by!],
-        "filter the rows returned"
-        where: pantry_bool_exp
-    ): pantry_aggregate!
-    "fetch data from the table: \"pantry\" using primary key columns"
-    pantry_by_pk(id: uuid!): pantry
+    ): pantryConnection!
     "fetch data from the table: \"pantry_items\""
-    pantry_items(
+    pantry_items_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [pantry_items_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [pantry_items_order_by!],
         "filter the rows returned"
         where: pantry_items_bool_exp
-    ): [pantry_items!]!
-    "fetch aggregated fields from the table: \"pantry_items\""
-    pantry_items_aggregate(
-        "distinct select on columns"
-        distinct_on: [pantry_items_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [pantry_items_order_by!],
-        "filter the rows returned"
-        where: pantry_items_bool_exp
-    ): pantry_items_aggregate!
-    "fetch data from the table: \"pantry_items\" using primary key columns"
-    pantry_items_by_pk(id: uuid!): pantry_items
+    ): pantry_itemsConnection!
     "fetch data from the table: \"pantry_jars\""
-    pantry_jars(
+    pantry_jars_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [pantry_jars_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [pantry_jars_order_by!],
         "filter the rows returned"
         where: pantry_jars_bool_exp
-    ): [pantry_jars!]!
-    "fetch aggregated fields from the table: \"pantry_jars\""
-    pantry_jars_aggregate(
-        "distinct select on columns"
-        distinct_on: [pantry_jars_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [pantry_jars_order_by!],
-        "filter the rows returned"
-        where: pantry_jars_bool_exp
-    ): pantry_jars_aggregate!
-    "fetch data from the table: \"pantry_jars\" using primary key columns"
-    pantry_jars_by_pk(id: uuid!): pantry_jars
+    ): pantry_jarsConnection!
     "fetch data from the table: \"pantry_user\""
-    pantry_user(
+    pantry_user_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [pantry_user_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [pantry_user_order_by!],
         "filter the rows returned"
         where: pantry_user_bool_exp
-    ): [pantry_user!]!
-    "fetch aggregated fields from the table: \"pantry_user\""
-    pantry_user_aggregate(
-        "distinct select on columns"
-        distinct_on: [pantry_user_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [pantry_user_order_by!],
-        "filter the rows returned"
-        where: pantry_user_bool_exp
-    ): pantry_user_aggregate!
-    "fetch data from the table: \"pantry_user\" using primary key columns"
-    pantry_user_by_pk(id: uuid!): pantry_user
+    ): pantry_userConnection!
     "fetch data from the table: \"recipe\""
-    recipe(
+    recipe_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [recipe_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [recipe_order_by!],
         "filter the rows returned"
         where: recipe_bool_exp
-    ): [recipe!]!
-    "fetch aggregated fields from the table: \"recipe\""
-    recipe_aggregate(
-        "distinct select on columns"
-        distinct_on: [recipe_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [recipe_order_by!],
-        "filter the rows returned"
-        where: recipe_bool_exp
-    ): recipe_aggregate!
-    "fetch data from the table: \"recipe\" using primary key columns"
-    recipe_by_pk(id: uuid!): recipe
+    ): recipeConnection!
     "fetch data from the table: \"recipe_item\""
-    recipe_item(
+    recipe_item_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [recipe_item_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [recipe_item_order_by!],
         "filter the rows returned"
         where: recipe_item_bool_exp
-    ): [recipe_item!]!
-    "fetch aggregated fields from the table: \"recipe_item\""
-    recipe_item_aggregate(
-        "distinct select on columns"
-        distinct_on: [recipe_item_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [recipe_item_order_by!],
-        "filter the rows returned"
-        where: recipe_item_bool_exp
-    ): recipe_item_aggregate!
-    "fetch data from the table: \"recipe_item\" using primary key columns"
-    recipe_item_by_pk(id: uuid!): recipe_item
+    ): recipe_itemConnection!
     "fetch data from the table: \"users\""
-    users(
+    users_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [users_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [users_order_by!],
         "filter the rows returned"
         where: users_bool_exp
-    ): [users!]!
-    "fetch aggregated fields from the table: \"users\""
-    users_aggregate(
-        "distinct select on columns"
-        distinct_on: [users_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [users_order_by!],
-        "filter the rows returned"
-        where: users_bool_exp
-    ): users_aggregate!
-    "fetch data from the table: \"users\" using primary key columns"
-    users_by_pk(id: uuid!): users
+    ): usersConnection!
 }
 
 "columns and relationships of \"recipe\""
-type recipe {
+type recipe implements Node {
     description: String
-    id: uuid!
+    id: ID!
     increment: Int!
     link: String
     "An array relationship"
@@ -2017,6 +2045,19 @@ type recipe {
         "filter the rows returned"
         where: meal_item_bool_exp
     ): meal_item_aggregate!
+    "An array relationship connection"
+    meal_items_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [meal_item_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [meal_item_order_by!],
+        "filter the rows returned"
+        where: meal_item_bool_exp
+    ): meal_itemConnection!
     name: String
     portions: Int
     "An array relationship"
@@ -2045,9 +2086,33 @@ type recipe {
         "filter the rows returned"
         where: recipe_item_bool_exp
     ): recipe_item_aggregate!
+    "An array relationship connection"
+    recipe_items_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [recipe_item_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [recipe_item_order_by!],
+        "filter the rows returned"
+        where: recipe_item_bool_exp
+    ): recipe_itemConnection!
     u_id: uuid!
     "An object relationship"
     user: users!
+}
+
+"A Relay Connection object on \"recipe\""
+type recipeConnection {
+    edges: [recipeEdge!]!
+    pageInfo: PageInfo!
+}
+
+type recipeEdge {
+    cursor: String!
+    node: recipe!
 }
 
 "aggregated selection of \"recipe\""
@@ -2078,7 +2143,7 @@ type recipe_avg_fields {
 }
 
 "columns and relationships of \"recipe_item\""
-type recipe_item {
+type recipe_item implements Node {
     carbohydrates: numeric!
     energy_cal: numeric!
     energy_kj: numeric!
@@ -2086,7 +2151,7 @@ type recipe_item {
     "An object relationship"
     food: food!
     food_id: uuid!
-    id: uuid!
+    id: ID!
     proteins: numeric!
     "An object relationship"
     recipe: recipe!
@@ -2095,6 +2160,17 @@ type recipe_item {
     "An object relationship"
     user: users!
     weight: numeric!
+}
+
+"A Relay Connection object on \"recipe_item\""
+type recipe_itemConnection {
+    edges: [recipe_itemEdge!]!
+    pageInfo: PageInfo!
+}
+
+type recipe_itemEdge {
+    cursor: String!
+    node: recipe_item!
 }
 
 "aggregated selection of \"recipe_item\""
@@ -2308,342 +2384,166 @@ type recipe_variance_fields {
 
 "subscription root"
 type subscription_root {
-    "fetch data from the table: \"food\""
-    food(
-        "distinct select on columns"
-        distinct_on: [food_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [food_order_by!],
-        "filter the rows returned"
-        where: food_bool_exp
-    ): [food!]!
-    "fetch aggregated fields from the table: \"food\""
-    food_aggregate(
-        "distinct select on columns"
-        distinct_on: [food_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [food_order_by!],
-        "filter the rows returned"
-        where: food_bool_exp
-    ): food_aggregate!
     "fetch data from the table: \"food_brand\""
-    food_brand(
+    food_brand_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [food_brand_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [food_brand_order_by!],
         "filter the rows returned"
         where: food_brand_bool_exp
-    ): [food_brand!]!
-    "fetch aggregated fields from the table: \"food_brand\""
-    food_brand_aggregate(
+    ): food_brandConnection!
+    "fetch data from the table: \"food\""
+    food_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
-        distinct_on: [food_brand_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        distinct_on: [food_select_column!],
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
-        order_by: [food_brand_order_by!],
+        order_by: [food_order_by!],
         "filter the rows returned"
-        where: food_brand_bool_exp
-    ): food_brand_aggregate!
-    "fetch data from the table: \"food_brand\" using primary key columns"
-    food_brand_by_pk(id: uuid!): food_brand
-    "fetch data from the table: \"food\" using primary key columns"
-    food_by_pk(id: uuid!): food
+        where: food_bool_exp
+    ): foodConnection!
     "fetch data from the table: \"food_type\""
-    food_type(
+    food_type_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [food_type_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [food_type_order_by!],
         "filter the rows returned"
         where: food_type_bool_exp
-    ): [food_type!]!
-    "fetch aggregated fields from the table: \"food_type\""
-    food_type_aggregate(
-        "distinct select on columns"
-        distinct_on: [food_type_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [food_type_order_by!],
-        "filter the rows returned"
-        where: food_type_bool_exp
-    ): food_type_aggregate!
-    "fetch data from the table: \"food_type\" using primary key columns"
-    food_type_by_pk(value: String!): food_type
+    ): food_typeConnection!
     "fetch data from the table: \"meal\""
-    meal(
+    meal_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [meal_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [meal_order_by!],
         "filter the rows returned"
         where: meal_bool_exp
-    ): [meal!]!
-    "fetch aggregated fields from the table: \"meal\""
-    meal_aggregate(
-        "distinct select on columns"
-        distinct_on: [meal_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [meal_order_by!],
-        "filter the rows returned"
-        where: meal_bool_exp
-    ): meal_aggregate!
-    "fetch data from the table: \"meal\" using primary key columns"
-    meal_by_pk(id: uuid!): meal
+    ): mealConnection!
     "fetch data from the table: \"meal_item\""
-    meal_item(
+    meal_item_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [meal_item_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [meal_item_order_by!],
         "filter the rows returned"
         where: meal_item_bool_exp
-    ): [meal_item!]!
-    "fetch aggregated fields from the table: \"meal_item\""
-    meal_item_aggregate(
-        "distinct select on columns"
-        distinct_on: [meal_item_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [meal_item_order_by!],
-        "filter the rows returned"
-        where: meal_item_bool_exp
-    ): meal_item_aggregate!
-    "fetch data from the table: \"meal_item\" using primary key columns"
-    meal_item_by_pk(id: uuid!): meal_item
+    ): meal_itemConnection!
+    node(
+        "A globally unique id"
+        id: ID!
+    ): Node
     "fetch data from the table: \"pantry\""
-    pantry(
+    pantry_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [pantry_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [pantry_order_by!],
         "filter the rows returned"
         where: pantry_bool_exp
-    ): [pantry!]!
-    "fetch aggregated fields from the table: \"pantry\""
-    pantry_aggregate(
-        "distinct select on columns"
-        distinct_on: [pantry_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [pantry_order_by!],
-        "filter the rows returned"
-        where: pantry_bool_exp
-    ): pantry_aggregate!
-    "fetch data from the table: \"pantry\" using primary key columns"
-    pantry_by_pk(id: uuid!): pantry
+    ): pantryConnection!
     "fetch data from the table: \"pantry_items\""
-    pantry_items(
+    pantry_items_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [pantry_items_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [pantry_items_order_by!],
         "filter the rows returned"
         where: pantry_items_bool_exp
-    ): [pantry_items!]!
-    "fetch aggregated fields from the table: \"pantry_items\""
-    pantry_items_aggregate(
-        "distinct select on columns"
-        distinct_on: [pantry_items_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [pantry_items_order_by!],
-        "filter the rows returned"
-        where: pantry_items_bool_exp
-    ): pantry_items_aggregate!
-    "fetch data from the table: \"pantry_items\" using primary key columns"
-    pantry_items_by_pk(id: uuid!): pantry_items
+    ): pantry_itemsConnection!
     "fetch data from the table: \"pantry_jars\""
-    pantry_jars(
+    pantry_jars_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [pantry_jars_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [pantry_jars_order_by!],
         "filter the rows returned"
         where: pantry_jars_bool_exp
-    ): [pantry_jars!]!
-    "fetch aggregated fields from the table: \"pantry_jars\""
-    pantry_jars_aggregate(
-        "distinct select on columns"
-        distinct_on: [pantry_jars_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [pantry_jars_order_by!],
-        "filter the rows returned"
-        where: pantry_jars_bool_exp
-    ): pantry_jars_aggregate!
-    "fetch data from the table: \"pantry_jars\" using primary key columns"
-    pantry_jars_by_pk(id: uuid!): pantry_jars
+    ): pantry_jarsConnection!
     "fetch data from the table: \"pantry_user\""
-    pantry_user(
+    pantry_user_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [pantry_user_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [pantry_user_order_by!],
         "filter the rows returned"
         where: pantry_user_bool_exp
-    ): [pantry_user!]!
-    "fetch aggregated fields from the table: \"pantry_user\""
-    pantry_user_aggregate(
-        "distinct select on columns"
-        distinct_on: [pantry_user_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [pantry_user_order_by!],
-        "filter the rows returned"
-        where: pantry_user_bool_exp
-    ): pantry_user_aggregate!
-    "fetch data from the table: \"pantry_user\" using primary key columns"
-    pantry_user_by_pk(id: uuid!): pantry_user
+    ): pantry_userConnection!
     "fetch data from the table: \"recipe\""
-    recipe(
+    recipe_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [recipe_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [recipe_order_by!],
         "filter the rows returned"
         where: recipe_bool_exp
-    ): [recipe!]!
-    "fetch aggregated fields from the table: \"recipe\""
-    recipe_aggregate(
-        "distinct select on columns"
-        distinct_on: [recipe_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [recipe_order_by!],
-        "filter the rows returned"
-        where: recipe_bool_exp
-    ): recipe_aggregate!
-    "fetch data from the table: \"recipe\" using primary key columns"
-    recipe_by_pk(id: uuid!): recipe
+    ): recipeConnection!
     "fetch data from the table: \"recipe_item\""
-    recipe_item(
+    recipe_item_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [recipe_item_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [recipe_item_order_by!],
         "filter the rows returned"
         where: recipe_item_bool_exp
-    ): [recipe_item!]!
-    "fetch aggregated fields from the table: \"recipe_item\""
-    recipe_item_aggregate(
-        "distinct select on columns"
-        distinct_on: [recipe_item_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [recipe_item_order_by!],
-        "filter the rows returned"
-        where: recipe_item_bool_exp
-    ): recipe_item_aggregate!
-    "fetch data from the table: \"recipe_item\" using primary key columns"
-    recipe_item_by_pk(id: uuid!): recipe_item
+    ): recipe_itemConnection!
     "fetch data from the table: \"users\""
-    users(
+    users_connection(
+        after: String,
+        before: String,
         "distinct select on columns"
         distinct_on: [users_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
+        first: Int,
+        last: Int,
         "sort the rows by one or more columns"
         order_by: [users_order_by!],
         "filter the rows returned"
         where: users_bool_exp
-    ): [users!]!
-    "fetch aggregated fields from the table: \"users\""
-    users_aggregate(
-        "distinct select on columns"
-        distinct_on: [users_select_column!],
-        "limit the number of rows returned"
-        limit: Int,
-        "skip the first n rows. Use only with order_by"
-        offset: Int,
-        "sort the rows by one or more columns"
-        order_by: [users_order_by!],
-        "filter the rows returned"
-        where: users_bool_exp
-    ): users_aggregate!
-    "fetch data from the table: \"users\" using primary key columns"
-    users_by_pk(id: uuid!): users
+    ): usersConnection!
 }
 
 """
@@ -2653,7 +2553,7 @@ List of users
 
 columns and relationships of "users"
 """
-type users {
+type users implements Node {
     email: String
     fb_id: String
     fb_picture_url: String
@@ -2684,8 +2584,21 @@ type users {
         "filter the rows returned"
         where: food_bool_exp
     ): food_aggregate!
+    "An array relationship connection"
+    food_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [food_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [food_order_by!],
+        "filter the rows returned"
+        where: food_bool_exp
+    ): foodConnection!
     full_name: String
-    id: uuid!
+    id: ID!
     last_name: String
     "An array relationship"
     meal_items(
@@ -2713,6 +2626,19 @@ type users {
         "filter the rows returned"
         where: meal_item_bool_exp
     ): meal_item_aggregate!
+    "An array relationship connection"
+    meal_items_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [meal_item_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [meal_item_order_by!],
+        "filter the rows returned"
+        where: meal_item_bool_exp
+    ): meal_itemConnection!
     "An array relationship"
     meals(
         "distinct select on columns"
@@ -2739,6 +2665,19 @@ type users {
         "filter the rows returned"
         where: meal_bool_exp
     ): meal_aggregate!
+    "An array relationship connection"
+    meals_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [meal_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [meal_order_by!],
+        "filter the rows returned"
+        where: meal_bool_exp
+    ): mealConnection!
     "An array relationship"
     pantry(
         "distinct select on columns"
@@ -2765,6 +2704,19 @@ type users {
         "filter the rows returned"
         where: pantry_user_bool_exp
     ): pantry_user_aggregate!
+    "An array relationship connection"
+    pantry_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [pantry_user_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [pantry_user_order_by!],
+        "filter the rows returned"
+        where: pantry_user_bool_exp
+    ): pantry_userConnection!
     password: String!
     "An array relationship"
     recipe_items(
@@ -2792,6 +2744,19 @@ type users {
         "filter the rows returned"
         where: recipe_item_bool_exp
     ): recipe_item_aggregate!
+    "An array relationship connection"
+    recipe_items_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [recipe_item_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [recipe_item_order_by!],
+        "filter the rows returned"
+        where: recipe_item_bool_exp
+    ): recipe_itemConnection!
     "An array relationship"
     recipes(
         "distinct select on columns"
@@ -2818,7 +2783,31 @@ type users {
         "filter the rows returned"
         where: recipe_bool_exp
     ): recipe_aggregate!
+    "An array relationship connection"
+    recipes_connection(
+        after: String,
+        before: String,
+        "distinct select on columns"
+        distinct_on: [recipe_select_column!],
+        first: Int,
+        last: Int,
+        "sort the rows by one or more columns"
+        order_by: [recipe_order_by!],
+        "filter the rows returned"
+        where: recipe_bool_exp
+    ): recipeConnection!
     user_name: String
+}
+
+"A Relay Connection object on \"users\""
+type usersConnection {
+    edges: [usersEdge!]!
+    pageInfo: PageInfo!
+}
+
+type usersEdge {
+    cursor: String!
+    node: users!
 }
 
 "aggregated selection of \"users\""
@@ -2927,7 +2916,7 @@ enum food_select_column {
     "column name"
     K
     "column name"
-    brand
+    brand_id
     "column name"
     calcium
     "column name"
@@ -3031,7 +3020,7 @@ enum food_update_column {
     "column name"
     K
     "column name"
-    brand
+    brand_id
     "column name"
     calcium
     "column name"
@@ -3594,7 +3583,7 @@ input food_bool_exp {
     _and: [food_bool_exp]
     _not: food_bool_exp
     _or: [food_bool_exp]
-    brand: uuid_comparison_exp
+    brand_id: uuid_comparison_exp
     calcium: numeric_comparison_exp
     carbohydrates: numeric_comparison_exp
     carbohydrates_fiber: numeric_comparison_exp
@@ -3746,7 +3735,7 @@ input food_insert_input {
     D: numeric
     E: numeric
     K: numeric
-    brand: uuid
+    brand_id: uuid
     calcium: numeric
     carbohydrates: numeric
     carbohydrates_fiber: numeric
@@ -3792,7 +3781,7 @@ input food_max_order_by {
     D: order_by
     E: order_by
     K: order_by
-    brand: order_by
+    brand_id: order_by
     calcium: order_by
     carbohydrates: order_by
     carbohydrates_fiber: order_by
@@ -3833,7 +3822,7 @@ input food_min_order_by {
     D: order_by
     E: order_by
     K: order_by
-    brand: order_by
+    brand_id: order_by
     calcium: order_by
     carbohydrates: order_by
     carbohydrates_fiber: order_by
@@ -3887,7 +3876,7 @@ input food_order_by {
     D: order_by
     E: order_by
     K: order_by
-    brand: order_by
+    brand_id: order_by
     calcium: order_by
     carbohydrates: order_by
     carbohydrates_fiber: order_by
@@ -3938,7 +3927,7 @@ input food_set_input {
     D: numeric
     E: numeric
     K: numeric
-    brand: uuid
+    brand_id: uuid
     calcium: numeric
     carbohydrates: numeric
     carbohydrates_fiber: numeric

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2020-05-02 11:25+0200\n"
-"Mime-Version: 1.0\n"
+"POT-Creation-Date: 2022-04-17 21:08+0200\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: @lingui/cli\n"
@@ -13,137 +13,286 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/screens/Ration/components/FoodLibrary/index.tsx:68
+#: src/screens/Recipes/RecipeCard.tsx:230
+msgid "+ Add ingredient"
+msgstr ""
+
+#: src/screens/FoodLibrary/index.tsx:123
 msgid "<0>Actions</0>"
 msgstr ""
 
-#: src/screens/Ration/components/AddFoodDialog/index.tsx:33
+#: src/screens/Recipes/RecipeCardHeader.tsx:184
+msgid "Add external link"
+msgstr ""
+
+#: src/screens/components/AddFoodDialog/index.tsx:110
 msgid "Add food"
 msgstr ""
 
-#: src/screens/Ration/components/AddMealDialog/index.tsx:89
+#: src/screens/components/AddMealDialog/index.tsx:233
 msgid "Add ingredient"
 msgstr ""
 
-#: src/screens/Ration/components/FoodLibrary/index.tsx:58
-msgid "Add new food"
+#: src/components/GridListing/index.tsx:62
+msgid "Add new item"
 msgstr ""
 
-#: src/screens/Ration/components/AddMealDialog/index.tsx:55
+#: src/screens/components/AddMealDialog/index.tsx:153
 msgid "Add new meal"
 msgstr ""
 
-#: src/screens/Ration/components/AddFoodDialog/index.tsx:37
+#: src/screens/components/AddFoodDialog/index.tsx:114
 msgid "Always add attributes per 100g"
 msgstr ""
 
-#: src/screens/Ration/components/AddFoodDialog/index.tsx:59
-#: src/screens/Ration/components/AddMealDialog/index.tsx:95
-#: src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx:65
-#: src/screens/Ration/components/MealItemDialog/EditMealItemDialog.tsx:62
+#: src/screens/FoodLibrary/index.tsx:115
+msgid "Brand"
+msgstr ""
+
+#: src/components/Card/EditModeCard.tsx:64
+#: src/screens/components/AddFoodDialog/index.tsx:191
+#: src/screens/components/AddMealDialog/index.tsx:239
+#: src/screens/components/CopyDayDialog/index.tsx:122
+#: src/screens/components/MealItemDialog/AddMealItemDialog.tsx:166
+#: src/screens/components/MealItemDialog/EditMealItemDialog.tsx:167
 msgid "Cancel"
 msgstr ""
 
-#: src/screens/Ration/components/FoodLibrary/index.tsx:66
+#: src/screens/FoodLibrary/index.tsx:119
 msgid "Carbohydrates"
 msgstr ""
 
-#: src/screens/Ration/components/AddFoodDialog/index.tsx:54
+#: src/screens/components/AddFoodDialog/index.tsx:174
 msgid "Carbohydrates (g)"
 msgstr ""
 
-#: src/screens/Ration/components/AddFoodDialog/index.tsx:51
+#: src/screens/Authorization/RegisterForm.tsx:124
+msgid "Confirm password"
+msgstr ""
+
+#: src/screens/components/CopyDayDialog/index.tsx:97
+msgid "Copy meals"
+msgstr ""
+
+#: src/components/FoodBrandSelect/index.tsx:78
+msgid "Create <0>{0}</0>"
+msgstr ""
+
+#: src/screens/Authorization/RegisterForm.tsx:80
+msgid "Create an Account"
+msgstr ""
+
+#: src/screens/Authorization/ForgotPasswordForm.tsx:40
+#: src/screens/Authorization/LoginForm.tsx:86
+#: src/screens/Authorization/RegisterForm.tsx:101
+msgid "E-mail"
+msgstr ""
+
+#: src/screens/components/AddFoodDialog/index.tsx:147
 msgid "Energy (cal)"
 msgstr ""
 
-#: src/screens/Ration/components/AddFoodDialog/index.tsx:52
+#: src/screens/components/AddFoodDialog/index.tsx:156
 msgid "Energy (kJ)"
 msgstr ""
 
-#: src/screens/Ration/components/FoodLibrary/index.tsx:64
+#: src/screens/FoodLibrary/index.tsx:117
 msgid "Energy (kcal|kJ)"
 msgstr ""
 
-#: src/screens/Ration/components/FoodLibrary/index.tsx:67
+#: src/screens/Recipes/RecipeCardHeader.tsx:206
+msgid "Enter description"
+msgstr ""
+
+#: src/screens/Authorization/FormCard.tsx:66
+msgid "Error"
+msgstr ""
+
+#: src/screens/components/MealItemDialog/AddMealItemDialog.tsx:204
+msgid "Failed to add item: {0}"
+msgstr ""
+
+#: src/screens/FoodLibrary/index.tsx:120
 msgid "Fats"
 msgstr ""
 
-#: src/screens/Ration/components/AddFoodDialog/index.tsx:55
+#: src/screens/components/AddFoodDialog/index.tsx:183
 msgid "Fats (g)"
 msgstr ""
 
-#: src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx:57
-#: src/screens/Ration/components/MealItemDialog/EditMealItemDialog.tsx:54
-msgid "Food"
+#: src/screens/Authorization/RegisterForm.tsx:87
+msgid "First name"
 msgstr ""
 
-#: src/screens/Ration/components/FoodLibrary/index.tsx:90
+#: src/constants.tsx:22
+msgid "Food Library"
+msgstr ""
+
+#: src/screens/Recipes/RecipeCardHeader.tsx:112
+msgid "For how many portions did you enter the recipe?"
+msgstr ""
+
+#: src/screens/Authorization/ForgotPasswordForm.tsx:27
+#: src/screens/Authorization/LoginForm.tsx:111
+msgid "Forgot password?"
+msgstr ""
+
+#: src/screens/components/CopyDayDialog/index.tsx:102
+msgid "From <0>{formatedFromDate}</0>"
+msgstr ""
+
+#: src/screens/Authorization/RegisterForm.tsx:94
+msgid "Last name"
+msgstr ""
+
+#: src/screens/FoodLibrary/index.tsx:188
 msgid "Library updated"
 msgstr ""
 
-#: src/components/BottomNavigation.tsx:20
-#~ msgid "Meals"
-#~ msgstr ""
+#: src/screens/Authorization/LoginForm.tsx:107
+msgid "Log in"
+msgstr ""
 
-#: src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx:72
-#: src/screens/Ration/components/MealItemDialog/EditMealItemDialog.tsx:69
-#: src/screens/Ration/components/Meals/components/DayPanels/DayPanelHeader.tsx:71
-#: src/screens/Ration/components/Meals/components/DayPanels/PanelDetailActions.tsx:33
-#: src/screens/Ration/components/Meals/components/DayPanels/PanelDetailTable.tsx:60
+#: src/screens/Authorization/LoginForm.tsx:80
+#: src/screens/Authorization/index.tsx:52
+msgid "Login"
+msgstr ""
+
+#: src/constants.tsx:12
+msgid "Meals"
+msgstr ""
+
+#: src/screens/Meals/components/DayPanels/DayPanelHeader.tsx:187
+#: src/screens/Meals/components/DayPanels/PanelDetailActions.tsx:73
+#: src/screens/Meals/components/DayPanels/PanelDetailTable.tsx:144
+#: src/screens/components/MealItemDialog/AddMealItemDialog.tsx:190
+#: src/screens/components/MealItemDialog/EditMealItemDialog.tsx:193
 msgid "Meals successfully updated"
 msgstr ""
 
-#: src/screens/Ration/components/AddFoodDialog/index.tsx:39
-#: src/screens/Ration/components/AddMealDialog/index.tsx:66
-#: src/screens/Ration/components/FoodLibrary/index.tsx:62
+#: src/screens/FoodLibrary/index.tsx:114
+#: src/screens/components/AddFoodDialog/index.tsx:118
+#: src/screens/components/AddMealDialog/index.tsx:174
 msgid "Name"
 msgstr ""
 
-#: src/screens/Ration/components/FoodLibrary/index.tsx:65
+#: src/screens/Authorization/ForgotPasswordForm.tsx:30
+msgid "No problem! Provide us with e-mail your account was created with and we will get back to you."
+msgstr ""
+
+#: src/screens/Authorization/LoginForm.tsx:92
+#: src/screens/Authorization/RegisterForm.tsx:114
+msgid "Password"
+msgstr ""
+
+#: src/components/DrawerNavigation.tsx:149
+msgid "Physique"
+msgstr ""
+
+#: src/screens/Recipes/RecipeCard.tsx:101
+msgid "Portions:"
+msgstr ""
+
+#: src/screens/FoodLibrary/index.tsx:118
 msgid "Proteins"
 msgstr ""
 
-#: src/screens/Ration/components/AddFoodDialog/index.tsx:53
+#: src/screens/components/AddFoodDialog/index.tsx:165
 msgid "Proteins (g)"
 msgstr ""
 
-#: src/components/BottomNavigation.tsx:24
-msgid "Ration"
+#: src/constants.tsx:17
+msgid "Recipes"
 msgstr ""
 
-#: src/screens/Ration/components/Meals/index.tsx:29
-msgid "Select week of the year:"
+#: src/screens/Authorization/RegisterForm.tsx:143
+#: src/screens/Authorization/index.tsx:50
+msgid "Register"
 msgstr ""
 
-#: src/screens/Ration/components/AddFoodDialog/index.tsx:62
-#: src/screens/Ration/components/AddMealDialog/index.tsx:109
-#: src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx:66
-#: src/screens/Ration/components/MealItemDialog/EditMealItemDialog.tsx:63
+#: src/screens/Authorization/ForgotPasswordForm.tsx:51
+msgid "Reset password"
+msgstr ""
+
+#: src/components/Card/EditModeCard.tsx:61
+msgid "Save"
+msgstr ""
+
+#: src/components/FoodBrandSelect/index.tsx:69
+msgid "Select brand"
+msgstr ""
+
+#: src/components/MealAutocomplete.tsx:93
+msgid "Select food"
+msgstr ""
+
+#: src/components/MealAutocomplete.tsx:91
+msgid "Select food or recipe"
+msgstr ""
+
+#: src/screens/components/AddFoodDialog/index.tsx:136
+#: src/screens/components/AddFoodDialog/index.tsx:137
+msgid "Select type"
+msgstr ""
+
+#: src/screens/Meals/index.tsx:77
+msgid "Select week:"
+msgstr ""
+
+#: src/screens/components/AddFoodDialog/index.tsx:194
+#: src/screens/components/AddMealDialog/index.tsx:242
+#: src/screens/components/CopyDayDialog/index.tsx:130
+#: src/screens/components/MealItemDialog/AddMealItemDialog.tsx:174
+#: src/screens/components/MealItemDialog/EditMealItemDialog.tsx:175
 msgid "Submit"
 msgstr ""
 
-#: src/components/BottomNavigation.tsx:23
-msgid "Summary"
+#: src/screens/Authorization/FormCard.tsx:55
+msgid "Success"
 msgstr ""
 
-#: src/screens/Ration/components/AddMealDialog/index.tsx:59
+#: src/screens/Recipes/RecipeCard.tsx:156
+msgid "TOTAL"
+msgstr ""
+
+#: src/screens/Authorization/index.tsx:40
+msgid "The best tool on your way to the best version of yourself"
+msgstr ""
+
+#: src/screens/components/AddMealDialog/index.tsx:157
 msgid "Time when meal was or will be consumed could be added later later. Selection of ingredients meal consist of, could be listed in FOOD LIBRARY tab and extended by <0>Add food</0> button."
 msgstr ""
 
-#: src/screens/Ration/components/FoodLibrary/index.tsx:63
+#: src/screens/components/CopyDayDialog/index.tsx:115
+msgid "To"
+msgstr ""
+
+#: src/screens/FoodLibrary/index.tsx:116
 msgid "Type"
 msgstr ""
 
-#: src/screens/Ration/components/AddMealDialog/index.tsx:81
-#: src/screens/Ration/components/MealItemDialog/AddMealItemDialog.tsx:62
-#: src/screens/Ration/components/MealItemDialog/EditMealItemDialog.tsx:59
+#: src/screens/components/AddFoodDialog/index.tsx:110
+msgid "Update food"
+msgstr ""
+
+#: src/screens/Authorization/RegisterForm.tsx:107
+msgid "Username"
+msgstr ""
+
+#: src/screens/Authorization/ForgotPasswordForm.tsx:57
+msgid "We have just sent further instructions to your e-mail —<0> check it out!</0>"
+msgstr ""
+
+#: src/screens/components/AddMealDialog/index.tsx:209
+#: src/screens/components/MealItemDialog/AddMealItemDialog.tsx:153
+#: src/screens/components/MealItemDialog/EditMealItemDialog.tsx:157
 msgid "Weight (g)"
 msgstr ""
 
-#: src/screens/Ration/components/AddMealDialog/index.tsx:69
-msgid "When"
+#: src/screens/Authorization/index.tsx:37
+msgid "Welcome to Physique.one"
 msgstr ""
 
-#: src/screens/Ration/index.tsx:38
-msgid "{0}"
+#: src/screens/components/AddMealDialog/index.tsx:194
+msgid "When"
 msgstr ""

@@ -4,7 +4,7 @@
   "extensions": {
     "endpoints": {
       "Default GraphQL Endpoint": {
-        "url": "https://body-monitor-be.herokuapp.com/v1/graphql",
+        "url": "https://body-monitor-be.herokuapp.com/v1beta1/relay",
         "headers": {
             "x-hasura-admin-secret": "KsChu1606"
         },

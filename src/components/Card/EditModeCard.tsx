@@ -1,9 +1,8 @@
 import React, { ComponentProps } from "react";
-import { ApolloError } from "@apollo/client";
 import * as M from "@material-ui/core";
 import * as L from "@material-ui/lab";
-import { Trans } from "@lingui/react";
-import { useStyles } from "./useStyles";
+import { Trans } from "@lingui/macro";
+import { useStyles } from "./styles";
 
 export interface EditModeCardProps {
   fields: {
@@ -14,7 +13,7 @@ export interface EditModeCardProps {
   onCancel(): void;
 
   loading?: boolean;
-  error?: ApolloError;
+  error?: Error;
 }
 
 export const EditModeCard = ({

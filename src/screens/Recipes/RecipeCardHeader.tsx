@@ -1,190 +1,145 @@
-import React, { useState } from "react";
+import React, { ChangeEvent } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   CardContent,
   CardHeader,
   createStyles,
+  Link,
   TextField,
   Typography,
-  Box,
-  Input,
-  Link,
 } from "@material-ui/core";
 import { LinkRounded } from "@material-ui/icons";
-import { Trans } from "@lingui/macro";
+import { t } from "@lingui/macro";
+import { RecipeQuery$data } from "src/api-hooks/recipe";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
-import { Recipe_Item_Aggregate } from "../../graphql/generated/graphql";
-import { useStore } from "../../store";
 
 const useStyles = makeStyles((theme) =>
   createStyles({
     title: {
-      maxWidth: 250,
-      cursor: "pointer",
+      display: "flex",
     },
     description: {
-      margin: theme.spacing(1),
-      cursor: "pointer",
+      marginTop: theme.spacing(1),
     },
     editableDescription: {
       width: "100%",
     },
+    flexBox: {
+      display: "flex",
+      alignItems: "center",
+    },
+    icon: {
+      display: "flex",
+      alignItems: "center",
+      marginRight: theme.spacing(2),
+    },
+    portionsContainer: {
+      display: "flex",
+      alignItems: "center",
+      marginTop: theme.spacing(1),
+    },
+    portionInput: {
+      //marginLeft: theme.spacing(2),
+      width: theme.spacing(30),
+    },
   })
 );
+type HeaderData = Pick<
+  RecipeQuery$data["recipe_connection"]["edges"][0]["node"],
+  "name" | "description" | "link" | "portions" | "isOwner"
+>;
 
-export interface RecipeCardHeaderProps {
-  id?: string;
-  name?: string | null;
-  link?: string | null;
-  portions?: number | null;
-  description?: string | null;
-  recipe_items_aggregate?: Recipe_Item_Aggregate;
-  u_id: string;
-}
+export type RecipeCardHeaderProps = {
+  data: HeaderData;
+  isEditable: boolean;
+  setIsEditable(p: boolean): void;
+  setNewValue(
+    key: string
+  ): (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  onDelete(): void;
+  onClose(): void;
+};
 
-// TODO: error handling
 export const RecipeCardHeader = ({
-  id,
-  name,
-  link,
-  portions,
-  description,
-  u_id,
+  data,
+  isEditable,
+  setIsEditable,
+  setNewValue,
+  onDelete,
+  onClose,
 }: RecipeCardHeaderProps) => {
   const classes = useStyles();
-  const {
-    userStore: {
-      user: { id: userId },
-    },
-    recipeStore: { deleteRecipe, updateRecipe },
-  } = useStore();
-  const isPermitted = userId === u_id;
-  const [isEdit, setIsEdit] = useState();
-
-  const [updatedName, setUpdatedName] = useState(name || "Enter recipe name");
-  const [updatedDesc, setUpdatedDesc] = useState(description);
-  const [updatedLink, setUpdatedLink] = useState(link);
-  const [updatedPortioning, setUpdatedPortioning] = useState(portions || 0);
-
-  const handleSubmit = () => {
-    updateRecipe({
-      id,
-      name: updatedName,
-      description: updatedDesc,
-      link: updatedLink,
-      portions: updatedPortioning,
-    });
-    setIsEdit(false);
-  };
-
   return (
     <>
       <CardHeader
         title={
-          isEdit ? (
-            <Box display={"flex"} alignItems={"center"}>
-              <TextField
-                defaultValue={updatedName}
-                type={"text"}
-                onChange={(event: any) => setUpdatedName(event?.target?.value)}
-                className={classes.title}
-              />
-            </Box>
+          isEditable ? (
+            <TextField
+              defaultValue={data.name}
+              placeholder={t`Enter recipe name`}
+              label={t`Recipe name`}
+              type={"text"}
+              onChange={setNewValue("name")}
+              className={classes.title}
+            />
           ) : (
-            <div className={classes.title}>{updatedName}</div>
+            <div className={classes.title}>{data.name}</div>
           )
         }
         action={
-          <Box display={"flex"} alignItems={"center"}>
-            {isPermitted &&
-              (isEdit ? (
-                <Box display={"flex"} alignItems={"center"}>
-                  <Typography id="input-slider" gutterBottom>
-                    <Trans>
-                      For how many portions did you enter the recipe?
-                    </Trans>
-                  </Typography>
-                  <Input
-                    error={!updatedPortioning}
-                    value={updatedPortioning}
-                    margin="dense"
-                    onChange={(event) => {
-                      setUpdatedPortioning(
-                        event.target.value === ""
-                          ? 0
-                          : Number(event.target.value)
-                      );
-                    }}
-                    inputProps={{
-                      step: 1,
-                      min: 0,
-                      max: 100,
-                      type: "number",
-                    }}
-                  />
-                </Box>
-              ) : (
-                <Typography
-                  gutterBottom
-                  variant={"overline"}
-                  color={"textSecondary"}
-                >
-                  {/*TODO: TRANS*/}
-                  Base recipe is for <strong>{updatedPortioning}</strong>{" "}
-                  portions
-                </Typography>
-              ))}
-
-            {isPermitted && (
+          <div className={classes.flexBox}>
+            {data?.isOwner && (
               <EditDeleteButtonGroup
-                onConfirmClick={isEdit ? handleSubmit : undefined}
-                onEditClick={!isEdit ? () => setIsEdit(true) : undefined}
-                onCancelClick={isEdit ? () => setIsEdit(false) : undefined}
-                onDeleteClick={() => deleteRecipe(id!)}
+                colored={true}
+                onEditClick={
+                  !isEditable ? () => setIsEditable(true) : undefined
+                }
+                onConfirmClick={
+                  isEditable ? () => setIsEditable(false) : undefined
+                }
+                onCancelClick={isEditable ? undefined : onClose}
+                onDeleteClick={isEditable ? onDelete : undefined}
               />
             )}
-          </Box>
+          </div>
         }
       />
       <CardContent>
-        {isEdit ? (
-          <Box display={"flex"} alignItems={"center"}>
-            <Box marginRight={2} display={"flex"} alignItems={"center"}>
-              <LinkRounded />
-            </Box>
+        {isEditable ? (
+          <div className={classes.flexBox}>
             <TextField
-              placeholder={"Add external link"} //TODO: TRANS
-              defaultValue={updatedLink}
+              placeholder={t`Add external link`}
+              label={t`External link`}
+              defaultValue={data.link}
               type={"text"}
-              onChange={(event: any) => setUpdatedLink(event?.target?.value)}
+              onChange={setNewValue("link")}
               className={classes.editableDescription}
             />
-          </Box>
+          </div>
         ) : (
-          <Box display={"flex"} alignItems={"center"} justifySelf={"center"}>
-            <Box display={"flex"} marginRight={2}>
+          <div className={classes.flexBox}>
+            <div className={classes.icon}>
               <LinkRounded />
-            </Box>
-            {updatedLink ? (
-              <Link href={updatedLink} target="_blank" rel="noopener">
-                {updatedLink}
+            </div>
+            {data.link ? (
+              <Link href={data.link} target="_blank" rel="noopener">
+                {data.link}
               </Link>
             ) : (
               <Typography color={"textSecondary"}>
-                <i>
-                  <Trans>Add external link</Trans>
-                </i>
+                <i>{t`No link`}</i>
               </Typography>
             )}
-          </Box>
+          </div>
         )}
 
-        {isEdit ? (
+        {isEditable ? (
           <TextField
-            placeholder={"Enter description"}
-            defaultValue={updatedDesc}
+            placeholder={t`Enter description`}
+            label={t`Description`}
+            defaultValue={data.description}
             type={"text"}
-            onChange={(event: any) => setUpdatedDesc(event?.target?.value)}
+            onChange={setNewValue("description")}
             className={classes.editableDescription}
           />
         ) : (
@@ -194,8 +149,27 @@ export const RecipeCardHeader = ({
             component="p"
             className={classes.description}
           >
-            {updatedDesc || <Trans>Enter description</Trans>}
+            {data.description || t`No description`}
           </Typography>
+        )}
+
+        {data?.isOwner && isEditable && (
+          <div className={classes.portionsContainer}>
+            <TextField
+              type={"number"}
+              label={t`How many portions are here?`}
+              error={!data.portions}
+              value={data.portions}
+              onChange={setNewValue("portions")}
+              inputProps={{
+                step: 1,
+                min: 0,
+                max: 100,
+                type: "number",
+              }}
+              className={classes.portionInput}
+            />
+          </div>
         )}
       </CardContent>
     </>

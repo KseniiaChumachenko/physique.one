@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { observer } from "mobx-react-lite";
 import {
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -11,9 +11,18 @@ import {
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
-import { Trans } from "@lingui/react";
-import { useStore } from "src/store";
-import { useAddMealItemMutation } from "../../../graphql/generated/graphql";
+import { Trans } from "@lingui/macro";
+import { useActiveUser } from "src/api-hooks/authorization";
+import {
+  FoodPreloadedHookProps,
+  useFoodPreloadedQuery,
+} from "src/api-hooks/food";
+import {
+  RecipePreloadedHookProps,
+  useRecipePreloaded,
+} from "src/api-hooks/recipe";
+import { useAddMealItemMutation } from "src/api-hooks/mealItem";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { MealAutocomplete } from "../../../components/MealAutocomplete";
 import { aggregate } from "../../Recipes/utils";
 
@@ -24,156 +33,181 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-interface Props {
+type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps;
+
+interface Props extends ExtendProps {
   open: boolean;
   setOpen(o: boolean): void;
-  meal_id?: string;
+  meal_id: string;
+  refetch: () => void;
 }
 
-export const AddMealItemDialog = observer(
-  ({ open, setOpen, meal_id }: Props) => {
-    const classes = useStyles();
-    const {
-      userStore: { user },
-      foodLibraryStore: { data: foodLibrary },
-      recipeStore: { data: recipeLibrary },
-    } = useStore();
+// TODO Refactor Add/Edit modals first
 
-    const [error, setOpenErrorMessage] = React.useState(false);
-    const [success, setOpenSuccessMessage] = React.useState(false);
+export const AddMealItemDialog = ({
+  open,
+  setOpen,
+  meal_id,
+  foodQR,
+  recipeQR,
+  refetch,
+}: Props) => {
+  const classes = useStyles();
+  const { data: foodLibrary } = useFoodPreloadedQuery(foodQR);
+  const { data: recipeLibrary } = useRecipePreloaded(recipeQR);
+  const [addMealItem] = useAddMealItemMutation();
+  const { user } = useActiveUser();
 
-    const [selectedItemId, setSelectedItemId] = useState(foodLibrary?.[0]?.id);
-    const [weight, setWeight] = useState(100);
+  const [error, setOpenErrorMessage] = React.useState<Error>();
+  const [success, setOpenSuccessMessage] = React.useState(false);
 
-    const mealItemProps = () => {
-      const food = foodLibrary.find(({ id }) => id === selectedItemId);
-      if (food) {
+  const [selectedItemId, setSelectedItemId] = useState(
+    foodLibrary.food_connection.edges[0].node.id || ""
+  );
+  const [weight, setWeight] = useState(100);
+
+  const mealItemProps = () => {
+    const food = foodLibrary.food_connection.edges.find(
+      ({ node: { id } }) => id === selectedItemId
+    )?.node;
+    if (food) {
+      const weightAdjustment = (divider: number) =>
+        (divider / (food?.weight || 100)) * weight;
+      return {
+        food: base64ToUuid(food?.id),
+
+        energy_cal: weightAdjustment(food?.energy_cal),
+        energy_kj: weightAdjustment(food?.energy_kj),
+        proteins: weightAdjustment(food?.proteins),
+        carbohydrates: weightAdjustment(food?.carbohydrates),
+        fats: weightAdjustment(food?.fats),
+      };
+    } else {
+      const recipe = recipeLibrary.recipe_connection.edges.find(
+        ({ node: { id } }) => id === selectedItemId
+      )?.node;
+
+      if (recipe) {
+        const recipeWeight = aggregate(recipe.recipe_items as any, "weight");
         const weightAdjustment = (divider: number) =>
-          (divider / (food?.weight || 100)) * weight;
+          (divider / recipeWeight) * weight;
+
         return {
-          food: food?.id,
-
-          energy_cal: weightAdjustment(food?.energy_cal),
-          energy_kj: weightAdjustment(food?.energy_kj),
-          proteins: weightAdjustment(food?.proteins),
-          carbohydrates: weightAdjustment(food?.carbohydrates),
-          fats: weightAdjustment(food?.fats),
+          id: base64ToUuid(recipe.id),
+          recipe_id: base64ToUuid(recipe.id),
+          carbohydrates: weightAdjustment(
+            aggregate(recipe.recipe_items as any, "carbohydrates")
+          ),
+          proteins: weightAdjustment(
+            aggregate(recipe.recipe_items as any, "proteins")
+          ),
+          fats: weightAdjustment(aggregate(recipe.recipe_items as any, "fats")),
+          energy_cal: weightAdjustment(
+            aggregate(recipe.recipe_items as any, "energy_cal")
+          ),
+          energy_kj: weightAdjustment(
+            aggregate(recipe.recipe_items as any, "energy_kj")
+          ),
+          weight: weightAdjustment(
+            aggregate(recipe.recipe_items as any, "weight")
+          ),
         };
-      } else {
-        const recipe = recipeLibrary.find(({ id }) => id === selectedItemId);
-
-        if (recipe) {
-          const recipeWeight = aggregate(recipe.recipe_items, "weight");
-          const weightAdjustment = (divider: number) =>
-            (divider / recipeWeight) * weight;
-
-          return {
-            id: recipe.id,
-            recipe_id: recipe.id,
-            name: recipe.name,
-            carbohydrates: weightAdjustment(
-              aggregate(recipe.recipe_items, "carbohydrates")
-            ),
-            proteins: weightAdjustment(
-              aggregate(recipe.recipe_items, "proteins")
-            ),
-            fats: weightAdjustment(aggregate(recipe.recipe_items, "fats")),
-            energy_cal: weightAdjustment(
-              aggregate(recipe.recipe_items, "energy_cal")
-            ),
-            energy_kj: weightAdjustment(
-              aggregate(recipe.recipe_items, "energy_kj")
-            ),
-            weight: weightAdjustment(aggregate(recipe.recipe_items, "weight")),
-          };
-        }
       }
-    };
+    }
+  };
 
-    const [addMealItem, { error: submitError }] = useAddMealItemMutation({
-      onError: () => setOpenErrorMessage(true),
+  const handleAddMealItem = () =>
+    addMealItem({
+      onError: (e) => setOpenErrorMessage(e),
       onCompleted: () => {
+        refetch();
         setOpenSuccessMessage(true);
         setOpen(false);
       },
       variables: {
-        u_id: user?.id,
-        weight,
-        meal_id,
-        ...mealItemProps(),
+        objects: [
+          {
+            u_id: user?.id,
+            weight,
+            meal_id: base64ToUuid(meal_id),
+            ...mealItemProps(),
+          },
+        ],
       },
     });
 
-    return (
-      <React.Fragment>
-        <Dialog open={open} onClose={() => setOpen(false)}>
-          <DialogTitle>Meal item</DialogTitle>
-          <DialogContent>
-            <MealAutocomplete
-              value={selectedItemId}
-              setValue={setSelectedItemId}
-              className={classes.field}
-            />
-            <TextField
-              label={<Trans>Weight (g)</Trans>}
-              defaultValue={weight}
-              type={"number"}
-              onChange={(event: any) => {
-                setWeight(event?.target?.value);
-                event.stopPropagation();
-              }}
-              className={classes.field}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button
-              variant={"text"}
-              children={<Trans>Cancel</Trans>}
-              onClick={(event) => {
-                setOpen(false);
-                event.stopPropagation();
-              }}
-            />
-            <Button
-              variant={"text"}
-              children={<Trans>Submit</Trans>}
-              onClick={(event) => {
-                addMealItem();
-                event.stopPropagation();
-              }}
-            />
-          </DialogActions>
-        </Dialog>
+  if (!foodQR || !recipeQR) {
+    return <CircularProgress />;
+  }
 
-        {success && (
-          <Snackbar
-            open={success}
-            autoHideDuration={6000}
+  return (
+    <React.Fragment>
+      <Dialog open={open} onClose={() => setOpen(false)}>
+        <DialogTitle>Meal item</DialogTitle>
+        <DialogContent>
+          <MealAutocomplete
+            value={selectedItemId}
+            setValue={setSelectedItemId}
+            className={classes.field}
+            foodQR={foodQR}
+            recipeQR={recipeQR}
+          />
+          <TextField
+            label={<Trans>Weight (g)</Trans>}
+            defaultValue={weight}
+            type={"number"}
+            onChange={(event: any) => {
+              setWeight(event?.target?.value);
+              event.stopPropagation();
+            }}
+            className={classes.field}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            variant={"text"}
+            children={<Trans>Cancel</Trans>}
+            onClick={(event) => {
+              setOpen(false);
+              event.stopPropagation();
+            }}
+          />
+          <Button
+            variant={"text"}
+            children={<Trans>Submit</Trans>}
+            onClick={handleAddMealItem}
+          />
+        </DialogActions>
+      </Dialog>
+
+      {success && (
+        <Snackbar
+          open={success}
+          autoHideDuration={6000}
+          onClose={() => setOpenSuccessMessage(false)}
+        >
+          <Alert
+            severity={"success"}
             onClose={() => setOpenSuccessMessage(false)}
           >
-            <Alert
-              severity={"success"}
-              onClose={() => setOpenSuccessMessage(false)}
-            >
-              <Trans>Meals successfully updated</Trans>
-            </Alert>
-          </Snackbar>
-        )}
-        {error && (
-          <Snackbar
-            open={error}
-            autoHideDuration={6000}
-            onClose={() => setOpenErrorMessage(false)}
+            <Trans>Meals successfully updated</Trans>
+          </Alert>
+        </Snackbar>
+      )}
+      {error && (
+        <Snackbar
+          open={!!error}
+          autoHideDuration={6000}
+          onClose={() => setOpenErrorMessage(undefined)}
+        >
+          <Alert
+            severity={"error"}
+            onClose={() => setOpenErrorMessage(undefined)}
           >
-            <Alert
-              severity={"error"}
-              onClose={() => setOpenErrorMessage(false)}
-            >
-              <Trans>Failed to add item: {submitError?.message}</Trans>
-            </Alert>
-          </Snackbar>
-        )}
-      </React.Fragment>
-    );
-  }
-);
+            <Trans>Failed to add item: {error?.message}</Trans>
+          </Alert>
+        </Snackbar>
+      )}
+    </React.Fragment>
+  );
+};

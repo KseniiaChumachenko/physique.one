@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 import {
   DialogTitle,
   Dialog,
-  DialogContent,
+  DialogContent as MDialogContent,
   DialogContentText,
   TextField,
   Button,
@@ -12,86 +12,83 @@ import {
 } from "@material-ui/core";
 import { DatePicker } from "@material-ui/pickers";
 import { Alert } from "@material-ui/lab";
-import { Trans } from "@lingui/react";
+import { Trans } from "@lingui/macro"
+import { useActiveUser } from "src/api-hooks/authorization";
 import {
-  useCopyDayMutation,
-  useMealsByDateSubscription,
-} from "../../../graphql/generated/graphql";
-import { useStore } from "../../../store";
+  AddMealMutation$variables,
+  MealsByDateQuery$data,
+} from "src/api-hooks/mealsByDate";
+import moment from "moment";
 
 interface Props {
   open: boolean;
   setOpen: any;
-
   date: string;
+  data: MealsByDateQuery$data;
+  onSubmit: (v: AddMealMutation$variables, onClose: () => void) => void;
 }
 
-export const CopyDayDialog = ({ open, setOpen, date }: Props) => {
-  const {
-    userStore: {
-      user: { id: u_id },
-    },
-  } = useStore();
+export const CopyDayDialog = ({
+  open,
+  setOpen,
+  date,
+  data,
+  onSubmit,
+}: Props) => {
+  const { user } = useActiveUser();
 
   const [success, setSuccess] = useState("");
   const [error, setError] = useState("");
-  const [insertDate, setInsertDate] = useState(null);
+  const [insertDate, setInsertDate] = useState(date);
 
-  const { data, loading: getLoading } = useMealsByDateSubscription({
-    variables: { date, u_id },
-  });
+  const newMeals = {
+    data: data.meal_connection.edges.map(({ node: m }) => {
+      const meal_id = uuid();
 
-  const [insert_day_copy, { loading: postLoading }] = useCopyDayMutation({
-    onCompleted: (data) => {
-      setSuccess(
-        `Copied  ${data.insert_meal?.affected_rows} rows successfully`
+      return (
+        m && {
+          id: meal_id,
+          date: insertDate,
+          time: m.time,
+          name: m.name || "",
+          u_id: user?.id,
+          meal_items: {
+            data: m.meal_items_connection.edges.map(
+              ({ node: i }) =>
+                i && {
+                  id: uuid(),
+                  u_id: user?.id,
+                  food: i.food,
+                  weight: i.weight,
+                  carbohydrates: i.carbohydrates,
+                  proteins: i.proteins,
+                  fats: i.fats,
+                  energy_cal: i.energy_cal,
+                  energy_kj: i.energy_kj,
+                  recipe_id: i.recipe_id,
+                }
+            ),
+          },
+        }
       );
-      setOpen(false);
-    },
-    onError: (error) => setError(error.message),
-  });
+    }),
+  };
 
-  const handleClose = (event: any) => {
+  const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSubmit = (event: any) => {
+    onSubmit(newMeals, handleClose);
     event.stopPropagation();
   };
 
-  const newMeals = data?.meal.map((m) => {
-    const meal_id = uuid();
-
-    return {
-      id: meal_id,
-      date: insertDate,
-      time: m.time,
-      name: m.name || "",
-
-      meal_items: m.meal_items.map((i) => ({
-        id: uuid(),
-        u_id,
-        food: i.food,
-        weight: i.weight,
-        carbohydrates: i.carbohydrates,
-        proteins: i.proteins,
-        fats: i.fats,
-        energy_cal: i.energy_cal,
-        energy_kj: i.energy_kj,
-        recipe_id: i.recipe_id,
-      })),
-    };
-  });
-
-  const handleSubmit = (e: any) => {
-    e.stopPropagation();
-    newMeals?.map((m) =>
-      insert_day_copy({
-        variables: { ...m, u_id },
-      })
-    );
-  };
+  const formatedFromDate = moment(date).format("dd (DD/MM/YYYY)");
 
   return (
     <Dialog
       open={open}
+      onClick={(e) => e.stopPropagation()}
       onClose={handleClose}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
@@ -99,40 +96,34 @@ export const CopyDayDialog = ({ open, setOpen, date }: Props) => {
       <DialogTitle id="alert-dialog-title">
         <Trans>Copy meals</Trans>
       </DialogTitle>
-      <DialogContent>
+
+      <MDialogContent>
+        <DialogContentText>
+          <Trans>
+            From <b>{formatedFromDate}</b>
+          </Trans>
+        </DialogContentText>
         <DialogContentText id="alert-dialog-description">
           <DatePicker
-            renderInput={(props: any) => (
-              <TextField
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                onClick={(e) => e.stopPropagation()}
-                placeholder={<Trans>Select date to insert to</Trans>}
-                //className={classes.smallerField}
-                {...props}
-              />
-            )}
+            renderInput={(props) => <TextField {...props} />}
             value={insertDate}
-            onChange={(date) => {
-              setInsertDate(date);
+            onChange={(date, e) => {
+              if (date) {
+                setInsertDate(moment(date, "YYYY-w-e").format());
+              }
             }}
-            label={<Trans>When</Trans>}
-            //autoOk={true}
+            label={<Trans>To</Trans>}
+            inputFormat={"DD/MM/yyyy"}
           />
         </DialogContentText>
-      </DialogContent>
+      </MDialogContent>
       <DialogActions>
-        <Button
-          onClick={handleClose}
-          color="primary"
-          disabled={getLoading || postLoading}
-        >
+        <Button onClick={handleClose} color="primary">
           <Trans>Cancel</Trans>
         </Button>
         <Button
-          disabled={getLoading || postLoading}
           onClick={handleSubmit}
+          variant={"contained"}
           color="primary"
           autoFocus
         >

@@ -1,44 +1,64 @@
 import React, { useState } from "react";
-import { Trans } from "@lingui/react";
+import { Disposable, UseMutationConfig } from "react-relay";
+import { Trans } from "@lingui/macro"
 import { Snackbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 import {
-  Meal,
-  useDeleteMealByIdMutation,
-} from "../../../../graphql/generated/graphql";
+  DeleteMealMutation,
+  DeleteMealMutation$variables,
+} from "src/api-hooks/mealsByDate";
+import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
+import { FoodPreloadedHookProps } from "src/api-hooks/food";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { EditDeleteButtonGroup } from "../../../components/EditDeletButtonGroup";
 import { AddMealItemDialog } from "../../../components/MealItemDialog/AddMealItemDialog";
 
-type MealItem = Pick<Meal, "id">;
+type ExtendProps = DeleteMealMutation$variables &
+  FoodPreloadedHookProps &
+  RecipePreloadedHookProps;
 
-interface Props extends MealItem {}
+interface Props extends ExtendProps {
+  refetch: () => void;
+  destroy: (c: UseMutationConfig<DeleteMealMutation>) => Disposable;
+}
 
-export const PanelDetailActions = ({ id }: Props) => {
+export const PanelDetailActions = ({
+  id,
+  refetch,
+  destroy,
+  foodQR,
+  recipeQR,
+}: Props) => {
   const [openAddMealItemDialog, setAddMealItemDialog] = useState(false);
 
-  const [error, setOpenErrorMessage] = React.useState();
-  const [success, setOpenSuccessMessage] = React.useState();
+  const [error, setOpenErrorMessage] = React.useState<boolean | Error>();
+  const [success, setOpenSuccessMessage] = React.useState<boolean>(false);
 
-  const [delete_meal_by_pk] = useDeleteMealByIdMutation({
-    variables: { id },
-    onCompleted: () => setOpenSuccessMessage(true),
-    onError: (error) => setOpenErrorMessage(error),
-  });
+  const handleDeleteMeal = () =>
+    destroy({
+      variables: { id: base64ToUuid(id as string) },
+      onCompleted: () => setOpenSuccessMessage(true),
+      onError: (error) => setOpenErrorMessage(error),
+    });
 
   return (
     <React.Fragment>
       <EditDeleteButtonGroup
         onAddClick={() => setAddMealItemDialog(true)}
-        onDeleteClick={() => delete_meal_by_pk()}
+        onDeleteClick={handleDeleteMeal}
       />
 
       {/*  Modals  */}
-      <AddMealItemDialog
-        open={openAddMealItemDialog}
-        setOpen={setAddMealItemDialog}
-        meal_id={id}
-      />
-
+      {id && (
+        <AddMealItemDialog
+          refetch={refetch}
+          foodQR={foodQR}
+          recipeQR={recipeQR}
+          open={openAddMealItemDialog}
+          setOpen={setAddMealItemDialog}
+          meal_id={id}
+        />
+      )}
       {/*  Toasts  */}
       {success && (
         <Snackbar
@@ -64,7 +84,9 @@ export const PanelDetailActions = ({ id }: Props) => {
             severity={"error"}
             onClose={() => setOpenSuccessMessage(false)}
           >
-            {error?.message as any}
+            {error instanceof Error
+              ? error.message
+              : ("Failed to delete item" as any)}
           </Alert>
         </Snackbar>
       )}

@@ -1,0 +1,11 @@
+extend type users{
+    isActive: Boolean
+}
+extend type recipe_item{
+    isOwner: Boolean
+}
+
+extend type recipe {
+    isOwner: Boolean
+}
+

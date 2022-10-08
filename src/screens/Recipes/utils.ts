@@ -1,4 +1,20 @@
-import { Food, Recipe_Item } from "../../graphql/generated/graphql";
+import { RecipeItem } from "./RecipeCard";
+
+interface Food {
+  readonly id: string;
+  readonly name: string;
+  readonly type: string;
+  readonly food_brand: {
+    readonly name: string;
+  } | null;
+  readonly carbohydrates: number;
+  readonly proteins: number;
+  readonly fats: number;
+  readonly energy_cal: number;
+  readonly energy_kj: number;
+  readonly u_id: string | null;
+  readonly weight: number | null;
+}
 
 export const getValueByPortionCoefficient = (
   value: number,
@@ -18,30 +34,30 @@ export const getRowValues = (
 ) => ({
   weight: getValueByPortionCoefficient(weight, portionCoefficient),
   energy_cal: getNutrientAccordingToWeight(
-    food.energy_cal,
+    food?.energy_cal,
     weight,
     portionCoefficient
   ),
   energy_kj: getNutrientAccordingToWeight(
-    food.energy_kj,
+    food?.energy_kj,
     weight,
     portionCoefficient
   ),
   proteins: getNutrientAccordingToWeight(
-    food.proteins,
+    food?.proteins,
     weight,
     portionCoefficient
   ),
   carbohydrates: getNutrientAccordingToWeight(
-    food.carbohydrates,
+    food?.carbohydrates,
     weight,
     portionCoefficient
   ),
-  fats: getNutrientAccordingToWeight(food.fats, weight, portionCoefficient),
+  fats: getNutrientAccordingToWeight(food?.fats, weight, portionCoefficient),
 });
 
-export const aggregate = (recipeItems: Recipe_Item[], arg: string) => {
-  const map = recipeItems.map((i) => i[arg]);
+export const aggregate = (recipeItems: readonly RecipeItem[], arg: string) => {
+  const map = recipeItems.filter((i) => i).map((i) => i[arg]);
   if (map.length > 0) {
     return map.reduce((acc, i) => acc + i);
   }

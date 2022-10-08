@@ -1,7 +1,19 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { Avatar, Card, CardHeader, createStyles } from "@material-ui/core";
-import { useStore } from "src/store";
+import {
+  Avatar,
+  Card,
+  CardHeader,
+  CircularProgress,
+  createStyles,
+} from "@material-ui/core";
+import { useActiveUser } from "src/api-hooks/authorization";
+import {
+  UserPreloadedHookProps,
+  useUser,
+  useUserPreloadedQuery,
+} from "src/api-hooks/user";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
 
 export const useStyles = makeStyles((theme) =>
   createStyles({
@@ -12,11 +24,12 @@ export const useStyles = makeStyles((theme) =>
   })
 );
 
-export const Profile = () => {
+const Container = ({ userQR }: UserPreloadedHookProps) => {
   const { avatar } = useStyles();
-  const {
-    userStore: { user },
-  } = useStore();
+
+  const { data } = useUserPreloadedQuery(userQR);
+
+  const user = data.users_connection.edges[0]?.node;
 
   return (
     <div>
@@ -34,5 +47,16 @@ export const Profile = () => {
         />
       </Card>
     </div>
+  );
+};
+
+export const Profile = () => {
+  const { user } = useActiveUser();
+  const { queryReference } = useUser({ id: base64ToUuid(user?.id || "") });
+
+  return (
+    <Suspense fallback={<CircularProgress />}>
+      {queryReference && <Container userQR={queryReference} />}
+    </Suspense>
   );
 };

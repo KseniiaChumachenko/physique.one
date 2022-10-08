@@ -1,44 +1,16 @@
-import omit from "lodash.omit";
-import { useLocalObservable } from "mobx-react-lite";
-import moment, { Moment } from "moment";
 import { v4 } from "uuid";
-import {
-  Meal_Item,
-  Meal_Item_Insert_Input,
-} from "../../../graphql/generated/graphql";
-
-interface State {
-  name?: string | null;
-  setName(newName: string): void;
-
-  time?: any;
-  setTime(newTime: Moment): void;
-
-  foods: Meal_Item[];
-
-  meal_items: Meal_Item_Insert_Input[];
-  add_meal_item(): void;
-  update_meal_item({
-    indexOfItem,
-    food,
-    weight,
-  }: {
-    indexOfItem?: number;
-    food?: Meal_Item;
-    weight?: number;
-  }): void;
-  remove_meal_item(id: string): void;
-}
+import { meal_item_insert_input } from "src/api-hooks/mealsByDate";
+import { FoodQuery$data } from "src/api-hooks/food";
+import { useReducer } from "react";
 
 const calculateMacronutrient = (
-  nutrientPer100G: number,
+  nutrientPer100G: number | null | undefined,
   foodWeight: number,
   weight: number
-) => (nutrientPer100G / foodWeight) * weight;
+) => ((nutrientPer100G || 0) / foodWeight) * weight;
 
 //TODO Duplicate of logic in MealItemDialog
-const standardMealItem = (food: Meal_Item, weight = 100) => ({
-  ...food,
+const standardMealItem = (food: meal_item_insert_input, weight = 100) => ({
   id: v4(),
   food: food.recipe_id ? null : food?.food || food?.id,
   recipe_id: food.recipe_id ?? null,
@@ -58,42 +30,66 @@ const standardMealItem = (food: Meal_Item, weight = 100) => ({
   energy_kj: calculateMacronutrient(food.energy_kj, food.weight || 100, weight),
 });
 
-export function useStore(
-  fetchedFoods: Meal_Item[],
-  name?: string | null,
-  meal_items?: Meal_Item[]
-) {
-  const store: State = useLocalObservable(() => ({
-    name: name,
-    setName: (newName) => {
-      store.name = newName;
-    },
+type UpdateProps = {
+  indexOfItem: number;
+  food?: meal_item_insert_input;
+  weight?: number;
+};
+type RemoveProps = {
+  id: string;
+};
 
-    time: moment(),
-    setTime: (newTime) => {
-      store.time = newTime;
-    },
+const reducer = (
+  state: meal_item_insert_input[],
+  action: {
+    type: "add" | "update" | "remove";
+    payload: {
+      data: {
+        foods: FoodQuery$data;
+      };
+      updateProps?: UpdateProps;
+      removeProps?: RemoveProps;
+    };
+  }
+): meal_item_insert_input[] => {
+  const defaultFood = action.payload.data.foods.food_connection.edges[0]?.node;
 
-    foods: fetchedFoods,
+  const updateIndex = action.payload.updateProps?.indexOfItem || 0;
+  const updateFood = action.payload.updateProps?.food || defaultFood;
+  const updateWeight = action.payload.updateProps?.weight || 100;
 
-    meal_items: meal_items?.map((item) => omit(item, "__typename")) || [
-      standardMealItem(fetchedFoods[0]) as any,
-    ],
+  const removeId = action.payload.removeProps?.id;
 
-    add_meal_item: () => {
-      store.meal_items.push(standardMealItem(fetchedFoods[0]) as any);
-    },
-    update_meal_item: ({ indexOfItem = 0, food, weight }) => {
-      store.meal_items[indexOfItem] = standardMealItem(
-        food || (store.meal_items[indexOfItem] as any),
-        weight || store.meal_items[indexOfItem].weight || 100
-      ) as any;
-    },
-    //TODO: broken
-    remove_meal_item: (id: string) => {
-      store.meal_items = store.meal_items.filter((item) => id !== item.id);
-    },
-  }));
+  switch (action.type) {
+    case "add":
+      return [...(state.length ? state : []), standardMealItem(defaultFood)];
+    case "update":
+      return state.map((i, key) =>
+        key === updateIndex ? standardMealItem(updateFood, updateWeight) : i
+      );
+    case "remove":
+      return state.filter((i) => removeId != i.id);
+    default:
+      throw new Error();
+  }
+};
 
-  return store;
-}
+export const useStore = (foods: FoodQuery$data) => {
+  const [state, dispatch] = useReducer(reducer, [
+    standardMealItem(foods.food_connection.edges[0]?.node),
+  ]);
+
+  const handleAddItem = () =>
+    dispatch({ type: "add", payload: { data: { foods } } });
+  const handleUpdateItem = (updateProps: UpdateProps) =>
+    dispatch({ type: "update", payload: { data: { foods }, updateProps } });
+  const handleRemoveItem = (removeProps: RemoveProps) =>
+    dispatch({ type: "remove", payload: { data: { foods }, removeProps } });
+
+  return {
+    state,
+    handleAddItem,
+    handleUpdateItem,
+    handleRemoveItem,
+  };
+};

@@ -1,16 +1,15 @@
-import React, { useState } from "react";
+import { v4 as uuid } from "uuid";
+import React, { ChangeEvent, useState } from "react";
 import moment from "moment";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { send } from "emailjs-com";
 import { Button, TextField } from "@material-ui/core";
-import { ApolloError } from "@apollo/client";
-import { Trans } from "@lingui/react";
-import { useStore } from "src/store";
+import { Trans } from "@lingui/macro";
 import {
+  ActiveUser,
+  useActiveUser,
   useRegisterMutation,
-  Users,
-  Users_Insert_Input,
-} from "../../graphql/generated/graphql";
+} from "../../api-hooks/authorization";
 import { FormCard } from "./FormCard";
 import {
   EMAILJS_REGISTRATION_CONFIRMATION_TEMPLATE_ID,
@@ -20,44 +19,48 @@ import {
 import { useStyles } from "./styled";
 
 export const RegisterForm = () => {
-  const history = useHistory();
+  const history = useNavigate();
   const classes = useStyles();
-
+  const id = uuid();
   const {
-    userStore: { setUser },
-  } = useStore();
+    mutations: { setActiveUser },
+  } = useActiveUser();
 
-  const [state, setState] = useState<Users_Insert_Input>();
+  const [registerMutation] = useRegisterMutation();
+  const [state, setState] = useState<ActiveUser | undefined>();
   const [password, setPassword] = useState({
     initial: "",
     confirmation: "",
   });
-  const [error, setError] = useState<ApolloError | undefined>(undefined);
+  const [error, setError] = useState<Error | undefined>(undefined);
 
-  const [insert_users_one] = useRegisterMutation({
-    variables: {
-      ...state,
-      password:
-        password.confirmation === password.initial ? password.confirmation : "",
-    },
-    onCompleted: ({ insert_users_one }) => {
-      setUser((insert_users_one as unknown) as Users);
-      send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_REGISTRATION_CONFIRMATION_TEMPLATE_ID,
-        {
-          reply_to: insert_users_one?.email,
-          to_name:
-            insert_users_one?.first_name + " " + insert_users_one?.last_name,
+  const handleRegister = () =>
+    registerMutation({
+      variables: {
+        object: {
+          ...state,
+          password:
+            password.confirmation === password.initial
+              ? password.confirmation
+              : "",
         },
-        EMAILJS_USER_ID
-      );
-      history.push(`/ration/${moment().week()}`);
-    },
-    onError: (error1) => setError(error1),
-  });
-
-  const handleRegister = () => insert_users_one();
+      },
+      onCompleted: ({ insert_users_one }) => {
+        setActiveUser(insert_users_one as any); //TODO
+        send(
+          EMAILJS_SERVICE_ID,
+          EMAILJS_REGISTRATION_CONFIRMATION_TEMPLATE_ID,
+          {
+            reply_to: insert_users_one?.email,
+            to_name:
+              insert_users_one?.first_name + " " + insert_users_one?.last_name,
+          },
+          EMAILJS_USER_ID
+        );
+        history(`/auth/ration?week=${moment().week()}&year=${moment().year()}`);
+      },
+      onError: (error1) => setError(error1),
+    });
 
   const validationUnmet = !(
     state?.email &&
@@ -67,6 +70,10 @@ export const RegisterForm = () => {
     state?.first_name &&
     state?.last_name
   );
+
+  const handleSetState = (v: keyof ActiveUser) => (
+    e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => setState({ ...state, id, [v]: e.target.value } as any);
 
   return (
     <FormCard
@@ -78,27 +85,27 @@ export const RegisterForm = () => {
             variant={"outlined"}
             required={true}
             label={<Trans>First name</Trans>}
-            onChange={(e) => setState({ ...state, first_name: e.target.value })}
+            onChange={handleSetState("first_name")}
           />
           <TextField
             className={classes.textFields}
             variant={"outlined"}
             required={true}
             label={<Trans>Last name</Trans>}
-            onChange={(e) => setState({ ...state, last_name: e.target.value })}
+            onChange={handleSetState("last_name")}
           />
           <TextField
             className={classes.textFields}
             variant={"outlined"}
             required={true}
             label={<Trans>E-mail</Trans>}
-            onChange={(e) => setState({ ...state, email: e.target.value })}
+            onChange={handleSetState("email")}
           />
           <TextField
             className={classes.textFields}
             variant={"outlined"}
             label={<Trans>Username</Trans>}
-            onChange={(e) => setState({ ...state, user_name: e.target.value })}
+            onChange={handleSetState("user_name")}
           />
           <TextField
             className={classes.textFields}

@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { observer } from "mobx-react-lite";
 import clsx from "clsx";
 import { makeStyles, Theme } from "@material-ui/core/styles";
 import {
@@ -20,8 +19,9 @@ import {
   ChevronRightRounded,
   DirectionsRunRounded,
 } from "@material-ui/icons";
-import { Trans } from "@lingui/react";
-import { useHistory, useLocation } from "react-router-dom";
+import { Trans } from "@lingui/macro";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useActiveUser } from "src/api-hooks/authorization";
 import { useStore } from "../store";
 import { ROUTES } from "../constants";
 
@@ -60,33 +60,34 @@ const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
-  avatarItem: {
-    paddingLeft: theme.spacing(1),
-  },
+
   avatar: {
-    marginRight: theme.spacing(3),
+    marginRight: theme.spacing(4),
+    width: 25,
+    height: 25,
   },
 }));
 
-export const DrawerNavigation = observer(() => {
+export const DrawerNavigation = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const history = useNavigate();
   const { pathname } = useLocation();
+  const {
+    user,
+    mutations: { resetUser },
+  } = useActiveUser();
 
   const {
-    screenStore: {
-      navigationOpen,
-      handleToggleNavigation,
-      handleCloseNavigation,
-    },
-    userStore: { user, resetUser },
+    navigationOpen,
+    handleToggleNavigation,
+    handleCloseNavigation,
   } = useStore();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleChangeRoute = useCallback(
     (newRoute: string) => () => {
-      history.push(newRoute);
+      history(newRoute);
       handleCloseNavigation();
     },
     []
@@ -98,11 +99,14 @@ export const DrawerNavigation = observer(() => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-  const handleRedirectToProfile = () => handleChangeRoute("/profile");
+  const handleRedirectToProfile = () => {
+    handleMenuClose();
+    handleChangeRoute("/auth/profile")();
+  };
   const handleLogOut = () => {
     resetUser();
     handleMenuClose();
-    handleChangeRoute("/auth");
+    handleChangeRoute("/login");
   };
 
   const renderMenu = (
@@ -139,7 +143,7 @@ export const DrawerNavigation = observer(() => {
           onClick={handleChangeRoute(ROUTES[0].pathname)}
         />
         <Typography variant={"h5"}>
-          <Trans>ONE | Physique</Trans>
+          <Trans>Physique</Trans>
         </Typography>
       </div>
       <Divider />
@@ -157,7 +161,7 @@ export const DrawerNavigation = observer(() => {
             key={i}
             button
             onClick={handleChangeRoute(r.pathname)}
-            selected={pathname.startsWith(r.pathname.slice(0, 3))}
+            selected={pathname === r.pathname}
           >
             <ListItemIcon children={r.icon} />
             <ListItemText primary={r.title} />
@@ -167,17 +171,14 @@ export const DrawerNavigation = observer(() => {
         <Divider />
 
         {user && (
-          <ListItem
-            button
-            onClick={handleProfileMenuOpen}
-            className={classes.avatarItem}
-          >
+          <ListItem button onClick={handleProfileMenuOpen}>
             <Avatar
               src={user.fb_picture_url || ""}
-              children={user.first_name.toString().slice(0, 1)}
+              children={user.first_name?.toString().slice(0, 1)}
               className={classes.avatar}
+              variant={"rounded"}
             />
-            <ListItemText primary={`${user.first_name} ${user.last_name}`} />
+            <ListItemText primary={user.first_name} />
           </ListItem>
         )}
         {renderMenu}
@@ -196,4 +197,4 @@ export const DrawerNavigation = observer(() => {
       </List>
     </Drawer>
   );
-});
+};

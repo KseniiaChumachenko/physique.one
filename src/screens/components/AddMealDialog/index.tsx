@@ -1,7 +1,6 @@
-import React, { useRef } from "react";
-import { observer } from "mobx-react-lite";
+import React, { Suspense, useRef, useState } from "react";
 import moment from "moment";
-import { Trans } from "@lingui/react";
+import { t, Trans } from "@lingui/macro";
 import {
   Button,
   Dialog,
@@ -10,23 +9,26 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
-  LinearProgress,
   TextField,
 } from "@material-ui/core";
 import { AddRounded, DeleteRounded } from "@material-ui/icons";
 import { makeStyles } from "@material-ui/core/styles";
 import { TimePicker } from "@material-ui/pickers";
 import { Autocomplete } from "@material-ui/lab";
-import { useStore as useGlobalStore } from "src/store";
+import { useActiveUser } from "src/api-hooks/authorization";
+import { AddMealMutation$variables } from "src/api-hooks/mealsByDate";
 import {
-  AddMealMutationVariables,
-  Food,
-  Meal_Item,
-  useFoodSelectFieldListingQuery,
-} from "src/graphql/generated/graphql";
-import { ToastMessage } from "src/components/ToastMessage";
-import { useScrollToBottom } from "src/hooks/useScrollToBottom";
-import { MealAutocomplete } from "../../../components/MealAutocomplete";
+  FoodPreloadedHookProps,
+  useFood,
+  useFoodPreloadedQuery,
+} from "src/api-hooks/food";
+import {
+  RecipePreloadedHookProps,
+  useRecipePreloaded,
+  useRecipe,
+} from "src/api-hooks/recipe";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
+import { MealAutocomplete } from "src/components/MealAutocomplete";
 import { aggregate } from "../../Recipes/utils";
 import { useStore } from "./useStore";
 
@@ -55,189 +57,197 @@ interface Props {
   open: boolean;
   setOpen: any;
   date: string;
-  onConfirm(state: AddMealMutationVariables): (event: any) => void;
+  onConfirm(state: AddMealMutation$variables): (event: any) => void;
 
   name?: string | null;
   time?: any;
-  meal_items?: Meal_Item[];
 }
 
-interface AddMealDialogProps extends Props {
-  fetchedFoods: Food[];
-}
+type AddMealDialogProps = FoodPreloadedHookProps &
+  RecipePreloadedHookProps &
+  Props;
 
-const AddMealDialogDataFlow = observer<AddMealDialogProps>(
-  ({
-    open,
-    setOpen,
-    date,
-    fetchedFoods,
-    name,
-    meal_items, //fetched data - TODO not needed
-    onConfirm,
-  }) => {
-    const classes = useStyles();
-    const {
-      userStore: { user },
-      recipeStore: { data: recipes },
-      foodLibraryStore: { data: foods },
-    } = useGlobalStore();
-    const stateEndRef = useRef(null);
-    const store = useStore(fetchedFoods as any, name, meal_items);
+const AddMealDialogDataFlow = ({
+  open,
+  setOpen,
+  date,
+  name: defaultName,
+  onConfirm,
+  foodQR,
+  recipeQR,
+}: AddMealDialogProps) => {
+  const classes = useStyles();
+  const { user } = useActiveUser();
+  const { data: foods } = useFoodPreloadedQuery(foodQR);
+  const {
+    data: {
+      recipe_connection: { edges: recipes },
+    },
+  } = useRecipePreloaded(recipeQR);
 
-    useScrollToBottom(store.meal_items, stateEndRef); //TODO for some reason this stoped working
+  const [time, setTime] = useState(moment());
+  const [name, setName] = useState(defaultName || "");
 
-    const handleChangeFoodItem = (key: number) => (selectId: string) => {
-      let item = foods[0].id;
-      const r = recipes.find(({ id }) => id === selectId);
-      if (r) {
-        item = {
-          id: r.id,
-          recipe_id: r.id,
-          name: r.name,
-          type: "Recipe",
-          carbohydrates: aggregate(r.recipe_items, "carbohydrates"),
-          proteins: aggregate(r.recipe_items, "proteins"),
-          fats: aggregate(r.recipe_items, "fats"),
-          energy_cal: aggregate(r.recipe_items, "energy_cal"),
-          energy_kj: aggregate(r.recipe_items, "energy_kj"),
-          weight: aggregate(r.recipe_items, "weight"),
-        };
-      } else {
-        item = foods.find(({ id }) => id === selectId);
-      }
+  const stateEndRef = useRef(null);
+  const { state, handleAddItem, handleUpdateItem, handleRemoveItem } = useStore(
+    foods
+  );
 
-      return store.update_meal_item({
-        indexOfItem: key,
-        food: item,
-      });
-    };
-    const handleClose = (event: any) => {
-      setOpen(false);
-      event.stopPropagation();
-    };
+  const handleChangeFoodItem = (key: number) => (selectId: string) => {
+    let item;
+    const r = recipes.find(({ node: { id } }) => id === selectId)?.node;
+    if (r) {
+      item = {
+        id: r.id,
+        recipe_id: r.id,
+        name: r.name,
+        type: "Recipe",
+        carbohydrates: aggregate(r.recipe_items as any, "carbohydrates"),
+        proteins: aggregate(r.recipe_items as any, "proteins"),
+        fats: aggregate(r.recipe_items as any, "fats"),
+        energy_cal: aggregate(r.recipe_items as any, "energy_cal"),
+        energy_kj: aggregate(r.recipe_items as any, "energy_kj"),
+        weight: aggregate(r.recipe_items as any, "weight"),
+      };
+    } else {
+      item = foods.food_connection.edges.find(
+        ({ node: { id } }) => id === selectId
+      )?.node;
+    }
 
-    const handleDeleteItem = (id: string) => () => {
-      store.remove_meal_item(id);
-    };
+    return handleUpdateItem({
+      indexOfItem: key,
+      food: item as any,
+    });
+  };
 
-    return (
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          <Trans>Add new meal</Trans>
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            <Trans>
-              Time when meal was or will be consumed could be added later later.
-              Selection of ingredients meal consist of, could be listed in FOOD
-              LIBRARY tab and extended by <b>Add food</b> button.
-            </Trans>
-          </DialogContentText>
-          <div className={classes.selectorsContainer}>
-            {/*TODO: Localization*/}
-            <Autocomplete
-              value={store.name || ""}
-              options={["Breakfast", "Lunch", "Dinner", "Supper", "Snack"]}
-              getOptionLabel={(option) => option}
-              onInputChange={(event, value) => {
-                event?.preventDefault();
-                store.setName(value);
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label={<Trans>Name</Trans>} />
-              )}
-              freeSolo={true}
-              fullWidth={true}
-              disableClearable={true}
-            />
-            <TimePicker
-              ampm={false}
-              renderInput={(props: any) => (
-                <TextField
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  defaultValue={store.time}
-                  className={classes.smallerField}
-                  {...props}
-                />
-              )}
-              value={store.time}
-              onChange={(time) => store.setTime(time as any)}
-              label={<Trans>When</Trans>}
-            />
-            <IconButton className={classes.emptyBlock} disabled={true} />
-          </div>
-          {store.meal_items.map((item, key) => (
-            <div className={classes.selectorsContainer} key={key}>
-              <MealAutocomplete
-                value={store.meal_items[key].id}
-                setValue={handleChangeFoodItem(key)}
-                fullWidth={true}
-                className={classes.autocompleteField}
-              />
-              <TextField
-                label={<Trans>Weight (g)</Trans>}
-                defaultValue={item.weight}
-                onChange={(event) =>
-                  store.update_meal_item({
-                    indexOfItem: key,
-                    weight: Number(event.target.value),
-                  })
-                }
-                className={classes.smallerField}
-              />
-              <IconButton
-                className={classes.deleteIcon}
-                children={<DeleteRounded />}
-                onClick={handleDeleteItem(item.id)}
-                disabled={key === 0}
-              />
-            </div>
-          ))}
-          <Button
-            color="primary"
-            startIcon={<AddRounded />}
-            onClick={store.add_meal_item}
+  const handleClose = (event: any) => {
+    setOpen(false);
+    event.stopPropagation();
+  };
+
+  const handleSubmit = onConfirm({
+    data: [
+      {
+        name,
+        date,
+        time: moment(time).format("HH:mm"),
+        meal_items: {
+          data: state.map((i) => ({
+            ...i,
+            u_id: user?.id,
+            recipe_id: i.recipe_id ? base64ToUuid(i.recipe_id) : null,
+            food: i.food ? base64ToUuid(i.food) : null,
+          })),
+        },
+        u_id: user?.id,
+      },
+    ],
+  });
+
+  return (
+    <Dialog
+      open={open}
+      onClose={handleClose}
+      aria-labelledby="alert-dialog-title"
+      aria-describedby="alert-dialog-description"
+    >
+      <DialogTitle id="alert-dialog-title">
+        <Trans>Add new meal</Trans>
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText id="alert-dialog-description">
+          <Trans>
+            Time when meal was or will be consumed could be added later later.
+            Selection of ingredients meal consist of, could be listed in FOOD
+            LIBRARY tab and extended by <b>Add food</b> button.
+          </Trans>
+        </DialogContentText>
+        <div className={classes.selectorsContainer}>
+          {/*TODO: Localization*/}
+          <Autocomplete
+            value={name}
+            options={[t`Breakfast`, t`Lunch`, t`Dinner`, t`Supper`, t`Snack`]}
+            getOptionLabel={(option) => option}
+            onInputChange={(event, value) => {
+              event?.preventDefault();
+              setName(value);
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label={<Trans>Name</Trans>} />
+            )}
+            freeSolo={true}
             fullWidth={true}
-          >
-            <Trans>Add ingredient</Trans>
-          </Button>
-          <div ref={stateEndRef} />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            <Trans> Cancel</Trans>
-          </Button>
-          <Button
-            onClick={onConfirm({
-              name: store.name,
-              date,
-              time: moment(store.time).format("HH:mm"),
-              data: store.meal_items.map(
-                ({ name, __typename, type, recipe, ...i }) => ({
-                  u_id: user?.id,
-                  ...i,
+            disableClearable={true}
+          />
+          <TimePicker
+            ampm={false}
+            renderInput={(props: any) => (
+              <TextField
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                defaultValue={time}
+                className={classes.smallerField}
+                {...props}
+              />
+            )}
+            value={time}
+            onChange={(time) => setTime(time as any)}
+            label={<Trans>When</Trans>}
+          />
+          <IconButton className={classes.emptyBlock} disabled={true} />
+        </div>
+        {state.map((item, key) => (
+          <div className={classes.selectorsContainer} key={key}>
+            <MealAutocomplete
+              value={item?.food || ""}
+              setValue={handleChangeFoodItem(key)}
+              fullWidth={true}
+              className={classes.autocompleteField}
+              foodQR={foodQR}
+              recipeQR={recipeQR}
+            />
+            <TextField
+              label={<Trans>Weight (g)</Trans>}
+              defaultValue={item.weight}
+              onChange={(event) =>
+                handleUpdateItem({
+                  indexOfItem: key,
+                  weight: Number(event.target.value),
                 })
-              ),
-              u_id: user?.id,
-            })}
-            color="primary"
-            autoFocus
-          >
-            <Trans>Submit</Trans>
-          </Button>
-        </DialogActions>
-      </Dialog>
-    );
-  }
-);
+              }
+              className={classes.smallerField}
+            />
+            <IconButton
+              className={classes.deleteIcon}
+              children={<DeleteRounded />}
+              onClick={() => handleRemoveItem({ id: item?.id || "" })}
+              disabled={key === 0}
+            />
+          </div>
+        ))}
+        <Button
+          color="primary"
+          startIcon={<AddRounded />}
+          onClick={handleAddItem}
+          fullWidth={true}
+        >
+          <Trans>Add ingredient</Trans>
+        </Button>
+        <div ref={stateEndRef} />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose} color="primary">
+          <Trans> Cancel</Trans>
+        </Button>
+        <Button onClick={handleSubmit} color="primary" autoFocus>
+          <Trans>Submit</Trans>
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
 
 export const AddMealDialog = ({
   open,
@@ -245,32 +255,25 @@ export const AddMealDialog = ({
   date,
   name,
   time,
-  meal_items,
   onConfirm,
 }: Props) => {
-  const { data, loading, error } = useFoodSelectFieldListingQuery();
-  if (error) {
-    return <ToastMessage severity={"error"} children={error?.message as any} />;
-  }
-
-  if (loading) {
-    return <LinearProgress />;
-  }
+  const { queryReference: foodQR } = useFood({});
+  const { queryReference: recipeQR } = useRecipe({});
 
   return (
-    <React.Fragment>
-      {data && (
+    <Suspense fallback={<div />}>
+      {foodQR && recipeQR && (
         <AddMealDialogDataFlow
           open={open}
           setOpen={setOpen}
           date={date}
-          fetchedFoods={data.food as Food[]}
           name={name}
           time={time}
-          meal_items={meal_items}
           onConfirm={onConfirm}
+          foodQR={foodQR}
+          recipeQR={recipeQR}
         />
       )}
-    </React.Fragment>
+    </Suspense>
   );
 };

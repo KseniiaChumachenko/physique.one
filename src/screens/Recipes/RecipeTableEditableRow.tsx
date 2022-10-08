@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { observer } from "mobx-react-lite";
 import { NIL, v4 as uuid } from "uuid";
 import { makeStyles } from "@material-ui/core/styles";
 import {
@@ -8,15 +7,31 @@ import {
   TableRow,
   TextField,
 } from "@material-ui/core";
+import { useActiveUser } from "src/api-hooks/authorization";
+import {
+  FoodPreloadedHookProps,
+  useFoodPreloadedQuery,
+} from "src/api-hooks/food";
+import {
+  RecipePreloadedHookProps,
+  useRecipePreloaded,
+} from "src/api-hooks/recipe";
+import {
+  useAddRecipeItemMutation,
+  useUpdateRecipeItemMutation,
+  useDeleteRecipeItemMutation,
+} from "src/api-hooks/recipeItem";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 import { MealAutocomplete } from "../../components/MealAutocomplete";
-import { Recipe_Item } from "../../graphql/generated/graphql";
-import { useStore } from "../../store";
+import { base64ToUuid } from "../../utils/base64-to-uuid";
 import { getRowValues } from "./utils";
+import { RecipeItem } from "./RecipeCard";
 
-interface Props {
+type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps;
+
+interface Props extends ExtendProps {
   recipe_id?: string;
-  row: Partial<Recipe_Item>;
+  row: RecipeItem;
   u_id: string;
   coefficientForPortions: number;
   onDiscardAddRow?: () => void;
@@ -37,140 +52,189 @@ const useStyles = makeStyles((theme) =>
   })
 );
 
-// TODO(#8): unify food selector across app
-// TODO: error handling
+export const RecipeTableEditableRow = ({
+  recipe_id,
+  row: basePortionRow,
+  u_id,
+  coefficientForPortions,
+  onDiscardAddRow,
+  foodQR,
+  recipeQR,
+}: Props) => {
+  const classes = useStyles();
+  const { data } = useFoodPreloadedQuery(foodQR);
+  const { refetch } = useRecipePreloaded(recipeQR);
+  const { user } = useActiveUser();
+  const [add] = useAddRecipeItemMutation();
+  const [update] = useUpdateRecipeItemMutation();
+  const [destroy] = useDeleteRecipeItemMutation();
 
-export const RecipeTableEditableRow = observer(
-  ({
-    recipe_id,
-    row: basePortionRow,
+  const isPermitted = user?.id === u_id;
+  const isNewRecipeItem = basePortionRow?.id === NIL;
+
+  const [isInEditMode, setEditMode] = useState(isNewRecipeItem);
+
+  const [rowFoodId, setRowFoodId] = useState(basePortionRow?.food?.id);
+  const [rowFoodWeight, setRowFoodWeight] = useState(basePortionRow?.weight);
+
+  const foodById = data.food_connection.edges.find(
+    ({ node }) =>
+      node.id === (rowFoodId ?? data.food_connection.edges[0].node.id)
+  )!;
+
+  const {
+    carbohydrates,
+    energy_cal,
+    energy_kj,
+    fats,
+    proteins,
+    weight,
+  } = getRowValues(
+    foodById.node,
+    rowFoodWeight,
+    isInEditMode ? 1 : coefficientForPortions
+  );
+
+  const row = {
+    id: base64ToUuid(basePortionRow.id),
+    food_id: base64ToUuid(foodById?.node.id),
+    food: foodById,
+    recipe_id: recipe_id ? base64ToUuid(recipe_id) : undefined,
     u_id,
-    coefficientForPortions,
-    onDiscardAddRow,
-  }: Props) => {
-    const classes = useStyles();
-    const {
-      userStore: {
-        user: { id: userId },
-      },
-      foodLibraryStore: { data },
-      recipeStore: { addRecipeItem, updateRecipeItem, deleteRecipeItem },
-    } = useStore();
+    carbohydrates,
+    energy_cal,
+    energy_kj,
+    fats,
+    proteins,
+    weight,
+  };
 
-    const isPermitted = userId === u_id;
-    const isNewRecipeItem = basePortionRow?.id === NIL;
+  const newRecipeId = uuid();
 
-    const [isInEditMode, setEditMode] = useState(isNewRecipeItem);
+  const handleSubmit = isInEditMode
+    ? isNewRecipeItem
+      ? () =>
+          add({
+            variables: {
+              objects: [
+                {
+                  carbohydrates,
+                  energy_cal,
+                  energy_kj,
+                  fats,
+                  food_id: row.food_id,
+                  proteins,
+                  recipe_id: row.recipe_id,
+                  u_id,
+                  weight,
+                  id: newRecipeId,
+                },
+              ],
+              id: newRecipeId,
+            },
+            onCompleted: () => {
+              refetch();
+              onDiscardAddRow?.();
+            },
+          })
+      : () =>
+          update({
+            variables: {
+              id: row.id!,
+              set: { food_id: row.food_id, weight: row.weight },
+            },
+            onCompleted: () => {
+              refetch();
+              setEditMode(false);
+            },
+          })
+    : undefined;
 
-    const [rowFoodId, setRowFoodId] = useState(basePortionRow?.food?.id);
-    const [rowFoodWeight, setRowFoodWeight] = useState(basePortionRow?.weight);
+  const handleCancel = isInEditMode
+    ? () => {
+        setEditMode(false);
+        onDiscardAddRow?.();
+      }
+    : undefined;
 
-    const foodById = data.find(
-      (item) => item.id === (rowFoodId ?? data[0].id)
-    )!;
-    const row = {
-      id: basePortionRow.id,
-      food_id: foodById?.id,
-      food: foodById,
-      recipe_id,
-      u_id,
-      ...getRowValues(
-        foodById,
-        rowFoodWeight,
-        isInEditMode ? 1 : coefficientForPortions
-      ),
-    };
+  const handleEdit = !isInEditMode ? () => setEditMode(true) : undefined;
 
-    const handleSubmit = isInEditMode
-      ? isNewRecipeItem
-        ? () => addRecipeItem({ ...row, id: uuid() }, onDiscardAddRow)
-        : () => updateRecipeItem(row, () => setEditMode(false))
-      : undefined;
+  const handleDelete = !isNewRecipeItem
+    ? () => destroy({ variables: { id: base64ToUuid(row.id) } })
+    : undefined;
 
-    const handleCancel = isInEditMode
-      ? () => {
-          setEditMode(false);
-          onDiscardAddRow?.();
-        }
-      : undefined;
-
-    const handleEdit = !isInEditMode ? () => setEditMode(true) : undefined;
-
-    const handleDelete = !isNewRecipeItem
-      ? () => deleteRecipeItem(row.id)
-      : undefined;
-
-    return (
-      <TableRow>
-        {isInEditMode ? (
-          <>
-            <TableCell
-              component="th"
-              scope="row"
-              className={classes.foodCell}
-              children={
-                <MealAutocomplete
-                  value={row.food?.id}
-                  setValue={setRowFoodId}
-                  withRecipes={false}
-                />
-              }
-            />
-            <TableCell
-              component="th"
-              scope="row"
-              children={
-                <TextField
-                  value={rowFoodWeight}
-                  type={"number"}
-                  onChange={(event: any) =>
-                    setRowFoodWeight(event?.target?.value)
-                  }
-                  className={classes.weightInput}
-                />
-              }
-            />
-          </>
-        ) : (
-          <>
-            <TableCell
-              component="th"
-              scope="row"
-              children={row?.food?.name}
-              className={classes.foodCell}
-            />
-            <TableCell component="th" scope="row" children={row?.weight} />
-          </>
-        )}
-        <TableCell
-          component="th"
-          scope="row"
-          children={
-            <React.Fragment>
-              {row?.energy_cal}
-              &nbsp;|&nbsp;
-              {row?.energy_kj}
-            </React.Fragment>
-          }
-        />
-        <TableCell component="th" scope="row" children={row?.proteins} />
-        <TableCell component="th" scope="row" children={row?.carbohydrates} />
-        <TableCell component="th" scope="row" children={row?.fats} />
-        <TableCell
-          component="th"
-          scope="row"
-          children={
-            isPermitted && (
-              <EditDeleteButtonGroup
-                onConfirmClick={handleSubmit}
-                onCancelClick={handleCancel}
-                onEditClick={handleEdit}
-                onDeleteClick={handleDelete}
+  return (
+    <TableRow>
+      {isInEditMode ? (
+        <>
+          <TableCell
+            component="th"
+            scope="row"
+            className={classes.foodCell}
+            children={
+              <MealAutocomplete
+                recipeQR={recipeQR}
+                foodQR={foodQR}
+                value={row.food?.node.id}
+                setValue={setRowFoodId}
+                withRecipes={false}
               />
-            )
-          }
-        />
-      </TableRow>
-    );
-  }
-);
+            }
+          />
+          <TableCell
+            component="th"
+            scope="row"
+            children={
+              <TextField
+                value={rowFoodWeight}
+                type={"number"}
+                onChange={(event: any) =>
+                  setRowFoodWeight(event?.target?.value)
+                }
+                className={classes.weightInput}
+              />
+            }
+          />
+        </>
+      ) : (
+        <>
+          <TableCell
+            component="th"
+            scope="row"
+            children={row?.food?.node.name}
+            className={classes.foodCell}
+          />
+          <TableCell component="th" scope="row" children={row?.weight} />
+        </>
+      )}
+      <TableCell
+        component="th"
+        scope="row"
+        children={
+          <React.Fragment>
+            {row?.energy_cal}
+            &nbsp;|&nbsp;
+            {row?.energy_kj}
+          </React.Fragment>
+        }
+      />
+      <TableCell component="th" scope="row" children={row?.proteins} />
+      <TableCell component="th" scope="row" children={row?.carbohydrates} />
+      <TableCell component="th" scope="row" children={row?.fats} />
+      <TableCell
+        component="th"
+        scope="row"
+        children={
+          isPermitted && (
+            <EditDeleteButtonGroup
+              onConfirmClick={handleSubmit}
+              onCancelClick={handleCancel}
+              onEditClick={handleEdit}
+              onDeleteClick={handleDelete}
+            />
+          )
+        }
+      />
+    </TableRow>
+  );
+};

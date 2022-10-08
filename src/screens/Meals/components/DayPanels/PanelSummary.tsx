@@ -1,14 +1,13 @@
 import React from "react";
 import moment from "moment";
+import { Disposable, UseMutationConfig } from "react-relay";
 import { ExpandMoreRounded } from "@material-ui/icons";
-import { ExpansionPanelSummary, Grid, Typography } from "@material-ui/core";
+import { AccordionSummary, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Meal,
-  useMealItemMacrosSumByIdSubscription,
-} from "src/graphql/generated/graphql";
-import { useStore } from "src/store";
-import { AggregationChips } from "../../../../components/AggredationChips";
+import { DeleteMealMutation } from "src/api-hooks/mealsByDate";
+import { FoodPreloadedHookProps } from "src/api-hooks/food";
+import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
+import { AggregationChips } from "../../../../components/AggregationChips";
 import { PanelDetailActions } from "./PanelDetailActions";
 
 const useStyles = makeStyles((theme) => ({
@@ -20,22 +19,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type SummaryProps = Pick<Meal, "name" | "time"> & Pick<Meal, "id">;
+//TODO: types
+type SummaryProps = {
+  readonly id: string;
+  readonly date: string | null;
+  readonly time: string | null;
+  readonly name: string | null;
+} & {
+  meal_items_aggregate: {
+    readonly aggregate: {
+      readonly sum: {
+        readonly carbohydrates: number | null;
+        readonly energy_cal: number | null;
+        readonly energy_kj: number | null;
+        readonly fats: number | null;
+        readonly proteins: number | null;
+      } | null;
+    } | null;
+  };
+} & {
+  refetch: () => void;
+  destroy: (c: UseMutationConfig<DeleteMealMutation>) => Disposable;
+} & FoodPreloadedHookProps &
+  RecipePreloadedHookProps;
 
-export const PanelSummary = ({ name, id, time }: SummaryProps) => {
+export const PanelSummary = ({
+  name,
+  id,
+  time,
+  meal_items_aggregate,
+  refetch,
+  destroy,
+  foodQR,
+  recipeQR,
+}: SummaryProps) => {
   const classes = useStyles();
-  const {
-    userStore: { user },
-  } = useStore();
 
-  const { data } = useMealItemMacrosSumByIdSubscription({
-    variables: { meal_id: id, u_id: user?.id },
-  });
-
-  const macronutrients = data?.meal_item_aggregate?.aggregate?.sum;
+  const macronutrients = meal_items_aggregate.aggregate?.sum;
 
   return (
-    <ExpansionPanelSummary expandIcon={<ExpandMoreRounded />}>
+    <AccordionSummary expandIcon={<ExpandMoreRounded />}>
       <div className={classes.panelHeader}>
         <Grid container spacing={1} alignItems={"center"}>
           <Grid
@@ -45,23 +68,31 @@ export const PanelSummary = ({ name, id, time }: SummaryProps) => {
             children={<Typography color={"textPrimary"}>{name}</Typography>}
           />
           <Grid item xs={4} md alignItems={"center"}>
-            {macronutrients?.energy_kj ? (
-              <AggregationChips
-                energy_cal={macronutrients.energy_cal}
-                energy_kj={macronutrients.energy_kj}
-                proteins={macronutrients.proteins}
-                carbohydrates={macronutrients.carbohydrates}
-                fats={macronutrients.fats}
-              />
-            ) : null}
+            <AggregationChips
+              energy_cal={macronutrients?.energy_cal || 0}
+              energy_kj={macronutrients?.energy_kj || 0}
+              proteins={macronutrients?.proteins || 0}
+              carbohydrates={macronutrients?.carbohydrates || 0}
+              fats={macronutrients?.fats || 0}
+            />
           </Grid>
-          <Grid
-            item
-            xs={5}
-            md={2}
-            alignItems={"center"}
-            children={<PanelDetailActions id={id} />}
-          />
+          {id && (
+            <Grid
+              item
+              xs={5}
+              md={2}
+              alignItems={"center"}
+              children={
+                <PanelDetailActions
+                  id={id}
+                  refetch={refetch}
+                  destroy={destroy}
+                  foodQR={foodQR}
+                  recipeQR={recipeQR}
+                />
+              }
+            />
+          )}
           <Grid
             item
             xs={3}
@@ -75,6 +106,6 @@ export const PanelSummary = ({ name, id, time }: SummaryProps) => {
           />
         </Grid>
       </div>
-    </ExpansionPanelSummary>
+    </AccordionSummary>
   );
 };
