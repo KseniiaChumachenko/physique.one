@@ -23,7 +23,7 @@
     "regenerator-runtime": "^0.13.9",
     "serve": "^13.0.2",
     "uuid": "^8.3.2",
-    "vite": "^2.9.1",
+    "vite": "^2.9.13",
     "vite-plugin-babel-macros": "^1.0.6",
     "vite-plugin-relay": "^1.0.7",
     "@babel/plugin-proposal-class-properties": "^7.16.7",
