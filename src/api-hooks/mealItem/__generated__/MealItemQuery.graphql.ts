@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a10144cc995f5c457ce5a805f4183d28>>
+ * @generated SignedSource<<91daeb2ede4fac718db7dfbe673abf63>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -25,6 +25,11 @@ export type MealItemQuery$data = {
         readonly meal_id: string;
         readonly id: string;
         readonly food: string | null;
+        readonly foodDesc: {
+          readonly food_brand: {
+            readonly name: string;
+          } | null;
+        } | null;
         readonly fats: number;
         readonly energy_kj: number;
         readonly energy_cal: number;
@@ -53,140 +58,192 @@ var v0 = [
 ],
 v1 = [
   {
-    "alias": null,
-    "args": [
+    "fields": [
       {
         "fields": [
           {
-            "fields": [
-              {
-                "kind": "Variable",
-                "name": "_eq",
-                "variableName": "id"
-              }
-            ],
-            "kind": "ObjectValue",
-            "name": "id"
-          },
-          {
-            "fields": [
-              {
-                "kind": "Variable",
-                "name": "_eq",
-                "variableName": "u_id"
-              }
-            ],
-            "kind": "ObjectValue",
-            "name": "u_id"
+            "kind": "Variable",
+            "name": "_eq",
+            "variableName": "id"
           }
         ],
         "kind": "ObjectValue",
-        "name": "where"
+        "name": "id"
+      },
+      {
+        "fields": [
+          {
+            "kind": "Variable",
+            "name": "_eq",
+            "variableName": "u_id"
+          }
+        ],
+        "kind": "ObjectValue",
+        "name": "u_id"
       }
     ],
-    "concreteType": "meal_itemConnection",
-    "kind": "LinkedField",
-    "name": "meal_item_connection",
-    "plural": false,
+    "kind": "ObjectValue",
+    "name": "where"
+  }
+],
+v2 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "cursor",
+  "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "weight",
+  "storageKey": null
+},
+v4 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "u_id",
+  "storageKey": null
+},
+v5 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "recipe_id",
+  "storageKey": null
+},
+v6 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "proteins",
+  "storageKey": null
+},
+v7 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "meal_id",
+  "storageKey": null
+},
+v8 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+},
+v9 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "food",
+  "storageKey": null
+},
+v10 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
+v11 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "fats",
+  "storageKey": null
+},
+v12 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "energy_kj",
+  "storageKey": null
+},
+v13 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "energy_cal",
+  "storageKey": null
+},
+v14 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "carbohydrates",
+  "storageKey": null
+};
+return {
+  "fragment": {
+    "argumentDefinitions": (v0/*: any*/),
+    "kind": "Fragment",
+    "metadata": null,
+    "name": "MealItemQuery",
     "selections": [
       {
         "alias": null,
-        "args": null,
-        "concreteType": "meal_itemEdge",
+        "args": (v1/*: any*/),
+        "concreteType": "meal_itemConnection",
         "kind": "LinkedField",
-        "name": "edges",
-        "plural": true,
+        "name": "meal_item_connection",
+        "plural": false,
         "selections": [
           {
             "alias": null,
             "args": null,
-            "kind": "ScalarField",
-            "name": "cursor",
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "meal_item",
+            "concreteType": "meal_itemEdge",
             "kind": "LinkedField",
-            "name": "node",
-            "plural": false,
+            "name": "edges",
+            "plural": true,
             "selections": [
+              (v2/*: any*/),
               {
                 "alias": null,
                 "args": null,
-                "kind": "ScalarField",
-                "name": "weight",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "u_id",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "recipe_id",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "proteins",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "meal_id",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "id",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "food",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "fats",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "energy_kj",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "energy_cal",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "carbohydrates",
+                "concreteType": "meal_item",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/),
+                  (v4/*: any*/),
+                  (v5/*: any*/),
+                  (v6/*: any*/),
+                  (v7/*: any*/),
+                  (v8/*: any*/),
+                  (v9/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "food",
+                    "kind": "LinkedField",
+                    "name": "foodDesc",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "food_brand",
+                        "kind": "LinkedField",
+                        "name": "food_brand",
+                        "plural": false,
+                        "selections": [
+                          (v10/*: any*/)
+                        ],
+                        "storageKey": null
+                      }
+                    ],
+                    "storageKey": null
+                  },
+                  (v11/*: any*/),
+                  (v12/*: any*/),
+                  (v13/*: any*/),
+                  (v14/*: any*/)
+                ],
                 "storageKey": null
               }
             ],
@@ -196,16 +253,6 @@ v1 = [
         "storageKey": null
       }
     ],
-    "storageKey": null
-  }
-];
-return {
-  "fragment": {
-    "argumentDefinitions": (v0/*: any*/),
-    "kind": "Fragment",
-    "metadata": null,
-    "name": "MealItemQuery",
-    "selections": (v1/*: any*/),
     "type": "query_root",
     "abstractKey": null
   },
@@ -214,19 +261,90 @@ return {
     "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
     "name": "MealItemQuery",
-    "selections": (v1/*: any*/)
+    "selections": [
+      {
+        "alias": null,
+        "args": (v1/*: any*/),
+        "concreteType": "meal_itemConnection",
+        "kind": "LinkedField",
+        "name": "meal_item_connection",
+        "plural": false,
+        "selections": [
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "meal_itemEdge",
+            "kind": "LinkedField",
+            "name": "edges",
+            "plural": true,
+            "selections": [
+              (v2/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "concreteType": "meal_item",
+                "kind": "LinkedField",
+                "name": "node",
+                "plural": false,
+                "selections": [
+                  (v3/*: any*/),
+                  (v4/*: any*/),
+                  (v5/*: any*/),
+                  (v6/*: any*/),
+                  (v7/*: any*/),
+                  (v8/*: any*/),
+                  (v9/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "food",
+                    "kind": "LinkedField",
+                    "name": "foodDesc",
+                    "plural": false,
+                    "selections": [
+                      {
+                        "alias": null,
+                        "args": null,
+                        "concreteType": "food_brand",
+                        "kind": "LinkedField",
+                        "name": "food_brand",
+                        "plural": false,
+                        "selections": [
+                          (v10/*: any*/),
+                          (v8/*: any*/)
+                        ],
+                        "storageKey": null
+                      },
+                      (v8/*: any*/)
+                    ],
+                    "storageKey": null
+                  },
+                  (v11/*: any*/),
+                  (v12/*: any*/),
+                  (v13/*: any*/),
+                  (v14/*: any*/)
+                ],
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
+          }
+        ],
+        "storageKey": null
+      }
+    ]
   },
   "params": {
-    "cacheID": "ab5eeb18c1cbf0e1f01e82ccc05f328c",
+    "cacheID": "0729a95caa150dcdd6b76512583014a3",
     "id": null,
     "metadata": {},
     "name": "MealItemQuery",
     "operationKind": "query",
-    "text": "query MealItemQuery(\n  $id: uuid\n  $u_id: uuid\n) {\n  meal_item_connection(where: {id: {_eq: $id}, u_id: {_eq: $u_id}}) {\n    edges {\n      cursor\n      node {\n        weight\n        u_id\n        recipe_id\n        proteins\n        meal_id\n        id\n        food\n        fats\n        energy_kj\n        energy_cal\n        carbohydrates\n      }\n    }\n  }\n}\n"
+    "text": "query MealItemQuery(\n  $id: uuid\n  $u_id: uuid\n) {\n  meal_item_connection(where: {id: {_eq: $id}, u_id: {_eq: $u_id}}) {\n    edges {\n      cursor\n      node {\n        weight\n        u_id\n        recipe_id\n        proteins\n        meal_id\n        id\n        food\n        foodDesc {\n          food_brand {\n            name\n            id\n          }\n          id\n        }\n        fats\n        energy_kj\n        energy_cal\n        carbohydrates\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4f00ee8c817680685a69c93ac129a03a";
+(node as any).hash = "18d732b4b2627eff5252b612523a3d89";
 
 export default node;

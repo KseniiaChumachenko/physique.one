@@ -11,6 +11,9 @@ export type Meal_Item = {
     readonly carbohydrates: number;
     readonly fats: number;
     readonly proteins: number;
+    readonly food_brand: {
+      readonly name: string;
+    } | null;
   } | null;
   readonly weight: number;
   readonly carbohydrates: number;

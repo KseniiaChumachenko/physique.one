@@ -50,20 +50,31 @@ export const RecipesContent = ({
     }
   }, [gridWidth, elRef.current]);
 
-  const handleAddRecipe = () =>
+  const handleAddRecipe = () => {
+    const activeRecipeId = uuid();
+    const data = {
+      id: activeRecipeId,
+      name: "New recipe",
+      u_id: user?.id,
+      recipe_items: null,
+    };
+
     add({
       variables: {
-        objects: [
-          {
-            id: uuid(),
-            name: "New recipe",
-            u_id: user?.id,
-            meal_items: null,
-            recipe_items: null,
-          },
-        ],
+        objects: [data],
+      },
+      onCompleted: (response, errors) => {
+        if (!errors) {
+          setSearchParams({
+            activeRecipeId:
+              response?.insert_recipe?.returning[0].id || activeRecipeId,
+            isDrawerOpen: "true",
+            isEditing: "true",
+          });
+        }
       },
     });
+  };
 
   const handleCloseDrawer = () => {
     setSearchParams({ activeRecipeId: activeRecipeId, isDrawerOpen: "false" });
@@ -142,7 +153,7 @@ export const RecipesContent = ({
               <Grid item key={i}>
                 <RecipeCard2
                   ref={node?.id === activeRecipeId ? elRef : null}
-                  key={node?.id}
+                  key={node?.name}
                   id={node?.id}
                   name={node?.name}
                   onClick={handleSetActiveRecipeId}
@@ -155,6 +166,7 @@ export const RecipesContent = ({
       </Grid>
 
       <RecipeDrawer
+        key={activeRecipeId}
         isOpen={isDrawerOpen}
         onClose={handleCloseDrawer}
         data={

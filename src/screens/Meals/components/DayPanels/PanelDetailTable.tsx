@@ -7,6 +7,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { Alert } from "@material-ui/lab";
@@ -86,7 +87,21 @@ export const PanelDetailTable = ({
                   <TableCell
                     component="th"
                     scope="row"
-                    children={row?.foodDesc?.name || row?.recipe?.name}
+                    children={
+                      <>
+                        {row?.recipe?.name || (
+                          <>
+                            {row?.foodDesc?.name}{" "}
+                            <Typography
+                              variant={"caption"}
+                              color={"textSecondary"}
+                            >
+                              {row?.foodDesc?.food_brand?.name}
+                            </Typography>
+                          </>
+                        )}
+                      </>
+                    }
                   />
                   <TableCell
                     component="th"

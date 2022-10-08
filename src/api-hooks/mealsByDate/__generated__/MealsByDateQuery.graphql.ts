@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3954a767861304b5fb3c484ef49922fc>>
+ * @generated SignedSource<<87e22b8bfa914f1f613612ceb39dff18>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -36,6 +36,9 @@ export type MealsByDateQuery$data = {
                 readonly carbohydrates: number;
                 readonly fats: number;
                 readonly proteins: number;
+                readonly food_brand: {
+                  readonly name: string;
+                } | null;
               } | null;
               readonly weight: number;
               readonly carbohydrates: number;
@@ -217,24 +220,9 @@ v17 = {
   "name": "proteins",
   "storageKey": null
 },
-v18 = {
-  "alias": null,
-  "args": null,
-  "concreteType": "food",
-  "kind": "LinkedField",
-  "name": "foodDesc",
-  "plural": false,
-  "selections": [
-    (v5/*: any*/),
-    (v8/*: any*/),
-    (v13/*: any*/),
-    (v14/*: any*/),
-    (v15/*: any*/),
-    (v16/*: any*/),
-    (v17/*: any*/)
-  ],
-  "storageKey": null
-},
+v18 = [
+  (v8/*: any*/)
+],
 v19 = {
   "alias": null,
   "args": null,
@@ -308,7 +296,11 @@ v22 = {
     }
   ],
   "storageKey": null
-};
+},
+v23 = [
+  (v8/*: any*/),
+  (v5/*: any*/)
+];
 return {
   "fragment": {
     "argumentDefinitions": (v0/*: any*/),
@@ -372,7 +364,34 @@ return {
                               (v10/*: any*/),
                               (v11/*: any*/),
                               (v12/*: any*/),
-                              (v18/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "food",
+                                "kind": "LinkedField",
+                                "name": "foodDesc",
+                                "plural": false,
+                                "selections": [
+                                  (v5/*: any*/),
+                                  (v8/*: any*/),
+                                  (v13/*: any*/),
+                                  (v14/*: any*/),
+                                  (v15/*: any*/),
+                                  (v16/*: any*/),
+                                  (v17/*: any*/),
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "food_brand",
+                                    "kind": "LinkedField",
+                                    "name": "food_brand",
+                                    "plural": false,
+                                    "selections": (v18/*: any*/),
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              },
                               (v19/*: any*/),
                               (v15/*: any*/),
                               (v17/*: any*/),
@@ -387,9 +406,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "recipe",
                                 "plural": false,
-                                "selections": [
-                                  (v8/*: any*/)
-                                ],
+                                "selections": (v18/*: any*/),
                                 "storageKey": null
                               }
                             ],
@@ -479,7 +496,34 @@ return {
                               (v10/*: any*/),
                               (v11/*: any*/),
                               (v12/*: any*/),
-                              (v18/*: any*/),
+                              {
+                                "alias": null,
+                                "args": null,
+                                "concreteType": "food",
+                                "kind": "LinkedField",
+                                "name": "foodDesc",
+                                "plural": false,
+                                "selections": [
+                                  (v5/*: any*/),
+                                  (v8/*: any*/),
+                                  (v13/*: any*/),
+                                  (v14/*: any*/),
+                                  (v15/*: any*/),
+                                  (v16/*: any*/),
+                                  (v17/*: any*/),
+                                  {
+                                    "alias": null,
+                                    "args": null,
+                                    "concreteType": "food_brand",
+                                    "kind": "LinkedField",
+                                    "name": "food_brand",
+                                    "plural": false,
+                                    "selections": (v23/*: any*/),
+                                    "storageKey": null
+                                  }
+                                ],
+                                "storageKey": null
+                              },
                               (v19/*: any*/),
                               (v15/*: any*/),
                               (v17/*: any*/),
@@ -494,10 +538,7 @@ return {
                                 "kind": "LinkedField",
                                 "name": "recipe",
                                 "plural": false,
-                                "selections": [
-                                  (v8/*: any*/),
-                                  (v5/*: any*/)
-                                ],
+                                "selections": (v23/*: any*/),
                                 "storageKey": null
                               }
                             ],
@@ -524,16 +565,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "10d2a05a0a5b9033f8de6b5193f9d0ea",
+    "cacheID": "1bc0986aec55f22346f5efb52666dc19",
     "id": null,
     "metadata": {},
     "name": "MealsByDateQuery",
     "operationKind": "query",
-    "text": "query MealsByDateQuery(\n  $date: date\n  $u_id: uuid\n) {\n  meal_connection(where: {date: {_eq: $date}, u_id: {_eq: $u_id}}, order_by: {time: asc_nulls_last}, last: 1000000000) {\n    edges {\n      node {\n        id\n        date\n        time\n        name\n        meal_items_connection(last: 1000000000) {\n          edges {\n            node {\n              id\n              u_id\n              meal_id\n              food\n              foodDesc {\n                id\n                name\n                energy_cal\n                energy_kj\n                carbohydrates\n                fats\n                proteins\n              }\n              weight\n              carbohydrates\n              proteins\n              fats\n              energy_cal\n              energy_kj\n              recipe_id\n              recipe {\n                name\n                id\n              }\n            }\n            cursor\n          }\n        }\n        meal_items_aggregate(where: {meal: {date: {_eq: $date}}, u_id: {_eq: $u_id}}) {\n          aggregate {\n            sum {\n              carbohydrates\n              energy_cal\n              energy_kj\n              fats\n              proteins\n            }\n          }\n        }\n      }\n      cursor\n    }\n  }\n}\n"
+    "text": "query MealsByDateQuery(\n  $date: date\n  $u_id: uuid\n) {\n  meal_connection(where: {date: {_eq: $date}, u_id: {_eq: $u_id}}, order_by: {time: asc_nulls_last}, last: 1000000000) {\n    edges {\n      node {\n        id\n        date\n        time\n        name\n        meal_items_connection(last: 1000000000) {\n          edges {\n            node {\n              id\n              u_id\n              meal_id\n              food\n              foodDesc {\n                id\n                name\n                energy_cal\n                energy_kj\n                carbohydrates\n                fats\n                proteins\n                food_brand {\n                  name\n                  id\n                }\n              }\n              weight\n              carbohydrates\n              proteins\n              fats\n              energy_cal\n              energy_kj\n              recipe_id\n              recipe {\n                name\n                id\n              }\n            }\n            cursor\n          }\n        }\n        meal_items_aggregate(where: {meal: {date: {_eq: $date}}, u_id: {_eq: $u_id}}) {\n          aggregate {\n            sum {\n              carbohydrates\n              energy_cal\n              energy_kj\n              fats\n              proteins\n            }\n          }\n        }\n      }\n      cursor\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "f08f3b4c8736fb29eecf88a368172c0e";
+(node as any).hash = "7df4983ed555378024880b4ed3c1fcba";
 
 export default node;

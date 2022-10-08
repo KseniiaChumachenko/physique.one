@@ -3,7 +3,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import {
   CardContent,
   CardHeader,
-  ClickAwayListener,
   createStyles,
   Link,
   TextField,
@@ -57,7 +56,6 @@ export type RecipeCardHeaderProps = {
   setNewValue(
     key: string
   ): (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
-  onSubmit(): void;
   onDelete(): void;
   onClose(): void;
 };
@@ -67,7 +65,6 @@ export const RecipeCardHeader = ({
   isEditable,
   setIsEditable,
   setNewValue,
-  onSubmit,
   onDelete,
   onClose,
 }: RecipeCardHeaderProps) => {
@@ -77,16 +74,14 @@ export const RecipeCardHeader = ({
       <CardHeader
         title={
           isEditable ? (
-            <ClickAwayListener onClickAway={onSubmit}>
-              <TextField
-                defaultValue={data.name}
-                placeholder={t`Enter recipe name`}
-                label={t`Recipe name`}
-                type={"text"}
-                onChange={setNewValue("name")}
-                className={classes.title}
-              />
-            </ClickAwayListener>
+            <TextField
+              defaultValue={data.name}
+              placeholder={t`Enter recipe name`}
+              label={t`Recipe name`}
+              type={"text"}
+              onChange={setNewValue("name")}
+              className={classes.title}
+            />
           ) : (
             <div className={classes.title}>{data.name}</div>
           )
@@ -112,16 +107,14 @@ export const RecipeCardHeader = ({
       <CardContent>
         {isEditable ? (
           <div className={classes.flexBox}>
-            <ClickAwayListener onClickAway={onSubmit}>
-              <TextField
-                placeholder={t`Add external link`}
-                label={t`External link`}
-                defaultValue={data.link}
-                type={"text"}
-                onChange={setNewValue("link")}
-                className={classes.editableDescription}
-              />
-            </ClickAwayListener>
+            <TextField
+              placeholder={t`Add external link`}
+              label={t`External link`}
+              defaultValue={data.link}
+              type={"text"}
+              onChange={setNewValue("link")}
+              className={classes.editableDescription}
+            />
           </div>
         ) : (
           <div className={classes.flexBox}>
@@ -141,16 +134,14 @@ export const RecipeCardHeader = ({
         )}
 
         {isEditable ? (
-          <ClickAwayListener onClickAway={onSubmit}>
-            <TextField
-              placeholder={t`Enter description`}
-              label={t`Description`}
-              defaultValue={data.description}
-              type={"text"}
-              onChange={setNewValue("description")}
-              className={classes.editableDescription}
-            />
-          </ClickAwayListener>
+          <TextField
+            placeholder={t`Enter description`}
+            label={t`Description`}
+            defaultValue={data.description}
+            type={"text"}
+            onChange={setNewValue("description")}
+            className={classes.editableDescription}
+          />
         ) : (
           <Typography
             variant="body2"
@@ -164,22 +155,20 @@ export const RecipeCardHeader = ({
 
         {data?.isOwner && isEditable && (
           <div className={classes.portionsContainer}>
-            <ClickAwayListener onClickAway={onSubmit}>
-              <TextField
-                type={"number"}
-                label={t`How many portions are here?`}
-                error={!data.portions}
-                value={data.portions}
-                onChange={setNewValue("portions")}
-                inputProps={{
-                  step: 1,
-                  min: 0,
-                  max: 100,
-                  type: "number",
-                }}
-                className={classes.portionInput}
-              />
-            </ClickAwayListener>
+            <TextField
+              type={"number"}
+              label={t`How many portions are here?`}
+              error={!data.portions}
+              value={data.portions}
+              onChange={setNewValue("portions")}
+              inputProps={{
+                step: 1,
+                min: 0,
+                max: 100,
+                type: "number",
+              }}
+              className={classes.portionInput}
+            />
           </div>
         )}
       </CardContent>

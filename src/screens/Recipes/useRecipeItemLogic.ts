@@ -1,5 +1,6 @@
 import { v4 as uuid } from "uuid";
 import {
+  recipe_item_set_input,
   useAddRecipeItemMutation,
   useDeleteRecipeItemMutation,
   useUpdateRecipeItemMutation,
@@ -14,6 +15,7 @@ import {
   useFoodPreloadedQuery,
 } from "../../api-hooks/food";
 import { useActiveUser } from "../../api-hooks/authorization";
+import { base64ToUuid } from "../../utils/base64-to-uuid";
 
 export function useRecipeItemLogic({
   foodQR,
@@ -32,7 +34,7 @@ export function useRecipeItemLogic({
   const onAdd = () => {
     const newRecipeId = uuid();
     const {
-      id: food_id,
+      id,
       carbohydrates,
       energy_cal,
       energy_kj,
@@ -47,9 +49,9 @@ export function useRecipeItemLogic({
             energy_cal,
             energy_kj,
             fats,
-            food_id,
+            food_id: base64ToUuid(id),
             proteins,
-            recipe_id,
+            recipe_id: base64ToUuid(recipe_id),
             u_id: user?.id,
             weight: 100,
             id: newRecipeId,
@@ -63,7 +65,7 @@ export function useRecipeItemLogic({
     });
   };
 
-  const onUpdate = ({ id, ...data }: Partial<RowData> & { id: string }) => {
+  const onUpdate = ({ id, food_id, ...data }: Partial<RowData> & { id: string }) => {
     const weightCoefficient = (data.weight || 100) / 100;
     const adjustByCoefficient = (i = 0) => i * weightCoefficient;
 
@@ -75,11 +77,17 @@ export function useRecipeItemLogic({
       fats: adjustByCoefficient(data.fats),
     };
 
-    const set = { ...data, ...calculatedFromPropsItem };
+    const { food, isOwner, ...restData } = data;
+
+    const set: recipe_item_set_input = {
+      ...restData,
+      ...calculatedFromPropsItem,
+      food_id: base64ToUuid(food_id),
+    };
 
     update({
       variables: {
-        id: id!,
+        id: base64ToUuid(id),
         set,
       },
       onCompleted: () => {
@@ -90,7 +98,7 @@ export function useRecipeItemLogic({
 
   const onRemove = (id: string) => {
     destroy({
-      variables: { id },
+      variables: { id: base64ToUuid(id) },
       onCompleted: () => {
         refetch();
       },

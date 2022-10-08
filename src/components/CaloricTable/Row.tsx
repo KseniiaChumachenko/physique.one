@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TableCell, TableRow, TextField } from "@material-ui/core";
+import { TableCell, TableRow, TextField, Typography } from "@material-ui/core";
 import { EditDeleteButtonGroup } from "src/screens/components/EditDeletButtonGroup";
 import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
@@ -25,6 +25,9 @@ export type RowData = Pick<
   food: {
     id: string;
     name: string;
+    food_brand: {
+      readonly name: string;
+    } | null;
   };
 };
 
@@ -51,13 +54,14 @@ export const Row = ({
   const [weight, setWeight] = useState(values.weight || 100); // initial value is not updated after value props are updated
 
   const name = values?.food?.name || values?.recipe?.name;
+  const brand = values?.food?.food_brand?.name;
 
   const handleSetItem = (id: string, type?: "food" | "recipe") => {
     setItem(id);
     if (type === "recipe") {
-      onSubmitRowChange({ ...values, id: values.id, recipe_id: id });
+      onSubmitRowChange({ ...values, weight, id: values.id, recipe_id: id });
     } else {
-      onSubmitRowChange({ ...values, id: values.id, food_id: id });
+      onSubmitRowChange({ ...values, weight, id: values.id, food_id: id });
     }
   };
 
@@ -113,7 +117,16 @@ export const Row = ({
           <TableCell
             component="th"
             scope="row"
-            children={name}
+            children={
+              <>
+                {name}
+                {brand && (
+                  <Typography variant={"caption"} color={"textSecondary"}>
+                    {" " + brand}
+                  </Typography>
+                )}
+              </>
+            }
             className={classes.foodCellReadOnly}
           />
           <TableCell component="th" scope="row" children={values.weight} />
@@ -150,16 +163,18 @@ export const Row = ({
             align={"right"}
             children={values?.fats}
           />
-          <TableCell
-            component="th"
-            scope="row"
-            align={"right"}
-            children={
-              isEditable && (
-                <EditDeleteButtonGroup onDeleteClick={handleDelete} />
-              )
-            }
-          />
+          {isEditable && (
+            <TableCell
+              component="th"
+              scope="row"
+              align={"right"}
+              children={
+                isEditable && (
+                  <EditDeleteButtonGroup onDeleteClick={handleDelete} />
+                )
+              }
+            />
+          )}
         </>
       )}
     </TableRow>

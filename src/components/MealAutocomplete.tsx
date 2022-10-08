@@ -3,8 +3,8 @@ import { Autocomplete, AutocompleteProps } from "@material-ui/lab";
 import { PropTypes, TextField } from "@material-ui/core";
 import { t } from "@lingui/macro";
 import {
-  food_insert_input,
   FoodPreloadedHookProps,
+  FoodQuery$data,
   useFoodPreloadedQuery,
 } from "src/api-hooks/food";
 import {
@@ -13,7 +13,7 @@ import {
 } from "src/api-hooks/recipe";
 import { aggregate } from "../screens/Recipes/utils";
 
-export type MealAutocompleteListItem = food_insert_input & {
+export type MealAutocompleteListItem = FoodQuery$data["food_connection"]["edges"][0]["node"] & {
   recipe?: boolean;
   food?: string;
   recipe_id?: string;
@@ -79,7 +79,13 @@ export const MealAutocomplete = ({
     <Autocomplete
       options={remappedOptions}
       defaultValue={remappedOptions[0]}
-      getOptionLabel={(option: MealAutocompleteListItem) => option?.name || ""}
+      getOptionLabel={(option: MealAutocompleteListItem) =>
+        option?.name +
+          " " +
+          (option?.food_brand?.name
+            ? "(" + option?.food_brand?.name + ")"
+            : "") || ""
+      }
       value={valueFromOptions}
       onChange={(event: any, newValue: MealAutocompleteListItem | null) => {
         setValue(newValue?.id || "", newValue?.recipe_id ? "recipe" : "food");

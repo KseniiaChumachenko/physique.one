@@ -2,7 +2,9 @@ import { graphql } from "react-relay";
 
 export const RecipeQuery = graphql`
   query RecipeQuery {
-    recipe_connection(order_by: { increment: desc }) {
+    recipe_connection(order_by: { increment: desc }, last: 10000)
+      @connection(key: "Listing__recipe_connection") {
+      __id
       edges {
         node {
           id
@@ -19,6 +21,9 @@ export const RecipeQuery = graphql`
             food {
               id
               name
+              food_brand {
+                name
+              }
             }
             proteins
             fats

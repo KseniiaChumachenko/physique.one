@@ -1,10 +1,11 @@
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useState } from "react";
 import {
   RecipePreloadedHookProps,
   RecipeQuery$data,
   useRecipePreloaded,
 } from "src/api-hooks/recipe";
 import { base64ToUuid } from "src/utils/base64-to-uuid";
+import { useSearchParams } from "react-router-dom";
 
 export function useRecipeHeaderLogic({
   data,
@@ -12,9 +13,20 @@ export function useRecipeHeaderLogic({
 }: RecipePreloadedHookProps & {
   data?: RecipeQuery$data["recipe_connection"]["edges"][0]["node"];
 }) {
-  const [isEditable, setIsEditable] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const activeRecipeId = searchParams.get("activeRecipeId") || "";
+  const isDrawerOpen = searchParams.get("isDrawerOpen") || "";
+  const isEditable = searchParams.get("isEditing") === "true";
+
+  const setIsEditable = (isEditing: boolean) =>
+    setSearchParams({
+      activeRecipeId,
+      isDrawerOpen,
+      isEditing: String(isEditing),
+    });
 
   const {
+    refetch,
     mutations: { update, destroy },
   } = useRecipePreloaded(recipeQR);
 
@@ -25,14 +37,22 @@ export function useRecipeHeaderLogic({
     portions: data?.portions || 0,
   });
 
-  useEffect(() => {
-    setState({
-      name: data?.name || "",
-      description: data?.description || "",
-      link: data?.link || "",
-      portions: data?.portions || 0,
-    });
-  }, [data?.id]);
+  const submit = () => {
+    if (
+      state?.name !== data?.name ||
+      state?.description !== data?.description ||
+      state?.link !== data?.link ||
+      state?.portions !== data?.portions
+    ) {
+      update({
+        variables: {
+          id: base64ToUuid(data?.id || ""),
+          set: state,
+        },
+        onCompleted: () => refetch(),
+      });
+    }
+  };
 
   const handleSetState = (
     key: "name" | "description" | "link" | "portions"
@@ -42,15 +62,7 @@ export function useRecipeHeaderLogic({
       value = value === "" ? 0 : Number(e.target.value);
     }
     setState({ ...state, [key]: value });
-  };
-
-  const handleSubmit = () => {
-    update({
-      variables: {
-        id: base64ToUuid(data?.id || ""),
-        set: state,
-      },
-    });
+    submit();
   };
 
   const handleDelete = () =>
@@ -61,7 +73,6 @@ export function useRecipeHeaderLogic({
     setIsEditable,
     state,
     handleSetState,
-    handleSubmit,
     handleDelete,
   };
 }

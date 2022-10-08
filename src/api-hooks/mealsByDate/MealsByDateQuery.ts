@@ -28,6 +28,9 @@ export const MealsByDateQuery = graphql`
                   carbohydrates
                   fats
                   proteins
+                  food_brand {
+                    name
+                  }
                 }
                 weight
                 carbohydrates

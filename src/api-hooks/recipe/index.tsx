@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { commitLocalUpdate } from "relay-runtime";
+import {commitLocalUpdate} from "relay-runtime";
 import {
   fetchQuery,
   PreloadedQuery,
@@ -62,14 +62,14 @@ export const useRecipePreloaded = (
   const [updateMutation] = useUpdateRecipeMutation();
   const [deleteMutation] = useDeleteRecipeMutation();
 
-  const [_, loadQuery] = useQueryLoader<RecipeQuery>(RecipeQueryDocument);
+  const [, loadQuery] = useQueryLoader<RecipeQuery>(RecipeQueryDocument);
 
   const data = usePreloadedQuery<RecipeQuery>(
     RecipeQueryDocument,
     queryReference
   );
 
-  useEffect(() => {
+  const setOwner = () => {
     commitLocalUpdate(environment as any, (store) => {
       data.recipe_connection.edges.map((i) => {
         const recipe = store.get(i.node.id);
@@ -81,7 +81,9 @@ export const useRecipePreloaded = (
         });
       });
     });
-  }, [data.recipe_connection.edges.length, queryReference]);
+  };
+
+  useEffect(setOwner, [data.recipe_connection.edges.length, queryReference]);
 
   const refetch = useCallback(
     (variables?: RecipeQuery$variables | undefined) => {
@@ -106,6 +108,7 @@ export const useRecipePreloaded = (
   const add = (config: UseMutationConfig<AddRecipeMutation>) =>
     addMutation({
       ...config,
+      onError: (error) => alert(error.message),
       onCompleted: (r, p) => {
         refetch();
         config.onCompleted?.(r, p);

@@ -49,7 +49,6 @@ export const RecipeDrawer = ({
     setIsEditable,
     state,
     handleSetState,
-    handleSubmit,
     handleDelete,
   } = useRecipeHeaderLogic({ data, recipeQR });
 
@@ -87,7 +86,6 @@ export const RecipeDrawer = ({
           setIsEditable={setIsEditable}
           setNewValue={handleSetState}
           onClose={onClose}
-          onSubmit={handleSubmit}
           onDelete={() => {
             handleDelete();
             onClose();
@@ -120,7 +118,7 @@ export const RecipeDrawer = ({
           <CaloricTable
             recipeQR={recipeQR}
             foodQR={foodQR}
-            data={data?.recipe_items.map((i) => ({ ...i, food_id: i.food.id }))}
+            data={data?.recipe_items?.map((i) => ({ ...i, food_id: i?.food?.id }))}
             isEditable={isEditable}
             onAddItem={onAdd}
             onRemoveRow={onRemove}

@@ -13,6 +13,11 @@ export const MealItemQuery = graphql`
           meal_id
           id
           food
+          foodDesc {
+            food_brand {
+              name
+            }
+          }
           fats
           energy_kj
           energy_cal
