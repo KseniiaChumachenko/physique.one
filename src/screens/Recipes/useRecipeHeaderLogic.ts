@@ -37,23 +37,6 @@ export function useRecipeHeaderLogic({
     portions: data?.portions || 0,
   });
 
-  const submit = () => {
-    if (
-      state?.name !== data?.name ||
-      state?.description !== data?.description ||
-      state?.link !== data?.link ||
-      state?.portions !== data?.portions
-    ) {
-      update({
-        variables: {
-          id: base64ToUuid(data?.id || ""),
-          set: state,
-        },
-        onCompleted: () => refetch(),
-      });
-    }
-  };
-
   const handleSetState = (
     key: "name" | "description" | "link" | "portions"
   ) => (e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -62,7 +45,13 @@ export function useRecipeHeaderLogic({
       value = value === "" ? 0 : Number(e.target.value);
     }
     setState({ ...state, [key]: value });
-    submit();
+    update({
+      variables: {
+        id: base64ToUuid(data?.id || ""),
+        set: { [key]: value },
+      },
+      onCompleted: () => refetch(),
+    });
   };
 
   const handleDelete = () =>
