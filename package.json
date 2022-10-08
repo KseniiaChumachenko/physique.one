@@ -19,7 +19,7 @@
     "react-facebook-login": "^4.1.1",
     "react-relay": "^13.2.0",
     "relay-compiler": "^13.2.0",
-    "react-router-dom": "^6.3.0",
+    "react-router-dom": "6.1.0",
     "regenerator-runtime": "^0.13.9",
     "serve": "^13.0.2",
     "uuid": "^8.3.2",
