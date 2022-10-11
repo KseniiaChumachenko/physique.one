@@ -1,6 +1,7 @@
 import React from "react";
 import {createBrowserRouter, RouterProvider,} from "react-router-dom";
 import {CircularProgress} from "@material-ui/core";
+import {ErrorBoundary} from "../components/ErrorBoundary";
 import {RequireAuth} from "../components/RequireAuth";
 import {AppLayout} from "./components/AppLayout";
 import {Meals} from "./Meals";
@@ -21,12 +22,13 @@ const router = createBrowserRouter([
     element: <PrivacyPolicy />,
   },
   {
-    path: "/auth",
+    path: "auth",
     element: (
       <RequireAuth>
         <AppLayout />
       </RequireAuth>
     ),
+    errorElement: <ErrorBoundary/>,
     children: [
       {
         path: "ration",
