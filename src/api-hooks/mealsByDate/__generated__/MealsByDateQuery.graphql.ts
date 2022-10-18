@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<87e22b8bfa914f1f613612ceb39dff18>>
+ * @generated SignedSource<<84250c52a1bb184dba514a0b40eca060>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,44 +16,10 @@ export type MealsByDateQuery$variables = {
 export type MealsByDateQuery$data = {
   readonly meal_connection: {
     readonly edges: ReadonlyArray<{
+      readonly cursor: string;
       readonly node: {
-        readonly id: string;
         readonly date: string | null;
-        readonly time: string | null;
-        readonly name: string | null;
-        readonly meal_items_connection: {
-          readonly edges: ReadonlyArray<{
-            readonly node: {
-              readonly id: string;
-              readonly u_id: string;
-              readonly meal_id: string;
-              readonly food: string | null;
-              readonly foodDesc: {
-                readonly id: string;
-                readonly name: string;
-                readonly energy_cal: number;
-                readonly energy_kj: number;
-                readonly carbohydrates: number;
-                readonly fats: number;
-                readonly proteins: number;
-                readonly food_brand: {
-                  readonly name: string;
-                } | null;
-              } | null;
-              readonly weight: number;
-              readonly carbohydrates: number;
-              readonly proteins: number;
-              readonly fats: number;
-              readonly energy_cal: number;
-              readonly energy_kj: number;
-              readonly recipe_id: string | null;
-              readonly recipe: {
-                readonly name: string | null;
-              } | null;
-            };
-            readonly cursor: string;
-          }>;
-        };
+        readonly id: string;
         readonly meal_items_aggregate: {
           readonly aggregate: {
             readonly sum: {
@@ -65,14 +31,48 @@ export type MealsByDateQuery$data = {
             } | null;
           } | null;
         };
+        readonly meal_items_connection: {
+          readonly edges: ReadonlyArray<{
+            readonly cursor: string;
+            readonly node: {
+              readonly carbohydrates: number;
+              readonly energy_cal: number;
+              readonly energy_kj: number;
+              readonly fats: number;
+              readonly food: string | null;
+              readonly foodDesc: {
+                readonly carbohydrates: number;
+                readonly energy_cal: number;
+                readonly energy_kj: number;
+                readonly fats: number;
+                readonly food_brand: {
+                  readonly name: string;
+                } | null;
+                readonly id: string;
+                readonly name: string;
+                readonly proteins: number;
+              } | null;
+              readonly id: string;
+              readonly meal_id: string;
+              readonly proteins: number;
+              readonly recipe: {
+                readonly name: string | null;
+              } | null;
+              readonly recipe_id: string | null;
+              readonly u_id: string;
+              readonly weight: number;
+            };
+          }>;
+        };
+        readonly name: string | null;
+        readonly time: string | null;
       };
-      readonly cursor: string;
     }>;
   };
 };
 export type MealsByDateQuery = {
-  variables: MealsByDateQuery$variables;
   response: MealsByDateQuery$data;
+  variables: MealsByDateQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

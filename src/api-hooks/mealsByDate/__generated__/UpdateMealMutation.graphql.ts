@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<e7cfe4b4e87de5274284b38498588f5a>>
+ * @generated SignedSource<<6939d4054bdbd65a1b1506c6615ef15e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -17,8 +17,8 @@ export type meal_set_input = {
   u_id?: string | null;
 };
 export type UpdateMealMutation$variables = {
-  id: string;
   _set?: meal_set_input | null;
+  id: string;
 };
 export type UpdateMealMutation$data = {
   readonly update_meal_by_pk: {
@@ -28,8 +28,8 @@ export type UpdateMealMutation$data = {
   } | null;
 };
 export type UpdateMealMutation = {
-  variables: UpdateMealMutation$variables;
   response: UpdateMealMutation$data;
+  variables: UpdateMealMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<6943317b7c9e21227d610d8e99bd0cd7>>
+ * @generated SignedSource<<5c949dd4a2a59d217600c39f4486f4bf>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -25,8 +25,8 @@ export type AddFoodBrandMutation$data = {
   } | null;
 };
 export type AddFoodBrandMutation = {
-  variables: AddFoodBrandMutation$variables;
   response: AddFoodBrandMutation$data;
+  variables: AddFoodBrandMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

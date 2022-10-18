@@ -13,19 +13,27 @@ import { RowData } from "src/components/CaloricTable/Row";
 import {
   FoodPreloadedHookProps,
   useFoodPreloadedQuery,
-} from "../../api-hooks/food";
-import { useActiveUser } from "../../api-hooks/authorization";
-import { base64ToUuid } from "../../utils/base64-to-uuid";
+} from "src/api-hooks/food";
+import {
+  RecipesPreloadedHookProps,
+  useRecipesPreloaded,
+} from "src/api-hooks/recipes";
+import { useActiveUser } from "src/api-hooks/authorization";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
 
 export function useRecipeItemLogic({
   foodQR,
   recipeQR,
+  recipesQR,
   recipe_id,
-}: FoodPreloadedHookProps & RecipePreloadedHookProps & { recipe_id: string }) {
+}: FoodPreloadedHookProps &
+  RecipePreloadedHookProps &
+  RecipesPreloadedHookProps & { recipe_id: string }) {
   const { user } = useActiveUser();
 
   const { data } = useFoodPreloadedQuery(foodQR);
   const { refetch } = useRecipePreloaded(recipeQR);
+  const { refetch: pluralRefetch } = useRecipesPreloaded(recipesQR);
 
   const [add] = useAddRecipeItemMutation();
   const [update] = useUpdateRecipeItemMutation();
@@ -33,14 +41,8 @@ export function useRecipeItemLogic({
 
   const onAdd = () => {
     const newRecipeId = uuid();
-    const {
-      id,
-      carbohydrates,
-      energy_cal,
-      energy_kj,
-      fats,
-      proteins,
-    } = data?.food_connection.edges[0].node;
+    const { id, carbohydrates, energy_cal, energy_kj, fats, proteins } =
+      data?.food_connection.edges[0].node;
     add({
       variables: {
         objects: [
@@ -61,11 +63,16 @@ export function useRecipeItemLogic({
       },
       onCompleted: () => {
         refetch();
+        pluralRefetch();
       },
     });
   };
 
-  const onUpdate = ({ id, food_id, ...data }: Partial<RowData> & { id: string }) => {
+  const onUpdate = ({
+    id,
+    food_id,
+    ...data
+  }: Partial<RowData> & { id: string }) => {
     const weightCoefficient = (data.weight || 100) / 100;
     const adjustByCoefficient = (i = 0) => i * weightCoefficient;
 
@@ -82,7 +89,7 @@ export function useRecipeItemLogic({
     const set: recipe_item_set_input = {
       ...restData,
       ...calculatedFromPropsItem,
-      food_id: base64ToUuid(food_id),
+      food_id: base64ToUuid(food_id || ""),
     };
 
     update({
@@ -92,6 +99,7 @@ export function useRecipeItemLogic({
       },
       onCompleted: () => {
         refetch();
+        pluralRefetch();
       },
     });
   };
@@ -101,6 +109,7 @@ export function useRecipeItemLogic({
       variables: { id: base64ToUuid(id) },
       onCompleted: () => {
         refetch();
+        pluralRefetch();
       },
     });
   };

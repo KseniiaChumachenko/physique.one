@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<0858a9afcdf35b24f94dbe326f01075d>>
+ * @generated SignedSource<<d018752cd51707222341f5aeb40c86b0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -39,8 +39,8 @@ export type UpdateRecipeItemMutation$data = {
   } | null;
 };
 export type UpdateRecipeItemMutation = {
-  variables: UpdateRecipeItemMutation$variables;
   response: UpdateRecipeItemMutation$data;
+  variables: UpdateRecipeItemMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

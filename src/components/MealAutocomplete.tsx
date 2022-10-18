@@ -8,10 +8,9 @@ import {
   useFoodPreloadedQuery,
 } from "src/api-hooks/food";
 import {
-  RecipePreloadedHookProps,
-  useRecipePreloaded,
-} from "src/api-hooks/recipe";
-import { aggregate } from "../screens/Recipes/utils";
+  RecipesPreloadedHookProps,
+  useRecipesPreloaded,
+} from "src/api-hooks/recipes";
 
 export type MealAutocompleteListItem = FoodQuery$data["food_connection"]["edges"][0]["node"] & {
   recipe?: boolean;
@@ -19,7 +18,7 @@ export type MealAutocompleteListItem = FoodQuery$data["food_connection"]["edges"
   recipe_id?: string;
 };
 
-type ExtendProps = RecipePreloadedHookProps &
+type ExtendProps = RecipesPreloadedHookProps &
   FoodPreloadedHookProps &
   Partial<AutocompleteProps<any, any, any, any>>;
 
@@ -28,7 +27,7 @@ interface MealAutocompleteProps extends ExtendProps {
   withRecipes?: boolean;
   value: string;
   setValue: (id: string, type?: "recipe" | "food") => void;
-  fieldMargin: PropTypes.Margin;
+  fieldMargin?: PropTypes.Margin;
 }
 
 export const MealAutocomplete = ({
@@ -37,7 +36,7 @@ export const MealAutocomplete = ({
   withInputLabel = true,
   withRecipes = true,
   foodQR,
-  recipeQR,
+  recipesQR,
   fieldMargin = "dense",
   ...restProps
 }: MealAutocompleteProps) => {
@@ -50,7 +49,7 @@ export const MealAutocomplete = ({
     data: {
       recipe_connection: { edges: recipes },
     },
-  } = useRecipePreloaded(recipeQR);
+  } = useRecipesPreloaded(recipesQR);
 
   const remappedOptions = withRecipes
     ? [
@@ -60,12 +59,12 @@ export const MealAutocomplete = ({
           recipe_id: r?.id,
           name: r.name,
           type: "Recipe",
-          carbohydrates: aggregate(r.recipe_items as any, "carbohydrates"),
-          proteins: aggregate(r.recipe_items as any, "proteins"),
-          fats: aggregate(r.recipe_items as any, "fats"),
-          energy_cal: aggregate(r.recipe_items as any, "energy_cal"),
-          energy_kj: aggregate(r.recipe_items as any, "energy_kj"),
-          weight: aggregate(r.recipe_items as any, "weight"),
+          carbohydrates: r?.recipe_items_aggregate?.aggregate?.sum?.carbohydrates,
+          proteins: r?.recipe_items_aggregate?.aggregate?.sum?.proteins,
+          fats: r?.recipe_items_aggregate?.aggregate?.sum?.fats,
+          energy_cal: r?.recipe_items_aggregate?.aggregate?.sum?.energy_cal,
+          energy_kj: r?.recipe_items_aggregate?.aggregate?.sum?.energy_kj,
+          weight: r?.recipe_items_aggregate?.aggregate?.sum?.weight,
           recipe: true,
         })),
       ]

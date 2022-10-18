@@ -1,5 +1,3 @@
-import { RecipeItem } from "./RecipeCard";
-
 interface Food {
   readonly id: string;
   readonly name: string;
@@ -56,7 +54,8 @@ export const getRowValues = (
   fats: getNutrientAccordingToWeight(food?.fats, weight, portionCoefficient),
 });
 
-export const aggregate = (recipeItems: readonly RecipeItem[], arg: string) => {
+// TODO
+export const aggregate = (recipeItems: Array<any>, arg: string) => {
   const map = recipeItems.filter((i) => i).map((i) => i[arg]);
   if (map.length > 0) {
     return map.reduce((acc, i) => acc + i);

@@ -7,7 +7,7 @@ import {
   DeleteMealMutation,
   DeleteMealMutation$variables,
 } from "src/api-hooks/mealsByDate";
-import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
+import { RecipesPreloadedHookProps } from "src/api-hooks/recipes";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
 import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { EditDeleteButtonGroup } from "../../../components/EditDeletButtonGroup";
@@ -15,7 +15,7 @@ import { AddMealItemDialog } from "../../../components/MealItemDialog/AddMealIte
 
 type ExtendProps = DeleteMealMutation$variables &
   FoodPreloadedHookProps &
-  RecipePreloadedHookProps;
+  RecipesPreloadedHookProps;
 
 interface Props extends ExtendProps {
   refetch: () => void;
@@ -27,7 +27,7 @@ export const PanelDetailActions = ({
   refetch,
   destroy,
   foodQR,
-  recipeQR,
+  recipesQR,
 }: Props) => {
   const [openAddMealItemDialog, setAddMealItemDialog] = useState(false);
 
@@ -53,7 +53,7 @@ export const PanelDetailActions = ({
         <AddMealItemDialog
           refetch={refetch}
           foodQR={foodQR}
-          recipeQR={recipeQR}
+          recipesQR={recipesQR}
           open={openAddMealItemDialog}
           setOpen={setAddMealItemDialog}
           meal_id={id}

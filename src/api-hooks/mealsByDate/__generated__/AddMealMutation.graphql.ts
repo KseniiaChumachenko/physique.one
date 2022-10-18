@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<1fcab72f8c181140c8d2a2387245a60d>>
+ * @generated SignedSource<<63eca457ad03b0c5031572a632786d51>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -119,9 +119,9 @@ export type food_brand_on_conflict = {
   where?: food_brand_bool_exp | null;
 };
 export type food_brand_bool_exp = {
-  _and?: ReadonlyArray<food_brand_bool_exp | null> | null;
+  _and?: ReadonlyArray<food_brand_bool_exp> | null;
   _not?: food_brand_bool_exp | null;
-  _or?: ReadonlyArray<food_brand_bool_exp | null> | null;
+  _or?: ReadonlyArray<food_brand_bool_exp> | null;
   id?: uuid_comparison_exp | null;
   name?: String_comparison_exp | null;
 };
@@ -142,6 +142,7 @@ export type String_comparison_exp = {
   _gte?: string | null;
   _ilike?: string | null;
   _in?: ReadonlyArray<string> | null;
+  _iregex?: string | null;
   _is_null?: boolean | null;
   _like?: string | null;
   _lt?: string | null;
@@ -149,8 +150,11 @@ export type String_comparison_exp = {
   _neq?: string | null;
   _nilike?: string | null;
   _nin?: ReadonlyArray<string> | null;
+  _niregex?: string | null;
   _nlike?: string | null;
+  _nregex?: string | null;
   _nsimilar?: string | null;
+  _regex?: string | null;
   _similar?: string | null;
 };
 export type food_type_obj_rel_insert_input = {
@@ -186,9 +190,9 @@ export type food_bool_exp = {
   D?: numeric_comparison_exp | null;
   E?: numeric_comparison_exp | null;
   K?: numeric_comparison_exp | null;
-  _and?: ReadonlyArray<food_bool_exp | null> | null;
+  _and?: ReadonlyArray<food_bool_exp> | null;
   _not?: food_bool_exp | null;
-  _or?: ReadonlyArray<food_bool_exp | null> | null;
+  _or?: ReadonlyArray<food_bool_exp> | null;
   brand_id?: uuid_comparison_exp | null;
   calcium?: numeric_comparison_exp | null;
   carbohydrates?: numeric_comparison_exp | null;
@@ -231,18 +235,18 @@ export type numeric_comparison_exp = {
   _nin?: ReadonlyArray<number> | null;
 };
 export type food_type_bool_exp = {
-  _and?: ReadonlyArray<food_type_bool_exp | null> | null;
+  _and?: ReadonlyArray<food_type_bool_exp> | null;
   _not?: food_type_bool_exp | null;
-  _or?: ReadonlyArray<food_type_bool_exp | null> | null;
+  _or?: ReadonlyArray<food_type_bool_exp> | null;
   decription?: String_comparison_exp | null;
   food?: food_bool_exp | null;
   img_url?: String_comparison_exp | null;
   value?: String_comparison_exp | null;
 };
 export type meal_item_bool_exp = {
-  _and?: ReadonlyArray<meal_item_bool_exp | null> | null;
+  _and?: ReadonlyArray<meal_item_bool_exp> | null;
   _not?: meal_item_bool_exp | null;
-  _or?: ReadonlyArray<meal_item_bool_exp | null> | null;
+  _or?: ReadonlyArray<meal_item_bool_exp> | null;
   carbohydrates?: numeric_comparison_exp | null;
   energy_cal?: numeric_comparison_exp | null;
   energy_kj?: numeric_comparison_exp | null;
@@ -260,9 +264,9 @@ export type meal_item_bool_exp = {
   weight?: numeric_comparison_exp | null;
 };
 export type meal_bool_exp = {
-  _and?: ReadonlyArray<meal_bool_exp | null> | null;
+  _and?: ReadonlyArray<meal_bool_exp> | null;
   _not?: meal_bool_exp | null;
-  _or?: ReadonlyArray<meal_bool_exp | null> | null;
+  _or?: ReadonlyArray<meal_bool_exp> | null;
   date?: date_comparison_exp | null;
   id?: uuid_comparison_exp | null;
   meal_items?: meal_item_bool_exp | null;
@@ -294,9 +298,9 @@ export type time_comparison_exp = {
   _nin?: ReadonlyArray<string> | null;
 };
 export type users_bool_exp = {
-  _and?: ReadonlyArray<users_bool_exp | null> | null;
+  _and?: ReadonlyArray<users_bool_exp> | null;
   _not?: users_bool_exp | null;
-  _or?: ReadonlyArray<users_bool_exp | null> | null;
+  _or?: ReadonlyArray<users_bool_exp> | null;
   email?: String_comparison_exp | null;
   fb_id?: String_comparison_exp | null;
   fb_picture_url?: String_comparison_exp | null;
@@ -314,23 +318,24 @@ export type users_bool_exp = {
   user_name?: String_comparison_exp | null;
 };
 export type pantry_user_bool_exp = {
-  _and?: ReadonlyArray<pantry_user_bool_exp | null> | null;
+  _and?: ReadonlyArray<pantry_user_bool_exp> | null;
   _not?: pantry_user_bool_exp | null;
-  _or?: ReadonlyArray<pantry_user_bool_exp | null> | null;
+  _or?: ReadonlyArray<pantry_user_bool_exp> | null;
   id?: uuid_comparison_exp | null;
   pantry_id?: uuid_comparison_exp | null;
   user?: users_bool_exp | null;
   user_id?: uuid_comparison_exp | null;
 };
 export type recipe_item_bool_exp = {
-  _and?: ReadonlyArray<recipe_item_bool_exp | null> | null;
+  _and?: ReadonlyArray<recipe_item_bool_exp> | null;
   _not?: recipe_item_bool_exp | null;
-  _or?: ReadonlyArray<recipe_item_bool_exp | null> | null;
+  _or?: ReadonlyArray<recipe_item_bool_exp> | null;
   carbohydrates?: numeric_comparison_exp | null;
   energy_cal?: numeric_comparison_exp | null;
   energy_kj?: numeric_comparison_exp | null;
   fats?: numeric_comparison_exp | null;
   food?: food_bool_exp | null;
+  food_brand?: food_brand_bool_exp | null;
   food_id?: uuid_comparison_exp | null;
   id?: uuid_comparison_exp | null;
   proteins?: numeric_comparison_exp | null;
@@ -341,9 +346,9 @@ export type recipe_item_bool_exp = {
   weight?: numeric_comparison_exp | null;
 };
 export type recipe_bool_exp = {
-  _and?: ReadonlyArray<recipe_bool_exp | null> | null;
+  _and?: ReadonlyArray<recipe_bool_exp> | null;
   _not?: recipe_bool_exp | null;
-  _or?: ReadonlyArray<recipe_bool_exp | null> | null;
+  _or?: ReadonlyArray<recipe_bool_exp> | null;
   description?: String_comparison_exp | null;
   id?: uuid_comparison_exp | null;
   increment?: Int_comparison_exp | null;
@@ -381,6 +386,7 @@ export type recipe_item_insert_input = {
   energy_kj?: number | null;
   fats?: number | null;
   food?: food_obj_rel_insert_input | null;
+  food_brand?: food_brand_obj_rel_insert_input | null;
   food_id?: string | null;
   id?: string | null;
   proteins?: number | null;
@@ -485,46 +491,46 @@ export type AddMealMutation$variables = {
 export type AddMealMutation$data = {
   readonly insert_meal: {
     readonly returning: ReadonlyArray<{
-      readonly id: string;
-      readonly time: string | null;
       readonly date: string | null;
-      readonly name: string | null;
+      readonly id: string;
       readonly meal_items_connection: {
         readonly edges: ReadonlyArray<{
+          readonly cursor: string;
           readonly node: {
-            readonly id: string;
-            readonly u_id: string;
-            readonly meal_id: string;
-            readonly food: string | null;
-            readonly foodDesc: {
-              readonly id: string;
-              readonly name: string;
-              readonly energy_cal: number;
-              readonly energy_kj: number;
-              readonly carbohydrates: number;
-              readonly fats: number;
-              readonly proteins: number;
-            } | null;
-            readonly weight: number;
             readonly carbohydrates: number;
-            readonly proteins: number;
-            readonly fats: number;
             readonly energy_cal: number;
             readonly energy_kj: number;
-            readonly recipe_id: string | null;
+            readonly fats: number;
+            readonly food: string | null;
+            readonly foodDesc: {
+              readonly carbohydrates: number;
+              readonly energy_cal: number;
+              readonly energy_kj: number;
+              readonly fats: number;
+              readonly id: string;
+              readonly name: string;
+              readonly proteins: number;
+            } | null;
+            readonly id: string;
+            readonly meal_id: string;
+            readonly proteins: number;
             readonly recipe: {
               readonly name: string | null;
             } | null;
+            readonly recipe_id: string | null;
+            readonly u_id: string;
+            readonly weight: number;
           };
-          readonly cursor: string;
         }>;
       };
+      readonly name: string | null;
+      readonly time: string | null;
     }>;
   } | null;
 };
 export type AddMealMutation = {
-  variables: AddMealMutation$variables;
   response: AddMealMutation$data;
+  variables: AddMealMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

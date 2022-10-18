@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d5f1990e4ee31f7e663522a4c0f71948>>
+ * @generated SignedSource<<34e85a2bad567d2241718225dae758ac>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -14,17 +14,17 @@ export type FoodQuery$data = {
   readonly food_connection: {
     readonly edges: ReadonlyArray<{
       readonly node: {
-        readonly id: string;
-        readonly name: string;
-        readonly type: string;
+        readonly carbohydrates: number;
+        readonly energy_cal: number;
+        readonly energy_kj: number;
+        readonly fats: number;
         readonly food_brand: {
           readonly name: string;
         } | null;
-        readonly carbohydrates: number;
+        readonly id: string;
+        readonly name: string;
         readonly proteins: number;
-        readonly fats: number;
-        readonly energy_cal: number;
-        readonly energy_kj: number;
+        readonly type: string;
         readonly u_id: string | null;
         readonly weight: number | null;
       };
@@ -32,8 +32,8 @@ export type FoodQuery$data = {
   };
 };
 export type FoodQuery = {
-  variables: FoodQuery$variables;
   response: FoodQuery$data;
+  variables: FoodQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

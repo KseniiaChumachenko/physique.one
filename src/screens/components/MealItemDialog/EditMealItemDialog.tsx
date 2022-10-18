@@ -18,13 +18,12 @@ import {
   useFoodPreloadedQuery,
 } from "src/api-hooks/food";
 import {
-  RecipePreloadedHookProps,
-  useRecipePreloaded,
-} from "src/api-hooks/recipe";
+  RecipesPreloadedHookProps,
+  useRecipesPreloaded,
+} from "src/api-hooks/recipes";
 import { useUpdateMealItemMutation } from "src/api-hooks/mealItem";
 import { useActiveUser } from "src/api-hooks/authorization";
 import { MealAutocomplete } from "src/components/MealAutocomplete";
-import { aggregate } from "../../Recipes/utils";
 
 const useStyles = makeStyles(() => ({
   field: {
@@ -33,7 +32,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps;
+type ExtendProps = FoodPreloadedHookProps & RecipesPreloadedHookProps;
 
 interface Props extends ExtendProps {
   open: boolean;
@@ -47,13 +46,13 @@ export const EditMealItemDialog = ({
   setOpen,
   mealItem,
   foodQR,
-  recipeQR,
+  recipesQR,
   refetch,
 }: Props) => {
   const classes = useStyles();
 
   const { data: foodLibrary } = useFoodPreloadedQuery(foodQR);
-  const { data: recipeLibrary } = useRecipePreloaded(recipeQR);
+  const { data: recipeLibrary } = useRecipesPreloaded(recipesQR);
   const [update] = useUpdateMealItemMutation();
 
   const { user } = useActiveUser();
@@ -90,29 +89,21 @@ export const EditMealItemDialog = ({
       )?.node;
 
       if (recipe) {
-        const recipeWeight = aggregate(recipe.recipe_items as any, "weight");
+        const sum = recipe?.recipe_items_aggregate?.aggregate?.sum;
+
+        const recipeWeight = sum?.weight || 0;
         const weightAdjustment = (divider: number) =>
           (divider / recipeWeight) * weight;
 
         return {
           id: base64ToUuid(recipe.id),
           recipe_id: base64ToUuid(recipe.id),
-          carbohydrates: weightAdjustment(
-            aggregate(recipe.recipe_items as any, "carbohydrates")
-          ),
-          proteins: weightAdjustment(
-            aggregate(recipe.recipe_items as any, "proteins")
-          ),
-          fats: weightAdjustment(aggregate(recipe.recipe_items as any, "fats")),
-          energy_cal: weightAdjustment(
-            aggregate(recipe.recipe_items as any, "energy_cal")
-          ),
-          energy_kj: weightAdjustment(
-            aggregate(recipe.recipe_items as any, "energy_kj")
-          ),
-          weight: weightAdjustment(
-            aggregate(recipe.recipe_items as any, "weight")
-          ),
+          carbohydrates: weightAdjustment(sum?.carbohydrates || 0),
+          proteins: weightAdjustment(sum?.proteins || 0),
+          fats: weightAdjustment(sum?.fats || 0),
+          energy_cal: weightAdjustment(sum?.energy_cal || 0),
+          energy_kj: weightAdjustment(sum?.energy_kj || 0),
+          weight: weightAdjustment(sum?.weight || 0),
         };
       }
     }
@@ -147,7 +138,7 @@ export const EditMealItemDialog = ({
           {selectedItemId && (
             <MealAutocomplete
               foodQR={foodQR}
-              recipeQR={recipeQR}
+              recipesQR={recipesQR}
               value={selectedItemId}
               setValue={setSelectedItemId}
               className={classes.field}

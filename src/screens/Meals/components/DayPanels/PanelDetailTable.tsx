@@ -18,7 +18,7 @@ import {
   useDeleteMealItemMutation,
 } from "src/api-hooks/mealItem";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
-import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
+import { RecipesPreloadedHookProps } from "src/api-hooks/recipes";
 import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { EditDeleteButtonGroup } from "../../../components/EditDeletButtonGroup";
 import { EditMealItemDialog } from "../../../components/MealItemDialog/EditMealItemDialog";
@@ -29,7 +29,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-type ExtendProps = FoodPreloadedHookProps & RecipePreloadedHookProps;
+type ExtendProps = FoodPreloadedHookProps & RecipesPreloadedHookProps;
 interface P extends ExtendProps {
   meal_items?: Meal_Item[];
   refetch: () => void;
@@ -39,7 +39,7 @@ export const PanelDetailTable = ({
   meal_items,
   refetch,
   foodQR,
-  recipeQR,
+  recipesQR,
 }: P) => {
   const classes = useStyles();
   const [openEditMealItemDialog, setEditMealItemDialog] = useState<
@@ -187,7 +187,7 @@ export const PanelDetailTable = ({
         <EditMealItemDialog
           refetch={refetch}
           foodQR={foodQR}
-          recipeQR={recipeQR}
+          recipesQR={recipesQR}
           open={!!openEditMealItemDialog}
           setOpen={setEditMealItemDialog}
           mealItem={openEditMealItemDialog as Meal_Item}

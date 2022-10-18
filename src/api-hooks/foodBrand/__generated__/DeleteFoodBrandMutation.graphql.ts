@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<ed91667426de4573dc73aa5c1ad1e8b4>>
+ * @generated SignedSource<<5c3ed8a9d400723416c2ebee05fb7ed4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,8 +19,8 @@ export type DeleteFoodBrandMutation$data = {
   } | null;
 };
 export type DeleteFoodBrandMutation = {
-  variables: DeleteFoodBrandMutation$variables;
   response: DeleteFoodBrandMutation$data;
+  variables: DeleteFoodBrandMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

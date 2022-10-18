@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a63b973c860ae72836ae06deca62306c>>
+ * @generated SignedSource<<d533b0096ce0d50ea201d06b4a9cc777>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,18 +13,18 @@ export type DeleteRecipeMutation$variables = {
   id: string;
 };
 export type DeleteRecipeMutation$data = {
+  readonly delete_recipe_by_pk: {
+    readonly id: string;
+  } | null;
   readonly delete_recipe_item: {
     readonly returning: ReadonlyArray<{
       readonly id: string;
     }>;
   } | null;
-  readonly delete_recipe_by_pk: {
-    readonly id: string;
-  } | null;
 };
 export type DeleteRecipeMutation = {
-  variables: DeleteRecipeMutation$variables;
   response: DeleteRecipeMutation$data;
+  variables: DeleteRecipeMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

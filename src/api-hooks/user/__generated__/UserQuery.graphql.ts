@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<2596c60e6f16b74ce682f111663f1f97>>
+ * @generated SignedSource<<cb21f4b1b842bdd98998a9ae6ae1d992>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,20 +16,20 @@ export type UserQuery$data = {
   readonly users_connection: {
     readonly edges: ReadonlyArray<{
       readonly node: {
-        readonly id: string;
         readonly email: string | null;
-        readonly first_name: string | null;
-        readonly last_name: string | null;
-        readonly user_name: string | null;
         readonly fb_id: string | null;
         readonly fb_picture_url: string | null;
+        readonly first_name: string | null;
+        readonly id: string;
+        readonly last_name: string | null;
+        readonly user_name: string | null;
       };
     }>;
   };
 };
 export type UserQuery = {
-  variables: UserQuery$variables;
   response: UserQuery$data;
+  variables: UserQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

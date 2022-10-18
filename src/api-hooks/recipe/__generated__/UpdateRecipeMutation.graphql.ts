@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f1e9ae8cfadfd121ebe3b4ccf6e822fc>>
+ * @generated SignedSource<<f9602091378ac93cea257444a1a29b4c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -26,12 +26,11 @@ export type UpdateRecipeMutation$data = {
   readonly update_recipe_by_pk: {
     readonly description: string | null;
     readonly id: string;
-    readonly link: string | null;
     readonly increment: number;
+    readonly isOwner: boolean | null;
+    readonly link: string | null;
     readonly name: string | null;
     readonly portions: number | null;
-    readonly u_id: string;
-    readonly isOwner: boolean | null;
     readonly recipe_items_aggregate: {
       readonly aggregate: {
         readonly sum: {
@@ -44,11 +43,12 @@ export type UpdateRecipeMutation$data = {
         } | null;
       } | null;
     };
+    readonly u_id: string;
   } | null;
 };
 export type UpdateRecipeMutation = {
-  variables: UpdateRecipeMutation$variables;
   response: UpdateRecipeMutation$data;
+  variables: UpdateRecipeMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<4d5ebb658daafc62826d6a9939354820>>
+ * @generated SignedSource<<ff24984f52f0ae2aa6274693a84476ef>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -15,17 +15,17 @@ export type FoodTypeQuery$data = {
     readonly edges: ReadonlyArray<{
       readonly cursor: string;
       readonly node: {
-        readonly id: string;
         readonly decription: string;
-        readonly value: string;
+        readonly id: string;
         readonly img_url: string;
+        readonly value: string;
       };
     }>;
   };
 };
 export type FoodTypeQuery = {
-  variables: FoodTypeQuery$variables;
   response: FoodTypeQuery$data;
+  variables: FoodTypeQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

@@ -8,7 +8,7 @@ import {
   useMealsPreloadedQuery,
 } from "src/api-hooks/mealsByDate";
 import { FoodPreloadedHookProps, useFood } from "src/api-hooks/food";
-import { RecipePreloadedHookProps, useRecipe } from "src/api-hooks/recipe";
+import { RecipesPreloadedHookProps, useRecipes } from "src/api-hooks/recipes";
 import { DayPanelHeader } from "./DayPanelHeader";
 import { PanelSummary } from "./PanelSummary";
 import { PanelDetailTable } from "./PanelDetailTable";
@@ -55,14 +55,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 type ExtendProps = FoodPreloadedHookProps &
-  RecipePreloadedHookProps &
+  RecipesPreloadedHookProps &
   MealsByDatePreloadedHookProps;
 
 interface PanelsProps extends ExtendProps {
   date: string;
 }
 
-const Panels = ({ date, mealsQR, recipeQR, foodQR }: PanelsProps) => {
+const Panels = ({ date, mealsQR, recipesQR, foodQR }: PanelsProps) => {
   const classes = useStyles();
 
   const {
@@ -92,7 +92,7 @@ const Panels = ({ date, mealsQR, recipeQR, foodQR }: PanelsProps) => {
                 <PanelSummary
                   refetch={refetch}
                   foodQR={foodQR}
-                  recipeQR={recipeQR}
+                  recipesQR={recipesQR}
                   destroy={destroy}
                   id={item?.id}
                   date={date}
@@ -103,7 +103,7 @@ const Panels = ({ date, mealsQR, recipeQR, foodQR }: PanelsProps) => {
                 />
                 <AccordionDetails className={classes.parentExpPanelDetails}>
                   <PanelDetailTable
-                    recipeQR={recipeQR}
+                    recipesQR={recipesQR}
                     foodQR={foodQR}
                     refetch={refetch}
                     meal_items={item?.meal_items_connection.edges.map(
@@ -126,7 +126,7 @@ interface Props {
 export const DayPanels = ({ date }: Props) => {
   const { user } = useActiveUser();
   const { queryReference: foodQR } = useFood({});
-  const { queryReference: recipeQR } = useRecipe({});
+  const { queryReference: recipeQR } = useRecipes({});
   const { queryReference: mealsQR } = useMealsByDateQuery({
     date,
     u_id: user?.id,
@@ -140,7 +140,7 @@ export const DayPanels = ({ date }: Props) => {
           date={date}
           mealsQR={mealsQR}
           foodQR={foodQR}
-          recipeQR={recipeQR}
+          recipesQR={recipeQR}
         />
       )}
     </Suspense>

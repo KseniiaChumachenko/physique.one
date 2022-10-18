@@ -1,7 +1,7 @@
 import { Table, TableBody } from "@material-ui/core";
 import React from "react";
 import { getRowValues } from "src/screens/Recipes/utils";
-import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
+import { RecipesPreloadedHookProps } from "src/api-hooks/recipes";
 import {
   FoodPreloadedHookProps,
   useFoodPreloadedQuery,
@@ -11,7 +11,7 @@ import { Row, RowData } from "./Row";
 import { TotalRow } from "./TotalRow";
 import { AddButton } from "./AddButton";
 
-type ExtendProps = RecipePreloadedHookProps & FoodPreloadedHookProps;
+type ExtendProps = RecipesPreloadedHookProps & FoodPreloadedHookProps;
 
 export interface Props extends ExtendProps {
   data: Array<RowData>;
@@ -28,7 +28,7 @@ export interface Props extends ExtendProps {
 
 export const CaloricTable = ({
   foodQR,
-  recipeQR,
+  recipesQR,
   isEditable,
   onRemoveRow,
   onSubmitRowChange,
@@ -65,7 +65,7 @@ export const CaloricTable = ({
             <Row
               key={i}
               foodQR={foodQR}
-              recipeQR={recipeQR}
+              recipesQR={recipesQR}
               onSubmitRowChange={onSubmitRowChange}
               onRemoveRow={onRemoveRow}
               withRecipes={withRecipes}
