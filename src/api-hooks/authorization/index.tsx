@@ -69,11 +69,13 @@ export const useLoginPreloaded = ({ loginQR }: LoginPreloadedQuery) => {
     mutations: { setActiveUser },
   } = useActiveUser();
   const data = usePreloadedQuery<LogInQuery>(LogInQueryDocument, loginQR);
-  const user = data.users_connection.edges[0].node;
+  const user = data?.users_connection?.edges[0]?.node;
   const { commitLogin } = useChangeActiveUserState(user);
 
-  commitLogin();
-  setActiveUser(user);
+  if (user){
+    commitLogin();
+    setActiveUser(user);
+  }
 
   return data;
 };

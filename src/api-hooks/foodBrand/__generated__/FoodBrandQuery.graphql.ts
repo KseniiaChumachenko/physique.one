@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<9ce553682e6bbc39481dd6f36df9f6e6>>
+ * @generated SignedSource<<27097736f0d6fbc57d1d8b2135a73753>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -22,8 +22,8 @@ export type FoodBrandQuery$data = {
   };
 };
 export type FoodBrandQuery = {
-  variables: FoodBrandQuery$variables;
   response: FoodBrandQuery$data;
+  variables: FoodBrandQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){

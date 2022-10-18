@@ -23,13 +23,12 @@ import {
   useFoodPreloadedQuery,
 } from "src/api-hooks/food";
 import {
-  RecipePreloadedHookProps,
-  useRecipePreloaded,
-  useRecipe,
-} from "src/api-hooks/recipe";
+  RecipesPreloadedHookProps,
+  useRecipesPreloaded,
+  useRecipes,
+} from "src/api-hooks/recipes";
 import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { MealAutocomplete } from "src/components/MealAutocomplete";
-import { aggregate } from "../../Recipes/utils";
 import { useStore } from "./useStore";
 
 const useStyles = makeStyles((theme) => ({
@@ -64,7 +63,7 @@ interface Props {
 }
 
 type AddMealDialogProps = FoodPreloadedHookProps &
-  RecipePreloadedHookProps &
+  RecipesPreloadedHookProps &
   Props;
 
 const AddMealDialogDataFlow = ({
@@ -74,7 +73,7 @@ const AddMealDialogDataFlow = ({
   name: defaultName,
   onConfirm,
   foodQR,
-  recipeQR,
+  recipesQR,
 }: AddMealDialogProps) => {
   const classes = useStyles();
   const { user } = useActiveUser();
@@ -83,7 +82,7 @@ const AddMealDialogDataFlow = ({
     data: {
       recipe_connection: { edges: recipes },
     },
-  } = useRecipePreloaded(recipeQR);
+  } = useRecipesPreloaded(recipesQR);
 
   const [time, setTime] = useState(moment());
   const [name, setName] = useState(defaultName || "");
@@ -102,12 +101,12 @@ const AddMealDialogDataFlow = ({
         recipe_id: r.id,
         name: r.name,
         type: "Recipe",
-        carbohydrates: aggregate(r.recipe_items as any, "carbohydrates"),
-        proteins: aggregate(r.recipe_items as any, "proteins"),
-        fats: aggregate(r.recipe_items as any, "fats"),
-        energy_cal: aggregate(r.recipe_items as any, "energy_cal"),
-        energy_kj: aggregate(r.recipe_items as any, "energy_kj"),
-        weight: aggregate(r.recipe_items as any, "weight"),
+        carbohydrates: r?.recipe_items_aggregate?.aggregate?.sum?.carbohydrates,
+        proteins: r?.recipe_items_aggregate?.aggregate?.sum?.proteins,
+        fats: r?.recipe_items_aggregate?.aggregate?.sum?.fats,
+        energy_cal: r?.recipe_items_aggregate?.aggregate?.sum?.energy_cal,
+        energy_kj: r?.recipe_items_aggregate?.aggregate?.sum?.energy_kj,
+        weight: r?.recipe_items_aggregate?.aggregate?.sum?.weight,
       };
     } else {
       item = foods.food_connection.edges.find(
@@ -201,12 +200,12 @@ const AddMealDialogDataFlow = ({
         {state.map((item, key) => (
           <div className={classes.selectorsContainer} key={key}>
             <MealAutocomplete
-              value={item?.food || ""}
+              value={item?.food || item?.recipe_id || ""}
               setValue={handleChangeFoodItem(key)}
               fullWidth={true}
               className={classes.autocompleteField}
               foodQR={foodQR}
-              recipeQR={recipeQR}
+              recipesQR={recipesQR}
             />
             <TextField
               label={<Trans>Weight (g)</Trans>}
@@ -214,6 +213,7 @@ const AddMealDialogDataFlow = ({
               onChange={(event) =>
                 handleUpdateItem({
                   indexOfItem: key,
+                  food:item,
                   weight: Number(event.target.value),
                 })
               }
@@ -258,7 +258,7 @@ export const AddMealDialog = ({
   onConfirm,
 }: Props) => {
   const { queryReference: foodQR } = useFood({});
-  const { queryReference: recipeQR } = useRecipe({});
+  const { queryReference: recipeQR } = useRecipes({});
 
   return (
     <Suspense fallback={<div />}>
@@ -271,7 +271,7 @@ export const AddMealDialog = ({
           time={time}
           onConfirm={onConfirm}
           foodQR={foodQR}
-          recipeQR={recipeQR}
+          recipesQR={recipeQR}
         />
       )}
     </Suspense>

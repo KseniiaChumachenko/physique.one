@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TableCell, TableRow, TextField, Typography } from "@material-ui/core";
 import { EditDeleteButtonGroup } from "src/screens/components/EditDeletButtonGroup";
-import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
+import { RecipesPreloadedHookProps } from "src/api-hooks/recipes";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
 import { useIsMobile } from "src/hooks/useIsMobile";
 import { Meal_Item } from "src/types";
@@ -21,6 +21,7 @@ export type RowData = Pick<
   | "carbohydrates"
   | "fats"
 > & {
+  isOwner: boolean,
   food_id: string;
   food: {
     id: string;
@@ -32,7 +33,7 @@ export type RowData = Pick<
 };
 
 type Props = RowData &
-  RecipePreloadedHookProps &
+  RecipesPreloadedHookProps &
   FoodPreloadedHookProps &
   Pick<
     BaseProps,
@@ -40,7 +41,7 @@ type Props = RowData &
   >;
 
 export const Row = ({
-  recipeQR,
+  recipesQR,
   foodQR,
   isEditable,
   onSubmitRowChange,
@@ -86,7 +87,7 @@ export const Row = ({
             className={classes.foodCell}
             children={
               <MealAutocomplete
-                recipeQR={recipeQR}
+                recipesQR={recipesQR}
                 foodQR={foodQR}
                 value={item}
                 setValue={handleSetItem}

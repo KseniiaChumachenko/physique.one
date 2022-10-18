@@ -10,7 +10,7 @@ import {
 } from "@material-ui/core";
 import { LinkRounded } from "@material-ui/icons";
 import { t } from "@lingui/macro";
-import { RecipeQuery$data } from "src/api-hooks/recipe";
+import { RecipeQuery$data } from "src/api-hooks/recipes";
 import { EditDeleteButtonGroup } from "../components/EditDeletButtonGroup";
 
 const useStyles = makeStyles((theme) =>

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a5f2019059c68b0b98361a6e769a78d1>>
+ * @generated SignedSource<<7f855651538cd4ab2060aa7986d5fb48>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,8 +23,8 @@ export type meal_item_set_input = {
   weight?: number | null;
 };
 export type UpdateMealItemMutation$variables = {
-  id: string;
   _set?: meal_item_set_input | null;
+  id: string;
 };
 export type UpdateMealItemMutation$data = {
   readonly update_meal_item_by_pk: {
@@ -42,8 +42,8 @@ export type UpdateMealItemMutation$data = {
   } | null;
 };
 export type UpdateMealItemMutation = {
-  variables: UpdateMealItemMutation$variables;
   response: UpdateMealItemMutation$data;
+  variables: UpdateMealItemMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){

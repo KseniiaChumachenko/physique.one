@@ -1,5 +1,4 @@
 import { useCallback, useEffect } from "react";
-import {commitLocalUpdate} from "relay-runtime";
 import {
   fetchQuery,
   PreloadedQuery,
@@ -9,15 +8,16 @@ import {
   useQueryLoader,
   useRelayEnvironment,
 } from "react-relay";
+import { commitLocalUpdate } from "relay-runtime";
+import { AddRecipeMutation as AddRecipeMutationDocument } from "../recipe/AddRecipeMutation";
+import { UpdateRecipeMutation as UpdateRecipeMutationDocument } from "../recipe/UpdateRecipeMutation";
+import { DeleteRecipeMutation as DeleteRecipeMutationDocument } from "../recipe/DeleteRecipeMutation";
 import { useActiveUser } from "../authorization";
+import { RecipeQuery as RecipeQueryDocument } from "./RecipeQuery";
 import {
   RecipeQuery,
   RecipeQuery$variables,
 } from "./__generated__/RecipeQuery.graphql";
-import { RecipeQuery as RecipeQueryDocument } from "./RecipeQuery";
-import { AddRecipeMutation as AddRecipeMutationDocument } from "./AddRecipeMutation";
-import { UpdateRecipeMutation as UpdateRecipeMutationDocument } from "./UpdateRecipeMutation";
-import { DeleteRecipeMutation as DeleteRecipeMutationDocument } from "./DeleteRecipeMutation";
 import { AddRecipeMutation } from "./__generated__/AddRecipeMutation.graphql";
 import { UpdateRecipeMutation } from "./__generated__/UpdateRecipeMutation.graphql";
 import { DeleteRecipeMutation } from "./__generated__/DeleteRecipeMutation.graphql";
@@ -35,17 +35,18 @@ export const useDeleteRecipeMutation = () =>
   useMutation<DeleteRecipeMutation>(DeleteRecipeMutationDocument);
 
 export const useRecipe = (v: RecipeQuery$variables) => {
-  const [queryReference, loadQuery] = useQueryLoader<RecipeQuery>(
-    RecipeQueryDocument
-  );
+  const [queryReference, loadQuery] =
+    useQueryLoader<RecipeQuery>(RecipeQueryDocument);
 
   useEffect(() => {
-    loadQuery(v);
+    if (v.id) {
+      loadQuery(v);
+    }
   }, []);
 
   const refetch = () => loadQuery(v, { fetchPolicy: "network-only" });
 
-  return { queryReference, refetch };
+  return { queryReference, loadQuery, refetch };
 };
 
 export interface RecipePreloadedHookProps {
@@ -72,7 +73,7 @@ export const useRecipePreloaded = (
   const setOwner = () => {
     commitLocalUpdate(environment as any, (store) => {
       data.recipe_connection.edges.map((i) => {
-        const recipe = store.get(i.node.id);
+        const recipe = store.get(i?.node?.id);
         recipe?.setValue(user?.id === i?.node?.u_id, "isOwner");
 
         i.node.recipe_items.map((i) => {

@@ -6,24 +6,25 @@ import { t } from "@lingui/macro";
 import { Grid, LinearProgress } from "@material-ui/core";
 import { useActiveUser } from "src/api-hooks/authorization";
 import {
-  RecipePreloadedHookProps,
-  useRecipe,
-  useRecipePreloaded,
-} from "src/api-hooks/recipe";
+  RecipesPreloadedHookProps,
+  useRecipes,
+  useRecipesPreloaded,
+} from "src/api-hooks/recipes";
+import { useAddRecipeMutation } from "src/api-hooks/recipe";
 import { FoodPreloadedHookProps, useFood } from "src/api-hooks/food";
 import { useKeyPress } from "src/hooks/useKeyPress";
 import { Key } from "src/types/key";
 import { useStore } from "src/store";
 import { useIsMobile } from "src/hooks/useIsMobile";
-import { RecipeCard2 } from "./RecipeCard2";
+import { RecipeCard } from "./RecipeCard";
 import { useStyles } from "./styles";
 import { RecipeDrawer } from "./RecipeDrawer";
 
-// TODO: operations on recipe in drawer + add new recipe
+// TODO: operations on recipes in drawer + add new recipes
 export const RecipesContent = ({
-  recipeQR,
+  recipesQR,
   foodQR,
-}: RecipePreloadedHookProps & FoodPreloadedHookProps) => {
+}: RecipesPreloadedHookProps & FoodPreloadedHookProps) => {
   const classes = useStyles();
   const isMobile = useIsMobile();
   const gridRef = useRef<HTMLDivElement>(null);
@@ -31,10 +32,8 @@ export const RecipesContent = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const activeRecipeId = searchParams.get("activeRecipeId") || "";
   const isDrawerOpen = searchParams.get("isDrawerOpen") === "true";
-  const {
-    data,
-    mutations: { add },
-  } = useRecipePreloaded(recipeQR);
+  const { data } = useRecipesPreloaded(recipesQR);
+  const [add] = useAddRecipeMutation();
   const { user } = useActiveUser();
 
   const { setAction } = useStore();
@@ -77,7 +76,7 @@ export const RecipesContent = ({
   };
 
   const handleCloseDrawer = () => {
-    setSearchParams({ activeRecipeId: activeRecipeId, isDrawerOpen: "false" });
+    setSearchParams({ activeRecipeId: activeRecipeId, isDrawerOpen: "false", isEditing: 'false' });
   };
 
   const handleSetActiveRecipeId = (value: string) => {
@@ -90,7 +89,7 @@ export const RecipesContent = ({
 
   useEffect(() => {
     setAction({
-      label: "+ Add new recipe",
+      label: "+ Add new recipes",
       onClick: handleAddRecipe,
     });
 
@@ -151,7 +150,7 @@ export const RecipesContent = ({
           ({ node }, i) =>
             node && (
               <Grid item key={i}>
-                <RecipeCard2
+                <RecipeCard
                   ref={node?.id === activeRecipeId ? elRef : null}
                   key={node?.name}
                   id={node?.id}
@@ -165,24 +164,20 @@ export const RecipesContent = ({
         )}
       </Grid>
 
-      <RecipeDrawer
-        key={activeRecipeId}
-        isOpen={isDrawerOpen}
-        onClose={handleCloseDrawer}
-        data={
-          data.recipe_connection.edges.find(
-            (i) => i?.node?.id === activeRecipeId
-          )?.node
-        }
-        recipeQR={recipeQR}
-        foodQR={foodQR}
-      />
+        <RecipeDrawer
+          key={activeRecipeId}
+          isOpen={isDrawerOpen}
+          onClose={handleCloseDrawer}
+          id={activeRecipeId}
+          recipesQR={recipesQR}
+          foodQR={foodQR}
+        />
     </div>
   );
 };
 
 export const Recipes = () => {
-  const { queryReference: recipeQR } = useRecipe({});
+  const { queryReference: recipeQR } = useRecipes({});
   const { queryReference: foodQR } = useFood({});
   const { handlePageName } = useStore();
 
@@ -194,7 +189,7 @@ export const Recipes = () => {
 
   return (
     <Suspense fallback={<LinearProgress />}>
-      {references && <RecipesContent recipeQR={recipeQR} foodQR={foodQR} />}
+      {references && <RecipesContent recipesQR={recipeQR} foodQR={foodQR} />}
     </Suspense>
   );
 };

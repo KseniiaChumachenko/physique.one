@@ -6,7 +6,7 @@ import { AccordionSummary, Grid, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { DeleteMealMutation } from "src/api-hooks/mealsByDate";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
-import { RecipePreloadedHookProps } from "src/api-hooks/recipe";
+import { RecipesPreloadedHookProps } from "src/api-hooks/recipes";
 import { AggregationChips } from "../../../../components/AggregationChips";
 import { PanelDetailActions } from "./PanelDetailActions";
 
@@ -41,7 +41,7 @@ type SummaryProps = {
   refetch: () => void;
   destroy: (c: UseMutationConfig<DeleteMealMutation>) => Disposable;
 } & FoodPreloadedHookProps &
-  RecipePreloadedHookProps;
+  RecipesPreloadedHookProps;
 
 export const PanelSummary = ({
   name,
@@ -51,7 +51,7 @@ export const PanelSummary = ({
   refetch,
   destroy,
   foodQR,
-  recipeQR,
+  recipesQR,
 }: SummaryProps) => {
   const classes = useStyles();
 
@@ -88,7 +88,7 @@ export const PanelSummary = ({
                   refetch={refetch}
                   destroy={destroy}
                   foodQR={foodQR}
-                  recipeQR={recipeQR}
+                  recipesQR={recipesQR}
                 />
               }
             />

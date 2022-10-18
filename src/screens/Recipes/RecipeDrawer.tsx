@@ -1,3 +1,4 @@
+import React, { Suspense, useState } from "react";
 import {
   Box,
   CardContent,
@@ -6,17 +7,20 @@ import {
   Drawer,
   Slider,
   Typography,
+  CircularProgress,
 } from "@material-ui/core";
-import React, { useState } from "react";
 import clsx from "clsx";
+import { RecipesPreloadedHookProps } from "src/api-hooks/recipes";
 import {
   RecipePreloadedHookProps,
-  RecipeQuery$data,
+  useRecipe,
+  useRecipePreloaded,
 } from "src/api-hooks/recipe";
 import { t } from "@lingui/macro";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
 import { CaloricTable } from "src/components/CaloricTable";
 import { useIsMobile } from "src/hooks/useIsMobile";
+import { base64ToUuid } from "src/utils/base64-to-uuid";
 import { RecipeCardHeader, RecipeCardHeaderProps } from "./RecipeCardHeader";
 import { useStyles } from "./styles";
 import { useRecipeHeaderLogic } from "./useRecipeHeaderLogic";
@@ -24,45 +28,107 @@ import { useRecipeItemLogic } from "./useRecipeItemLogic";
 
 type ExtendProps = Partial<RecipeCardHeaderProps> &
   FoodPreloadedHookProps &
-  RecipePreloadedHookProps;
+  RecipesPreloadedHookProps;
 
-interface Props extends ExtendProps {
+interface RecipeDrawerProps extends ExtendProps {
   isOpen: boolean;
   onClose(): void;
-  data?: RecipeQuery$data["recipe_connection"]["edges"][0]["node"];
+  id: string;
 }
 
-export const RecipeDrawer = ({
-  foodQR,
-  recipeQR,
-  data,
-  onClose,
-  isOpen,
-}: Props) => {
-  const classes = useStyles();
-  const isMobile = useIsMobile();
+type RecipeDrawerBodyProps = RecipeDrawerProps & RecipePreloadedHookProps;
 
+export const RecipeDrawerBody = ({
+  foodQR,
+  recipesQR,
+  recipeQR,
+  onClose,
+}: RecipeDrawerBodyProps) => {
+  const classes = useStyles();
+  const { data: fetchedData } = useRecipePreloaded(recipeQR);
+
+  const data = fetchedData.recipe_connection.edges[0]?.node || {};
   const portions = data?.portions || 1;
 
-  const {
-    isEditable,
-    setIsEditable,
-    state,
-    handleSetState,
-    handleDelete,
-  } = useRecipeHeaderLogic({ data, recipeQR });
+  const { isEditable, setIsEditable, state, handleSetState, handleDelete } =
+    useRecipeHeaderLogic({ data, recipeQR });
 
   const { onAdd, onUpdate, onRemove } = useRecipeItemLogic({
     foodQR,
     recipeQR,
+    recipesQR,
     recipe_id: data?.id || "",
   });
 
   const [displayPortions, setDisplayPortions] = useState(portions);
 
+  return (
+    <>
+      <RecipeCardHeader
+        key={data?.id}
+        data={{ ...state, isOwner: !!data?.isOwner }}
+        isEditable={isEditable}
+        setIsEditable={setIsEditable}
+        setNewValue={handleSetState}
+        onClose={onClose}
+        onDelete={() => {
+          handleDelete();
+          onClose();
+        }}
+      />
+      <CardContent>
+        {!isEditable && (
+          <Box className={classes.sliderContainer}>
+            <Typography variant={"overline"} color={"textSecondary"}>
+              {t`Portions:`}
+            </Typography>
+            <div className={classes.slider}>
+              <Slider
+                defaultValue={displayPortions}
+                value={displayPortions}
+                step={0.5}
+                max={50}
+                valueLabelFormat={(v) => v}
+                valueLabelDisplay="off"
+                marks={true}
+                onChange={(e, v) => {
+                  setDisplayPortions(v as number);
+                }}
+              />
+            </div>
+            <Chip color={"primary"} label={displayPortions} />
+          </Box>
+        )}
+
+        <CaloricTable
+          recipesQR={recipesQR}
+          foodQR={foodQR}
+          data={data?.recipe_items?.map((i) => ({
+            ...i,
+            food_id: i?.food?.id,
+          }))}
+          isEditable={isEditable}
+          onAddItem={onAdd}
+          onRemoveRow={onRemove}
+          onSubmitRowChange={onUpdate}
+          portions={portions}
+          displayPortions={isEditable ? portions : displayPortions}
+        />
+      </CardContent>
+    </>
+  );
+};
+
+export const RecipeDrawer = ({ id, ...rest }: RecipeDrawerProps) => {
+  const classes = useStyles();
+  const isMobile = useIsMobile();
+
+  const { queryReference: recipeQR } = useRecipe({
+    id: base64ToUuid(id || ""),
+  });
+
   const handleClickAway = () => {
-    onClose();
-    setIsEditable(false);
+    rest.onClose();
   };
 
   return (
@@ -74,59 +140,16 @@ export const RecipeDrawer = ({
         })}
         variant={!isMobile ? "persistent" : "temporary"}
         anchor="right"
-        open={isOpen}
+        open={rest.isOpen}
         classes={{
           paper: !isMobile ? classes.drawerPaper : classes.drawerPaperMobile,
         }}
       >
-        <RecipeCardHeader
-          key={data?.id}
-          data={{ ...state, isOwner: !!data?.isOwner }}
-          isEditable={isEditable}
-          setIsEditable={setIsEditable}
-          setNewValue={handleSetState}
-          onClose={onClose}
-          onDelete={() => {
-            handleDelete();
-            onClose();
-          }}
-        />
-        <CardContent>
-          {!isEditable && (
-            <Box className={classes.sliderContainer}>
-              <Typography variant={"overline"} color={"textSecondary"}>
-                {t`Portions:`}
-              </Typography>
-              <div className={classes.slider}>
-                <Slider
-                  defaultValue={displayPortions}
-                  value={displayPortions}
-                  step={0.5}
-                  max={50}
-                  valueLabelFormat={(v) => v}
-                  valueLabelDisplay="off"
-                  marks={true}
-                  onChange={(e, v) => {
-                    setDisplayPortions(v as number);
-                  }}
-                />
-              </div>
-              <Chip color={"primary"} label={displayPortions} />
-            </Box>
+        <Suspense fallback={<CircularProgress />}>
+          {recipeQR && (
+            <RecipeDrawerBody id={id} recipeQR={recipeQR} {...rest} />
           )}
-
-          <CaloricTable
-            recipeQR={recipeQR}
-            foodQR={foodQR}
-            data={data?.recipe_items?.map((i) => ({ ...i, food_id: i?.food?.id }))}
-            isEditable={isEditable}
-            onAddItem={onAdd}
-            onRemoveRow={onRemove}
-            onSubmitRowChange={onUpdate}
-            portions={portions}
-            displayPortions={isEditable ? portions : displayPortions}
-          />
-        </CardContent>
+        </Suspense>
       </Drawer>
     </ClickAwayListener>
   );

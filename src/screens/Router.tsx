@@ -32,6 +32,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "ration",
+        index: true,
         element: (
           <RequireAuth>
             <Meals />

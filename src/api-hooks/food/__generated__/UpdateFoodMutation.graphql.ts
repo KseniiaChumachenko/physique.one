@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<3dc99dbd4a69ddd6f3da37966f62e988>>
+ * @generated SignedSource<<3de0952bcb0772b12bdd87d811dc1520>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -72,8 +72,8 @@ export type UpdateFoodMutation$data = {
   } | null;
 };
 export type UpdateFoodMutation = {
-  variables: UpdateFoodMutation$variables;
   response: UpdateFoodMutation$data;
+  variables: UpdateFoodMutation$variables;
 };
 
 const node: ConcreteRequest = (function(){
