@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Link, TextField, Typography } from "@material-ui/core";
-import { Trans } from "@lingui/macro"
+import { Trans } from "@lingui/macro";
 import { useLogin } from "src/api-hooks/authorization";
 import { useStyles } from "./styled";
 import { ForgotPasswordForm } from "./ForgotPasswordForm";
@@ -51,6 +51,7 @@ export const LoginForm = () => {
   const [isResetForm, setResetForm] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(false);
   // const [fbResponse, setFBResponse] = useState<FBResponse>(
   //   INITIAL_FB_RESP_STATE
   // );
@@ -78,13 +79,14 @@ export const LoginForm = () => {
     <>
       <FormCard
         title={<Trans>Login</Trans>}
+        errorMessage={error ? "Invalid email or password" : undefined}
         fieldsSection={
           <>
             <TextField
               className={classes.textFields}
               variant={"outlined"}
               label={<Trans>E-mail</Trans>}
-              type={'email'}
+              type={"email"}
               onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
@@ -127,7 +129,9 @@ export const LoginForm = () => {
           </>
         }
       />
-      {queryReference && <Redirect loginQR={queryReference} />}
+      {queryReference && (
+        <Redirect loginQR={queryReference} setError={setError} />
+      )}
     </>
   );
 };

@@ -73,7 +73,7 @@ export const useRecipePreloaded = (
   const setOwner = () => {
     commitLocalUpdate(environment as any, (store) => {
       data.recipe_connection.edges.map((i) => {
-        const recipe = store.get(i.node.id);
+        const recipe = store.get(i?.node?.id);
         recipe?.setValue(user?.id === i?.node?.u_id, "isOwner");
 
         i.node.recipe_items.map((i) => {
