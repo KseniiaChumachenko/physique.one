@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d018752cd51707222341f5aeb40c86b0>>
+ * @generated SignedSource<<86d3700993a88f5d5132faa129b7621d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -16,6 +16,7 @@ export type recipe_item_set_input = {
   fats?: number | null;
   food_id?: string | null;
   id?: string | null;
+  increment?: number | null;
   proteins?: number | null;
   recipe_id?: string | null;
   u_id?: string | null;

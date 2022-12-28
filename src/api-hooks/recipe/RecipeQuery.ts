@@ -12,13 +12,21 @@ export const RecipeQuery = graphql`
                   link
                   portions
                   isOwner
-                  recipe_items {
+                  recipe_items(order_by: {increment: asc}) {
                       id
                       u_id
                       isOwner
                       food {
                           id
                           name
+                          energy_cal,
+                          energy_kj,
+                          proteins,
+                          carbohydrates,
+                          fats,
+                          type,
+                          u_id,
+                          weight,
                           food_brand {
                               name
                           }

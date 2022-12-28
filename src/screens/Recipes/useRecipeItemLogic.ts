@@ -20,6 +20,7 @@ import {
 } from "src/api-hooks/recipes";
 import { useActiveUser } from "src/api-hooks/authorization";
 import { base64ToUuid } from "src/utils/base64-to-uuid";
+import {getValueByPortionCoefficient} from "./utils";
 
 export function useRecipeItemLogic({
   foodQR,
@@ -71,24 +72,26 @@ export function useRecipeItemLogic({
   const onUpdate = ({
     id,
     food_id,
-    ...data
+    weight,
   }: Partial<RowData> & { id: string }) => {
-    const weightCoefficient = (data.weight || 100) / 100;
-    const adjustByCoefficient = (i = 0) => i * weightCoefficient;
+    const weightCoefficient = (weight || 100) / 100;
+    const adjustByCoefficient = (i = 0) => getValueByPortionCoefficient(i, weightCoefficient);
+
+    const newFood = data.food_connection.edges.find(
+      ({ node }) => node.id === food_id
+    )?.node;
 
     const calculatedFromPropsItem = {
-      energy_cal: adjustByCoefficient(data.energy_cal),
-      energy_kj: adjustByCoefficient(data.energy_kj),
-      proteins: adjustByCoefficient(data.proteins),
-      carbohydrates: adjustByCoefficient(data.carbohydrates),
-      fats: adjustByCoefficient(data.fats),
+      energy_cal: adjustByCoefficient(newFood?.energy_cal),
+      energy_kj: adjustByCoefficient(newFood?.energy_kj),
+      proteins: adjustByCoefficient(newFood?.proteins),
+      carbohydrates: adjustByCoefficient(newFood?.carbohydrates),
+      fats: adjustByCoefficient(newFood?.fats),
     };
 
-    const { food, isOwner, ...restData } = data;
-
     const set: recipe_item_set_input = {
-      ...restData,
       ...calculatedFromPropsItem,
+      weight,
       food_id: base64ToUuid(food_id || ""),
     };
 
