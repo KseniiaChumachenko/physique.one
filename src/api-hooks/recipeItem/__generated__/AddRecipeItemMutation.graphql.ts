@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d1d756e57f257ec2c46c3852b74c0fb8>>
+ * @generated SignedSource<<f075344bf56dbbb1f9e53abc1828320c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,7 +23,7 @@ export type pantry_user_constraint = "pantry_user_pkey" | "%future added value";
 export type pantry_user_update_column = "id" | "pantry_id" | "user_id" | "%future added value";
 export type recipe_constraint = "recipe_increment_key" | "recipe_pkey" | "%future added value";
 export type recipe_item_constraint = "recipe_item_pkey" | "%future added value";
-export type recipe_item_update_column = "carbohydrates" | "energy_cal" | "energy_kj" | "fats" | "food_id" | "id" | "proteins" | "recipe_id" | "u_id" | "weight" | "%future added value";
+export type recipe_item_update_column = "carbohydrates" | "energy_cal" | "energy_kj" | "fats" | "food_id" | "id" | "increment" | "proteins" | "recipe_id" | "u_id" | "weight" | "%future added value";
 export type recipe_update_column = "description" | "id" | "increment" | "link" | "name" | "portions" | "u_id" | "%future added value";
 export type users_constraint = "users_email_key" | "users_fb_id_key" | "users_fb_picture_url_key" | "users_password_key" | "users_pkey" | "users_user_name_key" | "%future added value";
 export type users_update_column = "email" | "fb_id" | "fb_picture_url" | "first_name" | "full_name" | "id" | "last_name" | "password" | "user_name" | "%future added value";
@@ -33,9 +33,9 @@ export type recipe_item_insert_input = {
   energy_kj?: number | null;
   fats?: number | null;
   food?: food_obj_rel_insert_input | null;
-  food_brand?: food_brand_obj_rel_insert_input | null;
   food_id?: string | null;
   id?: string | null;
+  increment?: number | null;
   proteins?: number | null;
   recipe?: recipe_obj_rel_insert_input | null;
   recipe_id?: string | null;
@@ -321,15 +321,26 @@ export type recipe_item_bool_exp = {
   energy_kj?: numeric_comparison_exp | null;
   fats?: numeric_comparison_exp | null;
   food?: food_bool_exp | null;
-  food_brand?: food_brand_bool_exp | null;
   food_id?: uuid_comparison_exp | null;
   id?: uuid_comparison_exp | null;
+  increment?: Int_comparison_exp | null;
   proteins?: numeric_comparison_exp | null;
   recipe?: recipe_bool_exp | null;
   recipe_id?: uuid_comparison_exp | null;
   u_id?: uuid_comparison_exp | null;
   user?: users_bool_exp | null;
   weight?: numeric_comparison_exp | null;
+};
+export type Int_comparison_exp = {
+  _eq?: number | null;
+  _gt?: number | null;
+  _gte?: number | null;
+  _in?: ReadonlyArray<number> | null;
+  _is_null?: boolean | null;
+  _lt?: number | null;
+  _lte?: number | null;
+  _neq?: number | null;
+  _nin?: ReadonlyArray<number> | null;
 };
 export type recipe_bool_exp = {
   _and?: ReadonlyArray<recipe_bool_exp> | null;
@@ -345,17 +356,6 @@ export type recipe_bool_exp = {
   recipe_items?: recipe_item_bool_exp | null;
   u_id?: uuid_comparison_exp | null;
   user?: users_bool_exp | null;
-};
-export type Int_comparison_exp = {
-  _eq?: number | null;
-  _gt?: number | null;
-  _gte?: number | null;
-  _in?: ReadonlyArray<number> | null;
-  _is_null?: boolean | null;
-  _lt?: number | null;
-  _lte?: number | null;
-  _neq?: number | null;
-  _nin?: ReadonlyArray<number> | null;
 };
 export type food_type_on_conflict = {
   constraint: food_type_constraint;

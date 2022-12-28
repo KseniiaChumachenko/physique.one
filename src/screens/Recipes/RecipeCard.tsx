@@ -7,10 +7,10 @@ import {
   Typography,
 } from "@material-ui/core";
 import { AggregationChips } from "src/components/AggregationChips";
-import { RecipeQuery$data } from "src/api-hooks/recipes";
+import { RecipesQuery$data } from "src/api-hooks/recipes";
 
 type General = Pick<
-  RecipeQuery$data["recipe_connection"]["edges"][0]["node"],
+  RecipesQuery$data["recipe_connection"]["edges"][0]["node"],
   "name" | "id"
 >;
 type Chips = ComponentProps<typeof AggregationChips>;

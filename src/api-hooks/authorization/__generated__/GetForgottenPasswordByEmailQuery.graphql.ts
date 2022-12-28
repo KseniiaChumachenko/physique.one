@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<20e348fa7921ae51b3864bb4d26f745d>>
+ * @generated SignedSource<<3ebd544b431b6a54a0b4c4e52c445913>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -224,9 +224,9 @@ export type recipe_item_bool_exp = {
   energy_kj?: numeric_comparison_exp | null;
   fats?: numeric_comparison_exp | null;
   food?: food_bool_exp | null;
-  food_brand?: food_brand_bool_exp | null;
   food_id?: uuid_comparison_exp | null;
   id?: uuid_comparison_exp | null;
+  increment?: Int_comparison_exp | null;
   proteins?: numeric_comparison_exp | null;
   recipe?: recipe_bool_exp | null;
   recipe_id?: uuid_comparison_exp | null;

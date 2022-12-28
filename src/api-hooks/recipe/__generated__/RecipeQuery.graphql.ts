@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<78e8f0fc4f2ed9295d878718fd85490a>>
+ * @generated SignedSource<<17a10ad4fca8bffbf1daf6485b92802c>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -28,11 +28,19 @@ export type RecipeQuery$data = {
           readonly energy_kj: number;
           readonly fats: number;
           readonly food: {
+            readonly carbohydrates: number;
+            readonly energy_cal: number;
+            readonly energy_kj: number;
+            readonly fats: number;
             readonly food_brand: {
               readonly name: string;
             } | null;
             readonly id: string;
             readonly name: string;
+            readonly proteins: number;
+            readonly type: string;
+            readonly u_id: string | null;
+            readonly weight: number | null;
           };
           readonly id: string;
           readonly isOwner: boolean | null;
@@ -119,49 +127,65 @@ v7 = {
   "name": "portions",
   "storageKey": null
 },
-v8 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "proteins",
-  "storageKey": null
-},
+v8 = [
+  {
+    "kind": "Literal",
+    "name": "order_by",
+    "value": {
+      "increment": "asc"
+    }
+  }
+],
 v9 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "fats",
-  "storageKey": null
-},
-v10 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "carbohydrates",
-  "storageKey": null
-},
-v11 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "energy_cal",
   "storageKey": null
 },
-v12 = {
+v10 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "energy_kj",
   "storageKey": null
 },
+v11 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "proteins",
+  "storageKey": null
+},
+v12 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "carbohydrates",
+  "storageKey": null
+},
 v13 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "fats",
+  "storageKey": null
+},
+v14 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "type",
+  "storageKey": null
+},
+v15 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "weight",
   "storageKey": null
 },
-v14 = {
+v16 = {
   "kind": "ClientExtension",
   "selections": [
     {
@@ -212,7 +236,7 @@ return {
                   (v7/*: any*/),
                   {
                     "alias": null,
-                    "args": null,
+                    "args": (v8/*: any*/),
                     "concreteType": "recipe_item",
                     "kind": "LinkedField",
                     "name": "recipe_items",
@@ -230,6 +254,14 @@ return {
                         "selections": [
                           (v2/*: any*/),
                           (v3/*: any*/),
+                          (v9/*: any*/),
+                          (v10/*: any*/),
+                          (v11/*: any*/),
+                          (v12/*: any*/),
+                          (v13/*: any*/),
+                          (v14/*: any*/),
+                          (v5/*: any*/),
+                          (v15/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -245,17 +277,17 @@ return {
                         ],
                         "storageKey": null
                       },
-                      (v8/*: any*/),
+                      (v11/*: any*/),
+                      (v13/*: any*/),
+                      (v12/*: any*/),
                       (v9/*: any*/),
                       (v10/*: any*/),
-                      (v11/*: any*/),
-                      (v12/*: any*/),
-                      (v13/*: any*/),
-                      (v14/*: any*/)
+                      (v15/*: any*/),
+                      (v16/*: any*/)
                     ],
-                    "storageKey": null
+                    "storageKey": "recipe_items(order_by:{\"increment\":\"asc\"})"
                   },
-                  (v14/*: any*/)
+                  (v16/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -307,7 +339,7 @@ return {
                   (v7/*: any*/),
                   {
                     "alias": null,
-                    "args": null,
+                    "args": (v8/*: any*/),
                     "concreteType": "recipe_item",
                     "kind": "LinkedField",
                     "name": "recipe_items",
@@ -325,6 +357,14 @@ return {
                         "selections": [
                           (v2/*: any*/),
                           (v3/*: any*/),
+                          (v9/*: any*/),
+                          (v10/*: any*/),
+                          (v11/*: any*/),
+                          (v12/*: any*/),
+                          (v13/*: any*/),
+                          (v14/*: any*/),
+                          (v5/*: any*/),
+                          (v15/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -341,17 +381,17 @@ return {
                         ],
                         "storageKey": null
                       },
-                      (v8/*: any*/),
+                      (v11/*: any*/),
+                      (v13/*: any*/),
+                      (v12/*: any*/),
                       (v9/*: any*/),
                       (v10/*: any*/),
-                      (v11/*: any*/),
-                      (v12/*: any*/),
-                      (v13/*: any*/),
-                      (v14/*: any*/)
+                      (v15/*: any*/),
+                      (v16/*: any*/)
                     ],
-                    "storageKey": null
+                    "storageKey": "recipe_items(order_by:{\"increment\":\"asc\"})"
                   },
-                  (v14/*: any*/)
+                  (v16/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -364,16 +404,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "86820f1328565420275309fd2be93cc3",
+    "cacheID": "80bb3a69a4ffc09c12424078a78d9f35",
     "id": null,
     "metadata": {},
     "name": "RecipeQuery",
     "operationKind": "query",
-    "text": "query RecipeQuery(\n  $id: uuid!\n) {\n  recipe_connection(where: {id: {_eq: $id}}) {\n    edges {\n      node {\n        id\n        name\n        description\n        u_id\n        link\n        portions\n        recipe_items {\n          id\n          u_id\n          food {\n            id\n            name\n            food_brand {\n              name\n              id\n            }\n          }\n          proteins\n          fats\n          carbohydrates\n          energy_cal\n          energy_kj\n          weight\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query RecipeQuery(\n  $id: uuid!\n) {\n  recipe_connection(where: {id: {_eq: $id}}) {\n    edges {\n      node {\n        id\n        name\n        description\n        u_id\n        link\n        portions\n        recipe_items(order_by: {increment: asc}) {\n          id\n          u_id\n          food {\n            id\n            name\n            energy_cal\n            energy_kj\n            proteins\n            carbohydrates\n            fats\n            type\n            u_id\n            weight\n            food_brand {\n              name\n              id\n            }\n          }\n          proteins\n          fats\n          carbohydrates\n          energy_cal\n          energy_kj\n          weight\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "0ab6d94a7b0a8d068ea4df95907a4be4";
+(node as any).hash = "b8886b7286398e75374393eab56f9471";
 
 export default node;

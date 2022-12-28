@@ -5,9 +5,14 @@ import { RecipesPreloadedHookProps } from "src/api-hooks/recipes";
 import { FoodPreloadedHookProps } from "src/api-hooks/food";
 import { useIsMobile } from "src/hooks/useIsMobile";
 import { Meal_Item } from "src/types";
+import { RecipeQuery$data } from "src/api-hooks/recipe";
 import { MealAutocomplete } from "../MealAutocomplete";
 import { Props as BaseProps } from "./index";
 import { useStyles } from "./styles";
+
+// TODO: be more generic than import from Recipes
+type foodType =
+  RecipeQuery$data["recipe_connection"]["edges"][0]["node"]["recipe_items"][0]["food"];
 
 export type RowData = Pick<
   Meal_Item,
@@ -21,19 +26,12 @@ export type RowData = Pick<
   | "carbohydrates"
   | "fats"
 > & {
-  isOwner: boolean,
+  isOwner: boolean;
   food_id: string;
-  food: {
-    id: string;
-    name: string;
-    food_brand: {
-      readonly name: string;
-    } | null;
-  };
+  food: foodType;
 };
 
-type Props = RowData &
-  RecipesPreloadedHookProps &
+type Props = { data: RowData } & RecipesPreloadedHookProps &
   FoodPreloadedHookProps &
   Pick<
     BaseProps,
@@ -47,7 +45,7 @@ export const Row = ({
   onSubmitRowChange,
   onRemoveRow,
   withRecipes,
-  ...values
+  data: values,
 }: Props) => {
   const isMobile = useIsMobile();
   const classes = useStyles();
@@ -60,15 +58,25 @@ export const Row = ({
   const handleSetItem = (id: string, type?: "food" | "recipe") => {
     setItem(id);
     if (type === "recipe") {
-      onSubmitRowChange({ ...values, weight, id: values.id, recipe_id: id });
+      onSubmitRowChange({
+        ...values,
+        weight,
+        recipe_id: id,
+        id: values.id,
+      });
     } else {
-      onSubmitRowChange({ ...values, weight, id: values.id, food_id: id });
+      onSubmitRowChange({
+        ...values,
+        weight,
+        food_id: id,
+        id: values.id,
+      });
     }
   };
 
   const handleSetWeight = (weight: number) => {
     setWeight(weight);
-    onSubmitRowChange({ ...values, id: values.id, weight });
+    onSubmitRowChange({ ...values, weight, id: values.id });
   };
 
   const handleDelete = () => {
