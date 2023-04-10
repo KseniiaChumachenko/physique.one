@@ -7,25 +7,34 @@ import { useIsMobile } from "src/hooks/useIsMobile";
 import { Meal_Item } from "src/types";
 import { RecipeQuery$data } from "src/api-hooks/recipe";
 import { MealAutocomplete } from "../MealAutocomplete";
+import {
+  getValueByPortionCoefficient,
+} from "../../screens/Recipes/utils";
 import { Props as BaseProps } from "./index";
 import { useStyles } from "./styles";
+
+const ENERGY_KEYS: Array<keyof FoodDefinition> = ["energy_cal", "energy_kj"];
+
+const MACROS_KEYS: Array<keyof FoodDefinition> = ["proteins", "carbohydrates", "fats"];
 
 // TODO: be more generic than import from Recipes
 type foodType =
   RecipeQuery$data["recipe_connection"]["edges"][0]["node"]["recipe_items"][0]["food"];
 
-export type RowData = Pick<
-  Meal_Item,
-  | "id"
-  | "recipe_id"
-  | "recipe"
-  | "weight"
-  | "energy_cal"
-  | "energy_kj"
-  | "proteins"
-  | "carbohydrates"
-  | "fats"
-> & {
+type FoodDefinition = Pick<
+    Meal_Item,
+    | "id"
+    | "recipe_id"
+    | "recipe"
+    | "weight"
+    | "energy_cal"
+    | "energy_kj"
+    | "proteins"
+    | "carbohydrates"
+    | "fats"
+>
+
+export type RowData = FoodDefinition & {
   isOwner: boolean;
   food_id: string;
   food: foodType;
@@ -36,13 +45,14 @@ type Props = { data: RowData } & RecipesPreloadedHookProps &
   Pick<
     BaseProps,
     "isEditable" | "withRecipes" | "onSubmitRowChange" | "onRemoveRow"
-  >;
+  > & { coefficientForPortions: number };
 
 export const Row = ({
   recipesQR,
   foodQR,
   isEditable,
   onSubmitRowChange,
+  coefficientForPortions,
   onRemoveRow,
   withRecipes,
   data: values,
@@ -85,6 +95,19 @@ export const Row = ({
     }
   };
 
+  const weightValue = getValueByPortionCoefficient(
+    values.weight,
+    coefficientForPortions
+  );
+
+  const energyValues = ENERGY_KEYS.map((k) =>
+    getValueByPortionCoefficient(values[k] as number, coefficientForPortions)
+  );
+
+  const macrosValues = MACROS_KEYS.map((k) =>
+    getValueByPortionCoefficient(values[k] as number, coefficientForPortions)
+  );
+
   return (
     <TableRow>
       {isEditable ? (
@@ -113,7 +136,7 @@ export const Row = ({
             className={classes.weightCell}
             children={
               <TextField
-                value={weight}
+                value={weightValue}
                 type={"number"}
                 onChange={(event: any) => handleSetWeight(event?.target?.value)}
                 className={classes.weightInput}
@@ -138,7 +161,7 @@ export const Row = ({
             }
             className={classes.foodCellReadOnly}
           />
-          <TableCell component="th" scope="row" children={values.weight} />
+          <TableCell component="th" scope="row" children={weightValue} />
         </>
       )}
       <TableCell
@@ -146,9 +169,9 @@ export const Row = ({
         scope="row"
         children={
           <React.Fragment>
-            {values?.energy_cal}
+            {energyValues[0]}
             &nbsp;|&nbsp;
-            {values?.energy_kj}
+            {energyValues[1]}
           </React.Fragment>
         }
       />
@@ -158,19 +181,19 @@ export const Row = ({
             component="th"
             scope="row"
             align={"right"}
-            children={values?.proteins}
+            children={macrosValues[0]}
           />
           <TableCell
             component="th"
             scope="row"
             align={"right"}
-            children={values?.carbohydrates}
+            children={macrosValues[1]}
           />
           <TableCell
             component="th"
             scope="row"
             align={"right"}
-            children={values?.fats}
+            children={macrosValues[2]}
           />
           {isEditable && (
             <TableCell

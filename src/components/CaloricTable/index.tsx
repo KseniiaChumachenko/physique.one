@@ -51,6 +51,7 @@ export const CaloricTable = ({
               foodQR={foodQR}
               recipesQR={recipesQR}
               onSubmitRowChange={onSubmitRowChange}
+              coefficientForPortions={coefficientForPortions}
               onRemoveRow={onRemoveRow}
               withRecipes={withRecipes}
               isEditable={isEditable}
